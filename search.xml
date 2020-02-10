@@ -26,6 +26,8 @@
 </li>
 <li><p>利用gulp压缩代码</p>
 </li>
+<li><p>代码复制功能</p>
+</li>
 </ol>
 <h2 id="待折腾的优化"><a href="#待折腾的优化" class="headerlink" title="待折腾的优化"></a>待折腾的优化</h2><ul>
 <li>访问速度</li>
