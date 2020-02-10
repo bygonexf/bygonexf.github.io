@@ -5,7 +5,7 @@
   
 
 
-<html class="theme-next muse use-motion" lang="zh-Hans">
+<html class="theme-next mist use-motion" lang="zh-Hans">
 <head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -59,8 +59,7 @@
   <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
 
 
-
-
+<link href="https://fonts.loli.net/css?family=Noto+Serif+SC:400,500,700&display=swap&subset=chinese-simplified" rel="stylesheet">
 
 
 
@@ -95,19 +94,19 @@
 
 
 
-<meta name="description" content="P问题 可以在多项式时间内被解决的问题  NP问题 可以在多项式时间内被验证的问题 图着色，哈密顿回路，TSP…  NP-hard问题 如果可以证明某问题有一个子问题是NP-Hard问题，那么该问题是一个NP-Hard问题。 通俗的讲，已经有一个很难的问题L’,而L问题比L’更难解决，那么该问题就是NP-Hard问题。   NP-Hard问题不确定是否可以在多项式时间内被验证。  停机问题(给出">
+<meta name="description" content="P问题，NP问题，NP-hard问题，NP-complete问题">
 <meta name="keywords" content="算法">
 <meta property="og:type" content="article">
 <meta property="og:title" content="P问题和NP问题">
 <meta property="og:url" content="https://bygonexf.github.io/2020/02/06/P问题和NP问题/index.html">
 <meta property="og:site_name" content="Choco">
-<meta property="og:description" content="P问题 可以在多项式时间内被解决的问题  NP问题 可以在多项式时间内被验证的问题 图着色，哈密顿回路，TSP…  NP-hard问题 如果可以证明某问题有一个子问题是NP-Hard问题，那么该问题是一个NP-Hard问题。 通俗的讲，已经有一个很难的问题L’,而L问题比L’更难解决，那么该问题就是NP-Hard问题。   NP-Hard问题不确定是否可以在多项式时间内被验证。  停机问题(给出">
+<meta property="og:description" content="P问题，NP问题，NP-hard问题，NP-complete问题">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://pic1.zhimg.com/80/674c06a71f0a34196da51fe8ce6501a6_hd.jpg">
-<meta property="og:updated_time" content="2020-02-06T03:43:44.740Z">
+<meta property="og:updated_time" content="2020-02-10T07:02:35.519Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="P问题和NP问题">
-<meta name="twitter:description" content="P问题 可以在多项式时间内被解决的问题  NP问题 可以在多项式时间内被验证的问题 图着色，哈密顿回路，TSP…  NP-hard问题 如果可以证明某问题有一个子问题是NP-Hard问题，那么该问题是一个NP-Hard问题。 通俗的讲，已经有一个很难的问题L’,而L问题比L’更难解决，那么该问题就是NP-Hard问题。   NP-Hard问题不确定是否可以在多项式时间内被验证。  停机问题(给出">
+<meta name="twitter:description" content="P问题，NP问题，NP-hard问题，NP-complete问题">
 <meta name="twitter:image" content="https://pic1.zhimg.com/80/674c06a71f0a34196da51fe8ce6501a6_hd.jpg">
 
 
@@ -116,9 +115,9 @@
   var NexT = window.NexT || {};
   var CONFIG = {
     root: '/',
-    scheme: 'Muse',
+    scheme: 'Mist',
     version: '5.1.4',
-    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
     fancybox: true,
     tabs: true,
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
@@ -179,7 +178,7 @@
       </a>
     </div>
       
-        <p class="site-subtitle">好巧不巧</p>
+        <p class="site-subtitle">one more bite</p>
       
   </div>
 
@@ -378,16 +377,21 @@
 
           
             
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/02/06/P问题和NP问题/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/02/06/P问题和NP问题/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
           
 
           
           
 
-          
-            <span class="post-meta-divider">|</span>
-            <span class="page-pv"><i class="fa fa-file-o"></i>
-            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
-            </span>
           
 
           
@@ -427,7 +431,6 @@
 </ul>
 <p>NP问题是否是P问题？</p>
 <p> <img src="https://pic1.zhimg.com/80/674c06a71f0a34196da51fe8ce6501a6_hd.jpg" alt="img"> </p>
-
       
     </div>
     
@@ -457,8 +460,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/09/07/也许是什么的开始/" rel="next" title="也许是什么的开始...">
-                <i class="fa fa-chevron-left"></i> 也许是什么的开始...
+              <a href="/2019/09/10/日记/" rel="next" title="一部分的日记">
+                <i class="fa fa-chevron-left"></i> 一部分的日记
               </a>
             
           </div>
@@ -494,6 +497,9 @@
 
           
 
+  
+    <div class="comments" id="comments">
+    </div>
   
 
 
@@ -533,7 +539,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">3</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -544,7 +550,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-count">4</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -555,7 +561,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-count">2</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -565,6 +571,16 @@
 
           
 
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:bygonexf@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
           
 
           
@@ -598,6 +614,9 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Fei</span>
 
+</div>
+
+<!--
   
 </div>
 
@@ -610,44 +629,25 @@
 
 
 
-  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
 
 
 
+-->
 
 <div class="powered-by">
     <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
     <i class="fa fa-user-md"></i>
     <span id="busuanzi_container_site_uv">
-        本站访客数:<span id="busuanzi_value_site_uv"></span>
+        遇见 <span id="busuanzi_value_site_uv"></span>
     </span>
     <span class="post-meta-divider">|</span>
     <span id="busuanzi_container_site_pv">
-        本站访问量<span id="busuanzi_value_site_pv"></span>
+        擦肩而过 <span id="busuanzi_value_site_pv"></span>
     </span>
 </div>
 
         
-<div class="busuanzi-count">
-  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-  
-    <span class="site-uv">
-      <i class="fa fa-user"></i>
-      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
-      
-    </span>
-  
-
-  
-    <span class="site-pv">
-      <i class="fa fa-eye"></i>
-      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
-      
-    </span>
-  
-</div>
-
 
 
 
@@ -662,6 +662,8 @@
     
       <div class="back-to-top">
         <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
         
       </div>
     
@@ -785,6 +787,28 @@
 
 
 
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'GyuhVvqtat4iqpvUjF5sUgBj-gzGzoHsz',
+        appKey: 'sX5S1trE3LnnFCSpp7epq55p',
+        placeholder: '',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
 
 
 
@@ -1116,6 +1140,21 @@
   
 
   
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
 
   
   
@@ -1126,5 +1165,7 @@
 
   
 
+  <script type="text/javascript" src="/lib/clipboard/clipboard.js"></script>
+<script type="text/javascript" src="/js/src/custom.js"></script>
 </body>
 </html>
