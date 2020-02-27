@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Hexo Next 主题优化</title>
+    <title>Hexo NexT 主题优化</title>
     <url>/2020/02/10/Hexo%20Next%20%E4%B8%BB%E9%A2%98%E4%BC%98%E5%8C%96/</url>
     <content><![CDATA[<h2 id="已折腾的优化"><a href="#已折腾的优化" class="headerlink" title="已折腾的优化"></a>已折腾的优化</h2><ol>
 <li><p>搜索功能</p>
@@ -17,7 +17,7 @@
 <li><p>修改背景图</p>
 <p>改了背景图之后，内容板块和评论区的透明度也得修改，评论区的修改试了好几个版本才成功…</p>
 </li>
-<li><p><strong>修改字体为思源宋体</strong></p>
+<li><p>修改字体为思源宋体</p>
 <p>字体也太重要了呜呜呜</p>
 </li>
 <li><p>增大文字区宽度</p>
@@ -56,9 +56,9 @@
 <li><p>修改文字区宽度也试了好几种办法</p>
 <p>最后还是在blog\themes\next\source\css_variables的base.styl中修改的</p>
 </li>
-<li><p>偷懒建议，背景图的话，貌似选择深蓝色系和原有其他设定比较搭</p>
+<li><p>偷懒建议，背景图的话，貌似选择深蓝色系和原有其他设定比较搭(啊，就夜深人静的时候点开博客会有一种私人避难所的感觉…莫名的安心感)</p>
 </li>
-<li><p>F12大法好，之后再研究研究咯</p>
+<li><p>F12大法好</p>
 </li>
 </ol>
 <h2 id="实用网站"><a href="#实用网站" class="headerlink" title="实用网站"></a>实用网站</h2><ul>
@@ -70,6 +70,7 @@
 ]]></content>
       <categories>
         <category>所学</category>
+        <category>博客</category>
       </categories>
   </entry>
   <entry>
