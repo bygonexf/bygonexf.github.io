@@ -41,7 +41,6 @@
 <p>大佬的博客太赏心悦目了</p>
 </li>
 <li><p><a href="https://bestzuo.cn/posts/763113948.html" target="_blank" rel="noopener">hexo博客valine评论样式美化 - Sanarous的博客</a> </p>
-<p>主要被我用来解决透明度问题了…</p>
 </li>
 <li><p><a href="https://bestzuo.cn/posts/blog-establish.html" target="_blank" rel="noopener">Hexo博客+Next主题深度优化与定制 - Sanarous的博客</a> </p>
 <p>这个大佬也写得好好</p>
@@ -51,10 +50,11 @@
 <li><p>记得hexo clean</p>
 <p>要不然至少分类标签计数容易出错</p>
 </li>
-<li><p><a href="https://blog.csdn.net/yyqjjw/article/details/93232515" target="_blank" rel="noopener">【Hexo】Spawn failed fatal: LF would be replaced by CRLF_Tyler Yang的博客-CSDN博客</a> </p>
+<li><p>“fatal: LF would be replaced by CRLF “</p>
+<figure class="highlight diff"><table><tr><td class="code"><pre><span class="line">[core]</span><br><span class="line">	repositoryformatversion = 0</span><br><span class="line">	filemode = false</span><br><span class="line">	bare = false</span><br><span class="line">	logallrefupdates = true</span><br><span class="line">	symlinks = false</span><br><span class="line">	ignorecase = true</span><br><span class="line"><span class="addition">+	autocrlf = false</span></span><br><span class="line"><span class="addition">+	safecrlf = false</span></span><br></pre></td></tr></table></figure>
 </li>
-<li><p>修改文字区宽度也试了好几种办法</p>
-<p>最后还是在blog\themes\next\source\css_variables的base.styl中修改的</p>
+<li><p>修改文字区宽度有部分方法不适用</p>
+<p>就在blog\themes\next\source\css_variables的base.styl改好了</p>
 </li>
 <li><p>偷懒建议，背景图的话，貌似选择深蓝色系和原有其他设定比较搭(啊，就夜深人静的时候点开博客会有一种私人避难所的感觉…莫名的安心感)</p>
 </li>
