@@ -1822,7 +1822,7 @@ pre .javascript .function {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #96c218;
+  background: #18bb7e;
 }
 .links-of-blogroll {
   font-size: 13px;
@@ -2905,7 +2905,7 @@ hr {
   }
 }
 body {
-  background-image: url("https://note.youdao.com/yws/api/personal/file/WEB4613d6a3d1c808f9487d0d10a3667853?method=getImage&version=67&cstk=ypordD2w");
+  background-image: url("/images/dawn.jpg");
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-position: 50% 50%;
