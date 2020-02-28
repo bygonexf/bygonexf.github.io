@@ -83,7 +83,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="操作系统,专业课笔记,">
 
 
 
@@ -94,13 +94,24 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="Choco">
-<meta property="og:url" content="https://bygonexf.github.io/categories/所学/博客/index.html">
+<meta name="description" content="deadlock characteristicsnecessary conditions4个条件同时满足，引起死锁：  mutual exclusion 至少有一个资源处于非共享模式，一次只能有一个进程使用  hold and wait 占有至少一个资源，等待另一为其他进程所占资源  no preemption 资源不能被抢占  circular wait   resource-allocatio">
+<meta name="keywords" content="操作系统,专业课笔记">
+<meta property="og:type" content="article">
+<meta property="og:title" content="操作系统笔记 CH7 Deadlocks">
+<meta property="og:url" content="https://bygonexf.github.io/2020/02/28/OS7/index.html">
 <meta property="og:site_name" content="Choco">
+<meta property="og:description" content="deadlock characteristicsnecessary conditions4个条件同时满足，引起死锁：  mutual exclusion 至少有一个资源处于非共享模式，一次只能有一个进程使用  hold and wait 占有至少一个资源，等待另一为其他进程所占资源  no preemption 资源不能被抢占  circular wait   resource-allocatio">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573293211940.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573295674796.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573296280721.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573296978952.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573297606742.png">
+<meta property="og:updated_time" content="2020-02-28T06:15:09.556Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Choco">
+<meta name="twitter:title" content="操作系统笔记 CH7 Deadlocks">
+<meta name="twitter:description" content="deadlock characteristicsnecessary conditions4个条件同时满足，引起死锁：  mutual exclusion 至少有一个资源处于非共享模式，一次只能有一个进程使用  hold and wait 占有至少一个资源，等待另一为其他进程所占资源  no preemption 资源不能被抢占  circular wait   resource-allocatio">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573293211940.png">
 
 
 
@@ -130,13 +141,13 @@
 
 
 
-  <link rel="canonical" href="https://bygonexf.github.io/categories/所学/博客/">
+  <link rel="canonical" href="https://bygonexf.github.io/2020/02/28/OS7/">
 
 
 
 
 
-  <title>分类: 博客 | Choco</title>
+  <title>操作系统笔记 CH7 Deadlocks | Choco</title>
   
 
 
@@ -155,7 +166,7 @@
     
   
 
-  <div class="container sidebar-position-left ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -291,53 +302,272 @@
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block category">
+  <div id="posts" class="posts-expand">
+    
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>博客<small>分类</small>
-        </h1>
-      </div>
+  
 
-      
-        
+  
+  
+  
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://bygonexf.github.io/2020/02/28/OS7/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Fei">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Choco">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2020/02/10/Hexo Next 主题优化/" itemprop="url">
-              
-                <span itemprop="name">Hexo NexT 主题优化</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">操作系统笔记 CH7 Deadlocks</h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2020-02-10T21:44:58+08:00" content="2020-02-10">
-          02-10
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-28T13:00:24+08:00">
+                2020-02-28
+              </time>
+            
 
-    </header>
-  </article>
+            
 
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/所学/" itemprop="url" rel="index">
+                    <span itemprop="name">所学</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/所学/操作系统/" itemprop="url" rel="index">
+                    <span itemprop="name">操作系统</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/02/28/OS7/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/02/28/OS7/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="deadlock-characteristics"><a href="#deadlock-characteristics" class="headerlink" title="deadlock characteristics"></a>deadlock characteristics</h2><h3 id="necessary-conditions"><a href="#necessary-conditions" class="headerlink" title="necessary conditions"></a>necessary conditions</h3><p>4个条件同时满足，引起死锁：</p>
+<ul>
+<li><p>mutual exclusion</p>
+<p>至少有一个资源处于非共享模式，一次只能有一个进程使用</p>
+</li>
+<li><p>hold and wait</p>
+<p>占有至少一个资源，等待另一为其他进程所占资源</p>
+</li>
+<li><p>no preemption</p>
+<p>资源不能被抢占</p>
+</li>
+<li><p>circular wait</p>
+</li>
+</ul>
+<h3 id="resource-allocation-graph"><a href="#resource-allocation-graph" class="headerlink" title="resource-allocation graph"></a>resource-allocation graph</h3><p>request edge : Pi-&gt;Rj</p>
+<p>assignment edge : Rj-&gt;Pi</p>
+<p>申请边只用指向矩形，但分配边必须从某个原点开始</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573293211940.png" style="zoom:67%;">
+
+<p>资源分配图有环是死锁的必要条件。若每类资源只有一个实例，含环是充分必要条件。若同类资源数&gt;1,不一定有死锁。</p>
+<h2 id="methods-for-handling-deadlocks"><a href="#methods-for-handling-deadlocks" class="headerlink" title="methods for handling deadlocks"></a>methods for handling deadlocks</h2><p>1.预防或避免死锁</p>
+<p>2.允许进入死锁，检测并恢复</p>
+<p>3.忽视这个问题(为多数OS所用)</p>
+<p>deadlock prevention: 确保至少一个必要条件不成立，通过限制如何申请资源</p>
+<p>deadlock avoidance: 事先得到进程申请和使用资源的额外信息，系统可确定对于一个申请，进程是否等待(申请允许还是延迟)，考虑可用、已分配、进程将来申请和释放的资源</p>
+<h2 id="deadlock-prevention"><a href="#deadlock-prevention" class="headerlink" title="deadlock prevention"></a>deadlock prevention</h2><p>确保4个必要条件至少1个不成立</p>
+<ul>
+<li><p>mutual exclusion</p>
+<p>通常不通过这个条件…</p>
+</li>
+<li><p>hold and wait</p>
+<ul>
+<li><p>每个进程在执行前申请并获得所有资源</p>
+</li>
+<li><p>进程在没有资源时才可申请资源(申请更多资源前，先释放已分配的资源)</p>
+</li>
+</ul>
+<p>缺点:1.资源利用率低 2.starvation</p>
+</li>
+<li><p>no preemption</p>
+<p>如果一个进程占有资源并申请另一个不能立即分配的资源，其现在已分配的资源都可被抢占(被隐式释放)。</p>
+<p>进程申请资源时，不可用也不被其他等待进程占有时，等待</p>
+<p>常应用于状态可以保存恢复的资源，如CPU寄存器和内存，不适用于打印机和磁带驱动器等。</p>
+</li>
+<li><p>circular wait</p>
+<p>对所有资源类型进行完全排序。每个进程只按递增顺序申请资源。(只能申请编号比它大的)</p>
+</li>
+</ul>
+<h2 id="deadlock-avoidance"><a href="#deadlock-avoidance" class="headerlink" title="deadlock avoidance"></a>deadlock avoidance</h2><p>死锁避免比死锁预防要求低</p>
+<p>deadlock prevention 低设备使用率和吞吐率</p>
+<p>a system is in a safe state only if there exists a safe sequence</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573295674796.png" style="zoom:50%;">
+
+<h3 id="resource-allocation-graph-algorithm"><a href="#resource-allocation-graph-algorithm" class="headerlink" title="resource-allocation-graph algorithm"></a>resource-allocation-graph algorithm</h3><p>增加claim edge(需求边)，虚线</p>
+<p>当进程Pi开始执行时，所有需求边必须先处于资源分配图。(可放宽为只要与Pi有关的需求边)</p>
+<p>只有在申请边Pi-&gt;Rj变成分配边Rj-&gt;Pi，而不会出现环时，才允许申请。环存在是unsafe state</p>
+<p>cycle-detection algorithm</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573296280721.png" style="zoom:50%;">
+
+<h3 id="banker’s-algorithm"><a href="#banker’s-algorithm" class="headerlink" title="banker’s algorithm"></a>banker’s algorithm</h3><p>自己看书做题去 P247</p>
+<h2 id="deadlock-detection"><a href="#deadlock-detection" class="headerlink" title="deadlock detection"></a>deadlock detection</h2><p>不采用prevention和avoidance，应提供检查是否出现死锁&amp;恢复算法。</p>
+<h3 id="每种资源类型单个实例"><a href="#每种资源类型单个实例" class="headerlink" title="每种资源类型单个实例"></a>每种资源类型单个实例</h3><p>wait-for graph: Pi等待Pj释放一个Pi需要的资源</p>
+<p>Pi-&gt;Pj iff 资源分配图中 Pi-&gt;Rq, Rq-&gt;Pj</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573296978952.png" style="zoom:33%;">
+
+<p>图中有环 &lt;-&gt; 死锁</p>
+<h3 id="每种资源类型多个实例"><a href="#每种资源类型多个实例" class="headerlink" title="每种资源类型多个实例"></a>每种资源类型多个实例</h3><p>detection algorithm</p>
+<p><img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573297606742.png" alt></p>
+<h3 id="资源图消边法"><a href="#资源图消边法" class="headerlink" title="资源图消边法"></a>资源图消边法</h3><p>PPT P45 + 看橘</p>
+<h2 id="recovery-from-deadlock"><a href="#recovery-from-deadlock" class="headerlink" title="recovery from deadlock"></a>recovery from deadlock</h2><h3 id="process-termination"><a href="#process-termination" class="headerlink" title="process termination"></a>process termination</h3><p>不管哪种进程终止方法，系统都会收回分配给终止进程的所有资源</p>
+<ul>
+<li>终止所有死锁进程</li>
+<li>一次终止一个，调用死锁检测，直到取消死锁循环</li>
+</ul>
+<h3 id="resource-preemption"><a href="#resource-preemption" class="headerlink" title="resource preemption"></a>resource preemption</h3><p>select a victim: which resources and which processes are to be preempted 代价因素 cost factors</p>
+<p>rollback: 抢占资源后对进程做什么安排 roll back to some safe state. simplest: total rollback</p>
+<p>starvation: 如何保证资源总是从一个进程抢占 在代价因素中加上回滚次数</p>
 
       
     </div>
+    
+    
+    
 
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/操作系统/" rel="tag"># 操作系统</a>
+          
+            <a href="/tags/专业课笔记/" rel="tag"># 专业课笔记</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/02/28/OS6/" rel="next" title="操作系统笔记 CH6 Process Synchronization">
+                <i class="fa fa-chevron-left"></i> 操作系统笔记 CH6 Process Synchronization
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/02/28/OS2/" rel="prev" title="操作系统笔记 CH2 OS structures">
+                操作系统笔记 CH2 OS structures <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
 
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -345,6 +575,13 @@
 
 
           
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
 
         </div>
         
@@ -365,8 +602,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -436,6 +682,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#deadlock-characteristics"><span class="nav-text">deadlock characteristics</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#necessary-conditions"><span class="nav-text">necessary conditions</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#resource-allocation-graph"><span class="nav-text">resource-allocation graph</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#methods-for-handling-deadlocks"><span class="nav-text">methods for handling deadlocks</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#deadlock-prevention"><span class="nav-text">deadlock prevention</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#deadlock-avoidance"><span class="nav-text">deadlock avoidance</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#resource-allocation-graph-algorithm"><span class="nav-text">resource-allocation-graph algorithm</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#banker’s-algorithm"><span class="nav-text">banker’s algorithm</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#deadlock-detection"><span class="nav-text">deadlock detection</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#每种资源类型单个实例"><span class="nav-text">每种资源类型单个实例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#每种资源类型多个实例"><span class="nav-text">每种资源类型多个实例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#资源图消边法"><span class="nav-text">资源图消边法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#recovery-from-deadlock"><span class="nav-text">recovery from deadlock</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#process-termination"><span class="nav-text">process termination</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#resource-preemption"><span class="nav-text">resource preemption</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -587,6 +849,10 @@
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 

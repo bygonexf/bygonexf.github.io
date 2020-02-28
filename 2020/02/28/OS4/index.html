@@ -83,7 +83,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="操作系统,专业课笔记,">
 
 
 
@@ -94,13 +94,23 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="Choco">
-<meta property="og:url" content="https://bygonexf.github.io/categories/所学/博客/index.html">
+<meta name="description" content="Dispatching is referred to as a thread. Resource of ownership is referred to as a process ortask. 对进程的swapping和termination都牵扯它所有线程 线程是CPU使用的基本单位。由thread ID, program counter, register set, stack组成 mult">
+<meta name="keywords" content="操作系统,专业课笔记">
+<meta property="og:type" content="article">
+<meta property="og:title" content="操作系统笔记 CH4 Threads">
+<meta property="og:url" content="https://bygonexf.github.io/2020/02/28/OS4/index.html">
 <meta property="og:site_name" content="Choco">
+<meta property="og:description" content="Dispatching is referred to as a thread. Resource of ownership is referred to as a process ortask. 对进程的swapping和termination都牵扯它所有线程 线程是CPU使用的基本单位。由thread ID, program counter, register set, stack组成 mult">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573189948482.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573562767512.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573563518826.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573563717238.png">
+<meta property="og:updated_time" content="2020-02-28T05:58:17.955Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Choco">
+<meta name="twitter:title" content="操作系统笔记 CH4 Threads">
+<meta name="twitter:description" content="Dispatching is referred to as a thread. Resource of ownership is referred to as a process ortask. 对进程的swapping和termination都牵扯它所有线程 线程是CPU使用的基本单位。由thread ID, program counter, register set, stack组成 mult">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573189948482.png">
 
 
 
@@ -130,13 +140,13 @@
 
 
 
-  <link rel="canonical" href="https://bygonexf.github.io/categories/所学/博客/">
+  <link rel="canonical" href="https://bygonexf.github.io/2020/02/28/OS4/">
 
 
 
 
 
-  <title>分类: 博客 | Choco</title>
+  <title>操作系统笔记 CH4 Threads | Choco</title>
   
 
 
@@ -155,7 +165,7 @@
     
   
 
-  <div class="container sidebar-position-left ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -291,53 +301,261 @@
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block category">
+  <div id="posts" class="posts-expand">
+    
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>博客<small>分类</small>
-        </h1>
-      </div>
+  
 
-      
-        
+  
+  
+  
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://bygonexf.github.io/2020/02/28/OS4/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Fei">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Choco">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2020/02/10/Hexo Next 主题优化/" itemprop="url">
-              
-                <span itemprop="name">Hexo NexT 主题优化</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">操作系统笔记 CH4 Threads</h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2020-02-10T21:44:58+08:00" content="2020-02-10">
-          02-10
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-28T13:00:24+08:00">
+                2020-02-28
+              </time>
+            
 
-    </header>
-  </article>
+            
 
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/所学/" itemprop="url" rel="index">
+                    <span itemprop="name">所学</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/所学/操作系统/" itemprop="url" rel="index">
+                    <span itemprop="name">操作系统</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/02/28/OS4/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/02/28/OS4/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Dispatching is referred to as a thread. Resource of ownership is referred to as a process or<br>task.</p>
+<p>对进程的swapping和termination都牵扯它所有线程</p>
+<p>线程是CPU使用的基本单位。由thread ID, program counter, register set, stack组成</p>
+<h2 id="multithreading-models"><a href="#multithreading-models" class="headerlink" title="multithreading models"></a>multithreading models</h2><p>User threads, supported above the kernel and are managed without kernel support.</p>
+<p>Kernel threads, supported and managed directly by the operating system.</p>
+<ul>
+<li><p>many-to-one</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573189948482.png" style="zoom:50%;">
+</li>
+<li><p>one-to-one</p>
+<p>一个线程阻塞，另一个还能运行</p>
+<p>并发。开销大。</p>
+<p>windows, linux, solaris 9 </p>
+</li>
+<li><p>many-to-many</p>
+<p>用户线程映射到数量相同或更少的内核线程</p>
+<p>When a thread performs a blocking system call, the kernel can schedule another thread for execution.</p>
+<p>two-level model:</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573562767512.png" style="zoom:50%;">
+
+</li>
+</ul>
+<h2 id="thread-libraries"><a href="#thread-libraries" class="headerlink" title="thread libraries"></a>thread libraries</h2><p>两种方法实现：1 在用户空间提供一个没有内核支持的库 2 由OS直接支持的内核级的库</p>
+<ol>
+<li><p>POSIX Pthreads</p>
+<p>Portable Operating System Interface of UNIX</p>
+<p>Referred to user-level library</p>
+</li>
+<li><p>Win32 threads</p>
+<p>kernel-level threads library </p>
+</li>
+<li><p>Java threads</p>
+<p>provides support at the language level for the creation and management of threads.</p>
+<p>两种创建线程的方法</p>
+<ul>
+<li>extending thread class</li>
+<li>define a class that implements the Runnable interface</li>
+</ul>
+</li>
+</ol>
+<h2 id="thread-issues"><a href="#thread-issues" class="headerlink" title="thread issues"></a>thread issues</h2><h3 id="The-fork-and-exec-system-calls"><a href="#The-fork-and-exec-system-calls" class="headerlink" title="The fork() and exec() system calls"></a>The fork() and exec() system calls</h3><h3 id="thread-cancellation"><a href="#thread-cancellation" class="headerlink" title="thread cancellation"></a>thread cancellation</h3><p>Asynchronous cancellation 异步取消：立即取消</p>
+<p>Deferred cancellation 延迟取消：不断检查是否该终止</p>
+<h3 id="signal-handling"><a href="#signal-handling" class="headerlink" title="signal handling"></a>signal handling</h3><p>A signal is used in UNIX systems to notify a process that a particular event has occurred.</p>
+<p>Synchronous signal: illegal memory access, division by 0.</p>
+<p>Asynchronously signal: terminating a process with specific keystrokes, Ctrl+C ，由运行进程之外的事产生</p>
+<p>two possible handlers:</p>
+<ul>
+<li>a user-defined signal handler</li>
+<li>a default signal handler, which is run by the kernel</li>
+</ul>
+<p>同步信号送到需要发到产生它的线程</p>
+<h3 id="thread-pools"><a href="#thread-pools" class="headerlink" title="thread pools"></a>thread pools</h3><img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573563518826.png" style="zoom:50%;">
+
+<p>优点：1 快 2 限制可用线程数量</p>
+<h3 id="thread-specific-data"><a href="#thread-specific-data" class="headerlink" title="thread-specific data"></a>thread-specific data</h3><p>Thread-specific data allows each thread to have its own copy of data (Thread-local storage (TLS) ).</p>
+<p> TLS visible across function invocations</p>
+<h3 id="scheduler-activation"><a href="#scheduler-activation" class="headerlink" title="scheduler activation"></a>scheduler activation</h3><img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573563717238.png" style="zoom:50%;">
+
+<p>Scheduler activation – one scheme for communication between the user-thread library and the kernel.</p>
+<p>provides upcalls, the kernel inform an application about certain events.</p>
+<p>upcall handlers must run on a LWP.</p>
+<p>当一个应用线程要阻塞，内核向应用程序发upcall，分配一个新LWP给应用线程，应用线程在这个LWP上运行upcall handler</p>
+<p>当阻塞线程等待事件发生，内核向线程库发另一个upcall， kernel allocates a new LWP or preempt one of the user threads to run the upcall handler for this event.</p>
+<h2 id="OS-examples"><a href="#OS-examples" class="headerlink" title="OS examples"></a>OS examples</h2><h2 id="windows-XP-threads"><a href="#windows-XP-threads" class="headerlink" title="windows XP threads"></a>windows XP threads</h2><p>one-to-one</p>
+<p>ETHREAD (in kernel space), KTHREAD (in kernel space), TEB (in user space)</p>
+<h2 id="Linux-threads-tasks"><a href="#Linux-threads-tasks" class="headerlink" title="Linux threads - tasks"></a>Linux threads - tasks</h2><p>clone() system call</p>
 
       
     </div>
+    
+    
+    
 
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/操作系统/" rel="tag"># 操作系统</a>
+          
+            <a href="/tags/专业课笔记/" rel="tag"># 专业课笔记</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/02/28/OS3/" rel="next" title="操作系统笔记 CH3 Process">
+                <i class="fa fa-chevron-left"></i> 操作系统笔记 CH3 Process
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/02/28/OS5/" rel="prev" title="操作系统笔记 CH5 CPU Scheduling">
+                操作系统笔记 CH5 CPU Scheduling <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
 
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -345,6 +563,13 @@
 
 
           
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
 
         </div>
         
@@ -365,8 +590,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -436,6 +670,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#multithreading-models"><span class="nav-text">multithreading models</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#thread-libraries"><span class="nav-text">thread libraries</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#thread-issues"><span class="nav-text">thread issues</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#The-fork-and-exec-system-calls"><span class="nav-text">The fork() and exec() system calls</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#thread-cancellation"><span class="nav-text">thread cancellation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#signal-handling"><span class="nav-text">signal handling</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#thread-pools"><span class="nav-text">thread pools</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#thread-specific-data"><span class="nav-text">thread-specific data</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#scheduler-activation"><span class="nav-text">scheduler activation</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#OS-examples"><span class="nav-text">OS examples</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#windows-XP-threads"><span class="nav-text">windows XP threads</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Linux-threads-tasks"><span class="nav-text">Linux threads - tasks</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -587,6 +837,10 @@
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
