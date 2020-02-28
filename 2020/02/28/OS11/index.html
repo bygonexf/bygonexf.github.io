@@ -1,0 +1,1331 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+<meta name="google-site-verification" content="ZtDCfxX0w_MTT5dz2MU_L5MC8gehpvNri9UkZKPBByU">
+<script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+<link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet">
+<style>
+    .pace .pace-progress {
+        background: #99ccff; /*进度条颜色*/
+        height: 3px;
+    }
+    .pace .pace-progress-inner {
+         box-shadow: 0 0 10px #1E92FB, 0 0 5px     #1944ba; /*阴影颜色*/
+    }
+    .pace .pace-activity {
+        border-top-color: #99ccff;    /*上边框颜色*/
+        border-left-color: #99ccff;    /*左边框颜色*/
+    }
+</style>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+<link href="https://fonts.loli.net/css?family=Noto+Serif+SC:400,500,700&display=swap&subset=chinese-simplified" rel="stylesheet">
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/girl-32.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/girl-16.ico?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="操作系统,专业课笔记,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="文件系统结构磁盘特点：可以原地重写，可以直接访问任意一块。 内存和磁盘之间的IO以块为单位。每块为一个或多个扇区。扇区通常为512B File system resides on secondary storage (disks) OS通过文件系统存储、定位、提取数据    IO control 最底层 由device driver 和 Interrupt handlers组成 实现内存和磁盘之间">
+<meta name="keywords" content="操作系统,专业课笔记">
+<meta property="og:type" content="article">
+<meta property="og:title" content="操作系统笔记 CH11 File-System Implementation">
+<meta property="og:url" content="https://bygonexf.github.io/2020/02/28/OS11/index.html">
+<meta property="og:site_name" content="Choco">
+<meta property="og:description" content="文件系统结构磁盘特点：可以原地重写，可以直接访问任意一块。 内存和磁盘之间的IO以块为单位。每块为一个或多个扇区。扇区通常为512B File system resides on secondary storage (disks) OS通过文件系统存储、定位、提取数据    IO control 最底层 由device driver 和 Interrupt handlers组成 实现内存和磁盘之间">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577502786991.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577503036078.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577507477227.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577509061560.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577509383605.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577510977781.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577511076567.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577512314875.png">
+<meta property="og:updated_time" content="2020-02-28T09:09:36.056Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="操作系统笔记 CH11 File-System Implementation">
+<meta name="twitter:description" content="文件系统结构磁盘特点：可以原地重写，可以直接访问任意一块。 内存和磁盘之间的IO以块为单位。每块为一个或多个扇区。扇区通常为512B File system resides on secondary storage (disks) OS通过文件系统存储、定位、提取数据    IO control 最底层 由device driver 和 Interrupt handlers组成 实现内存和磁盘之间">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577502786991.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://bygonexf.github.io/2020/02/28/OS11/">
+
+
+
+
+
+  <title>操作系统笔记 CH11 File-System Implementation | Choco</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Choco</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">one more bite</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://bygonexf.github.io/2020/02/28/OS11/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Fei">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Choco">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">操作系统笔记 CH11 File-System Implementation</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-28T13:11:24+08:00">
+                2020-02-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/所学/" itemprop="url" rel="index">
+                    <span itemprop="name">所学</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/所学/操作系统/" itemprop="url" rel="index">
+                    <span itemprop="name">操作系统</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/02/28/OS11/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/02/28/OS11/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="文件系统结构"><a href="#文件系统结构" class="headerlink" title="文件系统结构"></a>文件系统结构</h2><p>磁盘特点：可以原地重写，可以直接访问任意一块。</p>
+<p>内存和磁盘之间的IO以块为单位。每块为一个或多个扇区。扇区通常为512B</p>
+<p>File system resides on secondary storage (disks) OS通过文件系统存储、定位、提取数据</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577502786991.png" style="zoom: 50%;">
+
+<ul>
+<li><p>IO control 最底层</p>
+<p>由device driver 和 Interrupt handlers组成</p>
+<p>实现内存和磁盘之间的信息传输。</p>
+<p>device driver可作为翻译器。输入是高层命令，输出是底层的、硬件特定的命令。命令用于控制hardware controller</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577503036078.png" style="zoom:50%;">
+
+<p>device driver控制一类设备</p>
+</li>
+<li><p>basic file system</p>
+<p>Issue generic commands to the appropriate device driver to read and write physical blocks on the disk.</p>
+</li>
+<li><p>file-organization module</p>
+<p>将逻辑块地址 转换成 物理块地址</p>
+<p>也包括空闲空间管理器</p>
+</li>
+<li><p>logical file system</p>
+<p>管理metadata，元数据包括文件系统所有结构数据，而不包括实际数据</p>
+<p>管理目录结构</p>
+<p>通过FCB((inodes in UNIX))维护文件结构</p>
+<p>负责保护和安全</p>
+</li>
+</ul>
+<p>Layering useful for reducing complexity and redundancy, but adds overhead and can decrease performance.</p>
+<p>绝大多数OS支持多个文件系统</p>
+<p>UNIX使用UFS</p>
+<p>标准的Linux文件系统是extende file system</p>
+<h2 id="文件系统实现"><a href="#文件系统实现" class="headerlink" title="文件系统实现"></a>文件系统实现</h2><p>每个卷的boot control block：从该卷引导OS需要的信息。如果没有OS，该块为空，通常为卷的第一块。UFS称之为boot block，NTFS称之为partition boot sector</p>
+<p>每个卷的volume control blcok：包括卷(或分区)的详细信息，如分区的块数，块的大小…UFS称之为superblock，NTFS中它存在master file table中</p>
+<p>每个文件系统的目录结构用来组织文件。UFS中包含文件名和相关的inode号，NTFS中它存储在master file table中</p>
+<p>每个文件的FCB。UFS中是inode，NTFS存在master file table中，每个文件占一行</p>
+<h3 id="In-Memory-File-System-Structures"><a href="#In-Memory-File-System-Structures" class="headerlink" title="In-Memory File System Structures"></a>In-Memory File System Structures</h3><p>一个内存中的mount table(partition table)</p>
+<p>一个内存中的director structure cache</p>
+<p>system-wide open-file table: 包括每个打开文件的FCB副本</p>
+<p>per-process open-file table: Contains a pointer to the appropriate entry in the system-wide open-file table.</p>
+<p>buffers hold data blocks from secondary storage.</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577507477227.png" style="zoom:50%;">
+
+<p>对于访问打开文件表的索引：UNIX称之为file descriptor，Windows称之为file handle. 只要文件没有关闭，所有文件操作都是通过打开文件表来进行的</p>
+<h3 id="partitions-and-mounting-分区和安装"><a href="#partitions-and-mounting-分区和安装" class="headerlink" title="partitions and mounting 分区和安装"></a>partitions and mounting 分区和安装</h3><p>一个disk可以分为多个partition，一个partition可以横跨多个disk(作为RAID的一种形式比较合适)</p>
+<p>分区可以是</p>
+<ul>
+<li>raw 没有文件系统</li>
+<li>cooked 含有文件系统</li>
+</ul>
+<p>引导信息能保存在多个分区中，通常为一组有序块，并作为镜像文件读入内存</p>
+<p>boot loader知道位于引导区的多个文件系统和多个操作系统，一旦装入，它可以引导位于磁盘上的一个操作系统。磁盘可以有多个分区，每个分区包含不同类型的文件系统和不同的操作系统。</p>
+<p>root partiton包括操作系统内核或其他系统文件，在引导时装入内存。</p>
+<p>内存中有Mount table – containing information about file systems that has been mounted.</p>
+<h3 id="virtual-file-system-VFS"><a href="#virtual-file-system-VFS" class="headerlink" title="virtual file system (VFS)"></a>virtual file system (VFS)</h3><p>Virtual file system (VFS) on most OSes, including Unix, use object-oriented techniques to implement the file system. 用户甚至可以访问位于网络上的操作系统</p>
+<p>VFS allows the same system call interface (the API) to be used for different types of file systems.</p>
+<p>Implements vnodes which hold inodes or network file details.</p>
+<p>The API is to the VFS interface, rather than any specific type of file system.</p>
+<p>多个VFS接口的实现可以共存在同一台机器上</p>
+<p>vnode表示位于整个网络范围内唯一的文件</p>
+<p>Linux has four object types: inode, file, superblock, dentry</p>
+<p>VFS defines a set of operations on the objects that must be implemented.</p>
+<h2 id="目录实现"><a href="#目录实现" class="headerlink" title="目录实现"></a>目录实现</h2><h3 id="linear-list-线性列表"><a href="#linear-list-线性列表" class="headerlink" title="linear list 线性列表"></a>linear list 线性列表</h3><p>linear search time费时</p>
+<p>sorted list允许binary search</p>
+<p>a balanced tree</p>
+<h3 id="hash-table"><a href="#hash-table" class="headerlink" title="hash table"></a>hash table</h3><p>decreases directory search time</p>
+<p>需要处理collision(两个文件名哈希到相同的位置)：chained-overflow</p>
+<p>Difficulties: fixed size, hash function</p>
+<h2 id="分配方法"><a href="#分配方法" class="headerlink" title="分配方法"></a>分配方法</h2><p>how disk blocks are allocated for files</p>
+<h3 id="Contiguous-Allocation-连续分配"><a href="#Contiguous-Allocation-连续分配" class="headerlink" title="Contiguous Allocation 连续分配"></a>Contiguous Allocation 连续分配</h3><p>每个文件在磁盘上占有一组连续的块</p>
+<p>访问连续分配文件所需寻道数最少</p>
+<p>用第一块的磁盘地址和连续块的数量来定义</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577509061560.png" style="zoom:50%;">
+
+<p>sequential and direct access</p>
+<p>Best performance in most cases</p>
+<p>问题</p>
+<ul>
+<li>Difficult to find space for a new file: First-fit, best-fit</li>
+<li>External fragmentation</li>
+<li>compaction off-line (downtime) or on-line</li>
+</ul>
+<p>Extent-Based Systems, a modified contiguous allocation scheme 当空间不够时，另一块被称为扩展的连续空间会添加到原来的文件分配中</p>
+<h3 id="Linked-Allocation-链接分配"><a href="#Linked-Allocation-链接分配" class="headerlink" title="Linked Allocation 链接分配"></a>Linked Allocation 链接分配</h3><p>每个文件是磁盘块的链表</p>
+<p>目录包括文件第一块的指针和最后一块的指针。每一块都有下一块的指针。</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577509383605.png" style="zoom:50%;">
+
+<p>没有外部碎片</p>
+<p>只要有空闲块，文件就可以增大</p>
+<p>Disadvantages: 不能随机访问，指针需要空间，不可靠</p>
+<p>对于指针需要空间，解决办法是将多个块组成簇(cluster)，代价是增加了内部碎片</p>
+<h4 id="FAT-file-allocation-table-文件分配表"><a href="#FAT-file-allocation-table-文件分配表" class="headerlink" title="FAT(file-allocation table)文件分配表"></a>FAT(file-allocation table)文件分配表</h4><p>used by MS-DOS and OS/2</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577510977781.png" style="zoom:50%;">
+
+<p>对FAT采用缓存</p>
+<p>支持直接访问</p>
+<h3 id="Indexed-Allocation-索引分配"><a href="#Indexed-Allocation-索引分配" class="headerlink" title="Indexed Allocation 索引分配"></a>Indexed Allocation 索引分配</h3><p>每个文件都有索引块，是一个磁盘块地址的数组</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577511076567.png" style="zoom:50%;">
+
+<p>目录条目包括索引块的地址</p>
+<p>支持直接访问</p>
+<p>没有外部碎片</p>
+<p>索引块应该多大</p>
+<ul>
+<li><p>linked scheme</p>
+<p>将多个索引块链接起来</p>
+</li>
+<li><p>two-level index</p>
+</li>
+<li><p>combined scheme</p>
+<p>UNIX采用</p>
+</li>
+</ul>
+<h3 id="性能"><a href="#性能" class="headerlink" title="性能"></a>性能</h3><p>contiguous great for sequential and random</p>
+<p>linked good for sequential, not random</p>
+<p>combine contiguous allocation with indexed allocation by using contiguous allocation for small files (up to three or four blocks), automatically switching to an indexed allocation if the file grows large.</p>
+<h3 id="free-space-management"><a href="#free-space-management" class="headerlink" title="free-space management"></a>free-space management</h3><p>文件系统需要维护free-space list记录空闲磁盘空间(不一定是链表)</p>
+<h4 id="bit-map-bit-vector"><a href="#bit-map-bit-vector" class="headerlink" title="bit map / bit vector"></a>bit map / bit vector</h4><p>每块用一位表示。空闲-1，已分配-0</p>
+<p>查找第一个和n个连续空闲块简单高效</p>
+<p>Bit map requires extra space.</p>
+<p>Easy to get contiguous files space.</p>
+<h4 id="linked-list-链表"><a href="#linked-list-链表" class="headerlink" title="linked list 链表"></a>linked list 链表</h4><p>将所有空闲块用链表链接</p>
+<p>将指向第一空闲块的指针缓存在内存</p>
+<p>Cannot get contiguous space easily.</p>
+<h4 id="grouping"><a href="#grouping" class="headerlink" title="grouping"></a>grouping</h4><p>将n个空闲块的地址存在第一个空闲块里。(前n-1确实为空，最后一块包含另外n个空闲块的地址)</p>
+<p>可以找到大量空闲块</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577512314875.png" style="zoom:33%;">
+
+<h4 id="counting"><a href="#counting" class="headerlink" title="counting"></a>counting</h4><p>记录第一块的地址和紧跟第一块的连续的空闲块的数量n</p>
+<p>can be stored in a balanced tree for efficiency</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/操作系统/" rel="tag"># 操作系统</a>
+          
+            <a href="/tags/专业课笔记/" rel="tag"># 专业课笔记</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/02/28/OS10/" rel="next" title="操作系统笔记 CH10 File-System Interface">
+                <i class="fa fa-chevron-left"></i> 操作系统笔记 CH10 File-System Interface
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/02/28/OS12/" rel="prev" title="操作系统笔记 CH12 Mass-Storage Structure">
+                操作系统笔记 CH12 Mass-Storage Structure <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Fei</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:bygonexf@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#文件系统结构"><span class="nav-text">文件系统结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件系统实现"><span class="nav-text">文件系统实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#In-Memory-File-System-Structures"><span class="nav-text">In-Memory File System Structures</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#partitions-and-mounting-分区和安装"><span class="nav-text">partitions and mounting 分区和安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#virtual-file-system-VFS"><span class="nav-text">virtual file system (VFS)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#目录实现"><span class="nav-text">目录实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#linear-list-线性列表"><span class="nav-text">linear list 线性列表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hash-table"><span class="nav-text">hash table</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分配方法"><span class="nav-text">分配方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Contiguous-Allocation-连续分配"><span class="nav-text">Contiguous Allocation 连续分配</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Linked-Allocation-链接分配"><span class="nav-text">Linked Allocation 链接分配</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#FAT-file-allocation-table-文件分配表"><span class="nav-text">FAT(file-allocation table)文件分配表</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Indexed-Allocation-索引分配"><span class="nav-text">Indexed Allocation 索引分配</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#性能"><span class="nav-text">性能</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#free-space-management"><span class="nav-text">free-space management</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#bit-map-bit-vector"><span class="nav-text">bit map / bit vector</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#linked-list-链表"><span class="nav-text">linked list 链表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#grouping"><span class="nav-text">grouping</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#counting"><span class="nav-text">counting</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="heart">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Fei</span>
+
+</div>
+
+<!--
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+-->
+
+<div class="powered-by">
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <i class="fa fa-user-md"></i>
+    <span id="busuanzi_container_site_uv">
+        遇见 <span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span id="busuanzi_container_site_pv">
+        擦肩而过 <span id="busuanzi_value_site_pv"></span>
+    </span>
+</div>
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'GyuhVvqtat4iqpvUjF5sUgBj-gzGzoHsz',
+        appKey: 'sX5S1trE3LnnFCSpp7epq55p',
+        placeholder: '',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'manual') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  <script type="text/javascript" src="/lib/clipboard/clipboard.js"></script>
+<script type="text/javascript" src="/js/src/custom.js"></script>
+</body>
+</html>

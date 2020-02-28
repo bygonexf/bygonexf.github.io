@@ -1,0 +1,1284 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+<meta name="google-site-verification" content="ZtDCfxX0w_MTT5dz2MU_L5MC8gehpvNri9UkZKPBByU">
+<script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+<link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet">
+<style>
+    .pace .pace-progress {
+        background: #99ccff; /*进度条颜色*/
+        height: 3px;
+    }
+    .pace .pace-progress-inner {
+         box-shadow: 0 0 10px #1E92FB, 0 0 5px     #1944ba; /*阴影颜色*/
+    }
+    .pace .pace-activity {
+        border-top-color: #99ccff;    /*上边框颜色*/
+        border-left-color: #99ccff;    /*左边框颜色*/
+    }
+</style>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+<link href="https://fonts.loli.net/css?family=Noto+Serif+SC:400,500,700&display=swap&subset=chinese-simplified" rel="stylesheet">
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/girl-32.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/girl-16.ico?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="操作系统,专业课笔记,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="the kernel is structured to use device-driver modules. device driver为IO子系统提供了统一设备访问接口 两个趋势：接口日益标准化，设备多样性 IO 硬件port bus controller Controller usually have registers, where device driver places commands">
+<meta name="keywords" content="操作系统,专业课笔记">
+<meta property="og:type" content="article">
+<meta property="og:title" content="操作系统笔记 CH13 I&#x2F;O Systems">
+<meta property="og:url" content="https://bygonexf.github.io/2020/02/28/OS13/index.html">
+<meta property="og:site_name" content="Choco">
+<meta property="og:description" content="the kernel is structured to use device-driver modules. device driver为IO子系统提供了统一设备访问接口 两个趋势：接口日益标准化，设备多样性 IO 硬件port bus controller Controller usually have registers, where device driver places commands">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577522127902.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577522223439.png">
+<meta property="og:updated_time" content="2020-02-28T09:14:45.313Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="操作系统笔记 CH13 I&#x2F;O Systems">
+<meta name="twitter:description" content="the kernel is structured to use device-driver modules. device driver为IO子系统提供了统一设备访问接口 两个趋势：接口日益标准化，设备多样性 IO 硬件port bus controller Controller usually have registers, where device driver places commands">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577522127902.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://bygonexf.github.io/2020/02/28/OS13/">
+
+
+
+
+
+  <title>操作系统笔记 CH13 I/O Systems | Choco</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Choco</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">one more bite</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://bygonexf.github.io/2020/02/28/OS13/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Fei">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Choco">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">操作系统笔记 CH13 I/O Systems</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-28T13:13:24+08:00">
+                2020-02-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/所学/" itemprop="url" rel="index">
+                    <span itemprop="name">所学</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/所学/操作系统/" itemprop="url" rel="index">
+                    <span itemprop="name">操作系统</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/02/28/OS13/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/02/28/OS13/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>the kernel is structured to use device-driver modules.</p>
+<p>device driver为IO子系统提供了统一设备访问接口</p>
+<p>两个趋势：接口日益标准化，设备多样性</p>
+<h2 id="IO-硬件"><a href="#IO-硬件" class="headerlink" title="IO 硬件"></a>IO 硬件</h2><p>port</p>
+<p>bus</p>
+<p>controller</p>
+<p>Controller usually have registers, where device driver places commands, addresses, and data to write, or read data from registers after command execution. Data-in register, data-out register, status register, control register</p>
+<p>设备有地址</p>
+<ul>
+<li><p>Direct I/O instructions</p>
+</li>
+<li><p>Memory-mapped I/O 内存映射IO</p>
+<p>设备控制寄存器 被映射到 处理器的地址空间</p>
+<p>Especially for large address spaces (graphics)</p>
+</li>
+</ul>
+<p>IO端口有4种寄存器：</p>
+<ul>
+<li>status</li>
+<li>control</li>
+<li>data-in</li>
+<li>data-out</li>
+</ul>
+<p>Techniques for Performing I/O</p>
+<ul>
+<li>Programmed I/O</li>
+<li>Interrupt-driven I/O</li>
+<li>Direct Memory Access (DMA)</li>
+</ul>
+<h3 id="polling-轮询"><a href="#polling-轮询" class="headerlink" title="polling 轮询"></a>polling 轮询</h3><p>控制器通过状态寄存器的busy bit显示其状态</p>
+<p>主机通过命令寄存器中的command-ready bit表示其意愿</p>
+<p>busy-waiting / polling 主机不断读状态寄存器直到忙位被清除</p>
+<p>Polling can happen in 3 instruction cycles, Read status, logical-and to extract status bit, branch if not zero</p>
+<h3 id="interrupts"><a href="#interrupts" class="headerlink" title="interrupts"></a>interrupts</h3><p>Interrupt-request line</p>
+<p>Interrupt handler receives interrupts. Maskable to ignore or delay some interrupts</p>
+<p>Interrupt vector to dispatch interrupt to correct handler</p>
+<p>中断向量：中断处理程序的内存地址</p>
+<p>计算机设备比向量内地址多。interrupt chaining 中断向量内的每个元素都指向中断处理程序列表的头</p>
+<p>实现了中断优先级</p>
+<p>Interrupt mechanism also used for exceptions</p>
+<p>Good uses: system calls, page fault</p>
+<p>Used for time-sensitive processing, frequent, must be fast.</p>
+<h3 id="DMA"><a href="#DMA" class="headerlink" title="DMA"></a>DMA</h3><p>Requires DMA controller, a special-purpose processor.</p>
+<p>Bypasses CPU to transfer data directly between I/O device and memory.</p>
+<p>Host writes a DMA command block into memory.</p>
+<p>CPU writes the address of this command block to the DMA controller.</p>
+<p>DMA controller operates the memory bus directly, placing address on the bus to perform transfers.</p>
+<p>When the entire transfer is finished, the DMA controller interrupts the CPU.</p>
+<p>Handshaking between the DMA controller and the device controller:</p>
+<p>​    performed via a pair of wires called DMA-request and DMA-acknowledge.</p>
+<p>DMA控制器抓住内存总线时，CPU暂时不能访问主存，但可以访问一级或二级高速缓存中的数据项。</p>
+<p>周期挪用cycle stealing可能放慢CPU计算，但数据传输工作交给DMA控制器改善整体性能</p>
+<p>DVMA (direct virtual memory access) can perform a transfer between two memory-mapped devices<br>without the intervention of the CPU or the use of main memory. 直接实现两个内存映射设备之间的传输，无需CPU的干涉或使用主存</p>
+<h2 id="IO应用接口"><a href="#IO应用接口" class="headerlink" title="IO应用接口"></a>IO应用接口</h2><p>设备驱动程序层device-driver layer为内核IO子系统隐藏设备控制器之间的差异</p>
+<p>Broadly I/O devices can be grouped by the OS into</p>
+<ul>
+<li>block IO</li>
+<li>character-stream IO</li>
+<li>memory-mapped file access</li>
+<li>network sockets</li>
+</ul>
+<p>OS存在后门(escape / back door)，允许应用程序将任何命令透明地传输到设备控制器</p>
+<p> Unix ioctl()</p>
+<h3 id="块与字符设备"><a href="#块与字符设备" class="headerlink" title="块与字符设备"></a>块与字符设备</h3><h4 id="Block-devices"><a href="#Block-devices" class="headerlink" title="Block devices"></a>Block devices</h4><p> include disk drives</p>
+<p>Commands include read(), write(), seek()</p>
+<p>Raw I/O, direct I/O, or file-system access</p>
+<p>Memory-mapped file access possible</p>
+<p>DMA</p>
+<h4 id="Character-devices"><a href="#Character-devices" class="headerlink" title="Character devices"></a>Character devices</h4><p> include keyboards, mice, serial ports</p>
+<p>Commands include get(), put()</p>
+<h3 id="网络设备"><a href="#网络设备" class="headerlink" title="网络设备"></a>网络设备</h3><p>The socket interface, Linux, Unix and Windows</p>
+<p>Includes select functionality: manages a set of sockets</p>
+<h3 id="clocks-and-timers"><a href="#clocks-and-timers" class="headerlink" title="clocks and timers"></a>clocks and timers</h3><p>Provide current time, elapsed time, timer</p>
+<p>Programmable interval timer used for timings, periodic interrupts.</p>
+<h3 id="Blocking-I-O-and-Nonblocking-I-O"><a href="#Blocking-I-O-and-Nonblocking-I-O" class="headerlink" title="Blocking I/O and Nonblocking I/O"></a>Blocking I/O and Nonblocking I/O</h3><p>Blocking - process suspended until I/O completed</p>
+<p>Nonblocking - I/O call returns as much as available</p>
+<p>Asynchronous - process runs while I/O executes 不必等待IO完成就可立即返回</p>
+<h2 id="Kernel-I-O-Subsystem"><a href="#Kernel-I-O-Subsystem" class="headerlink" title="Kernel I/O Subsystem"></a>Kernel I/O Subsystem</h2><h3 id="IO-scheduling"><a href="#IO-scheduling" class="headerlink" title="IO scheduling"></a>IO scheduling</h3><p>为每个设备维护一个请求队列</p>
+<h3 id="buffering"><a href="#buffering" class="headerlink" title="buffering"></a>buffering</h3><p>保存两个设备之间 或 设备和应用程序之间 所传输数据的内存区域</p>
+<h3 id="caching"><a href="#caching" class="headerlink" title="caching"></a>caching</h3><p>高速缓存是可以保留数据副本的高速存储器</p>
+<p>buffer可能是数据的唯一副本，而cache只是提供了一个 驻留在其他地方的数据 在高速存储上的一个副本</p>
+<p>有时同一内存区域可同时用作cache和buffer</p>
+<h3 id="Spooling假脱机-amp-Device-reservation"><a href="#Spooling假脱机-amp-Device-reservation" class="headerlink" title="Spooling假脱机 &amp; Device reservation"></a>Spooling假脱机 &amp; Device reservation</h3><p>Spooling - hold output for a device</p>
+<p>Device reservation( 预约) - provides exclusive access to a device</p>
+<h3 id="error-handling"><a href="#error-handling" class="headerlink" title="error handling"></a>error handling</h3><p>Most return an error number or code when I/O request fails.</p>
+<p>System error logs hold problem reports</p>
+<h3 id="IO-protection"><a href="#IO-protection" class="headerlink" title="IO protection"></a>IO protection</h3><p>所有IO指令为特权指令</p>
+<p>IO必须通过system call执行</p>
+<h3 id="内核数据结构"><a href="#内核数据结构" class="headerlink" title="内核数据结构"></a>内核数据结构</h3><p>Kernel keeps state information for I/O components, including open file tables, network connections, character device state.</p>
+<p>Many complex data structures to track buffers, memory allocation, “dirty” blocks.</p>
+<p>Some use object-oriented methods and message passing to implement I/O.</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577522127902.png" style="zoom:50%;">
+
+<h2 id="把IO操作转换成硬件操作"><a href="#把IO操作转换成硬件操作" class="headerlink" title="把IO操作转换成硬件操作"></a>把IO操作转换成硬件操作</h2><img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577522223439.png" style="zoom:50%;">
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/操作系统/" rel="tag"># 操作系统</a>
+          
+            <a href="/tags/专业课笔记/" rel="tag"># 专业课笔记</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/02/28/OS12/" rel="next" title="操作系统笔记 CH12 Mass-Storage Structure">
+                <i class="fa fa-chevron-left"></i> 操作系统笔记 CH12 Mass-Storage Structure
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Fei</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:bygonexf@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#IO-硬件"><span class="nav-text">IO 硬件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#polling-轮询"><span class="nav-text">polling 轮询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#interrupts"><span class="nav-text">interrupts</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DMA"><span class="nav-text">DMA</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IO应用接口"><span class="nav-text">IO应用接口</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#块与字符设备"><span class="nav-text">块与字符设备</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Block-devices"><span class="nav-text">Block devices</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Character-devices"><span class="nav-text">Character devices</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#网络设备"><span class="nav-text">网络设备</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#clocks-and-timers"><span class="nav-text">clocks and timers</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Blocking-I-O-and-Nonblocking-I-O"><span class="nav-text">Blocking I/O and Nonblocking I/O</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Kernel-I-O-Subsystem"><span class="nav-text">Kernel I/O Subsystem</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#IO-scheduling"><span class="nav-text">IO scheduling</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#buffering"><span class="nav-text">buffering</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#caching"><span class="nav-text">caching</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Spooling假脱机-amp-Device-reservation"><span class="nav-text">Spooling假脱机 &amp; Device reservation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#error-handling"><span class="nav-text">error handling</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IO-protection"><span class="nav-text">IO protection</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#内核数据结构"><span class="nav-text">内核数据结构</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#把IO操作转换成硬件操作"><span class="nav-text">把IO操作转换成硬件操作</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="heart">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Fei</span>
+
+</div>
+
+<!--
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+-->
+
+<div class="powered-by">
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <i class="fa fa-user-md"></i>
+    <span id="busuanzi_container_site_uv">
+        遇见 <span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span id="busuanzi_container_site_pv">
+        擦肩而过 <span id="busuanzi_value_site_pv"></span>
+    </span>
+</div>
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'GyuhVvqtat4iqpvUjF5sUgBj-gzGzoHsz',
+        appKey: 'sX5S1trE3LnnFCSpp7epq55p',
+        placeholder: '',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'manual') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  <script type="text/javascript" src="/lib/clipboard/clipboard.js"></script>
+<script type="text/javascript" src="/js/src/custom.js"></script>
+</body>
+</html>

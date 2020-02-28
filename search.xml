@@ -1,162 +1,894 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>操作系统笔记 CH2 OS structures</title>
-    <url>/2020/02/28/OS2/</url>
-    <content><![CDATA[<h2 id="UI"><a href="#UI" class="headerlink" title="UI"></a>UI</h2><ul>
-<li><p>CLI command-line / command interpreter</p>
-<p>implemented in kernel (MS-DOS)</p>
-<p>by systems program (Windows / UNIX)</p>
-<p> multiple flavors implemented – shells UNIX / Linux</p>
-<p>linux shell : shell: 带形参的批命令文件</p>
-</li>
-<li><p>batch interface</p>
-</li>
-<li><p>GUI graphical user interface</p>
-<p>desktop, icon, Xerox PARC</p>
-</li>
-</ul>
-<h2 id="system-calls"><a href="#system-calls" class="headerlink" title="system calls"></a>system calls</h2><p><u>Programming interface to the services provided by the OS</u></p>
-<p>written in high-level language</p>
-<p>Mostly accessed by programs via a high-level Application Program Interface (<u>API</u>) rather than direct system call use.</p>
-<p>most common API: </p>
+    <title>操作系统笔记 CH13 I/O Systems</title>
+    <url>/2020/02/28/OS13/</url>
+    <content><![CDATA[<p>the kernel is structured to use device-driver modules.</p>
+<p>device driver为IO子系统提供了统一设备访问接口</p>
+<p>两个趋势：接口日益标准化，设备多样性</p>
+<h2 id="IO-硬件"><a href="#IO-硬件" class="headerlink" title="IO 硬件"></a>IO 硬件</h2><p>port</p>
+<p>bus</p>
+<p>controller</p>
+<p>Controller usually have registers, where device driver places commands, addresses, and data to write, or read data from registers after command execution. Data-in register, data-out register, status register, control register</p>
+<p>设备有地址</p>
 <ul>
-<li>Win32 API</li>
-<li>POSIX API: for UNIX, Linux, and Mac OS X</li>
-<li>Java API: for JVM</li>
+<li><p>Direct I/O instructions</p>
+</li>
+<li><p>Memory-mapped I/O 内存映射IO</p>
+<p>设备控制寄存器 被映射到 处理器的地址空间</p>
+<p>Especially for large address spaces (graphics)</p>
+</li>
 </ul>
-<p>A programmer accesses an API via a library of code provided by the operating system. (e.g. libc )</p>
-<p>the <u>run-time support system</u> provides a system-call interface that serves as the link to system calls.</p>
-<h4 id="system-call-parameter-passing"><a href="#system-call-parameter-passing" class="headerlink" title="system call parameter passing"></a>system call parameter passing</h4><p>3 methods:</p>
-<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573537965310.png" style="zoom:50%;">
+<p>IO端口有4种寄存器：</p>
+<ul>
+<li>status</li>
+<li>control</li>
+<li>data-in</li>
+<li>data-out</li>
+</ul>
+<p>Techniques for Performing I/O</p>
+<ul>
+<li>Programmed I/O</li>
+<li>Interrupt-driven I/O</li>
+<li>Direct Memory Access (DMA)</li>
+</ul>
+<h3 id="polling-轮询"><a href="#polling-轮询" class="headerlink" title="polling 轮询"></a>polling 轮询</h3><p>控制器通过状态寄存器的busy bit显示其状态</p>
+<p>主机通过命令寄存器中的command-ready bit表示其意愿</p>
+<p>busy-waiting / polling 主机不断读状态寄存器直到忙位被清除</p>
+<p>Polling can happen in 3 instruction cycles, Read status, logical-and to extract status bit, branch if not zero</p>
+<h3 id="interrupts"><a href="#interrupts" class="headerlink" title="interrupts"></a>interrupts</h3><p>Interrupt-request line</p>
+<p>Interrupt handler receives interrupts. Maskable to ignore or delay some interrupts</p>
+<p>Interrupt vector to dispatch interrupt to correct handler</p>
+<p>中断向量：中断处理程序的内存地址</p>
+<p>计算机设备比向量内地址多。interrupt chaining 中断向量内的每个元素都指向中断处理程序列表的头</p>
+<p>实现了中断优先级</p>
+<p>Interrupt mechanism also used for exceptions</p>
+<p>Good uses: system calls, page fault</p>
+<p>Used for time-sensitive processing, frequent, must be fast.</p>
+<h3 id="DMA"><a href="#DMA" class="headerlink" title="DMA"></a>DMA</h3><p>Requires DMA controller, a special-purpose processor.</p>
+<p>Bypasses CPU to transfer data directly between I/O device and memory.</p>
+<p>Host writes a DMA command block into memory.</p>
+<p>CPU writes the address of this command block to the DMA controller.</p>
+<p>DMA controller operates the memory bus directly, placing address on the bus to perform transfers.</p>
+<p>When the entire transfer is finished, the DMA controller interrupts the CPU.</p>
+<p>Handshaking between the DMA controller and the device controller:</p>
+<p>​    performed via a pair of wires called DMA-request and DMA-acknowledge.</p>
+<p>DMA控制器抓住内存总线时，CPU暂时不能访问主存，但可以访问一级或二级高速缓存中的数据项。</p>
+<p>周期挪用cycle stealing可能放慢CPU计算，但数据传输工作交给DMA控制器改善整体性能</p>
+<p>DVMA (direct virtual memory access) can perform a transfer between two memory-mapped devices<br>without the intervention of the CPU or the use of main memory. 直接实现两个内存映射设备之间的传输，无需CPU的干涉或使用主存</p>
+<h2 id="IO应用接口"><a href="#IO应用接口" class="headerlink" title="IO应用接口"></a>IO应用接口</h2><p>设备驱动程序层device-driver layer为内核IO子系统隐藏设备控制器之间的差异</p>
+<p>Broadly I/O devices can be grouped by the OS into</p>
+<ul>
+<li>block IO</li>
+<li>character-stream IO</li>
+<li>memory-mapped file access</li>
+<li>network sockets</li>
+</ul>
+<p>OS存在后门(escape / back door)，允许应用程序将任何命令透明地传输到设备控制器</p>
+<p> Unix ioctl()</p>
+<h3 id="块与字符设备"><a href="#块与字符设备" class="headerlink" title="块与字符设备"></a>块与字符设备</h3><h4 id="Block-devices"><a href="#Block-devices" class="headerlink" title="Block devices"></a>Block devices</h4><p> include disk drives</p>
+<p>Commands include read(), write(), seek()</p>
+<p>Raw I/O, direct I/O, or file-system access</p>
+<p>Memory-mapped file access possible</p>
+<p>DMA</p>
+<h4 id="Character-devices"><a href="#Character-devices" class="headerlink" title="Character devices"></a>Character devices</h4><p> include keyboards, mice, serial ports</p>
+<p>Commands include get(), put()</p>
+<h3 id="网络设备"><a href="#网络设备" class="headerlink" title="网络设备"></a>网络设备</h3><p>The socket interface, Linux, Unix and Windows</p>
+<p>Includes select functionality: manages a set of sockets</p>
+<h3 id="clocks-and-timers"><a href="#clocks-and-timers" class="headerlink" title="clocks and timers"></a>clocks and timers</h3><p>Provide current time, elapsed time, timer</p>
+<p>Programmable interval timer used for timings, periodic interrupts.</p>
+<h3 id="Blocking-I-O-and-Nonblocking-I-O"><a href="#Blocking-I-O-and-Nonblocking-I-O" class="headerlink" title="Blocking I/O and Nonblocking I/O"></a>Blocking I/O and Nonblocking I/O</h3><p>Blocking - process suspended until I/O completed</p>
+<p>Nonblocking - I/O call returns as much as available</p>
+<p>Asynchronous - process runs while I/O executes 不必等待IO完成就可立即返回</p>
+<h2 id="Kernel-I-O-Subsystem"><a href="#Kernel-I-O-Subsystem" class="headerlink" title="Kernel I/O Subsystem"></a>Kernel I/O Subsystem</h2><h3 id="IO-scheduling"><a href="#IO-scheduling" class="headerlink" title="IO scheduling"></a>IO scheduling</h3><p>为每个设备维护一个请求队列</p>
+<h3 id="buffering"><a href="#buffering" class="headerlink" title="buffering"></a>buffering</h3><p>保存两个设备之间 或 设备和应用程序之间 所传输数据的内存区域</p>
+<h3 id="caching"><a href="#caching" class="headerlink" title="caching"></a>caching</h3><p>高速缓存是可以保留数据副本的高速存储器</p>
+<p>buffer可能是数据的唯一副本，而cache只是提供了一个 驻留在其他地方的数据 在高速存储上的一个副本</p>
+<p>有时同一内存区域可同时用作cache和buffer</p>
+<h3 id="Spooling假脱机-amp-Device-reservation"><a href="#Spooling假脱机-amp-Device-reservation" class="headerlink" title="Spooling假脱机 &amp; Device reservation"></a>Spooling假脱机 &amp; Device reservation</h3><p>Spooling - hold output for a device</p>
+<p>Device reservation( 预约) - provides exclusive access to a device</p>
+<h3 id="error-handling"><a href="#error-handling" class="headerlink" title="error handling"></a>error handling</h3><p>Most return an error number or code when I/O request fails.</p>
+<p>System error logs hold problem reports</p>
+<h3 id="IO-protection"><a href="#IO-protection" class="headerlink" title="IO protection"></a>IO protection</h3><p>所有IO指令为特权指令</p>
+<p>IO必须通过system call执行</p>
+<h3 id="内核数据结构"><a href="#内核数据结构" class="headerlink" title="内核数据结构"></a>内核数据结构</h3><p>Kernel keeps state information for I/O components, including open file tables, network connections, character device state.</p>
+<p>Many complex data structures to track buffers, memory allocation, “dirty” blocks.</p>
+<p>Some use object-oriented methods and message passing to implement I/O.</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577522127902.png" style="zoom:50%;">
 
-<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573537985715.png" style="zoom:50%;">
+<h2 id="把IO操作转换成硬件操作"><a href="#把IO操作转换成硬件操作" class="headerlink" title="把IO操作转换成硬件操作"></a>把IO操作转换成硬件操作</h2><img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577522223439.png" style="zoom:50%;">]]></content>
+      <categories>
+        <category>所学</category>
+        <category>操作系统</category>
+      </categories>
+      <tags>
+        <tag>操作系统</tag>
+        <tag>专业课笔记</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>操作系统笔记 CH12 Mass-Storage Structure</title>
+    <url>/2020/02/28/OS12/</url>
+    <content><![CDATA[<h3 id="磁盘"><a href="#磁盘" class="headerlink" title="磁盘"></a>磁盘</h3><p>扇区0是最外面柱面的第一个磁道的第一个扇区。映射先按磁道内扇区顺序，再按柱面内磁道顺序，最后按从外到内的柱面顺序来排序的。</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577512929633.png" style="zoom: 50%;">
 
-<h3 id="types-of-system-call"><a href="#types-of-system-call" class="headerlink" title="types of system call"></a>types of system call</h3><ul>
-<li><p>process control</p>
-<p>dump memory if error, Debugger for determining bugs, single step execution, Locks for managing access to shared data between processes</p>
-</li>
-<li><p>file manipulation</p>
-</li>
-<li><p>device manipulation</p>
-</li>
-<li><p>information maintenance</p>
-</li>
-<li><p>communications</p>
-<ul>
-<li><p>message passing model</p>
-<p>through an interprocess-communication facility (IPC) provided by OS</p>
-</li>
-</ul>
-</li>
-<li><p>shared memory passing</p>
-<p>process use <em>map</em> memory system call to gain access to regions of memory owned by other processes.</p>
-</li>
-</ul>
-<h2 id="system-prorams"><a href="#system-prorams" class="headerlink" title="system prorams"></a>system prorams</h2><p>file management</p>
-<p>status information: Some systems implement a registry, used to store and retrieve configuration information.</p>
-<p>file modification</p>
-<p>programming-language support</p>
-<p>program loading and execution</p>
-<p>communications</p>
-<p>system utilities/application programs: </p>
-<p>background services: Launch at boot time. Run in user context not kernel context.  Known as services, subsystems, daemons</p>
-<h2 id="OS-design-and-implementation"><a href="#OS-design-and-implementation" class="headerlink" title="OS design and implementation"></a>OS design and implementation</h2><p>策略policy: 决定做什么，可能随时间位置改变，对资源分配很重要</p>
-<p>机制mechanism: 决定怎么做，系统更需要通用机制</p>
-<p>The separation of policy from mechanism allows maximum <u>flexibility</u> if policy decisions are to be changed later. 微内核把机制与策略的区分利用到极致。</p>
-<p><strong>Emulation</strong> can allow an OS to run on non-native hardware.</p>
-<p>用高级语言编写， OS更易移植，降低速度，增加存储要求</p>
-<p>bottleneck routines can be identified. replaced with assembly-language equivalents.</p>
-<h2 id="OS-structure"><a href="#OS-structure" class="headerlink" title="OS structure"></a>OS structure</h2><ul>
-<li><p>simple structure</p>
-<ul>
-<li><p>MS-DOS</p>
-<p>没被仔细划分成模块，没有很好区分接口和层次</p>
-</li>
-<li><p>UNIX</p>
-<p>由内核和系统程序组成</p>
-</li>
-</ul>
-</li>
-<li><p>layered approach</p>
-<p>the bottom layer (layer 0) is the hardware, the highest (layer N) is the user interface</p>
-<p>每层利用低层提供功能实现</p>
-<p>advantage: contruction, debugging, design, implementation</p>
-<p>difficulty: disk driver &amp; memory-management routines, disk driver &amp; CPU scheduler</p>
-<p>less efficient</p>
-</li>
-<li><p>microkernels</p>
-<p>Mach</p>
-<p>microkernel contains only essential functions</p>
-<ul>
-<li>memory management</li>
-<li>CPU scheduling</li>
-<li>communications</li>
-</ul>
-<p>微内核主要功能：使 客户程序 和 运行在用户空间的各种服务 之间进行通信 message passing</p>
-<p>Mach, Tru64 UNIX, Mac OS X kernel, QNX</p>
-<p>由于系统功能总开销增加而导致系统性能下降</p>
-</li>
-<li><p>modules</p>
-<p>Many modern operating systems implement loadable kernel modules.</p>
-<p>The kernel has a set of core components and dynamically links in additional services via modules, either at boot time or during run time.</p>
-<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573542431080.png" style="zoom:33%;">
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577513031964.png" style="zoom:67%;">
 
-<p>允许内核提供核心服务，也能动态地实现特定功能</p>
-<p>类似分层，但更灵活，任一模块可调用其他任何模块。</p>
-<p>类似微内核，核心模块只有核心功能及其他模块加载和通信的相关信息。更高效，因为模块无需调用消息传递来通信。</p>
-</li>
-</ul>
-<p>hybrid systems:</p>
-<p>​    linux &amp; solaris: monolithic, modular</p>
-<p>​    windows: monolithic, plus microkernel for different subsystem personalities, run as user-mode                     processes, dynamically loadable kernel modules</p>
-<p> Mac OS X: 分层，其中一层包括Mach微内核</p>
-<h2 id="virtual-machines"><a href="#virtual-machines" class="headerlink" title="virtual machines"></a>virtual machines</h2><p>takes the <strong>layered</strong> approach to its logical conclusion</p>
-<p>It treats hardware and the operating system kernel as though they were all hardware.</p>
-<p>The operating system creates the illusion of multiple processes, each executing on its own processor with its own (virtual) memory.</p>
+<p>Head crash results from disk head making contact with the disk surface. Cannot be repaired, the entire disk must be replaced.</p>
+<p>Disks can be removable</p>
+<p>Host controller in computer uses bus to talk to disk controller built into drive or storage array.</p>
+<p>The disk controller operates the disk-drive hardware to carry out the command.</p>
+<p>Disk controllers have a built-in cache. Data transfer at the disk drive happens between the<br>cache and the disk surface. Data transfer to the host, at fast electronic speeds, occurs between the cache and the host controller.</p>
+<h3 id="磁带"><a href="#磁带" class="headerlink" title="磁带"></a>磁带</h3><p>长久，存储大量数据。慢</p>
+<h2 id="磁盘结构"><a href="#磁盘结构" class="headerlink" title="磁盘结构"></a>磁盘结构</h2><p>Disk drives are addressed as large 1-dimensional arrays of logical blocks, where the logical block is the smallest unit of transfer.</p>
+<p>Low-level formatting(低级格式化) creates logical blocks on physical media.</p>
 <ul>
-<li>by CPU scheduling</li>
-<li>by virtual memory</li>
+<li><p>Constant Linear Velocity ( 常数线性周转率)</p>
+<p>the density of bits per track is uniform</p>
+<p>CD-ROM, DVD-ROM</p>
+</li>
+<li><p>Constant Angular Velocity ( 常数角周转率)</p>
+<p>the density of bits decreases from inner tracks to outer tracks</p>
+<p>hard disk</p>
+</li>
 </ul>
-<p>virtualization: a technology that allows operating systems to run as applications within other operating systems. VMM(virtual machine Manager)</p>
-<p>Emulation used when source CPU type different from target type.  When computer language not compiled to native code – Interpretation</p>
-<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573543236416.png" style="zoom: 33%;">
-
-<p>advantage: protection of system resources, solving system compatibility problem.</p>
-<p>虚拟机软件允许在kernel mode(因为它自己就是操作系统)，但虚拟机自身只能允许在user mode</p>
-<p>virtual kernel mode 和 virtual user mode 都允许在 physical user mode</p>
-<p>真正机器上user mode到kernel mode的切换，也必须在虚拟机上引起从virtual user mode到virtual kernel mode的切换</p>
-<h3 id="JVM"><a href="#JVM" class="headerlink" title="JVM"></a>JVM</h3><p>consists of</p>
+<h2 id="disk-attachment"><a href="#disk-attachment" class="headerlink" title="disk attachment"></a>disk attachment</h2><p>计算机访问磁盘存储两种方式</p>
 <ul>
-<li><p>class loader</p>
+<li><p>通过IO端口(或主机附属存储)</p>
+<p>小系统采用这种方法</p>
 </li>
-<li><p>class verifier</p>
-</li>
-<li><p>Java interpreter</p>
-<p>software module that interprets the bytecodes one at a time</p>
-<ul>
-<li>Just-In-Time (JIT) compilers turns the architecture-neutral bytecodes into native machine language for the host computer.</li>
-</ul>
+<li><p>通过分布式文件系统DFS的远程主机，称为网络附属存储</p>
 </li>
 </ul>
-<p>JVM automatically manages memory by performing garbage collection.</p>
-<h2 id="OS-generation"><a href="#OS-generation" class="headerlink" title="OS generation"></a>OS generation</h2><p>对于某个特定的计算场所，必须配置configure和生成generate系统：SYSGEN</p>
-<p>generation methods:</p>
-<p>​    可完全重新编译</p>
-<p>​    或系统描述可用来创建表</p>
-<p>​    或完全table-driven(绝大多数现代OS是这样),选择发生在执行时而不是编译连接时。</p>
-<h2 id="system-boot"><a href="#system-boot" class="headerlink" title="system boot"></a>system boot</h2><p>booting: starting a computer by loading the kernel</p>
-<p>Bootstrap program (bootstrap loader): small piece of code stored in ROM.  locates the kernel, loads it into memory, and starts its execution.</p>
-<p>two step:</p>
+<h3 id="Host-attached-storage"><a href="#Host-attached-storage" class="headerlink" title="Host-attached storage"></a>Host-attached storage</h3><p>Is accessed through I/O ports talking to I/O busses</p>
+<p>I/O directed to bus ID, device ID, logical unit (LUN)</p>
+<h3 id="Network-Attached-Storage-NAS"><a href="#Network-Attached-Storage-NAS" class="headerlink" title="Network-Attached Storage (NAS)"></a>Network-Attached Storage (NAS)</h3><p>客户通过远程进程调用接口访问NAS</p>
+<p>UNIX中的NFS，windows中的CIFS(Common Internet File System)</p>
+<p>RPCs are carried via TCP or UDP on IP network.</p>
+<p>The NAS unit is usually implemented as a RAID array with software that implements the RPC interface.</p>
+<p>New iSCSI protocol uses IP network protocol to carry the SCSI protocol. Remotely attaching to devices (blocks)</p>
+<h3 id="Storage-Area-Network-SAN"><a href="#Storage-Area-Network-SAN" class="headerlink" title="Storage Area Network (SAN)"></a>Storage Area Network (SAN)</h3><p>服务器与存储单元之间的私有网络(采用存储协议而非网络协议)</p>
+<p>灵活</p>
+<p>Common in large storage environments.</p>
+<p>Multiple hosts attached to multiple storage arrays – flexible</p>
+<p>SAN is one or more storage arrays Connected to one or more Fiber Channel switches</p>
+<p>Hosts also attach to the switches.</p>
+<p>Storage made available via LUN Masking from specific arrays to specific servers.</p>
+<h2 id="disk-scheduling"><a href="#disk-scheduling" class="headerlink" title="disk scheduling"></a>disk scheduling</h2><p>Minimize seek time</p>
+<p>OS maintains queue of requests, per disk or device.</p>
+<p>controllers have small buffers and can manage a queue of I/O requests. </p>
+<h3 id="FSFC"><a href="#FSFC" class="headerlink" title="FSFC"></a>FSFC</h3><h3 id="SSTF-Shortest-Seek-Time-First"><a href="#SSTF-Shortest-Seek-Time-First" class="headerlink" title="SSTF Shortest Seek Time First"></a>SSTF Shortest Seek Time First</h3><p>starvation</p>
+<h3 id="SCAN-elevator"><a href="#SCAN-elevator" class="headerlink" title="SCAN / elevator"></a>SCAN / elevator</h3><p>到达另一端时，磁头改变方向</p>
+<h3 id="C-SCAN"><a href="#C-SCAN" class="headerlink" title="C-SCAN"></a>C-SCAN</h3><p>当磁头移到另一端时，会马上返回磁盘开始。将柱面当成环链</p>
+<h3 id="LOOK"><a href="#LOOK" class="headerlink" title="LOOK"></a>LOOK</h3><p>磁头只移动到一个方向上最远的请求为止</p>
+<h3 id="C-LOOK"><a href="#C-LOOK" class="headerlink" title="C-LOOK"></a>C-LOOK</h3><h3 id="磁盘调度算法的选择"><a href="#磁盘调度算法的选择" class="headerlink" title="磁盘调度算法的选择"></a>磁盘调度算法的选择</h3><p>SSTF is common and has a natural appeal</p>
+<p>SCAN and C-SCAN对磁盘负荷大的系统执行较好，不会有starvation</p>
+<p>Requests for disk service can be influenced by the file-allocation method.</p>
+<p>The disk-scheduling algorithm should be written as a separate module of the operating system, allowing it to be replaced with a different algorithm if necessary.</p>
+<p>Either SSTF or LOOK is a reasonable choice for the default algorithm.</p>
+<h2 id="磁盘管理"><a href="#磁盘管理" class="headerlink" title="磁盘管理"></a>磁盘管理</h2><h3 id="磁盘格式化-disk-formatting"><a href="#磁盘格式化-disk-formatting" class="headerlink" title="磁盘格式化 disk formatting"></a>磁盘格式化 disk formatting</h3><p>低级格式化/物理格式化：将磁盘分成扇区以便磁盘控制器能读能写。为每个扇区采用特殊的数据结构。The data structure typically consists of a header(sector #), a data area, and a trailer(ECC, error correction code) 扇区通常512B，但可选</p>
+<p>OS需要将自己的数据结构记录在磁盘上</p>
 <ol>
-<li><p>bootstrap loader</p>
-<p>fetches the boot program from boot block into memory to execute.</p>
+<li><p>将磁盘分为由一个或多个柱面组成的分区。将每个分区作为一个逻辑磁盘。</p>
 </li>
-<li><p>boot program</p>
-<p>loads the entire OS into memory and begin its execution</p>
+<li><p>Logical formatting逻辑格式化</p>
+<p>创建文件系统</p>
 </li>
 </ol>
+<p>为了提高效率，大多数OS将块集中到一大块，称作簇(cluster)。磁盘IO通过块完成，文件系统IO通过簇完成</p>
+<p>raw disk生磁盘：将磁盘分区作为一个逻辑块的大顺序数组，没有任何文件系统数据结构 </p>
+<p>raw disk可用作swap space</p>
+<p>对该数组的IO称作raw IO</p>
+<p>有些数据库系统比较喜欢raw IO</p>
+<h3 id="boot-block-引导块"><a href="#boot-block-引导块" class="headerlink" title="boot block 引导块"></a>boot block 引导块</h3><p>bootstrap程序应找到磁盘上的操作系统内核，装入内存，并转到起始地址，从而开始OS的执行</p>
+<p>bootstrap保存在ROM中。不过大多数OS只在ROM中保留bootstrap loader: 进一步从磁盘上调入更完整的bootstrap程序</p>
+<p>完整的bootstrap程序在磁盘的启动块(boot block)上，启动块位于磁盘的固定位置。</p>
+<p>拥有启动分区的磁盘称为boot disk或system disk</p>
+<p>启动扇区 MBR master boot record . Besides boot code, the MBR contains a partition table listing the partitions for the hard disk and a flag indicating which partition the system is to be booted from.</p>
+<p>启动ROM中的代码引导磁盘控制器将启动块读入到内存(此时尚未装入设备驱动程序)</p>
+<p>硬盘分为一个或多个分区，一个分区为boot partition，包含OS和设备驱动程序。该分区的第一个扇区既是boot sector</p>
+<h3 id="bad-blocks"><a href="#bad-blocks" class="headerlink" title="bad blocks"></a>bad blocks</h3><p>Controller calculates the ECC and finds the sector is bad. 控制器计算ECC</p>
+<p>An unrecoverable hard error results in lost data.</p>
+<p>对于简单磁盘：坏块可手工处理</p>
+<p>对于复杂磁盘：</p>
+<p>​    控制器维护一个磁盘坏块链表，控制器可用备用块来逻辑地替换坏块 sector sparing(forwarding)</p>
+<p>​    sector slipping</p>
 ]]></content>
+      <categories>
+        <category>所学</category>
+        <category>操作系统</category>
+      </categories>
+      <tags>
+        <tag>操作系统</tag>
+        <tag>专业课笔记</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>操作系统笔记 CH11 File-System Implementation</title>
+    <url>/2020/02/28/OS11/</url>
+    <content><![CDATA[<h2 id="文件系统结构"><a href="#文件系统结构" class="headerlink" title="文件系统结构"></a>文件系统结构</h2><p>磁盘特点：可以原地重写，可以直接访问任意一块。</p>
+<p>内存和磁盘之间的IO以块为单位。每块为一个或多个扇区。扇区通常为512B</p>
+<p>File system resides on secondary storage (disks) OS通过文件系统存储、定位、提取数据</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577502786991.png" style="zoom: 50%;">
+
+<ul>
+<li><p>IO control 最底层</p>
+<p>由device driver 和 Interrupt handlers组成</p>
+<p>实现内存和磁盘之间的信息传输。</p>
+<p>device driver可作为翻译器。输入是高层命令，输出是底层的、硬件特定的命令。命令用于控制hardware controller</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577503036078.png" style="zoom:50%;">
+
+<p>device driver控制一类设备</p>
+</li>
+<li><p>basic file system</p>
+<p>Issue generic commands to the appropriate device driver to read and write physical blocks on the disk.</p>
+</li>
+<li><p>file-organization module</p>
+<p>将逻辑块地址 转换成 物理块地址</p>
+<p>也包括空闲空间管理器</p>
+</li>
+<li><p>logical file system</p>
+<p>管理metadata，元数据包括文件系统所有结构数据，而不包括实际数据</p>
+<p>管理目录结构</p>
+<p>通过FCB((inodes in UNIX))维护文件结构</p>
+<p>负责保护和安全</p>
+</li>
+</ul>
+<p>Layering useful for reducing complexity and redundancy, but adds overhead and can decrease performance.</p>
+<p>绝大多数OS支持多个文件系统</p>
+<p>UNIX使用UFS</p>
+<p>标准的Linux文件系统是extende file system</p>
+<h2 id="文件系统实现"><a href="#文件系统实现" class="headerlink" title="文件系统实现"></a>文件系统实现</h2><p>每个卷的boot control block：从该卷引导OS需要的信息。如果没有OS，该块为空，通常为卷的第一块。UFS称之为boot block，NTFS称之为partition boot sector</p>
+<p>每个卷的volume control blcok：包括卷(或分区)的详细信息，如分区的块数，块的大小…UFS称之为superblock，NTFS中它存在master file table中</p>
+<p>每个文件系统的目录结构用来组织文件。UFS中包含文件名和相关的inode号，NTFS中它存储在master file table中</p>
+<p>每个文件的FCB。UFS中是inode，NTFS存在master file table中，每个文件占一行</p>
+<h3 id="In-Memory-File-System-Structures"><a href="#In-Memory-File-System-Structures" class="headerlink" title="In-Memory File System Structures"></a>In-Memory File System Structures</h3><p>一个内存中的mount table(partition table)</p>
+<p>一个内存中的director structure cache</p>
+<p>system-wide open-file table: 包括每个打开文件的FCB副本</p>
+<p>per-process open-file table: Contains a pointer to the appropriate entry in the system-wide open-file table.</p>
+<p>buffers hold data blocks from secondary storage.</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577507477227.png" style="zoom:50%;">
+
+<p>对于访问打开文件表的索引：UNIX称之为file descriptor，Windows称之为file handle. 只要文件没有关闭，所有文件操作都是通过打开文件表来进行的</p>
+<h3 id="partitions-and-mounting-分区和安装"><a href="#partitions-and-mounting-分区和安装" class="headerlink" title="partitions and mounting 分区和安装"></a>partitions and mounting 分区和安装</h3><p>一个disk可以分为多个partition，一个partition可以横跨多个disk(作为RAID的一种形式比较合适)</p>
+<p>分区可以是</p>
+<ul>
+<li>raw 没有文件系统</li>
+<li>cooked 含有文件系统</li>
+</ul>
+<p>引导信息能保存在多个分区中，通常为一组有序块，并作为镜像文件读入内存</p>
+<p>boot loader知道位于引导区的多个文件系统和多个操作系统，一旦装入，它可以引导位于磁盘上的一个操作系统。磁盘可以有多个分区，每个分区包含不同类型的文件系统和不同的操作系统。</p>
+<p>root partiton包括操作系统内核或其他系统文件，在引导时装入内存。</p>
+<p>内存中有Mount table – containing information about file systems that has been mounted.</p>
+<h3 id="virtual-file-system-VFS"><a href="#virtual-file-system-VFS" class="headerlink" title="virtual file system (VFS)"></a>virtual file system (VFS)</h3><p>Virtual file system (VFS) on most OSes, including Unix, use object-oriented techniques to implement the file system. 用户甚至可以访问位于网络上的操作系统</p>
+<p>VFS allows the same system call interface (the API) to be used for different types of file systems.</p>
+<p>Implements vnodes which hold inodes or network file details.</p>
+<p>The API is to the VFS interface, rather than any specific type of file system.</p>
+<p>多个VFS接口的实现可以共存在同一台机器上</p>
+<p>vnode表示位于整个网络范围内唯一的文件</p>
+<p>Linux has four object types: inode, file, superblock, dentry</p>
+<p>VFS defines a set of operations on the objects that must be implemented.</p>
+<h2 id="目录实现"><a href="#目录实现" class="headerlink" title="目录实现"></a>目录实现</h2><h3 id="linear-list-线性列表"><a href="#linear-list-线性列表" class="headerlink" title="linear list 线性列表"></a>linear list 线性列表</h3><p>linear search time费时</p>
+<p>sorted list允许binary search</p>
+<p>a balanced tree</p>
+<h3 id="hash-table"><a href="#hash-table" class="headerlink" title="hash table"></a>hash table</h3><p>decreases directory search time</p>
+<p>需要处理collision(两个文件名哈希到相同的位置)：chained-overflow</p>
+<p>Difficulties: fixed size, hash function</p>
+<h2 id="分配方法"><a href="#分配方法" class="headerlink" title="分配方法"></a>分配方法</h2><p>how disk blocks are allocated for files</p>
+<h3 id="Contiguous-Allocation-连续分配"><a href="#Contiguous-Allocation-连续分配" class="headerlink" title="Contiguous Allocation 连续分配"></a>Contiguous Allocation 连续分配</h3><p>每个文件在磁盘上占有一组连续的块</p>
+<p>访问连续分配文件所需寻道数最少</p>
+<p>用第一块的磁盘地址和连续块的数量来定义</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577509061560.png" style="zoom:50%;">
+
+<p>sequential and direct access</p>
+<p>Best performance in most cases</p>
+<p>问题</p>
+<ul>
+<li>Difficult to find space for a new file: First-fit, best-fit</li>
+<li>External fragmentation</li>
+<li>compaction off-line (downtime) or on-line</li>
+</ul>
+<p>Extent-Based Systems, a modified contiguous allocation scheme 当空间不够时，另一块被称为扩展的连续空间会添加到原来的文件分配中</p>
+<h3 id="Linked-Allocation-链接分配"><a href="#Linked-Allocation-链接分配" class="headerlink" title="Linked Allocation 链接分配"></a>Linked Allocation 链接分配</h3><p>每个文件是磁盘块的链表</p>
+<p>目录包括文件第一块的指针和最后一块的指针。每一块都有下一块的指针。</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577509383605.png" style="zoom:50%;">
+
+<p>没有外部碎片</p>
+<p>只要有空闲块，文件就可以增大</p>
+<p>Disadvantages: 不能随机访问，指针需要空间，不可靠</p>
+<p>对于指针需要空间，解决办法是将多个块组成簇(cluster)，代价是增加了内部碎片</p>
+<h4 id="FAT-file-allocation-table-文件分配表"><a href="#FAT-file-allocation-table-文件分配表" class="headerlink" title="FAT(file-allocation table)文件分配表"></a>FAT(file-allocation table)文件分配表</h4><p>used by MS-DOS and OS/2</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577510977781.png" style="zoom:50%;">
+
+<p>对FAT采用缓存</p>
+<p>支持直接访问</p>
+<h3 id="Indexed-Allocation-索引分配"><a href="#Indexed-Allocation-索引分配" class="headerlink" title="Indexed Allocation 索引分配"></a>Indexed Allocation 索引分配</h3><p>每个文件都有索引块，是一个磁盘块地址的数组</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577511076567.png" style="zoom:50%;">
+
+<p>目录条目包括索引块的地址</p>
+<p>支持直接访问</p>
+<p>没有外部碎片</p>
+<p>索引块应该多大</p>
+<ul>
+<li><p>linked scheme</p>
+<p>将多个索引块链接起来</p>
+</li>
+<li><p>two-level index</p>
+</li>
+<li><p>combined scheme</p>
+<p>UNIX采用</p>
+</li>
+</ul>
+<h3 id="性能"><a href="#性能" class="headerlink" title="性能"></a>性能</h3><p>contiguous great for sequential and random</p>
+<p>linked good for sequential, not random</p>
+<p>combine contiguous allocation with indexed allocation by using contiguous allocation for small files (up to three or four blocks), automatically switching to an indexed allocation if the file grows large.</p>
+<h3 id="free-space-management"><a href="#free-space-management" class="headerlink" title="free-space management"></a>free-space management</h3><p>文件系统需要维护free-space list记录空闲磁盘空间(不一定是链表)</p>
+<h4 id="bit-map-bit-vector"><a href="#bit-map-bit-vector" class="headerlink" title="bit map / bit vector"></a>bit map / bit vector</h4><p>每块用一位表示。空闲-1，已分配-0</p>
+<p>查找第一个和n个连续空闲块简单高效</p>
+<p>Bit map requires extra space.</p>
+<p>Easy to get contiguous files space.</p>
+<h4 id="linked-list-链表"><a href="#linked-list-链表" class="headerlink" title="linked list 链表"></a>linked list 链表</h4><p>将所有空闲块用链表链接</p>
+<p>将指向第一空闲块的指针缓存在内存</p>
+<p>Cannot get contiguous space easily.</p>
+<h4 id="grouping"><a href="#grouping" class="headerlink" title="grouping"></a>grouping</h4><p>将n个空闲块的地址存在第一个空闲块里。(前n-1确实为空，最后一块包含另外n个空闲块的地址)</p>
+<p>可以找到大量空闲块</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577512314875.png" style="zoom:33%;">
+
+<h4 id="counting"><a href="#counting" class="headerlink" title="counting"></a>counting</h4><p>记录第一块的地址和紧跟第一块的连续的空闲块的数量n</p>
+<p>can be stored in a balanced tree for efficiency</p>
+]]></content>
+      <categories>
+        <category>所学</category>
+        <category>操作系统</category>
+      </categories>
+      <tags>
+        <tag>操作系统</tag>
+        <tag>专业课笔记</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>操作系统笔记 CH10 File-System Interface</title>
+    <url>/2020/02/28/OS10/</url>
+    <content><![CDATA[<h2 id="file-concept"><a href="#file-concept" class="headerlink" title="file concept"></a>file concept</h2><p>文件：记录在外存上的 相关信息的 具有名称的 集合，逻辑内存的最小分配单元</p>
+<p>通常，文件表示程序和数据</p>
+<p>free form or may be formatted rigidly</p>
+<h3 id="file-attributes"><a href="#file-attributes" class="headerlink" title="file attributes"></a>file attributes</h3><ul>
+<li>name: human-readable</li>
+<li>identifier: a unique number, non-human-readable name</li>
+<li>type</li>
+<li>location</li>
+<li>size</li>
+<li>protection</li>
+<li>time, date and user identification</li>
+</ul>
+<p>文件的信息存在directory中，directory也存在外存上</p>
+<p>A directory entry consists of the file’s name and its unique id. The id in turn locates the other file attributes.</p>
+<h3 id="file-operations"><a href="#file-operations" class="headerlink" title="file operations"></a>file operations</h3><p>6个基本文件操作：</p>
+<ul>
+<li><p>create</p>
+</li>
+<li><p>write</p>
+<p>write pointer</p>
+</li>
+<li><p>read</p>
+<p>read pointer</p>
+<p>A per-process current-file-position pointer</p>
+</li>
+<li><p>reposition</p>
+<p>file seek, not need I/O</p>
+</li>
+<li><p>delete</p>
+<p>release file space, erase directory entry</p>
+</li>
+<li><p>truncate</p>
+<p>reset length to 0, release file space</p>
+<p>只删除内容，保留属性</p>
+</li>
+</ul>
+<p>基本操作可以组合成其他操作</p>
+<p>Most file operations involve searching the directory for the entry associated with the named file</p>
+<p>首次使用文件时，使用系统调用open()</p>
+<p>OS维护一个包含所有打开文件的信息表(open-file table)。当需要一个文件操作时，通过该表的一个索引指定文件，无需搜索。文件不再使用时，进程可关闭它，OS从open-file table删除这一条目。系统调用create和delete操作的是关闭文件，而不是打开文件。</p>
+<p>系统调用open()返回一个指向open-file table中一个条目的指针。通过使用该指针，而不是真实文件名称，进行所有IO操作。also accept access mode information, such as create, read-only, read-write, append-only, etc.</p>
+<p>close(Fi), move the content of entry Fi in open-file table to directory structure on disk.</p>
+<p>多进程可能同时打开同一文件。OS采用两级内部表。</p>
+<ul>
+<li><p>Process open-file table, a per-process table</p>
+<p>该进程所使用的文件信息</p>
+<p>单个进程表的每个条目相应地指向整个系统的打开文件表</p>
+</li>
+<li><p>System open-file table, a system-wide table</p>
+<p>包含进程无关信息(如文件在磁盘上的位置，访问日期和文件大小)</p>
+<p>一旦一个进程打开文件，System open-file table会增加相应条目，当另一个进程执行调用open()，在其Process open-file table增加一个条目，并指向System open-file table相应条目</p>
+<p>每个文件有一个open count，记录多少进程打开了该文件。当open count=0，该文件条目可删除。</p>
+</li>
+</ul>
+<p>每个打开文件有如下信息：</p>
+<ul>
+<li><p>file pointer</p>
+<p>pointer to last read/write location</p>
+<p>对每个进程唯一</p>
+</li>
+<li><p>file-open count</p>
+</li>
+<li><p>disk location of file</p>
+</li>
+<li><p>access rights</p>
+<p>每个进程用一个访问模式打开文件</p>
+<p>保存在单个进程打开文件表中</p>
+</li>
+</ul>
+<h4 id="文件锁-file-locks"><a href="#文件锁-file-locks" class="headerlink" title="文件锁(file locks)"></a>文件锁(file locks)</h4><p>shared lock: 多个进程并发获取</p>
+<p>exclusive lock: 只有一个进程可以获取</p>
+<p>加锁机制：</p>
+<p>mandatory强制：一个进程获得锁，阻止其他进程访问已加锁的文件。access is denied depending on locks held and requested. – Windows OS. </p>
+<p>advisory建议：processes can find status of locks and decide what to do. – Unix OS.</p>
+<h3 id="file-types"><a href="#file-types" class="headerlink" title="file types"></a>file types</h3><p>实现文件类型的常用技术：在文件名称内包含类型。名称可分为两部分：name , extension</p>
+<p>Some OS, each file has a type, and a creator attribute containing the name of the program that created it.</p>
+<p>UNIX, a magic number stored at the beginning of some files to indicate roughly the type of the file.</p>
+<h2 id="access-methods"><a href="#access-methods" class="headerlink" title="access methods"></a>access methods</h2><p>Criteria for File Organization: Rapid access, Ease of update, Economy of storage, Simple maintenance, Reliability</p>
+<h3 id="sequential-access-顺序访问"><a href="#sequential-access-顺序访问" class="headerlink" title="sequential access 顺序访问"></a>sequential access 顺序访问</h3><p>基于文件的磁带模型。不仅适用于顺序访问设备，也适用于随机访问设备</p>
+<h3 id="direct-access-直接访问"><a href="#direct-access-直接访问" class="headerlink" title="direct access 直接访问"></a>direct access 直接访问</h3><p>文件由固定长度的逻辑记录组成。基于文件的磁盘模型。可立即访问大量信息。数据库常采用这种类型的文件。</p>
+<p>提供的是相对块号。</p>
+<p>对直接访问文件，可容易地模拟顺序访问。反过来很低效。</p>
+<h3 id="其他访问方式"><a href="#其他访问方式" class="headerlink" title="其他访问方式"></a>其他访问方式</h3><p>通常涉及创建索引</p>
+<h2 id="directory-structure"><a href="#directory-structure" class="headerlink" title="directory structure"></a>directory structure</h2><p>有时需要在一个磁盘上装多种文件系统</p>
+<p>Disk can be subdivided into partitions.</p>
+<p>Disk or partition can be used：</p>
+<p>​    raw, without a file system, e.g. swap space</p>
+<p>​    formatted with a file system</p>
+<p>Volume: Entity containing file system</p>
+<p>Each volume containing file system also tracks that file system’s info in device directory or volume table of contents.</p>
+<p>Disks or partitions can be RAID protected against failure.</p>
+<p>directory可看作符号表，将 文件名 转换成 目录条目</p>
+<p>Both the directory structure and the files reside on disk.</p>
+<h3 id="Single-Level-Directory"><a href="#Single-Level-Directory" class="headerlink" title="Single-Level Directory"></a>Single-Level Directory</h3><p>所有文件包含在同一目录中</p>
+<p>必须有唯一名称</p>
+<p>naming problem , grouping problem</p>
+<h3 id="Two-Level-Directory"><a href="#Two-Level-Directory" class="headerlink" title="Two-Level Directory"></a>Two-Level Directory</h3><p>为每个用户创建独立目录</p>
+<p>A master file directory(主文件目录MFD) and one user file directory(用户文件目录UFD) for each user.</p>
+<p>UFD内文件名唯一即可</p>
+<p>No grouping capability </p>
+<p>File sharing怎么解决</p>
+<ul>
+<li>Path name. defined by a user name and a file name.</li>
+<li>Special user directory, containing system files.</li>
+<li>Search path, the sequence of directories searched.</li>
+</ul>
+<h3 id="Tree-Structured-Directories"><a href="#Tree-Structured-Directories" class="headerlink" title="Tree-Structured Directories"></a>Tree-Structured Directories</h3><p>树有根目录，系统内的每个文件都有唯一路径名</p>
+<p>One bit in each entry defines the entry as a file(0) or as a subdirectory(1).</p>
+<p>Grouping Capability</p>
+<p>每个进程有 Current directory (working directory) 当前目录 In accounting file, a pointer/the name of the user’s initial directory. Copied to a local variable for this user.</p>
+<p>Absolute path name: 从根开始</p>
+<p>relative path name: 从当前目录开始</p>
+<p>创建子目录/新文件在当前目录下完成</p>
+<p>Deleting a subdirectory</p>
+<p>​    deleting a empty directory. – MS-DOS 目录不为空不能删除</p>
+<p>​    deleting all files and subdirectories that it contains.– UNIX 所有该目录的文件和子目录可删除</p>
+<h3 id="Acyclic-Graph-Directories-无环图"><a href="#Acyclic-Graph-Directories-无环图" class="headerlink" title="Acyclic-Graph Directories 无环图"></a>Acyclic-Graph Directories 无环图</h3><p>树状结构禁止共享文件和目录</p>
+<p>注意这里是共享文件而不是文件复制，共享文件任何改变为其他用户可见</p>
+<p>Ways implementing shared files and subdirectories: </p>
+<p>​    Create a new directory entry, called a link. – UNIX  link, a pointer to another file or subdirectory. Resolve the link – follow pointer to locate the file.</p>
+<p>​    duplicate all information about shared files in all sharing directories. 问题：维护一致性</p>
+<p>当用户删除文件时就删除，会留下dangling pointer</p>
+<p>​    对于link: Deletion of a link need not affectt he original file. Deletion of the file entry, leaving the links dangling.</p>
+<p>​    对于duplication: File-reference list, Backpointers. 为每个文件保留一个引用列表或引用计数Backpointers, so we can delete all pointers.</p>
+<h3 id="General-Graph-Directory"><a href="#General-Graph-Directory" class="headerlink" title="General Graph Directory"></a>General Graph Directory</h3><p>允许环存在</p>
+<p>为避免无限循环：强制限制在搜索时所访问目录的次数</p>
+<p>何时可删除？因为有环，就算不存在引用，其引用计数也可能不为0，可能存在自我引用。解决办法：Garbage collection: The first pass, traversing the entire file system, marking everything that can be accessed.  The second pass, collects everything that is not marked onto a list of free space.</p>
+<p>How to avoid cycles? Allow only links to file not subdirectories. Every time a new link is added use a cycle detection algorithm. A simpler algorithm, bypass links during directory traversal.</p>
+<h2 id="file-system-mounting-文件系统安装"><a href="#file-system-mounting-文件系统安装" class="headerlink" title="file system mounting 文件系统安装"></a>file system mounting 文件系统安装</h2><ol>
+<li><p>OS需要知道 设备名称 和 安装点(mount point)</p>
+</li>
+<li><p>OS验证设备是否包含一个有效文件系统(通过device driver读入设备目录，验证目录是否具有期望格式)</p>
+</li>
+<li><p>OS在其目录结构记录下：一个文件系统已安装在给定安装点上</p>
+</li>
+</ol>
+<p>Systems impose semantics to clarify functionality.</p>
+<h2 id="file-sharing"><a href="#file-sharing" class="headerlink" title="file sharing"></a>file sharing</h2><p>多用户需要共享文件</p>
+<p>Sharing may be done through a protection scheme.</p>
+<p>More file and directory attributes are needed: File / directory owner; File / directory user, access rights; File / directory user groups, access rights</p>
+<p>User IDs identify users, allowing permissions and protections to be per-user. Group IDs allow users to be in groups, permitting group access rights.</p>
+<h3 id="remote-file-system-远程文件系统"><a href="#remote-file-system-远程文件系统" class="headerlink" title="remote file system 远程文件系统"></a>remote file system 远程文件系统</h3><ol>
+<li><p>通过程序(如ftp)在机器之间进行文件的人工传输</p>
+</li>
+<li><p>distributed file systems (DFS)</p>
+<p>远程目录可从本机上直接访问</p>
+<p>much tighter integration</p>
+</li>
+<li><p>via the World Wide Web(WWW)</p>
+<p>A browser is needed. uses anonymous file exchange.</p>
+</li>
+</ol>
+<h4 id="Client-server-model"><a href="#Client-server-model" class="headerlink" title="Client-server model"></a>Client-server model</h4><p>allows clients to mount remote file systems from servers.</p>
+<p>Client and user-on-client identification is insecure or complicated.</p>
+<p>​    client can be specified by a network name or other identifier, such as an IP address, Can be spoofed or imitated.</p>
+<p>​    Secure authentication via encrypted keys. Ensuring compatibility of the client and server.</p>
+<p>NFS: standard UNIX client-server file sharing protocol</p>
+<p>CIFS(Common Internet File System): standard Windows protocol, uses active directory</p>
+<p>Standard operating system file calls are translated into remote calls远程调用</p>
+<h4 id="Distributed-Information-Systems"><a href="#Distributed-Information-Systems" class="headerlink" title="Distributed Information Systems"></a>Distributed Information Systems</h4><p>Providing unified access to the information needed for remote computing.</p>
+<p>DNS (domain name system) provides host-name-to-network-address translations for entire internet.</p>
+<p>NIS (network information service), yellow pages黄页, centralizes storage of user names, host names, printer information, and the like.</p>
+<p>LDAP (lightweight directory-access protocol), used by industry as a secure distributed naming mechanism. secure single sign-on</p>
+<h4 id="Failure-Modes-故障模式"><a href="#Failure-Modes-故障模式" class="headerlink" title="Failure Modes 故障模式"></a>Failure Modes 故障模式</h4><p>Remote file systems add new failure modes, due to network failure, server failure.</p>
+<p>Recovery from failure can involve state information about status状态信息 of each remote request.</p>
+<p>Stateless protocols such as NFS V3 include all information in each request, allowing easy recovery but less security.</p>
+<p>In NFS V4, it is made stateful</p>
+<h3 id="Consistency-Semantics-一致性语义"><a href="#Consistency-Semantics-一致性语义" class="headerlink" title="Consistency Semantics 一致性语义"></a>Consistency Semantics 一致性语义</h3><p>描述多用户同时访问共享文件时的语义。规定了一个用户所修改的数据何时对另一用户可见。</p>
+<p>由于延迟，不适合类似进程同步那些复杂算法</p>
+<ul>
+<li><p>AFS (Andrew File System) implemented complex remote file sharing semantics</p>
+<p>server记录client的动作</p>
+<p>When a client changes a file, the server notifies other clients with a call back promise technique</p>
+<p>一个用户对打开文件的写不能立即被打开同一文件的其他用户看见。一旦文件关闭，其修改只能被以后打开的会话所见。</p>
+<p>多个用户允许对自己的映像进行并发(没有延迟)的读写操作</p>
+</li>
+<li><p>UFS (Unix file system) implements</p>
+<p>一个文件与单个物理映射相关联，该映射作为互斥资源访问。修改立即可见。竞争导致用户进程延迟。</p>
+</li>
+<li><p>Immutable shared files, declared by its creator. Read-only. 不可修改</p>
+</li>
+</ul>
+<h2 id="protection"><a href="#protection" class="headerlink" title="protection"></a>protection</h2><p>高层功能可以用系统程序调用低层系统调用实现。保护可以只在低层提供。</p>
+<p>Mode of access: read, write, execute</p>
+<p>为每个文件和目录增加一个访问控制列表ACL(Access-control list)，给定每个用户名及其允许访问的类型</p>
+<p>三种用户类型:</p>
+<ul>
+<li>owner</li>
+<li>group</li>
+<li>universe(public): all other users in the system</li>
+</ul>
+<p>每个域三个位:RWX. 需要9个位</p>
+]]></content>
+      <categories>
+        <category>所学</category>
+        <category>操作系统</category>
+      </categories>
+      <tags>
+        <tag>操作系统</tag>
+        <tag>专业课笔记</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>操作系统笔记 CH9 Virtual Memory</title>
+    <url>/2020/02/28/OS9/</url>
+    <content><![CDATA[<h2 id="background"><a href="#background" class="headerlink" title="background"></a>background</h2><p>CH8的内存管理方案需要将整个进程放入内存，动态载入只能减轻这一限制</p>
+<p>Code needs to be in memory to execute, but entire program rarely used.</p>
+<p>execute partially-loaded program</p>
+<ul>
+<li>程序不受现有物理内存大小限制，可以为virtual address space编写程序</li>
+<li>更多程序可以同时执行，CPU利用率增加，而响应时间、周转时间不增加</li>
+<li>载入或交换程序所需IO变少，用户程序运行更快</li>
+</ul>
+<p>Virtual memory – separation of user logical memory from physical memory.</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577436249080.png" style="zoom:50%;">
+
+<p>动态内存分配，堆向上增长；子程序调用，栈向下增长。包括洞的虚拟地址空间是稀地址空间。</p>
+<p>Enables sparse address spaces with holes left for growth, dynamically linked libraries, etc.</p>
+<p>Virtual memory allows files and memory to be shared by two or more processes through page sharing.</p>
+<p>虚拟内存实现：</p>
+<ul>
+<li>demand paging</li>
+<li>demand segmentation</li>
+</ul>
+<h2 id="demand-paging-按需调页"><a href="#demand-paging-按需调页" class="headerlink" title="demand paging 按需调页"></a>demand paging 按需调页</h2><p>Lazy swapper: never swaps a page into memory unless that page will be needed.</p>
+<p>swapper对整个进程进行操作，pager只对进程的单个页进行操作</p>
+<p>页表条目，valid-invalid bit: valid-合法也在内存 invalid-无效(不在逻辑地址空间) 或 有效但在磁盘</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577443877399.png" style="zoom:50%;">
+
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577444151280.png" style="zoom:50%;">
+
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577444186893.png" style="zoom:50%;">
+
+<p>pure demand paging: 只有在需要时才将页调入内存</p>
+<p>单个指令可能访问多个页的内存(一页指令，其他页数据)，一个指令可能产生多个page fault. 不过由于locality of reference, 按需调页的性能还算合理。</p>
+<p>按需调页的硬件支持：</p>
+<ul>
+<li>Page table with valid-Invalid bit</li>
+<li>Secondary memory (swap device with swap space)</li>
+</ul>
+<p>请求调页的关键要求是能够在页错误后instruction restart</p>
+<p>如果页错误在获取操作数时，再次获取指令，再次译码指令，再次获取操作数。</p>
+<p>一个指令可能改变多个不同位置。若源和目的块有重叠，源块可能已修改，不能简单地再次执行。(微码计算试图访问两块的两端；临时寄存器保存覆盖位置的值)</p>
+<p>EAT = (1– p) * memory access time + p * page fault service time</p>
+<p>page fault service time = page fault overhead+[ swap page out ]+swap page in+restart overhead</p>
+<p>处理页错误中断和重新启动进程可以通过仔细编码降低开销</p>
+<p>EAT与页错误率直接相关</p>
+<p>与文件无关的页需要使用交换空间</p>
+<h2 id="Copy-on-Write-写时复制"><a href="#Copy-on-Write-写时复制" class="headerlink" title="Copy-on-Write 写时复制"></a>Copy-on-Write 写时复制</h2><p>fork()使用写时复制技术</p>
+<p>父子进程开始时共享同一页面。这些页面标记为写时复制页(只有可能修改的页需要标记)。如果任一进程对页进行写，创建一个共享页的副本。</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577445363016.png" style="zoom:50%;">
+
+<p>COW allows more efficient process creation as only modified pages are copied.</p>
+<p>free pages are allocated from a pool of free pages. 采用按需填零(zero-fill-on-demand)技术分配这些页，需要分配前先填零，因此清除了以前的内容。</p>
+<p>vfork()，不采用copy-on-write，vfork()将父进程挂起，子进程使用父进程的地址空间。如果子进程修改父进程地址空间的任何页， 父进程重启时可见。主要用于子进程被创建后立即调用exec()的情况。比较高效。用于实现UNIX命令行shell的接口。</p>
+<h2 id="page-replacement"><a href="#page-replacement" class="headerlink" title="page replacement"></a>page replacement</h2><p>Use modify bit (dirty bit) to reduce overhead of page transfers. 不修改的话不需要写回磁盘</p>
+<p>Page replacement completes separation between logical memory and physical memory.</p>
+<p>frame-allocation algorithm</p>
+<p>page replacement algorithm</p>
+<p>reference string: 内存的引用序列</p>
+<h3 id="FIFO"><a href="#FIFO" class="headerlink" title="FIFO"></a>FIFO</h3><p>Belady’s anomaly: 页错误率可能会随着所分配的帧数的增加而增加</p>
+<h3 id="OPT-MIN"><a href="#OPT-MIN" class="headerlink" title="OPT/MIN"></a>OPT/MIN</h3><p>置换最长时间不会使用的页</p>
+<p>未来知识</p>
+<h3 id="LRU"><a href="#LRU" class="headerlink" title="LRU"></a>LRU</h3><p>最长时间没有使用的页</p>
+<p>By the principle of locality, this should be the page least likely to be referenced in the near future.</p>
+<p>Associates with each page the time of that page’s last use.</p>
+<p>两种可行实现：</p>
+<ul>
+<li><p>counter</p>
+<p>每个页表项关联一个使用时间域。对每次引用，计数器增加。置换具有最小时间的页。</p>
+</li>
+<li><p>stack</p>
+<p>没引用一个页，页就从栈中删除并放在顶部</p>
+<p>No search for replacement, LRU page is at the bottom.</p>
+</li>
+</ul>
+<h3 id="LRU-Approximation-Algorithms"><a href="#LRU-Approximation-Algorithms" class="headerlink" title="LRU Approximation Algorithms"></a>LRU Approximation Algorithms</h3><p>LRU needs special hardware and still slow.所以用近似算法</p>
+<p>页表每项都关联一个reference bit, 每引用一个页(读or写)，引用位被硬件置1</p>
+<h4 id="Reference-bit-algorithm"><a href="#Reference-bit-algorithm" class="headerlink" title="Reference bit algorithm"></a>Reference bit algorithm</h4><p>When page is referenced, the bit is set to 1 by the hardware.</p>
+<p>Replace the one which is 0 (if one exists).</p>
+<p>Problem ：We do not know the order.</p>
+<h4 id="Additional-reference-bits-algorithm"><a href="#Additional-reference-bits-algorithm" class="headerlink" title="Additional-reference-bits algorithm"></a>Additional-reference-bits algorithm</h4><p>Keep an 8-bit byte for each page in a table in memory.</p>
+<p>规定时间间隔里记录引用位</p>
+<p>At regular intervals, a timer interrupts, OS shifts the reference bit for each page into the high-order bit of its 8- bit byte, shifting the other bits right by 1 bit and discarding the low-order bit.</p>
+<p>将这8位看作无符号整数，置换具有最小值的页</p>
+<h4 id="Second-chance-Clock"><a href="#Second-chance-Clock" class="headerlink" title="Second chance / Clock"></a>Second chance / Clock</h4><p>Basic algorithm: FIFO</p>
+<p>循环队列，指针向前移动直到找到一个引用位为0的页，在向前移动时，清除引用位。</p>
+<p>如果所有位均已设置，会遍历整个队列。成了FIFO</p>
+<h4 id="Enhanced-Second-Chance-Algorithm"><a href="#Enhanced-Second-Chance-Algorithm" class="headerlink" title="Enhanced Second-Chance Algorithm"></a>Enhanced Second-Chance Algorithm</h4><p>(reference bit, modify bit)</p>
+<p>(0,0)最好 (0,1) (1,0) (1,1)</p>
+<p>降低IO</p>
+<h3 id="Counting-based-page-replacement"><a href="#Counting-based-page-replacement" class="headerlink" title="Counting-based page replacement"></a>Counting-based page replacement</h3><p>每个页保留一个用于记录引用次数的计数器。</p>
+<p>LFU: replaces page with the smallest count</p>
+<p>MFU: page with the smallest count was probably just brought in and has yet to be used.</p>
+<h2 id="page-allocation-帧分配"><a href="#page-allocation-帧分配" class="headerlink" title="page allocation 帧分配"></a>page allocation 帧分配</h2><p>分配至少最少数量的帧。必须有足够的帧容纳所有单个指令所引用的页。</p>
+<p>每个进程的帧的最少数量由体系结构决定，最大数量由可用物理内存的数量决定。</p>
+<ul>
+<li><p>fixed allocation</p>
+<p>高低优先级一样处理</p>
+<p>when a page fault occurs, one of the pages of that process must be replaced. – Local replacement</p>
+<p>固定分配必须局部置换(置换自己进程里的页)</p>
+<ul>
+<li><p>equal allocation</p>
+<p>n个进程之间分配m个帧，每个m/n帧</p>
+</li>
+<li><p>proportional allocation</p>
+<p>根据进程大小比例地分配内存</p>
+<p>进程pi的虚拟内存大小si</p>
+<p>a i = s i /S * m</p>
+</li>
+</ul>
+</li>
+<li><p>priority allocation</p>
+<p>Use a proportional allocation scheme using priorities rather than size, or on a combination of size and priority.</p>
+</li>
+</ul>
+<p>Local replacement:  select for replacement one of its frames</p>
+<p>​    分配每个进程的帧的数量不变</p>
+<p>Global replacement:  select for replacement a frame from a process with lower priority number</p>
+<p>​    易于实现。更好的系统吞吐量，常用。</p>
+<p>​    OS keeps list of free frames.</p>
+<p>​    进程不能控制其页错误率(受其他进程调页行为影响)</p>
+<h2 id="thrashing-系统颠簸"><a href="#thrashing-系统颠簸" class="headerlink" title="thrashing 系统颠簸"></a>thrashing 系统颠簸</h2><p>thrashing: 频繁的页调度行为</p>
+<p>如果一个进程在换页上用的时间多于执行时间，这个进程就在颠簸</p>
+<p>CPU调度程序发现CPU使用率降低，增加多道程序程度…更多页错误，CPU使用率更低</p>
+<p>颠簸时，为了增加CPU使用率和降低系统颠簸，必须降低多道程序的程度</p>
+<p>采用局部置换，一个进程颠簸不会使其他进程颠簸</p>
+<p>Why does thrashing occur? Σ locality size &gt; total memory size</p>
+<p>using a local (or priority) replacement algorithm, Can limit the effect of thrashing.</p>
+<p>为了防止颠簸，必须提供进程所需的足够多的帧。</p>
+<p>Locality: a set of pages that are actively used together. Process migrates from one locality to another. Localities may overlap.</p>
+<h3 id="Working-Set-Model-工作集合模型"><a href="#Working-Set-Model-工作集合模型" class="headerlink" title="Working-Set Model 工作集合模型"></a>Working-Set Model 工作集合模型</h3><p>基于局部性假设</p>
+<p>参数Δ定义working-set window：a fixed number of page references</p>
+<p>Working Set: the set of pages in the most recent Δ page references.</p>
+<p>WSS i (working set size of Process P i ) : (varies in time) the number of pages in Working Set of process P i .</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577453374315.png" style="zoom:50%;">
+
+<p>工作集合的精度与Δ的选择有关，太小不能包含整个局部，太大包含多个局部</p>
+<p>总的帧需求量 D =Σ WSS i  总的需求大于帧的数量，会出现颠簸</p>
+<p>OS跟踪每个进程的工作集合，如果D &gt; m，暂停一个进程，该进程的页被写出，且其帧可分配给其他进程</p>
+<p>通过固定定时中断(interval timer)和引用位(reference bit)可以近似模拟工作集合模型</p>
+<h3 id="Page-Fault-Frequency-Scheme-PPF-页错误频率"><a href="#Page-Fault-Frequency-Scheme-PPF-页错误频率" class="headerlink" title="Page-Fault Frequency Scheme(PPF) 页错误频率"></a>Page-Fault Frequency Scheme(PPF) 页错误频率</h3><p>为所期望的页错误率设置上限和下限。超过上限，为进程分配更多的帧；低于下限，从该进程中移走帧。</p>
+<p>如果页错误率增加且没有可用帧，必须选择一个进程暂停，可将释放的帧分配给具有高页错误率的进程</p>
+]]></content>
+      <categories>
+        <category>所学</category>
+        <category>操作系统</category>
+      </categories>
+      <tags>
+        <tag>操作系统</tag>
+        <tag>专业课笔记</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>操作系统笔记 CH8 Main Memory</title>
+    <url>/2020/02/28/OS8/</url>
+    <content><![CDATA[<h2 id="background"><a href="#background" class="headerlink" title="background"></a>background</h2><h3 id="基本硬件"><a href="#基本硬件" class="headerlink" title="基本硬件"></a>基本硬件</h3><p>CPU可直接访问的存储器只有 内存 和  处理器内的寄存器</p>
+<p>​    CPU内置寄存器可在一个CPU时钟周期内完成访问，对于寄存器中的内容，CPU可以在一个周期内解析并执行多个指令</p>
+<p>​    对于内存，访存可能需要多个时钟周期。没有数据时，要暂停(stall)</p>
+<p>协调速度差异，在CPU和内存之间，增加高速缓存cache</p>
+<p>instruction-execution cycle: Fetch an instruction, decode instruction, fetch operands, execute, store results back into memory</p>
+<p>为了确保正确操作，需要保护内存。</p>
+<p>每个进程有独立空间。两个寄存器：</p>
+<ul>
+<li>base register: 最小的合法物理地址</li>
+<li>limit register: 范围的大小</li>
+</ul>
+<p>CPU硬件对user mode产生的每一个地址与寄存器的地址进行比较，实现内存空间的保护。</p>
+<p>只有OS可以通过特殊的特权指令加载base register和limit register</p>
+<h3 id="地址绑定-address-binding"><a href="#地址绑定-address-binding" class="headerlink" title="地址绑定 address binding"></a>地址绑定 address binding</h3><p>进程在执行时可以在磁盘和内存之间移动，在磁盘上等待调入内存以便执行的进程形成input queue</p>
+<p>许多系统允许用户进程放在物理内存的任意位置，用户进程开始地址不必为0</p>
+<p>源程序中的地址用符号表示，compiler将symbolic address绑定到relocatable address(如从本模块开始的第14字节)，linker或loader将可重定位地址绑定成absolute address。每次绑定都是从一个地址空间到另一个的映射。</p>
+<p>将指令与数据绑定到内存地址有几种情况：</p>
+<ul>
+<li><p>compile time</p>
+<p>编译时就知道进程将在内存中的驻留地址，可以生成absolute code</p>
+<p>如果将来地址发生变化，必须重新编译代码</p>
+</li>
+<li><p>load time</p>
+<p>编译时不知道。编译器生成relocatable code</p>
+<p>绑定延迟到加载时</p>
+<p>如果开始地址发生变化，只需重新加载用户代码引入改变值</p>
+</li>
+<li><p>execution time</p>
+<p>进程在执行时可以从一个内存段移到另一个内存段</p>
+<p>绑定延迟到执行时</p>
+<p>需要硬件(如base and limit registers)</p>
+</li>
+</ul>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577411832987.png" style="zoom:33%;">
+
+<h3 id="logical-vs-physical-address-space"><a href="#logical-vs-physical-address-space" class="headerlink" title="logical vs. physical address space"></a>logical vs. physical address space</h3><p>logical address: CPU生成的地址，virtual adderss</p>
+<p>physical address: 内存单元看到的地址，即加载到memory-address register的地址</p>
+<p>compile-time和load-time的address binding生成相同的逻辑地址和物理地址，但execution-time生成不同的，这种情况称逻辑地址为virtual address</p>
+<p>logical address space: 程序所生成的所有逻辑地址的集合</p>
+<p>physical address space: 与这些逻辑地址相对应的物理地址的集合</p>
+<p>运行时完成从虚拟到物理的地址映射的硬件：MMU(memory-management unit)</p>
+<p>relocation register: 用户进程所生成的地址送交内存前，加上relocation register的值</p>
+<p>用户程序绝不会看到真正的物理地址(execution-binding只发生在它作为内存地址引用时(比如间接加载和存储时))</p>
+<p>用户程序处理逻辑地址，内存映射硬件将逻辑地址映射为物理地址</p>
+<h2 id="swapping"><a href="#swapping" class="headerlink" title="swapping"></a>swapping</h2><p>进程可以暂时从内存swap到backing store上，需要再次执行时再调入内存</p>
+<p>backing store通常是fast disk，容纳所有用户的memory images，提供对这些内存镜像的直接访问。</p>
+<p>ready queue包括在backing store和在内存中准备运行的所有进程</p>
+<p>如果绑定是在汇编时或加载时所定的，一个交换出的进程必须交换回原来的内存空间，如果绑定是在运行是所定，可以移到不同的位置</p>
+<p>roll in, roll out: 交换策略的变种被用在基于优先级的调度算法中</p>
+<p>Dispatcher is called whenever the CPU scheduler decides to execute a process</p>
+<p>交换系统的context switch time比较长</p>
+<p>为了有效使用CPU，需要每个进程的执行时间比交换时间长</p>
+<p>交换时间主要是transfer time, 和所交换的内存空间成正比(进程10MB，备份存储是40MBps的硬盘，传入或传出：10MB/40MBps)</p>
+<p>如果要换出进程，必须确保该进程完全处于空闲状态</p>
+<p>solution to 待处理IO(pending IO)</p>
+<ul>
+<li>不能换出有待处理IO的进程</li>
+<li>IO操作的执行只能使用OS buffers. double buffering</li>
+</ul>
+<p>交换空间通常作为磁盘的一整块，且独立于文件系统。</p>
+<p>标准交换使用不多，一些交换的变种得到应用。(不如通常不执行交换，许多进程运行且内存吃紧，开始交换，若系统负荷降低，停止交换)</p>
+<h2 id="contiguous-memory-allocation"><a href="#contiguous-memory-allocation" class="headerlink" title="contiguous memory allocation"></a>contiguous memory allocation</h2><p>内存通常分为两部分，一部分驻留OS，一部分用于用户进程。操作系统通常位于低内存。</p>
+<p>连续内存分配：每个进程位于一个连续的内存区域</p>
+<h3 id="内存映射和保护"><a href="#内存映射和保护" class="headerlink" title="内存映射和保护"></a>内存映射和保护</h3><p>relocation-register scheme: </p>
+<ul>
+<li><p>relocatio/base register</p>
+</li>
+<li><p>limit register</p>
+<p>每个逻辑地址必须小于limit register</p>
+</li>
+</ul>
+<p>MMU动态地将逻辑地址加上relocation register的值后映射成物理地址</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577415727527.png" style="zoom: 50%;">
+
+<p>relocation-register scheme允许OS动态改变。如果某驱动程序不常用，不必再内存保存数据和代码，transient kernel code根据需要调入或调出，使用这类代码可以在程序运行时动态改变OS大小</p>
+<h3 id="memory-allocation"><a href="#memory-allocation" class="headerlink" title="memory allocation"></a>memory allocation</h3><ul>
+<li><p>fixed partitioning (MFT)</p>
+<p>多道程序的程度受分区数限制</p>
+<p>internal fragmentation: 进程所分配的内存比所需要大</p>
+<ul>
+<li><p>equal-size partitions</p>
+</li>
+<li><p>unequal-size partitions</p>
+<p>queue for each partition</p>
+</li>
+</ul>
+</li>
+<li><p>variable partitioning (MVT)</p>
+<p>variable length and number</p>
+<p>hole: a block of available memory</p>
+<p>OS维护一个表，记录哪些内存可用/已被占用</p>
+<p>recaim的时候如果新孔与其他孔相邻，将这些孔合并成大孔</p>
+<p>从一组可用孔选择一个：fisrst-fit, best-fit, worst-fit</p>
+<p>fisrt fit: 50% rule N个可分配快，0.5N个块为外部碎片，1/3内存不可用</p>
+<p>first和best在时间和利用空间好于worst，first和best利用空间差不多，first更快。</p>
+<p>external fragmentation: 所有可用内存之和可以满足要求，但并不连续</p>
+</li>
+</ul>
+<p>解决外部碎片：</p>
+<ul>
+<li><p>紧缩(compaction) </p>
+<p>把所有空闲空间合并成一整块</p>
+<p>紧缩仅在重定位是动态并在运行时可采用</p>
+</li>
+<li><p>允许物理地址空间非连续</p>
+<p>分页/分段</p>
+</li>
+</ul>
+<h2 id="paging-分页"><a href="#paging-分页" class="headerlink" title="paging 分页"></a>paging 分页</h2><p>允许进程物理地址空间非连续</p>
+<p>帧(frame): 物理内存划分为固定大小的块</p>
+<p>页(page): 逻辑内存分为同样大小的块</p>
+<p>backing store也划分为固定大小的块(block)</p>
+<p>页大小由硬件决定，通常为2的幂(power of 2)，512B~16MB</p>
+<p>When a process is to be executed, its pages are loaded into any available memory frames from the blocks.</p>
+<p>OS为每个进程维护一个page table, contains the frame location for each page in the process, page table used to translate logical to physical addresse</p>
+<p>有internal fragmentation(进程要求内存大小不是页大小的整数倍)</p>
+<p>由CPU生成的地址分为两部分：page number(used as an index into a page table), page offset</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577426080611.png" style="zoom:50%;">
+
+<p>逻辑地址页号位数：进程可以有多少页决定</p>
+<p>物理地址页号位数：帧数决定</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577426108848.png" style="zoom:50%;">
+
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577426371002.png" style="zoom:50%;">
+
+<p>分页特定：用户视角的内存与物理内存分离。用户程序将内存作为一整块处理，只包括这一个进程。逻辑地址到物理地址的映射由硬件完成，用户不知道。</p>
+<h3 id="分页的硬件支持"><a href="#分页的硬件支持" class="headerlink" title="分页的硬件支持"></a>分页的硬件支持</h3><p>每个进程一个页表。页表的指针与其他寄存器的值存入PCB。启动进程时，首先装入用户寄存器。</p>
+<p>&lt;256 entries, 页表可作为一组专用寄存器实现；大的页表存在内存中。</p>
+<ul>
+<li>PTBR(Page-table base register)</li>
+<li>PTLR(Page-table length register)</li>
+</ul>
+<p>装入或修改页表寄存器的指令是特权级的</p>
+<p>访问一个字节需要2次访存(一次页表条目，一次字节)</p>
+<h4 id="TLB"><a href="#TLB" class="headerlink" title="TLB"></a>TLB</h4><p>解决这个问题：TLB(translation look-aside buffer / associative memory)</p>
+<p>The given page number is compared with all keys simultaneously.</p>
+<p>page # 和 frame #</p>
+<ul>
+<li><p>a hit</p>
+</li>
+<li><p>a miss</p>
+<p>the page number is used to index the process page table</p>
+</li>
+</ul>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577427134596.png" style="zoom:50%;">
+
+<p>有的TLB允许有些条目固定下来 wired down(e.g. entries for kernel code)</p>
+<p>有的TLB在在每个TLB条目中保存ASID(address-space identifier)，可唯一地标识进程，为进程提供地址空间保护，允许TLB同时包含多个不同进程的条目</p>
+<h4 id="EAT-Effective-Access-Time"><a href="#EAT-Effective-Access-Time" class="headerlink" title="EAT(Effective Access Time)"></a>EAT(Effective Access Time)</h4><p>hit ratio: 页号在TLB中被查找到的百分比率</p>
+<h3 id="内存保护"><a href="#内存保护" class="headerlink" title="内存保护"></a>内存保护</h3><p>分页环境下，内存保护通过与每个帧相关联的保护位实现。这些位保存在页表里。</p>
+<p>RW bit: read-write or read-only</p>
+<p>valid-invalid bit: 在不在进程的逻辑地址空间中。有点浪费，所以有时用PTLR看页表长度</p>
+<p>Any violations result in a trap to the kernel.</p>
+<h2 id="页表结构"><a href="#页表结构" class="headerlink" title="页表结构"></a>页表结构</h2><h3 id="层次页表-Hierarchical"><a href="#层次页表-Hierarchical" class="headerlink" title="层次页表 Hierarchical"></a>层次页表 Hierarchical</h3><p>forward-mapped page table</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577427835376.png" style="zoom:67%;">
+
+<p>e.g. VAX(virtual address extension)体系结构支持一种两层分页的变种</p>
+<p> 页表项长度是页面的地址。页表大小=页面个数*页表项长度 。</p>
+<h3 id="哈希页表-Hashed-Page-Tables"><a href="#哈希页表-Hashed-Page-Tables" class="headerlink" title="哈希页表 Hashed Page Tables"></a>哈希页表 Hashed Page Tables</h3><p>Common in address spaces &gt; 32 bits</p>
+<p>哈希页表每一条目包括一个链表的元素，每个元素3个域：1虚拟页码  2所映射的帧号 3指向链表中下一元素的指针 </p>
+<p>群集页表(clustered page table)类似于哈希页表，不过每一条目包括多页，对于稀疏地址空间有用</p>
+<h3 id="反向页表-Inverted-Page-Table"><a href="#反向页表-Inverted-Page-Table" class="headerlink" title="反向页表 Inverted Page Table"></a>反向页表 Inverted Page Table</h3><p>Rather than each process having a page table and keeping track of all possible logical pages, track all physical pages.</p>
+<p>One entry for each real frame of memory. </p>
+<p>每个条目包含 保存在真正内存位置的页的虚拟地址 和 拥有该页的进程的信息</p>
+<p>整个系统只有一个页表。</p>
+<p>Often requires an address-space identifier (ASID) stored in each entry of the page table.</p>
+<p>Ensures the mapping of a logical page for a particular process to the corresponding physical page frame.</p>
+<p>&lt; process-id, page-number, offset &gt;</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577428523948.png" style="zoom:50%;">
+
+<p>减少存储空间，但增加了查找时间。</p>
+<p>可以通过哈希页表将查找限制在较少的条目中。访问哈希表时先访问TLB</p>
+<p>反向页表实现共享内存困难。共享内存通常作为被映射到一个物理地址的多虚拟地址实现。而反向页表，每个物理页只有一个虚拟页条目。</p>
+<p>解决办法：允许页表包含one mapping of a virtual address to the shared physical address</p>
+<h2 id="分段-segmentation"><a href="#分段-segmentation" class="headerlink" title="分段 segmentation"></a>分段 segmentation</h2><p>用户视角的内存管理方案</p>
+<p>每个段有名称和长度。地址指定了段名称和段偏移。</p>
+<p>分段：用户通过两个量指定地址，段名称和段偏移；分页：用户只指定一个地址，该地址通过硬件分为页码和偏移，对用户透明</p>
+<p>&lt;segment-number, offset&gt;</p>
+<p>二维用户定义地址映射为一维物理地址，通过段表(segment table)实现，段表每个条目有segment base和segment limit</p>
+<p>STBR(segment-table base register): points to the segment table’s location in memory</p>
+<p>STLR(segment-table limit register): indicates number of segments used by a program</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577429459185.png" style="zoom: 50%;">
+
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577429477972.png" style="zoom:50%;">]]></content>
       <categories>
         <category>所学</category>
         <category>操作系统</category>
@@ -289,232 +1021,6 @@
 <p>实现有限等待互斥：</p>
 <img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573284642763.png" style="zoom:67%;">
 
-]]></content>
-      <categories>
-        <category>所学</category>
-        <category>操作系统</category>
-      </categories>
-      <tags>
-        <tag>操作系统</tag>
-        <tag>专业课笔记</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>操作系统笔记 CH1 Intro</title>
-    <url>/2020/02/28/OS1/</url>
-    <content><![CDATA[<h2 id="What-OS-do"><a href="#What-OS-do" class="headerlink" title="What OS do"></a>What OS do</h2><p>操作系统是管理计算机硬件的程序</p>
-<p>computer system: hardware, operating system, application programs, users</p>
-<p>​    hardware: CPU, memory, I/O devices</p>
-<h3 id="user-view"><a href="#user-view" class="headerlink" title="user view"></a>user view</h3><img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573524547711.png" style="zoom:33%;">
-
-<p>services provided by OS:</p>
-<ul>
-<li><p>program development (editors and debuggers)</p>
-</li>
-<li><p>program execution</p>
-</li>
-<li><p>access to IO devices</p>
-</li>
-<li><p>controlled access to files</p>
-</li>
-<li><p>system access</p>
-</li>
-<li><p>error detection and response</p>
-<ul>
-<li><p>internal and external hardware errors</p>
-<p>memory error, device failure</p>
-</li>
-<li><p>software errors</p>
-<p>arithmetic overflow, accesss forbidden memory locations</p>
-</li>
-</ul>
-<p>外中断: interruption 与当前运行程序无关的事件</p>
-<p>内中断: exception / trap  非法操作码，地址越界，算术溢出，缺页，专门陷入指令…</p>
-</li>
-<li><p>accounting</p>
-<ul>
-<li>collect statistics</li>
-<li>monitor performance</li>
-</ul>
-</li>
-</ul>
-<h3 id="system-view"><a href="#system-view" class="headerlink" title="system view"></a>system view</h3><p>resource allocator, control program</p>
-<h3 id="defining-OS"><a href="#defining-OS" class="headerlink" title="defining OS"></a>defining OS</h3><p>kernel, one program running at all times</p>
-<p>系统软件。程序模块的集合。组织和管理计算机的软硬件资源。</p>
-<h2 id="computer-system-organization"><a href="#computer-system-organization" class="headerlink" title="computer-system organization"></a>computer-system organization</h2><p>computer startup:<br>    bootsrap program: stored in ROM/EEPROM, AKA firmware</p>
-<p>硬件&amp;固件：</p>
-<p>​    A hardware has a physical entity</p>
-<p>​    A hardware needs a program to run. A firmware is a program itself.</p>
-<p>​    A hardware cannot operate without a firmware. A firmware operates on a hardware.</p>
-<p>OS starts executing the first process, and waits for some event to occur:</p>
-<ul>
-<li><p>an interrupt from the hardware</p>
-<p>sending a signal to CPU by way of the system bus</p>
-</li>
-<li><p>an interrupt from the software</p>
-<p>executing a system call</p>
-</li>
-</ul>
-<h3 id="computer-system-operation"><a href="#computer-system-operation" class="headerlink" title="computer-system operation"></a>computer-system operation</h3><p>device controller informs CPU that it has finishd its operation by causing an interrupt</p>
-<p><u>interrupt</u>:</p>
-<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573526982292.png" style="zoom:50%;">
-
-<p>​    interrupt vector(中断向量): the staring address of all the interrupt service routines(中断服务程序). </p>
-<p>a <u>trap</u> is a software-generated interrupt caused either by an error or a user request</p>
-<p>OS is interrupt-driven</p>
-<h3 id="storage-structure"><a href="#storage-structure" class="headerlink" title="storage structure"></a>storage structure</h3><img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573527305908.png" style="zoom:50%;">
-
-<p>storage hierarchy</p>
-<p>​    speed, cost, volatility</p>
-<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573527537071.png" style="zoom:50%;">
-
-<h3 id="IO-structure"><a href="#IO-structure" class="headerlink" title="IO structure"></a>IO structure</h3><ul>
-<li><p>programmed IO</p>
-<p>IO module performs the action</p>
-</li>
-<li><p>interrupt-driven IO</p>
-<p>processor is interrupted when IO module ready to exchange data</p>
-<p>processor is free to do other work</p>
-<p>consume a lot of processor time</p>
-<p>we need system call &amp; device-status table</p>
-<ul>
-<li><p>synchronous IO</p>
-<p>After I/O starts, control returns to user program only upon I/O completion.</p>
-</li>
-<li><p>asychronous IO</p>
-</li>
-</ul>
-</li>
-<li><p>DMA</p>
-<p>Transfers a block of data directly to / from memory.</p>
-<p>device controller transfers blocks of data from buffer storage directly to main memory without CPU intervention.</p>
-<p>Only one interrupt is generated per block. The processor is only involved at the beginning and the end of the transfer.</p>
-</li>
-<li><p>IO channel</p>
-<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573528354725.png" style="zoom:33%;">
-
-</li>
-</ul>
-<p>一个CPU和多个device controller通过总线连接。每个dvice controller可负责多个特定类型设备。</p>
-<p>OS为每个device controller提供一个device driver, driver presents a uniform interface to the device</p>
-<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573527989496.png" style="zoom:50%;">
-
-<h2 id="computer-system-architecture"><a href="#computer-system-architecture" class="headerlink" title="computer-system architecture"></a>computer-system architecture</h2><h3 id="single-processor-system"><a href="#single-processor-system" class="headerlink" title="single-processor system"></a>single-processor system</h3><h3 id="multiprocessor-system-parallel-system-tightly-coupled"><a href="#multiprocessor-system-parallel-system-tightly-coupled" class="headerlink" title="multiprocessor system / parallel system / tightly coupled"></a>multiprocessor system / parallel system / tightly coupled</h3><p>增加吞吐量、规模经济、增加可靠性</p>
-<p>graceful degradation: 提供与正常工作的硬件成正比服务的能力</p>
-<p>fault tolerant: 超出适度退化的能力 容错</p>
-<ul>
-<li><p>asymmetric multiprocessing</p>
-<p>主从</p>
-<p>each processor is assigned a specific task. a master processor controls the system, allocates work to the slave processors.</p>
-</li>
-<li><p>symmetric multiprocessing SMP</p>
-</li>
-<li><p>multicore-CPUs</p>
-<p>Multiple compute cores on a single chip 多个内核 单个芯片</p>
-</li>
-<li><p>blade servers 刀片服务器</p>
-<p>每个刀片处理器独立启动并运行各自的OS</p>
-</li>
-</ul>
-<h2 id="clustered-system"><a href="#clustered-system" class="headerlink" title="clustered system"></a>clustered system</h2><p>与多处理器系统不同：多个独立系统耦合</p>
-<p>共享存储并通过LAN/更快内部连接</p>
-<p>asymmetric clustering: one machine is in hot-stand-by mode(热备份)</p>
-<p>symmetric clustering: monitor each other</p>
-<h2 id="OS-structure"><a href="#OS-structure" class="headerlink" title="OS structure"></a>OS structure</h2><ul>
-<li><p>time-sharing system(multitasking)</p>
-<p>interactive</p>
-<p>response time short</p>
-<p>允许多用户同时共享计算机</p>
-<p><u>CPU scheduling &amp; multiprogramming</u> : 以提供用户分时计算机的一部分</p>
-<p>为保证合理响应时间，通过swapping得到，使用virtual memory </p>
-</li>
-</ul>
-<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573530369578.png" style="zoom: 33%;">
-
-<h2 id="OS-operations"><a href="#OS-operations" class="headerlink" title="OS operations"></a>OS operations</h2><p>dual mode: user mode &amp; monitor mode</p>
-<p>mode bit provided by hardware</p>
-<p>Some instructions are designated as privileged, only executable in kernel mode.</p>
-<p>System call changes mode to kernel mode, return from call resets it to user mode.</p>
-<p>特权指令包括转换到用户模式，IO控制，定时器管理，中断管理等</p>
-<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573530628171.png" style="zoom: 50%;">
-
-<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573530670239.png" style="zoom:50%;">
-
-<h3 id="process-management"><a href="#process-management" class="headerlink" title="process management"></a>process management</h3><p>Single-threaded process has one program counter specifying location of next instruction to execute.</p>
-<p>Multi-threaded process has one program counter per thread.</p>
-<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573530891037.png" style="zoom:50%;">
-
-<h3 id="memory-management"><a href="#memory-management" class="headerlink" title="memory management"></a>memory management</h3><p>determines what is in memory</p>
-<p>Central to the operation of a modern computer system.<br> All data should be in memory before and after processing.<br> All instructions should be in memory in order to execute.</p>
-<p>virtual memory: </p>
-<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573531043445.png" style="zoom:33%;">
-
-<h3 id="storage-management"><a href="#storage-management" class="headerlink" title="storage management"></a>storage management</h3><ul>
-<li><p>file-system management</p>
-<p>Access control on most systems to determine who can access what.</p>
-</li>
-<li><p>mass-storage management</p>
-<p>secondary storage, tertiary storage</p>
-</li>
-<li><p>caching</p>
-<p>copying information into faster storage system</p>
-<ul>
-<li><p>disk cache</p>
-<p>A portion of main memory used as a buffer to temporarily to hold data for the disk.</p>
-</li>
-<li><p>cache memory 高速缓存</p>
-<p>invisible to OS</p>
-</li>
-</ul>
-<p>coherency &amp; consistency</p>
-</li>
-<li><p>IO subsystem</p>
-<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573531626180.png" style="zoom:50%;">
-
-</li>
-</ul>
-<h3 id="protection-and-security"><a href="#protection-and-security" class="headerlink" title="protection and security"></a>protection and security</h3><ul>
-<li><p>protection</p>
-<p>控制进程或用户对计算机系统资源的访问的机制</p>
-</li>
-<li><p>security</p>
-<p>防止系统不受外部或内部攻击</p>
-</li>
-<li><p>access control</p>
-</li>
-<li><p>information flow control</p>
-</li>
-<li><p>certification</p>
-</li>
-</ul>
-<p>保护和安全需要系统能区分用户，user ID(UID); 需要区分用户集，group ID</p>
-<p>privilege escalation: 有时用户需要升级特权来获取对一个活动的额外特权</p>
-<h3 id="distributed-systems"><a href="#distributed-systems" class="headerlink" title="distributed systems"></a>distributed systems</h3><p>loosely coupled </p>
-<p>network: communication path TCP/IP协议常用</p>
-<p>network operating system: 更自治 提供信息交换的通信 file sharing, communication, runs independently </p>
-<p>分布式系统更少自治，不同的草作系统紧密连接，好像是一个操作系统控制网络 <strong>process migration</strong></p>
-<h3 id="special-purpose-systems"><a href="#special-purpose-systems" class="headerlink" title="special-purpose systems"></a>special-purpose systems</h3><ul>
-<li><p>real-time system</p>
-<p>Often used as a control device in a dedicated application</p>
-<p>hard/soft</p>
-</li>
-<li><p>real-time embedded system 实时嵌入式系统</p>
-<p>OS很limited</p>
-</li>
-<li><p>multimedia system 多媒体系统</p>
-<p>将多媒体数据加入到计算机系统(audio and video files)</p>
-</li>
-<li><p>handheld system 手持系统</p>
-<p>PDA: personal digital assistants 专门的嵌入式系统</p>
-</li>
-</ul>
-<h3 id="computing-environments"><a href="#computing-environments" class="headerlink" title="computing environments"></a>computing environments</h3><p>traditional computing</p>
-<p>client-server computing: computer-server, file-server</p>
-<p>peer-to-peer computing: centralized lookupservice, discovery protocol, voice over IP</p>
-<p>cloud computing</p>
-<p>Operating System Concepts 7th edition</p>
-<p>Operating System Concepts 7th edition</p>
-<p>Operating System Concepts 7th</p>
 ]]></content>
       <categories>
         <category>所学</category>
@@ -859,6 +1365,398 @@
 </ul>
 </li>
 </ul>
+]]></content>
+      <categories>
+        <category>所学</category>
+        <category>操作系统</category>
+      </categories>
+      <tags>
+        <tag>操作系统</tag>
+        <tag>专业课笔记</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>操作系统笔记 CH2 OS structures</title>
+    <url>/2020/02/28/OS2/</url>
+    <content><![CDATA[<h2 id="UI"><a href="#UI" class="headerlink" title="UI"></a>UI</h2><ul>
+<li><p>CLI command-line / command interpreter</p>
+<p>implemented in kernel (MS-DOS)</p>
+<p>by systems program (Windows / UNIX)</p>
+<p> multiple flavors implemented – shells UNIX / Linux</p>
+<p>linux shell : shell: 带形参的批命令文件</p>
+</li>
+<li><p>batch interface</p>
+</li>
+<li><p>GUI graphical user interface</p>
+<p>desktop, icon, Xerox PARC</p>
+</li>
+</ul>
+<h2 id="system-calls"><a href="#system-calls" class="headerlink" title="system calls"></a>system calls</h2><p><u>Programming interface to the services provided by the OS</u></p>
+<p>written in high-level language</p>
+<p>Mostly accessed by programs via a high-level Application Program Interface (<u>API</u>) rather than direct system call use.</p>
+<p>most common API: </p>
+<ul>
+<li>Win32 API</li>
+<li>POSIX API: for UNIX, Linux, and Mac OS X</li>
+<li>Java API: for JVM</li>
+</ul>
+<p>A programmer accesses an API via a library of code provided by the operating system. (e.g. libc )</p>
+<p>the <u>run-time support system</u> provides a system-call interface that serves as the link to system calls.</p>
+<h4 id="system-call-parameter-passing"><a href="#system-call-parameter-passing" class="headerlink" title="system call parameter passing"></a>system call parameter passing</h4><p>3 methods:</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573537965310.png" style="zoom:50%;">
+
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573537985715.png" style="zoom:50%;">
+
+<h3 id="types-of-system-call"><a href="#types-of-system-call" class="headerlink" title="types of system call"></a>types of system call</h3><ul>
+<li><p>process control</p>
+<p>dump memory if error, Debugger for determining bugs, single step execution, Locks for managing access to shared data between processes</p>
+</li>
+<li><p>file manipulation</p>
+</li>
+<li><p>device manipulation</p>
+</li>
+<li><p>information maintenance</p>
+</li>
+<li><p>communications</p>
+<ul>
+<li><p>message passing model</p>
+<p>through an interprocess-communication facility (IPC) provided by OS</p>
+</li>
+</ul>
+</li>
+<li><p>shared memory passing</p>
+<p>process use <em>map</em> memory system call to gain access to regions of memory owned by other processes.</p>
+</li>
+</ul>
+<h2 id="system-prorams"><a href="#system-prorams" class="headerlink" title="system prorams"></a>system prorams</h2><p>file management</p>
+<p>status information: Some systems implement a registry, used to store and retrieve configuration information.</p>
+<p>file modification</p>
+<p>programming-language support</p>
+<p>program loading and execution</p>
+<p>communications</p>
+<p>system utilities/application programs: </p>
+<p>background services: Launch at boot time. Run in user context not kernel context.  Known as services, subsystems, daemons</p>
+<h2 id="OS-design-and-implementation"><a href="#OS-design-and-implementation" class="headerlink" title="OS design and implementation"></a>OS design and implementation</h2><p>策略policy: 决定做什么，可能随时间位置改变，对资源分配很重要</p>
+<p>机制mechanism: 决定怎么做，系统更需要通用机制</p>
+<p>The separation of policy from mechanism allows maximum <u>flexibility</u> if policy decisions are to be changed later. 微内核把机制与策略的区分利用到极致。</p>
+<p><strong>Emulation</strong> can allow an OS to run on non-native hardware.</p>
+<p>用高级语言编写， OS更易移植，降低速度，增加存储要求</p>
+<p>bottleneck routines can be identified. replaced with assembly-language equivalents.</p>
+<h2 id="OS-structure"><a href="#OS-structure" class="headerlink" title="OS structure"></a>OS structure</h2><ul>
+<li><p>simple structure</p>
+<ul>
+<li><p>MS-DOS</p>
+<p>没被仔细划分成模块，没有很好区分接口和层次</p>
+</li>
+<li><p>UNIX</p>
+<p>由内核和系统程序组成</p>
+</li>
+</ul>
+</li>
+<li><p>layered approach</p>
+<p>the bottom layer (layer 0) is the hardware, the highest (layer N) is the user interface</p>
+<p>每层利用低层提供功能实现</p>
+<p>advantage: contruction, debugging, design, implementation</p>
+<p>difficulty: disk driver &amp; memory-management routines, disk driver &amp; CPU scheduler</p>
+<p>less efficient</p>
+</li>
+<li><p>microkernels</p>
+<p>Mach</p>
+<p>microkernel contains only essential functions</p>
+<ul>
+<li>memory management</li>
+<li>CPU scheduling</li>
+<li>communications</li>
+</ul>
+<p>微内核主要功能：使 客户程序 和 运行在用户空间的各种服务 之间进行通信 message passing</p>
+<p>Mach, Tru64 UNIX, Mac OS X kernel, QNX</p>
+<p>由于系统功能总开销增加而导致系统性能下降</p>
+</li>
+<li><p>modules</p>
+<p>Many modern operating systems implement loadable kernel modules.</p>
+<p>The kernel has a set of core components and dynamically links in additional services via modules, either at boot time or during run time.</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573542431080.png" style="zoom:33%;">
+
+<p>允许内核提供核心服务，也能动态地实现特定功能</p>
+<p>类似分层，但更灵活，任一模块可调用其他任何模块。</p>
+<p>类似微内核，核心模块只有核心功能及其他模块加载和通信的相关信息。更高效，因为模块无需调用消息传递来通信。</p>
+</li>
+</ul>
+<p>hybrid systems:</p>
+<p>​    linux &amp; solaris: monolithic, modular</p>
+<p>​    windows: monolithic, plus microkernel for different subsystem personalities, run as user-mode                     processes, dynamically loadable kernel modules</p>
+<p> Mac OS X: 分层，其中一层包括Mach微内核</p>
+<h2 id="virtual-machines"><a href="#virtual-machines" class="headerlink" title="virtual machines"></a>virtual machines</h2><p>takes the <strong>layered</strong> approach to its logical conclusion</p>
+<p>It treats hardware and the operating system kernel as though they were all hardware.</p>
+<p>The operating system creates the illusion of multiple processes, each executing on its own processor with its own (virtual) memory.</p>
+<ul>
+<li>by CPU scheduling</li>
+<li>by virtual memory</li>
+</ul>
+<p>virtualization: a technology that allows operating systems to run as applications within other operating systems. VMM(virtual machine Manager)</p>
+<p>Emulation used when source CPU type different from target type.  When computer language not compiled to native code – Interpretation</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573543236416.png" style="zoom: 33%;">
+
+<p>advantage: protection of system resources, solving system compatibility problem.</p>
+<p>虚拟机软件允许在kernel mode(因为它自己就是操作系统)，但虚拟机自身只能允许在user mode</p>
+<p>virtual kernel mode 和 virtual user mode 都允许在 physical user mode</p>
+<p>真正机器上user mode到kernel mode的切换，也必须在虚拟机上引起从virtual user mode到virtual kernel mode的切换</p>
+<h3 id="JVM"><a href="#JVM" class="headerlink" title="JVM"></a>JVM</h3><p>consists of</p>
+<ul>
+<li><p>class loader</p>
+</li>
+<li><p>class verifier</p>
+</li>
+<li><p>Java interpreter</p>
+<p>software module that interprets the bytecodes one at a time</p>
+<ul>
+<li>Just-In-Time (JIT) compilers turns the architecture-neutral bytecodes into native machine language for the host computer.</li>
+</ul>
+</li>
+</ul>
+<p>JVM automatically manages memory by performing garbage collection.</p>
+<h2 id="OS-generation"><a href="#OS-generation" class="headerlink" title="OS generation"></a>OS generation</h2><p>对于某个特定的计算场所，必须配置configure和生成generate系统：SYSGEN</p>
+<p>generation methods:</p>
+<p>​    可完全重新编译</p>
+<p>​    或系统描述可用来创建表</p>
+<p>​    或完全table-driven(绝大多数现代OS是这样),选择发生在执行时而不是编译连接时。</p>
+<h2 id="system-boot"><a href="#system-boot" class="headerlink" title="system boot"></a>system boot</h2><p>booting: starting a computer by loading the kernel</p>
+<p>Bootstrap program (bootstrap loader): small piece of code stored in ROM.  locates the kernel, loads it into memory, and starts its execution.</p>
+<p>two step:</p>
+<ol>
+<li><p>bootstrap loader</p>
+<p>fetches the boot program from boot block into memory to execute.</p>
+</li>
+<li><p>boot program</p>
+<p>loads the entire OS into memory and begin its execution</p>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>所学</category>
+        <category>操作系统</category>
+      </categories>
+      <tags>
+        <tag>操作系统</tag>
+        <tag>专业课笔记</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>操作系统笔记 CH1 Intro</title>
+    <url>/2020/02/28/OS1/</url>
+    <content><![CDATA[<h2 id="What-OS-do"><a href="#What-OS-do" class="headerlink" title="What OS do"></a>What OS do</h2><p>操作系统是管理计算机硬件的程序</p>
+<p>computer system: hardware, operating system, application programs, users</p>
+<p>​    hardware: CPU, memory, I/O devices</p>
+<h3 id="user-view"><a href="#user-view" class="headerlink" title="user view"></a>user view</h3><img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573524547711.png" style="zoom:33%;">
+
+<p>services provided by OS:</p>
+<ul>
+<li><p>program development (editors and debuggers)</p>
+</li>
+<li><p>program execution</p>
+</li>
+<li><p>access to IO devices</p>
+</li>
+<li><p>controlled access to files</p>
+</li>
+<li><p>system access</p>
+</li>
+<li><p>error detection and response</p>
+<ul>
+<li><p>internal and external hardware errors</p>
+<p>memory error, device failure</p>
+</li>
+<li><p>software errors</p>
+<p>arithmetic overflow, accesss forbidden memory locations</p>
+</li>
+</ul>
+<p>外中断: interruption 与当前运行程序无关的事件</p>
+<p>内中断: exception / trap  非法操作码，地址越界，算术溢出，缺页，专门陷入指令…</p>
+</li>
+<li><p>accounting</p>
+<ul>
+<li>collect statistics</li>
+<li>monitor performance</li>
+</ul>
+</li>
+</ul>
+<h3 id="system-view"><a href="#system-view" class="headerlink" title="system view"></a>system view</h3><p>resource allocator, control program</p>
+<h3 id="defining-OS"><a href="#defining-OS" class="headerlink" title="defining OS"></a>defining OS</h3><p>kernel, one program running at all times</p>
+<p>系统软件。程序模块的集合。组织和管理计算机的软硬件资源。</p>
+<h2 id="computer-system-organization"><a href="#computer-system-organization" class="headerlink" title="computer-system organization"></a>computer-system organization</h2><p>computer startup:<br>    bootsrap program: stored in ROM/EEPROM, AKA firmware</p>
+<p>硬件&amp;固件：</p>
+<p>​    A hardware has a physical entity</p>
+<p>​    A hardware needs a program to run. A firmware is a program itself.</p>
+<p>​    A hardware cannot operate without a firmware. A firmware operates on a hardware.</p>
+<p>OS starts executing the first process, and waits for some event to occur:</p>
+<ul>
+<li><p>an interrupt from the hardware</p>
+<p>sending a signal to CPU by way of the system bus</p>
+</li>
+<li><p>an interrupt from the software</p>
+<p>executing a system call</p>
+</li>
+</ul>
+<h3 id="computer-system-operation"><a href="#computer-system-operation" class="headerlink" title="computer-system operation"></a>computer-system operation</h3><p>device controller informs CPU that it has finishd its operation by causing an interrupt</p>
+<p><u>interrupt</u>:</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573526982292.png" style="zoom:50%;">
+
+<p>​    interrupt vector(中断向量): the staring address of all the interrupt service routines(中断服务程序). </p>
+<p>a <u>trap</u> is a software-generated interrupt caused either by an error or a user request</p>
+<p>OS is interrupt-driven</p>
+<h3 id="storage-structure"><a href="#storage-structure" class="headerlink" title="storage structure"></a>storage structure</h3><img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573527305908.png" style="zoom:50%;">
+
+<p>storage hierarchy</p>
+<p>​    speed, cost, volatility</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573527537071.png" style="zoom:50%;">
+
+<h3 id="IO-structure"><a href="#IO-structure" class="headerlink" title="IO structure"></a>IO structure</h3><ul>
+<li><p>programmed IO</p>
+<p>IO module performs the action</p>
+</li>
+<li><p>interrupt-driven IO</p>
+<p>processor is interrupted when IO module ready to exchange data</p>
+<p>processor is free to do other work</p>
+<p>consume a lot of processor time</p>
+<p>we need system call &amp; device-status table</p>
+<ul>
+<li><p>synchronous IO</p>
+<p>After I/O starts, control returns to user program only upon I/O completion.</p>
+</li>
+<li><p>asychronous IO</p>
+</li>
+</ul>
+</li>
+<li><p>DMA</p>
+<p>Transfers a block of data directly to / from memory.</p>
+<p>device controller transfers blocks of data from buffer storage directly to main memory without CPU intervention.</p>
+<p>Only one interrupt is generated per block. The processor is only involved at the beginning and the end of the transfer.</p>
+</li>
+<li><p>IO channel</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573528354725.png" style="zoom:33%;">
+
+</li>
+</ul>
+<p>一个CPU和多个device controller通过总线连接。每个dvice controller可负责多个特定类型设备。</p>
+<p>OS为每个device controller提供一个device driver, driver presents a uniform interface to the device</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573527989496.png" style="zoom:50%;">
+
+<h2 id="computer-system-architecture"><a href="#computer-system-architecture" class="headerlink" title="computer-system architecture"></a>computer-system architecture</h2><h3 id="single-processor-system"><a href="#single-processor-system" class="headerlink" title="single-processor system"></a>single-processor system</h3><h3 id="multiprocessor-system-parallel-system-tightly-coupled"><a href="#multiprocessor-system-parallel-system-tightly-coupled" class="headerlink" title="multiprocessor system / parallel system / tightly coupled"></a>multiprocessor system / parallel system / tightly coupled</h3><p>增加吞吐量、规模经济、增加可靠性</p>
+<p>graceful degradation: 提供与正常工作的硬件成正比服务的能力</p>
+<p>fault tolerant: 超出适度退化的能力 容错</p>
+<ul>
+<li><p>asymmetric multiprocessing</p>
+<p>主从</p>
+<p>each processor is assigned a specific task. a master processor controls the system, allocates work to the slave processors.</p>
+</li>
+<li><p>symmetric multiprocessing SMP</p>
+</li>
+<li><p>multicore-CPUs</p>
+<p>Multiple compute cores on a single chip 多个内核 单个芯片</p>
+</li>
+<li><p>blade servers 刀片服务器</p>
+<p>每个刀片处理器独立启动并运行各自的OS</p>
+</li>
+</ul>
+<h2 id="clustered-system"><a href="#clustered-system" class="headerlink" title="clustered system"></a>clustered system</h2><p>与多处理器系统不同：多个独立系统耦合</p>
+<p>共享存储并通过LAN/更快内部连接</p>
+<p>asymmetric clustering: one machine is in hot-stand-by mode(热备份)</p>
+<p>symmetric clustering: monitor each other</p>
+<h2 id="OS-structure"><a href="#OS-structure" class="headerlink" title="OS structure"></a>OS structure</h2><ul>
+<li><p>time-sharing system(multitasking)</p>
+<p>interactive</p>
+<p>response time short</p>
+<p>允许多用户同时共享计算机</p>
+<p><u>CPU scheduling &amp; multiprogramming</u> : 以提供用户分时计算机的一部分</p>
+<p>为保证合理响应时间，通过swapping得到，使用virtual memory </p>
+</li>
+</ul>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573530369578.png" style="zoom: 33%;">
+
+<h2 id="OS-operations"><a href="#OS-operations" class="headerlink" title="OS operations"></a>OS operations</h2><p>dual mode: user mode &amp; monitor mode</p>
+<p>mode bit provided by hardware</p>
+<p>Some instructions are designated as privileged, only executable in kernel mode.</p>
+<p>System call changes mode to kernel mode, return from call resets it to user mode.</p>
+<p>特权指令包括转换到用户模式，IO控制，定时器管理，中断管理等</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573530628171.png" style="zoom: 50%;">
+
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573530670239.png" style="zoom:50%;">
+
+<h3 id="process-management"><a href="#process-management" class="headerlink" title="process management"></a>process management</h3><p>Single-threaded process has one program counter specifying location of next instruction to execute.</p>
+<p>Multi-threaded process has one program counter per thread.</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573530891037.png" style="zoom:50%;">
+
+<h3 id="memory-management"><a href="#memory-management" class="headerlink" title="memory management"></a>memory management</h3><p>determines what is in memory</p>
+<p>Central to the operation of a modern computer system.<br> All data should be in memory before and after processing.<br> All instructions should be in memory in order to execute.</p>
+<p>virtual memory: </p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573531043445.png" style="zoom:33%;">
+
+<h3 id="storage-management"><a href="#storage-management" class="headerlink" title="storage management"></a>storage management</h3><ul>
+<li><p>file-system management</p>
+<p>Access control on most systems to determine who can access what.</p>
+</li>
+<li><p>mass-storage management</p>
+<p>secondary storage, tertiary storage</p>
+</li>
+<li><p>caching</p>
+<p>copying information into faster storage system</p>
+<ul>
+<li><p>disk cache</p>
+<p>A portion of main memory used as a buffer to temporarily to hold data for the disk.</p>
+</li>
+<li><p>cache memory 高速缓存</p>
+<p>invisible to OS</p>
+</li>
+</ul>
+<p>coherency &amp; consistency</p>
+</li>
+<li><p>IO subsystem</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573531626180.png" style="zoom:50%;">
+
+</li>
+</ul>
+<h3 id="protection-and-security"><a href="#protection-and-security" class="headerlink" title="protection and security"></a>protection and security</h3><ul>
+<li><p>protection</p>
+<p>控制进程或用户对计算机系统资源的访问的机制</p>
+</li>
+<li><p>security</p>
+<p>防止系统不受外部或内部攻击</p>
+</li>
+<li><p>access control</p>
+</li>
+<li><p>information flow control</p>
+</li>
+<li><p>certification</p>
+</li>
+</ul>
+<p>保护和安全需要系统能区分用户，user ID(UID); 需要区分用户集，group ID</p>
+<p>privilege escalation: 有时用户需要升级特权来获取对一个活动的额外特权</p>
+<h3 id="distributed-systems"><a href="#distributed-systems" class="headerlink" title="distributed systems"></a>distributed systems</h3><p>loosely coupled </p>
+<p>network: communication path TCP/IP协议常用</p>
+<p>network operating system: 更自治 提供信息交换的通信 file sharing, communication, runs independently </p>
+<p>分布式系统更少自治，不同的草作系统紧密连接，好像是一个操作系统控制网络 <strong>process migration</strong></p>
+<h3 id="special-purpose-systems"><a href="#special-purpose-systems" class="headerlink" title="special-purpose systems"></a>special-purpose systems</h3><ul>
+<li><p>real-time system</p>
+<p>Often used as a control device in a dedicated application</p>
+<p>hard/soft</p>
+</li>
+<li><p>real-time embedded system 实时嵌入式系统</p>
+<p>OS很limited</p>
+</li>
+<li><p>multimedia system 多媒体系统</p>
+<p>将多媒体数据加入到计算机系统(audio and video files)</p>
+</li>
+<li><p>handheld system 手持系统</p>
+<p>PDA: personal digital assistants 专门的嵌入式系统</p>
+</li>
+</ul>
+<h3 id="computing-environments"><a href="#computing-environments" class="headerlink" title="computing environments"></a>computing environments</h3><p>traditional computing</p>
+<p>client-server computing: computer-server, file-server</p>
+<p>peer-to-peer computing: centralized lookupservice, discovery protocol, voice over IP</p>
+<p>cloud computing</p>
+<p>Operating System Concepts 7th edition</p>
+<p>Operating System Concepts 7th edition</p>
+<p>Operating System Concepts 7th</p>
 ]]></content>
       <categories>
         <category>所学</category>

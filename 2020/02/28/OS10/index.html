@@ -1,0 +1,1384 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+<meta name="google-site-verification" content="ZtDCfxX0w_MTT5dz2MU_L5MC8gehpvNri9UkZKPBByU">
+<script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+<link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet">
+<style>
+    .pace .pace-progress {
+        background: #99ccff; /*进度条颜色*/
+        height: 3px;
+    }
+    .pace .pace-progress-inner {
+         box-shadow: 0 0 10px #1E92FB, 0 0 5px     #1944ba; /*阴影颜色*/
+    }
+    .pace .pace-activity {
+        border-top-color: #99ccff;    /*上边框颜色*/
+        border-left-color: #99ccff;    /*左边框颜色*/
+    }
+</style>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+<link href="https://fonts.loli.net/css?family=Noto+Serif+SC:400,500,700&display=swap&subset=chinese-simplified" rel="stylesheet">
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/girl-32.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/girl-16.ico?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="操作系统,专业课笔记,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="file concept文件：记录在外存上的 相关信息的 具有名称的 集合，逻辑内存的最小分配单元 通常，文件表示程序和数据 free form or may be formatted rigidly file attributes name: human-readable identifier: a unique number, non-human-readable name type loca">
+<meta name="keywords" content="操作系统,专业课笔记">
+<meta property="og:type" content="article">
+<meta property="og:title" content="操作系统笔记 CH10 File-System Interface">
+<meta property="og:url" content="https://bygonexf.github.io/2020/02/28/OS10/index.html">
+<meta property="og:site_name" content="Choco">
+<meta property="og:description" content="file concept文件：记录在外存上的 相关信息的 具有名称的 集合，逻辑内存的最小分配单元 通常，文件表示程序和数据 free form or may be formatted rigidly file attributes name: human-readable identifier: a unique number, non-human-readable name type loca">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-02-28T09:01:39.323Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="操作系统笔记 CH10 File-System Interface">
+<meta name="twitter:description" content="file concept文件：记录在外存上的 相关信息的 具有名称的 集合，逻辑内存的最小分配单元 通常，文件表示程序和数据 free form or may be formatted rigidly file attributes name: human-readable identifier: a unique number, non-human-readable name type loca">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://bygonexf.github.io/2020/02/28/OS10/">
+
+
+
+
+
+  <title>操作系统笔记 CH10 File-System Interface | Choco</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Choco</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">one more bite</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://bygonexf.github.io/2020/02/28/OS10/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Fei">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Choco">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">操作系统笔记 CH10 File-System Interface</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-28T13:10:24+08:00">
+                2020-02-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/所学/" itemprop="url" rel="index">
+                    <span itemprop="name">所学</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/所学/操作系统/" itemprop="url" rel="index">
+                    <span itemprop="name">操作系统</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/02/28/OS10/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/02/28/OS10/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="file-concept"><a href="#file-concept" class="headerlink" title="file concept"></a>file concept</h2><p>文件：记录在外存上的 相关信息的 具有名称的 集合，逻辑内存的最小分配单元</p>
+<p>通常，文件表示程序和数据</p>
+<p>free form or may be formatted rigidly</p>
+<h3 id="file-attributes"><a href="#file-attributes" class="headerlink" title="file attributes"></a>file attributes</h3><ul>
+<li>name: human-readable</li>
+<li>identifier: a unique number, non-human-readable name</li>
+<li>type</li>
+<li>location</li>
+<li>size</li>
+<li>protection</li>
+<li>time, date and user identification</li>
+</ul>
+<p>文件的信息存在directory中，directory也存在外存上</p>
+<p>A directory entry consists of the file’s name and its unique id. The id in turn locates the other file attributes.</p>
+<h3 id="file-operations"><a href="#file-operations" class="headerlink" title="file operations"></a>file operations</h3><p>6个基本文件操作：</p>
+<ul>
+<li><p>create</p>
+</li>
+<li><p>write</p>
+<p>write pointer</p>
+</li>
+<li><p>read</p>
+<p>read pointer</p>
+<p>A per-process current-file-position pointer</p>
+</li>
+<li><p>reposition</p>
+<p>file seek, not need I/O</p>
+</li>
+<li><p>delete</p>
+<p>release file space, erase directory entry</p>
+</li>
+<li><p>truncate</p>
+<p>reset length to 0, release file space</p>
+<p>只删除内容，保留属性</p>
+</li>
+</ul>
+<p>基本操作可以组合成其他操作</p>
+<p>Most file operations involve searching the directory for the entry associated with the named file</p>
+<p>首次使用文件时，使用系统调用open()</p>
+<p>OS维护一个包含所有打开文件的信息表(open-file table)。当需要一个文件操作时，通过该表的一个索引指定文件，无需搜索。文件不再使用时，进程可关闭它，OS从open-file table删除这一条目。系统调用create和delete操作的是关闭文件，而不是打开文件。</p>
+<p>系统调用open()返回一个指向open-file table中一个条目的指针。通过使用该指针，而不是真实文件名称，进行所有IO操作。also accept access mode information, such as create, read-only, read-write, append-only, etc.</p>
+<p>close(Fi), move the content of entry Fi in open-file table to directory structure on disk.</p>
+<p>多进程可能同时打开同一文件。OS采用两级内部表。</p>
+<ul>
+<li><p>Process open-file table, a per-process table</p>
+<p>该进程所使用的文件信息</p>
+<p>单个进程表的每个条目相应地指向整个系统的打开文件表</p>
+</li>
+<li><p>System open-file table, a system-wide table</p>
+<p>包含进程无关信息(如文件在磁盘上的位置，访问日期和文件大小)</p>
+<p>一旦一个进程打开文件，System open-file table会增加相应条目，当另一个进程执行调用open()，在其Process open-file table增加一个条目，并指向System open-file table相应条目</p>
+<p>每个文件有一个open count，记录多少进程打开了该文件。当open count=0，该文件条目可删除。</p>
+</li>
+</ul>
+<p>每个打开文件有如下信息：</p>
+<ul>
+<li><p>file pointer</p>
+<p>pointer to last read/write location</p>
+<p>对每个进程唯一</p>
+</li>
+<li><p>file-open count</p>
+</li>
+<li><p>disk location of file</p>
+</li>
+<li><p>access rights</p>
+<p>每个进程用一个访问模式打开文件</p>
+<p>保存在单个进程打开文件表中</p>
+</li>
+</ul>
+<h4 id="文件锁-file-locks"><a href="#文件锁-file-locks" class="headerlink" title="文件锁(file locks)"></a>文件锁(file locks)</h4><p>shared lock: 多个进程并发获取</p>
+<p>exclusive lock: 只有一个进程可以获取</p>
+<p>加锁机制：</p>
+<p>mandatory强制：一个进程获得锁，阻止其他进程访问已加锁的文件。access is denied depending on locks held and requested. – Windows OS. </p>
+<p>advisory建议：processes can find status of locks and decide what to do. – Unix OS.</p>
+<h3 id="file-types"><a href="#file-types" class="headerlink" title="file types"></a>file types</h3><p>实现文件类型的常用技术：在文件名称内包含类型。名称可分为两部分：name , extension</p>
+<p>Some OS, each file has a type, and a creator attribute containing the name of the program that created it.</p>
+<p>UNIX, a magic number stored at the beginning of some files to indicate roughly the type of the file.</p>
+<h2 id="access-methods"><a href="#access-methods" class="headerlink" title="access methods"></a>access methods</h2><p>Criteria for File Organization: Rapid access, Ease of update, Economy of storage, Simple maintenance, Reliability</p>
+<h3 id="sequential-access-顺序访问"><a href="#sequential-access-顺序访问" class="headerlink" title="sequential access 顺序访问"></a>sequential access 顺序访问</h3><p>基于文件的磁带模型。不仅适用于顺序访问设备，也适用于随机访问设备</p>
+<h3 id="direct-access-直接访问"><a href="#direct-access-直接访问" class="headerlink" title="direct access 直接访问"></a>direct access 直接访问</h3><p>文件由固定长度的逻辑记录组成。基于文件的磁盘模型。可立即访问大量信息。数据库常采用这种类型的文件。</p>
+<p>提供的是相对块号。</p>
+<p>对直接访问文件，可容易地模拟顺序访问。反过来很低效。</p>
+<h3 id="其他访问方式"><a href="#其他访问方式" class="headerlink" title="其他访问方式"></a>其他访问方式</h3><p>通常涉及创建索引</p>
+<h2 id="directory-structure"><a href="#directory-structure" class="headerlink" title="directory structure"></a>directory structure</h2><p>有时需要在一个磁盘上装多种文件系统</p>
+<p>Disk can be subdivided into partitions.</p>
+<p>Disk or partition can be used：</p>
+<p>​    raw, without a file system, e.g. swap space</p>
+<p>​    formatted with a file system</p>
+<p>Volume: Entity containing file system</p>
+<p>Each volume containing file system also tracks that file system’s info in device directory or volume table of contents.</p>
+<p>Disks or partitions can be RAID protected against failure.</p>
+<p>directory可看作符号表，将 文件名 转换成 目录条目</p>
+<p>Both the directory structure and the files reside on disk.</p>
+<h3 id="Single-Level-Directory"><a href="#Single-Level-Directory" class="headerlink" title="Single-Level Directory"></a>Single-Level Directory</h3><p>所有文件包含在同一目录中</p>
+<p>必须有唯一名称</p>
+<p>naming problem , grouping problem</p>
+<h3 id="Two-Level-Directory"><a href="#Two-Level-Directory" class="headerlink" title="Two-Level Directory"></a>Two-Level Directory</h3><p>为每个用户创建独立目录</p>
+<p>A master file directory(主文件目录MFD) and one user file directory(用户文件目录UFD) for each user.</p>
+<p>UFD内文件名唯一即可</p>
+<p>No grouping capability </p>
+<p>File sharing怎么解决</p>
+<ul>
+<li>Path name. defined by a user name and a file name.</li>
+<li>Special user directory, containing system files.</li>
+<li>Search path, the sequence of directories searched.</li>
+</ul>
+<h3 id="Tree-Structured-Directories"><a href="#Tree-Structured-Directories" class="headerlink" title="Tree-Structured Directories"></a>Tree-Structured Directories</h3><p>树有根目录，系统内的每个文件都有唯一路径名</p>
+<p>One bit in each entry defines the entry as a file(0) or as a subdirectory(1).</p>
+<p>Grouping Capability</p>
+<p>每个进程有 Current directory (working directory) 当前目录 In accounting file, a pointer/the name of the user’s initial directory. Copied to a local variable for this user.</p>
+<p>Absolute path name: 从根开始</p>
+<p>relative path name: 从当前目录开始</p>
+<p>创建子目录/新文件在当前目录下完成</p>
+<p>Deleting a subdirectory</p>
+<p>​    deleting a empty directory. – MS-DOS 目录不为空不能删除</p>
+<p>​    deleting all files and subdirectories that it contains.– UNIX 所有该目录的文件和子目录可删除</p>
+<h3 id="Acyclic-Graph-Directories-无环图"><a href="#Acyclic-Graph-Directories-无环图" class="headerlink" title="Acyclic-Graph Directories 无环图"></a>Acyclic-Graph Directories 无环图</h3><p>树状结构禁止共享文件和目录</p>
+<p>注意这里是共享文件而不是文件复制，共享文件任何改变为其他用户可见</p>
+<p>Ways implementing shared files and subdirectories: </p>
+<p>​    Create a new directory entry, called a link. – UNIX  link, a pointer to another file or subdirectory. Resolve the link – follow pointer to locate the file.</p>
+<p>​    duplicate all information about shared files in all sharing directories. 问题：维护一致性</p>
+<p>当用户删除文件时就删除，会留下dangling pointer</p>
+<p>​    对于link: Deletion of a link need not affectt he original file. Deletion of the file entry, leaving the links dangling.</p>
+<p>​    对于duplication: File-reference list, Backpointers. 为每个文件保留一个引用列表或引用计数Backpointers, so we can delete all pointers.</p>
+<h3 id="General-Graph-Directory"><a href="#General-Graph-Directory" class="headerlink" title="General Graph Directory"></a>General Graph Directory</h3><p>允许环存在</p>
+<p>为避免无限循环：强制限制在搜索时所访问目录的次数</p>
+<p>何时可删除？因为有环，就算不存在引用，其引用计数也可能不为0，可能存在自我引用。解决办法：Garbage collection: The first pass, traversing the entire file system, marking everything that can be accessed.  The second pass, collects everything that is not marked onto a list of free space.</p>
+<p>How to avoid cycles? Allow only links to file not subdirectories. Every time a new link is added use a cycle detection algorithm. A simpler algorithm, bypass links during directory traversal.</p>
+<h2 id="file-system-mounting-文件系统安装"><a href="#file-system-mounting-文件系统安装" class="headerlink" title="file system mounting 文件系统安装"></a>file system mounting 文件系统安装</h2><ol>
+<li><p>OS需要知道 设备名称 和 安装点(mount point)</p>
+</li>
+<li><p>OS验证设备是否包含一个有效文件系统(通过device driver读入设备目录，验证目录是否具有期望格式)</p>
+</li>
+<li><p>OS在其目录结构记录下：一个文件系统已安装在给定安装点上</p>
+</li>
+</ol>
+<p>Systems impose semantics to clarify functionality.</p>
+<h2 id="file-sharing"><a href="#file-sharing" class="headerlink" title="file sharing"></a>file sharing</h2><p>多用户需要共享文件</p>
+<p>Sharing may be done through a protection scheme.</p>
+<p>More file and directory attributes are needed: File / directory owner; File / directory user, access rights; File / directory user groups, access rights</p>
+<p>User IDs identify users, allowing permissions and protections to be per-user. Group IDs allow users to be in groups, permitting group access rights.</p>
+<h3 id="remote-file-system-远程文件系统"><a href="#remote-file-system-远程文件系统" class="headerlink" title="remote file system 远程文件系统"></a>remote file system 远程文件系统</h3><ol>
+<li><p>通过程序(如ftp)在机器之间进行文件的人工传输</p>
+</li>
+<li><p>distributed file systems (DFS)</p>
+<p>远程目录可从本机上直接访问</p>
+<p>much tighter integration</p>
+</li>
+<li><p>via the World Wide Web(WWW)</p>
+<p>A browser is needed. uses anonymous file exchange.</p>
+</li>
+</ol>
+<h4 id="Client-server-model"><a href="#Client-server-model" class="headerlink" title="Client-server model"></a>Client-server model</h4><p>allows clients to mount remote file systems from servers.</p>
+<p>Client and user-on-client identification is insecure or complicated.</p>
+<p>​    client can be specified by a network name or other identifier, such as an IP address, Can be spoofed or imitated.</p>
+<p>​    Secure authentication via encrypted keys. Ensuring compatibility of the client and server.</p>
+<p>NFS: standard UNIX client-server file sharing protocol</p>
+<p>CIFS(Common Internet File System): standard Windows protocol, uses active directory</p>
+<p>Standard operating system file calls are translated into remote calls远程调用</p>
+<h4 id="Distributed-Information-Systems"><a href="#Distributed-Information-Systems" class="headerlink" title="Distributed Information Systems"></a>Distributed Information Systems</h4><p>Providing unified access to the information needed for remote computing.</p>
+<p>DNS (domain name system) provides host-name-to-network-address translations for entire internet.</p>
+<p>NIS (network information service), yellow pages黄页, centralizes storage of user names, host names, printer information, and the like.</p>
+<p>LDAP (lightweight directory-access protocol), used by industry as a secure distributed naming mechanism. secure single sign-on</p>
+<h4 id="Failure-Modes-故障模式"><a href="#Failure-Modes-故障模式" class="headerlink" title="Failure Modes 故障模式"></a>Failure Modes 故障模式</h4><p>Remote file systems add new failure modes, due to network failure, server failure.</p>
+<p>Recovery from failure can involve state information about status状态信息 of each remote request.</p>
+<p>Stateless protocols such as NFS V3 include all information in each request, allowing easy recovery but less security.</p>
+<p>In NFS V4, it is made stateful</p>
+<h3 id="Consistency-Semantics-一致性语义"><a href="#Consistency-Semantics-一致性语义" class="headerlink" title="Consistency Semantics 一致性语义"></a>Consistency Semantics 一致性语义</h3><p>描述多用户同时访问共享文件时的语义。规定了一个用户所修改的数据何时对另一用户可见。</p>
+<p>由于延迟，不适合类似进程同步那些复杂算法</p>
+<ul>
+<li><p>AFS (Andrew File System) implemented complex remote file sharing semantics</p>
+<p>server记录client的动作</p>
+<p>When a client changes a file, the server notifies other clients with a call back promise technique</p>
+<p>一个用户对打开文件的写不能立即被打开同一文件的其他用户看见。一旦文件关闭，其修改只能被以后打开的会话所见。</p>
+<p>多个用户允许对自己的映像进行并发(没有延迟)的读写操作</p>
+</li>
+<li><p>UFS (Unix file system) implements</p>
+<p>一个文件与单个物理映射相关联，该映射作为互斥资源访问。修改立即可见。竞争导致用户进程延迟。</p>
+</li>
+<li><p>Immutable shared files, declared by its creator. Read-only. 不可修改</p>
+</li>
+</ul>
+<h2 id="protection"><a href="#protection" class="headerlink" title="protection"></a>protection</h2><p>高层功能可以用系统程序调用低层系统调用实现。保护可以只在低层提供。</p>
+<p>Mode of access: read, write, execute</p>
+<p>为每个文件和目录增加一个访问控制列表ACL(Access-control list)，给定每个用户名及其允许访问的类型</p>
+<p>三种用户类型:</p>
+<ul>
+<li>owner</li>
+<li>group</li>
+<li>universe(public): all other users in the system</li>
+</ul>
+<p>每个域三个位:RWX. 需要9个位</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/操作系统/" rel="tag"># 操作系统</a>
+          
+            <a href="/tags/专业课笔记/" rel="tag"># 专业课笔记</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/02/28/OS9/" rel="next" title="操作系统笔记 CH9 Virtual Memory">
+                <i class="fa fa-chevron-left"></i> 操作系统笔记 CH9 Virtual Memory
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/02/28/OS11/" rel="prev" title="操作系统笔记 CH11 File-System Implementation">
+                操作系统笔记 CH11 File-System Implementation <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Fei</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:bygonexf@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#file-concept"><span class="nav-text">file concept</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#file-attributes"><span class="nav-text">file attributes</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#file-operations"><span class="nav-text">file operations</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#文件锁-file-locks"><span class="nav-text">文件锁(file locks)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#file-types"><span class="nav-text">file types</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#access-methods"><span class="nav-text">access methods</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#sequential-access-顺序访问"><span class="nav-text">sequential access 顺序访问</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#direct-access-直接访问"><span class="nav-text">direct access 直接访问</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其他访问方式"><span class="nav-text">其他访问方式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#directory-structure"><span class="nav-text">directory structure</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Single-Level-Directory"><span class="nav-text">Single-Level Directory</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Two-Level-Directory"><span class="nav-text">Two-Level Directory</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Tree-Structured-Directories"><span class="nav-text">Tree-Structured Directories</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Acyclic-Graph-Directories-无环图"><span class="nav-text">Acyclic-Graph Directories 无环图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#General-Graph-Directory"><span class="nav-text">General Graph Directory</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#file-system-mounting-文件系统安装"><span class="nav-text">file system mounting 文件系统安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#file-sharing"><span class="nav-text">file sharing</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#remote-file-system-远程文件系统"><span class="nav-text">remote file system 远程文件系统</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Client-server-model"><span class="nav-text">Client-server model</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Distributed-Information-Systems"><span class="nav-text">Distributed Information Systems</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Failure-Modes-故障模式"><span class="nav-text">Failure Modes 故障模式</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Consistency-Semantics-一致性语义"><span class="nav-text">Consistency Semantics 一致性语义</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#protection"><span class="nav-text">protection</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="heart">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Fei</span>
+
+</div>
+
+<!--
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+-->
+
+<div class="powered-by">
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <i class="fa fa-user-md"></i>
+    <span id="busuanzi_container_site_uv">
+        遇见 <span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span id="busuanzi_container_site_pv">
+        擦肩而过 <span id="busuanzi_value_site_pv"></span>
+    </span>
+</div>
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'GyuhVvqtat4iqpvUjF5sUgBj-gzGzoHsz',
+        appKey: 'sX5S1trE3LnnFCSpp7epq55p',
+        placeholder: '',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'manual') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  <script type="text/javascript" src="/lib/clipboard/clipboard.js"></script>
+<script type="text/javascript" src="/js/src/custom.js"></script>
+</body>
+</html>
