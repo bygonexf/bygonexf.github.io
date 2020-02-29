@@ -2131,7 +2131,6 @@
 <li><p>修改网站图标</p>
 </li>
 <li><p>修改背景图</p>
-<p>改了背景图之后，内容板块和评论区的透明度也得修改，评论区的修改试了好几个版本才成功…</p>
 </li>
 <li><p>修改字体为思源宋体</p>
 <p>字体也太重要了呜呜呜</p>
@@ -2164,7 +2163,6 @@
 </ul>
 <h2 id="踩过的坑和心得"><a href="#踩过的坑和心得" class="headerlink" title="踩过的坑和心得"></a>踩过的坑和心得</h2><ol>
 <li><p>记得hexo clean</p>
-<p>要不然至少分类标签计数容易出错</p>
 </li>
 <li><p>“fatal: LF would be replaced by CRLF “</p>
 <figure class="highlight diff"><table><tr><td class="code"><pre><span class="line">[core]</span><br><span class="line">	repositoryformatversion = 0</span><br><span class="line">	filemode = false</span><br><span class="line">	bare = false</span><br><span class="line">	logallrefupdates = true</span><br><span class="line">	symlinks = false</span><br><span class="line">	ignorecase = true</span><br><span class="line"><span class="addition">+	autocrlf = false</span></span><br><span class="line"><span class="addition">+	safecrlf = false</span></span><br></pre></td></tr></table></figure>
