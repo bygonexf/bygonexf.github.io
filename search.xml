@@ -1,6 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Anaconda一些命令</title>
+    <url>/2020/02/29/Anaconda%E4%B8%80%E4%BA%9B%E5%91%BD%E4%BB%A4/</url>
+    <content><![CDATA[<p>创建环境</p>
+<figure class="highlight llvm"><table><tr><td class="code"><pre><span class="line">conda create -n envname python=<span class="keyword">x</span>.<span class="keyword">x</span></span><br></pre></td></tr></table></figure>
+
+<p>删除环境</p>
+<figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">conda <span class="built_in">remove</span> -n envname <span class="comment">--all</span></span><br></pre></td></tr></table></figure>
+
+<p>进入环境conda activate 退出环境conda deactivate</p>
+<p>列出安装的库</p>
+<figure class="highlight applescript"><table><tr><td class="code"><pre><span class="line">conda <span class="built_in">list</span></span><br></pre></td></tr></table></figure>
+
+<p>升级所有库</p>
+<figure class="highlight routeros"><table><tr><td class="code"><pre><span class="line">conda<span class="built_in"> upgrade </span>--all</span><br></pre></td></tr></table></figure>
+
+<p>换源</p>
+<figure class="highlight vim"><table><tr><td class="code"><pre><span class="line">conda config --<span class="built_in">add</span> channels http<span class="variable">s:</span>//mirrors.tuna.tsinghua.edu.<span class="keyword">cn</span>/anaconda/pkgs/free/</span><br><span class="line"></span><br><span class="line">conda config --<span class="built_in">add</span> channels http<span class="variable">s:</span>//mirrors.tuna.tsinghua.edu.<span class="keyword">cn</span>/anaconda/pkgs/main/</span><br><span class="line"></span><br><span class="line">conda config --<span class="keyword">set</span> show_channel_urls yes</span><br></pre></td></tr></table></figure>
+
+<p>pip install -i <a href="https://pypi.tuna.tsinghua.edu.cn/simple" target="_blank" rel="noopener">https://pypi.tuna.tsinghua.edu.cn/simple</a> xxx</p>
+]]></content>
+      <categories>
+        <category>所学</category>
+      </categories>
+  </entry>
+  <entry>
     <title>春雪 摘</title>
     <url>/2020/02/28/%E6%98%A5%E9%9B%AAnotes/</url>
     <content><![CDATA[<p>藤花的薄紫，一旦罩在她们比平时更加着意修饰的粉脸上，宛若沉落着优雅的死影。</p>
