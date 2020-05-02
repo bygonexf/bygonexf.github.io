@@ -83,7 +83,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="概率论,">
 
 
 
@@ -94,13 +94,20 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="Choco">
-<meta property="og:url" content="https://bygonexf.github.io/archives/page/3/index.html">
+<meta name="description" content="后验概率 已知结果，根据结果估计原因的概率分布 $P(因|果)$ $P(\theta|x)$  先验概率 根据历史原因规律原因 $P(因)$ $P(\theta)$  似然估计 先定下来原因，根据原因估计结果的概率分布 $P(果|因)$ $P(x|\theta)$  贝叶斯公式 $P(A|B)=\frac{P(B|A)*P(A)}{P(B)}$ $P(\theta|x)=\frac{P(x|\t">
+<meta name="keywords" content="概率论">
+<meta property="og:type" content="article">
+<meta property="og:title" content="先验&amp;后验&amp;MLE&amp;MAP&amp;Bayesian">
+<meta property="og:url" content="https://bygonexf.github.io/2020/04/25/先验后验/index.html">
 <meta property="og:site_name" content="Choco">
+<meta property="og:description" content="后验概率 已知结果，根据结果估计原因的概率分布 $P(因|果)$ $P(\theta|x)$  先验概率 根据历史原因规律原因 $P(因)$ $P(\theta)$  似然估计 先定下来原因，根据原因估计结果的概率分布 $P(果|因)$ $P(x|\theta)$  贝叶斯公式 $P(A|B)=\frac{P(B|A)*P(A)}{P(B)}$ $P(\theta|x)=\frac{P(x|\t">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="c:/Users/dream/AppData/Roaming/Typora/typora-user-images/image-20200425232452877.png">
+<meta property="og:updated_time" content="2020-04-25T15:32:03.342Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Choco">
+<meta name="twitter:title" content="先验&amp;后验&amp;MLE&amp;MAP&amp;Bayesian">
+<meta name="twitter:description" content="后验概率 已知结果，根据结果估计原因的概率分布 $P(因|果)$ $P(\theta|x)$  先验概率 根据历史原因规律原因 $P(因)$ $P(\theta)$  似然估计 先定下来原因，根据原因估计结果的概率分布 $P(果|因)$ $P(x|\theta)$  贝叶斯公式 $P(A|B)=\frac{P(B|A)*P(A)}{P(B)}$ $P(\theta|x)=\frac{P(x|\t">
+<meta name="twitter:image" content="c:/Users/dream/AppData/Roaming/Typora/typora-user-images/image-20200425232452877.png">
 
 
 
@@ -130,13 +137,13 @@
 
 
 
-  <link rel="canonical" href="https://bygonexf.github.io/archives/page/3/">
+  <link rel="canonical" href="https://bygonexf.github.io/2020/04/25/先验后验/">
 
 
 
 
 
-  <title>归档 | Choco</title>
+  <title>先验&后验&MLE&MAP&Bayesian | Choco</title>
   
 
 
@@ -155,7 +162,7 @@
     
   
 
-  <div class="container sidebar-position-left page-archive">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -291,390 +298,231 @@
           <div id="content" class="content">
             
 
+  <div id="posts" class="posts-expand">
+    
+
+  
+
   
   
   
-  <div class="post-block archive">
-    <div id="posts" class="posts-collapse">
-      <span class="archive-move-on"></span>
 
-      <span class="archive-page-counter">
-        
-        
-         
-        
-        OK! 目前共计 33 篇日志。 继续努力。
-      </span>
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://bygonexf.github.io/2020/04/25/先验后验/">
 
-      
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Fei">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Choco">
+    </span>
+
+    
+      <header class="post-header">
 
         
         
+          <h1 class="post-title" itemprop="name headline">先验&后验&MLE&MAP&Bayesian</h1>
         
 
-        
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-04-25T21:26:18+08:00">
+                2020-04-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
           
-          <div class="collection-title">
-            <h1 class="archive-year" id="archive-year-2020">2020</h1>
-          </div>
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2020/02/28/OS10/" itemprop="url">
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
               
-                <span itemprop="name">操作系统笔记 CH10 File-System Interface</span>
+                <span class="post-meta-item-text">分类于</span>
               
-            </a>
-        
-      </h2>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/所学/" itemprop="url" rel="index">
+                    <span itemprop="name">所学</span>
+                  </a>
+                </span>
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2020-02-28T13:10:24+08:00" content="2020-02-28">
-          02-28
-        </time>
-      </div>
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/所学/碎知识点/" itemprop="url" rel="index">
+                    <span itemprop="name">碎知识点</span>
+                  </a>
+                </span>
 
-    </header>
-  </article>
+                
+                
+              
+            </span>
+          
 
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/04/25/先验后验/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/04/25/先验后验/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
 
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2020/02/28/OS9/" itemprop="url">
-              
-                <span itemprop="name">操作系统笔记 CH9 Virtual Memory</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2020-02-28T13:09:24+08:00" content="2020-02-28">
-          02-28
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
       
 
-        
-        
-        
+      
+        <ul>
+<li><p>后验概率</p>
+<p>已知结果，根据结果估计原因的概率分布</p>
+<p>$P(因|果)$</p>
+<p>$P(\theta|x)$</p>
+</li>
+<li><p>先验概率</p>
+<p>根据历史原因规律原因</p>
+<p>$P(因)$</p>
+<p>$P(\theta)$</p>
+</li>
+<li><p>似然估计</p>
+<p>先定下来原因，根据原因估计结果的概率分布</p>
+<p>$P(果|因)$</p>
+<p>$P(x|\theta)$</p>
+</li>
+<li><p>贝叶斯公式</p>
+<p>$P(A|B)=\frac{P(B|A)*P(A)}{P(B)}$</p>
+<p>$P(\theta|x)=\frac{P(x|\theta)*P(\theta)}{P(x)}$</p>
+<p>$后验概率=\frac{似然估计*先验概率}{evidence}$</p>
+<p>(不考虑原因，只看结果的概率分布即evidence，样本发生的概率分布的证据)</p>
+<p>一个本来就难以发生的事情，就算出现某个证据和他强烈相关，也要谨慎。证据很可能来自别的虽然不是很相关，但发生概率较高的事情。</p>
+</li>
+<li><p>最大似然估计(MLE)</p>
+<p>找出一组参数$\theta$，是的模型产生出观测数据$x$的概率最大</p>
+</li>
+<li><p>最大后验估计(MAP)</p>
+<p>$Posterior\propto(Likelihood*Prior)$</p>
+</li>
+<li><p>贝叶斯估计</p>
+<p>把待估计的参数看成是符合某种先验概率分布的随机变量，而不是确定数值。在样本分布上，计算参数所有可能的情况，并通过计算参数的期望，得到后验概率密度。</p>
+</li>
+</ul>
+<img src="C:\Users\dream\AppData\Roaming\Typora\typora-user-images\image-20200425232452877.png" alt="image-20200425232452877" style="zoom:67%;">
 
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2020/02/28/OS8/" itemprop="url">
-              
-                <span itemprop="name">操作系统笔记 CH8 Main Memory</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2020-02-28T13:08:24+08:00" content="2020-02-28">
-          02-28
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
+<p>随着我们观测到越来越多的数据，MAP估计逐步逼近MLE</p>
+<p>当我们观测到的数据越来越多的时候，我们从数据中获取的信息的置信度是越高的，相反老师提供的反馈（Prior）的重要性就会逐渐降低。理想情况下，当我们拥有无穷多的数据样本时，MAP会逼近MLE估计。</p>
+<p>MLE不考虑先验（prior)，MAP和贝叶斯估计则考虑先验（prior）</p>
+<p>MLE、MAP是选择相对最好的一个模型（point estimation）， 贝叶斯方法则是通过观测数据来估计后验分布(posterior distribution)，并通过后验分布做群体决策，所以后者的目标并不是在去选择某一个最好的模型。</p>
+<p>贝叶斯估计复杂度大，通常用MCMC(markov chain monte carlo)等近似算法来近似</p>
+<p>ML和MAP都属于同一个范畴，最后的目标都是一样的：找到一个最优解，然后用最优解做预测</p>
+<p>ML和MAP只会给出<strong>一个最优的解</strong>， 然而贝叶斯模型会给出对参数的一个分布，比如对模型的参数, 假定参数空间里有参数1,参数2, 参数3,…参数N，贝叶斯模型学出来的就是这些参数的重要性（也就是分布），然后当我们对新的样本预测的时候，就会让<strong>所有的模型</strong>一起去预测，但每个模型会有自己的权重（权重就是学出来的分布）。最终的决策由所有的估计根据其权重做出决策。</p>
 
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2020/02/28/OS7/" itemprop="url">
-              
-                <span itemprop="name">操作系统笔记 CH7 Deadlocks</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2020-02-28T13:07:24+08:00" content="2020-02-28">
-          02-28
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2020/02/28/OS6/" itemprop="url">
-              
-                <span itemprop="name">操作系统笔记 CH6 Process Synchronization</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2020-02-28T13:06:24+08:00" content="2020-02-28">
-          02-28
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2020/02/28/OS5/" itemprop="url">
-              
-                <span itemprop="name">操作系统笔记 CH5 CPU Scheduling</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2020-02-28T13:05:24+08:00" content="2020-02-28">
-          02-28
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2020/02/28/OS4/" itemprop="url">
-              
-                <span itemprop="name">操作系统笔记 CH4 Threads</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2020-02-28T13:04:24+08:00" content="2020-02-28">
-          02-28
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2020/02/28/OS3/" itemprop="url">
-              
-                <span itemprop="name">操作系统笔记 CH3 Process</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2020-02-28T13:03:24+08:00" content="2020-02-28">
-          02-28
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2020/02/28/OS2/" itemprop="url">
-              
-                <span itemprop="name">操作系统笔记 CH2 OS structures</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2020-02-28T13:01:24+08:00" content="2020-02-28">
-          02-28
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2020/02/28/OS1/" itemprop="url">
-              
-                <span itemprop="name">操作系统笔记 CH1 Intro</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2020-02-28T13:00:24+08:00" content="2020-02-28">
-          02-28
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
     </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/概率论/" rel="tag"># 概率论</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/04/19/日记/" rel="next" title="一部分的日记">
+                <i class="fa fa-chevron-left"></i> 一部分的日记
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
-
-  
-  <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/archives/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/archives/">1</a><a class="page-number" href="/archives/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/archives/page/4/">4</a><a class="extend next" rel="next" href="/archives/page/4/"><i class="fa fa-angle-right"></i></a>
-  </nav>
+  </article>
 
 
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -682,6 +530,13 @@
 
 
           
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
 
         </div>
         
@@ -924,6 +779,10 @@
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
