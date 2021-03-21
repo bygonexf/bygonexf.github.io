@@ -6,7 +6,7 @@
   <link href="https://bygonexf.github.io/atom.xml" rel="self"/>
   
   <link href="https://bygonexf.github.io/"/>
-  <updated>2020-05-03T02:25:46.748Z</updated>
+  <updated>2021-03-21T13:37:32.534Z</updated>
   <id>https://bygonexf.github.io/</id>
   
   <author>
@@ -15,6 +15,33 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Win10 下 Linux 子系统 (WSL) 配置小记</title>
+    <link href="https://bygonexf.github.io/2021/03/21/wsl/"/>
+    <id>https://bygonexf.github.io/2021/03/21/wsl/</id>
+    <published>2021-03-21T12:29:24.000Z</published>
+    <updated>2021-03-21T13:37:32.534Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="网络代理配置"><a href="#网络代理配置" class="headerlink" title="网络代理配置"></a>网络代理配置</h2><p>刚开始用 <code>apt-get</code> 就被卡到。</p><p>WSL1 的时候，Linux 子系统和 Windows 主机是共享一个 localhost 的。WSL2 由于通过虚拟机实现，若要访问 Windows 主机的网络，需要使用主机的 IP 地址（IP 地址可以用 <code>ipconfig</code> 命令查看）。</p><h3 id="WSL2-环境变量配置"><a href="#WSL2-环境变量配置" class="headerlink" title="WSL2 环境变量配置"></a>WSL2 环境变量配置</h3><p>V2ray 的话，默认 socks5 端口是 10808，默认 http 端口是 10809。</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> http_proxy = socks5://&lt;windows_ip&gt;:10808</span><br><span class="line"><span class="built_in">export</span> https_proxy = socks5://&lt;windows_ip&gt;:10808</span><br></pre></td></tr></table></figure><p>git 也可以设置使用代理。</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git config --global proxy.https socks5://&lt;windows_ip&gt;:10808</span><br></pre></td></tr></table></figure><p>当然，如果希望每次启动的时候代理配置都生效，可以写入 <code>~/.bashrc</code> 文件中。</p><h3 id="V2ray-配置"><a href="#V2ray-配置" class="headerlink" title="V2ray 配置"></a>V2ray 配置</h3><p>在设置中要勾选上「允许来自局域网的连接」。</p><h2 id="默认-shell-设置"><a href="#默认-shell-设置" class="headerlink" title="默认 shell 设置"></a>默认 shell 设置</h2><p>执行 <code>chsh</code> 命令打开新的 WSL 窗口的时候，默认 shell 仍然没有变化。</p><p>还是需要在 <code>~/.bashrc</code> 中加上一行：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bash -c fish</span><br></pre></td></tr></table></figure><p>当然如果是 zsh 还是 fish 就随意啦。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h2 id=&quot;网络代理配置&quot;&gt;&lt;a href=&quot;#网络代理配置&quot; class=&quot;headerlink&quot; title=&quot;网络代理配置&quot;&gt;&lt;/a&gt;网络代理配置&lt;/h2&gt;&lt;p&gt;刚开始用 &lt;code&gt;apt-get&lt;/code&gt; 就被卡到。&lt;/p&gt;
+&lt;p&gt;WSL1 的时候，Linux </summary>
+      
+    
+    
+    
+    <category term="所学" scheme="https://bygonexf.github.io/categories/%E6%89%80%E5%AD%A6/"/>
+    
+    <category term="折腾" scheme="https://bygonexf.github.io/categories/%E6%89%80%E5%AD%A6/%E6%8A%98%E8%85%BE/"/>
+    
+    
+    <category term="WSL" scheme="https://bygonexf.github.io/tags/WSL/"/>
+    
+  </entry>
   
   <entry>
     <title>一部分的日记</title>
@@ -509,34 +536,6 @@
       
       
     <summary type="html">&lt;h2 id=&quot;background&quot;&gt;&lt;a href=&quot;#background&quot; class=&quot;headerlink&quot; title=&quot;background&quot;&gt;&lt;/a&gt;background&lt;/h2&gt;&lt;h3 id=&quot;基本硬件&quot;&gt;&lt;a href=&quot;#基本硬件&quot; class=&quot;head</summary>
-      
-    
-    
-    
-    <category term="所学" scheme="https://bygonexf.github.io/categories/%E6%89%80%E5%AD%A6/"/>
-    
-    <category term="操作系统" scheme="https://bygonexf.github.io/categories/%E6%89%80%E5%AD%A6/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"/>
-    
-    
-    <category term="操作系统" scheme="https://bygonexf.github.io/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"/>
-    
-    <category term="专业课笔记" scheme="https://bygonexf.github.io/tags/%E4%B8%93%E4%B8%9A%E8%AF%BE%E7%AC%94%E8%AE%B0/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>操作系统笔记 CH7 Deadlocks</title>
-    <link href="https://bygonexf.github.io/2020/02/28/OS7/"/>
-    <id>https://bygonexf.github.io/2020/02/28/OS7/</id>
-    <published>2020-02-28T05:07:24.000Z</published>
-    <updated>2020-02-28T06:25:57.230Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="deadlock-characteristics"><a href="#deadlock-characteristics" class="headerlink" title="deadlock characteristics"></a>deadlock characteristics</h2><h3 id="necessary-conditions"><a href="#necessary-conditions" class="headerlink" title="necessary conditions"></a>necessary conditions</h3><p>4个条件同时满足，引起死锁：</p><ul><li><p>mutual exclusion</p><p>至少有一个资源处于非共享模式，一次只能有一个进程使用</p></li><li><p>hold and wait</p><p>占有至少一个资源，等待另一为其他进程所占资源</p></li><li><p>no preemption</p><p>资源不能被抢占</p></li><li><p>circular wait</p></li></ul><h3 id="resource-allocation-graph"><a href="#resource-allocation-graph" class="headerlink" title="resource-allocation graph"></a>resource-allocation graph</h3><p>request edge : Pi-&gt;Rj</p><p>assignment edge : Rj-&gt;Pi</p><p>申请边只用指向矩形，但分配边必须从某个原点开始</p><img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573293211940.png" style="zoom:67%;" /><p>资源分配图有环是死锁的必要条件。若每类资源只有一个实例，含环是充分必要条件。若同类资源数&gt;1,不一定有死锁。</p><h2 id="methods-for-handling-deadlocks"><a href="#methods-for-handling-deadlocks" class="headerlink" title="methods for handling deadlocks"></a>methods for handling deadlocks</h2><p>1.预防或避免死锁</p><p>2.允许进入死锁，检测并恢复</p><p>3.忽视这个问题(为多数OS所用)</p><p>deadlock prevention: 确保至少一个必要条件不成立，通过限制如何申请资源</p><p>deadlock avoidance: 事先得到进程申请和使用资源的额外信息，系统可确定对于一个申请，进程是否等待(申请允许还是延迟)，考虑可用、已分配、进程将来申请和释放的资源</p><h2 id="deadlock-prevention"><a href="#deadlock-prevention" class="headerlink" title="deadlock prevention"></a>deadlock prevention</h2><p>确保4个必要条件至少1个不成立</p><ul><li><p>mutual exclusion</p><p>通常不通过这个条件…</p></li><li><p>hold and wait</p><ul><li><p>每个进程在执行前申请并获得所有资源</p></li><li><p>进程在没有资源时才可申请资源(申请更多资源前，先释放已分配的资源)</p></li></ul><p>缺点:1.资源利用率低 2.starvation</p></li><li><p>no preemption</p><p>如果一个进程占有资源并申请另一个不能立即分配的资源，其现在已分配的资源都可被抢占(被隐式释放)。</p><p>进程申请资源时，不可用也不被其他等待进程占有时，等待</p><p>常应用于状态可以保存恢复的资源，如CPU寄存器和内存，不适用于打印机和磁带驱动器等。</p></li><li><p>circular wait</p><p>对所有资源类型进行完全排序。每个进程只按递增顺序申请资源。(只能申请编号比它大的)</p></li></ul><h2 id="deadlock-avoidance"><a href="#deadlock-avoidance" class="headerlink" title="deadlock avoidance"></a>deadlock avoidance</h2><p>死锁避免比死锁预防要求低</p><p>deadlock prevention 低设备使用率和吞吐率</p><p>a system is in a safe state only if there exists a safe sequence</p><img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573295674796.png" style="zoom:50%;" /><h3 id="resource-allocation-graph-algorithm"><a href="#resource-allocation-graph-algorithm" class="headerlink" title="resource-allocation-graph algorithm"></a>resource-allocation-graph algorithm</h3><p>增加claim edge(需求边)，虚线</p><p>当进程Pi开始执行时，所有需求边必须先处于资源分配图。(可放宽为只要与Pi有关的需求边)</p><p>只有在申请边Pi-&gt;Rj变成分配边Rj-&gt;Pi，而不会出现环时，才允许申请。环存在是unsafe state</p><p>cycle-detection algorithm</p><img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573296280721.png" style="zoom:50%;" /><h3 id="banker’s-algorithm"><a href="#banker’s-algorithm" class="headerlink" title="banker’s algorithm"></a>banker’s algorithm</h3><p>自己看书做题去 P247</p><h2 id="deadlock-detection"><a href="#deadlock-detection" class="headerlink" title="deadlock detection"></a>deadlock detection</h2><p>不采用prevention和avoidance，应提供检查是否出现死锁&amp;恢复算法。</p><h3 id="每种资源类型单个实例"><a href="#每种资源类型单个实例" class="headerlink" title="每种资源类型单个实例"></a>每种资源类型单个实例</h3><p>wait-for graph: Pi等待Pj释放一个Pi需要的资源</p><p>Pi-&gt;Pj iff 资源分配图中 Pi-&gt;Rq, Rq-&gt;Pj</p><img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573296978952.png" style="zoom:33%;" /><p>图中有环 &lt;-&gt; 死锁</p><h3 id="每种资源类型多个实例"><a href="#每种资源类型多个实例" class="headerlink" title="每种资源类型多个实例"></a>每种资源类型多个实例</h3><p>detection algorithm</p><p><img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573297606742.png"></p><h3 id="资源图消边法"><a href="#资源图消边法" class="headerlink" title="资源图消边法"></a>资源图消边法</h3><p>PPT P45 + 看橘</p><h2 id="recovery-from-deadlock"><a href="#recovery-from-deadlock" class="headerlink" title="recovery from deadlock"></a>recovery from deadlock</h2><h3 id="process-termination"><a href="#process-termination" class="headerlink" title="process termination"></a>process termination</h3><p>不管哪种进程终止方法，系统都会收回分配给终止进程的所有资源</p><ul><li>终止所有死锁进程</li><li>一次终止一个，调用死锁检测，直到取消死锁循环</li></ul><h3 id="resource-preemption"><a href="#resource-preemption" class="headerlink" title="resource preemption"></a>resource preemption</h3><p>select a victim: which resources and which processes are to be preempted 代价因素 cost factors</p><p>rollback: 抢占资源后对进程做什么安排 roll back to some safe state. simplest: total rollback</p><p>starvation: 如何保证资源总是从一个进程抢占 在代价因素中加上回滚次数</p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h2 id=&quot;deadlock-characteristics&quot;&gt;&lt;a href=&quot;#deadlock-characteristics&quot; class=&quot;headerlink&quot; title=&quot;deadlock characteristics&quot;&gt;&lt;/a&gt;deadlock chara</summary>
       
     
     
