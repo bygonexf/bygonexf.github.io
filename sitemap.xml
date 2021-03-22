@@ -349,13 +349,6 @@
   </url>
   
   <url>
-    <loc>https://bygonexf.github.io/categories/%E6%89%80%E8%AF%BB/</loc>
-    <lastmod>2021-03-22</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://bygonexf.github.io/categories/%E6%89%80%E6%80%9D/</loc>
     <lastmod>2021-03-22</lastmod>
     <changefreq>daily</changefreq>
@@ -363,7 +356,7 @@
   </url>
   
   <url>
-    <loc>https://bygonexf.github.io/categories/%E6%89%80%E8%AF%BB/Kindle-clippings/</loc>
+    <loc>https://bygonexf.github.io/categories/%E6%89%80%E8%AF%BB/</loc>
     <lastmod>2021-03-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -371,6 +364,13 @@
   
   <url>
     <loc>https://bygonexf.github.io/categories/%E6%89%80%E6%80%9D/%E5%BA%9F%E8%AF%9D%E5%95%A6/</loc>
+    <lastmod>2021-03-22</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://bygonexf.github.io/categories/%E6%89%80%E8%AF%BB/Kindle-clippings/</loc>
     <lastmod>2021-03-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>

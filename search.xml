@@ -320,149 +320,6 @@
       </tags>
   </entry>
   <entry>
-    <title>操作系统笔记 CH11 File-System Implementation</title>
-    <url>/2020/02/28/OS11/</url>
-    <content><![CDATA[<h2 id="文件系统结构"><a href="#文件系统结构" class="headerlink" title="文件系统结构"></a>文件系统结构</h2><p>磁盘特点：可以原地重写，可以直接访问任意一块。</p>
-<p>内存和磁盘之间的IO以块为单位。每块为一个或多个扇区。扇区通常为512B</p>
-<p>File system resides on secondary storage (disks) OS通过文件系统存储、定位、提取数据</p>
-<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577502786991.png" style="zoom: 50%;" />
-
-<ul>
-<li><p>IO control 最底层</p>
-<p>由device driver 和 Interrupt handlers组成</p>
-<p>实现内存和磁盘之间的信息传输。</p>
-<p>device driver可作为翻译器。输入是高层命令，输出是底层的、硬件特定的命令。命令用于控制hardware controller</p>
-<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577503036078.png" style="zoom:50%;" />
-
-<p>device driver控制一类设备</p>
-</li>
-<li><p>basic file system</p>
-<p>Issue generic commands to the appropriate device driver to read and write physical blocks on the disk.</p>
-</li>
-<li><p>file-organization module</p>
-<p>将逻辑块地址 转换成 物理块地址</p>
-<p>也包括空闲空间管理器</p>
-</li>
-<li><p>logical file system</p>
-<p>管理metadata，元数据包括文件系统所有结构数据，而不包括实际数据</p>
-<p>管理目录结构</p>
-<p>通过FCB((inodes in UNIX))维护文件结构</p>
-<p>负责保护和安全</p>
-</li>
-</ul>
-<p>Layering useful for reducing complexity and redundancy, but adds overhead and can decrease performance.</p>
-<p>绝大多数OS支持多个文件系统</p>
-<p>UNIX使用UFS</p>
-<p>标准的Linux文件系统是extende file system</p>
-<h2 id="文件系统实现"><a href="#文件系统实现" class="headerlink" title="文件系统实现"></a>文件系统实现</h2><p>每个卷的boot control block：从该卷引导OS需要的信息。如果没有OS，该块为空，通常为卷的第一块。UFS称之为boot block，NTFS称之为partition boot sector</p>
-<p>每个卷的volume control blcok：包括卷(或分区)的详细信息，如分区的块数，块的大小…UFS称之为superblock，NTFS中它存在master file table中</p>
-<p>每个文件系统的目录结构用来组织文件。UFS中包含文件名和相关的inode号，NTFS中它存储在master file table中</p>
-<p>每个文件的FCB。UFS中是inode，NTFS存在master file table中，每个文件占一行</p>
-<h3 id="In-Memory-File-System-Structures"><a href="#In-Memory-File-System-Structures" class="headerlink" title="In-Memory File System Structures"></a>In-Memory File System Structures</h3><p>一个内存中的mount table(partition table)</p>
-<p>一个内存中的director structure cache</p>
-<p>system-wide open-file table: 包括每个打开文件的FCB副本</p>
-<p>per-process open-file table: Contains a pointer to the appropriate entry in the system-wide open-file table.</p>
-<p>buffers hold data blocks from secondary storage.</p>
-<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577507477227.png" style="zoom:50%;" />
-
-<p>对于访问打开文件表的索引：UNIX称之为file descriptor，Windows称之为file handle. 只要文件没有关闭，所有文件操作都是通过打开文件表来进行的</p>
-<h3 id="partitions-and-mounting-分区和安装"><a href="#partitions-and-mounting-分区和安装" class="headerlink" title="partitions and mounting 分区和安装"></a>partitions and mounting 分区和安装</h3><p>一个disk可以分为多个partition，一个partition可以横跨多个disk(作为RAID的一种形式比较合适)</p>
-<p>分区可以是</p>
-<ul>
-<li>raw 没有文件系统</li>
-<li>cooked 含有文件系统</li>
-</ul>
-<p>引导信息能保存在多个分区中，通常为一组有序块，并作为镜像文件读入内存</p>
-<p>boot loader知道位于引导区的多个文件系统和多个操作系统，一旦装入，它可以引导位于磁盘上的一个操作系统。磁盘可以有多个分区，每个分区包含不同类型的文件系统和不同的操作系统。</p>
-<p>root partiton包括操作系统内核或其他系统文件，在引导时装入内存。</p>
-<p>内存中有Mount table – containing information about file systems that has been mounted.</p>
-<h3 id="virtual-file-system-VFS"><a href="#virtual-file-system-VFS" class="headerlink" title="virtual file system (VFS)"></a>virtual file system (VFS)</h3><p>Virtual file system (VFS) on most OSes, including Unix, use object-oriented techniques to implement the file system. 用户甚至可以访问位于网络上的操作系统</p>
-<p>VFS allows the same system call interface (the API) to be used for different types of file systems.</p>
-<p>Implements vnodes which hold inodes or network file details.</p>
-<p>The API is to the VFS interface, rather than any specific type of file system.</p>
-<p>多个VFS接口的实现可以共存在同一台机器上</p>
-<p>vnode表示位于整个网络范围内唯一的文件</p>
-<p>Linux has four object types: inode, file, superblock, dentry</p>
-<p>VFS defines a set of operations on the objects that must be implemented.</p>
-<h2 id="目录实现"><a href="#目录实现" class="headerlink" title="目录实现"></a>目录实现</h2><h3 id="linear-list-线性列表"><a href="#linear-list-线性列表" class="headerlink" title="linear list 线性列表"></a>linear list 线性列表</h3><p>linear search time费时</p>
-<p>sorted list允许binary search</p>
-<p>a balanced tree</p>
-<h3 id="hash-table"><a href="#hash-table" class="headerlink" title="hash table"></a>hash table</h3><p>decreases directory search time</p>
-<p>需要处理collision(两个文件名哈希到相同的位置)：chained-overflow</p>
-<p>Difficulties: fixed size, hash function</p>
-<h2 id="分配方法"><a href="#分配方法" class="headerlink" title="分配方法"></a>分配方法</h2><p>how disk blocks are allocated for files</p>
-<h3 id="Contiguous-Allocation-连续分配"><a href="#Contiguous-Allocation-连续分配" class="headerlink" title="Contiguous Allocation 连续分配"></a>Contiguous Allocation 连续分配</h3><p>每个文件在磁盘上占有一组连续的块</p>
-<p>访问连续分配文件所需寻道数最少</p>
-<p>用第一块的磁盘地址和连续块的数量来定义</p>
-<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577509061560.png" style="zoom:50%;" />
-
-<p>sequential and direct access</p>
-<p>Best performance in most cases</p>
-<p>问题</p>
-<ul>
-<li>Difficult to find space for a new file: First-fit, best-fit</li>
-<li>External fragmentation</li>
-<li>compaction off-line (downtime) or on-line</li>
-</ul>
-<p>Extent-Based Systems, a modified contiguous allocation scheme 当空间不够时，另一块被称为扩展的连续空间会添加到原来的文件分配中</p>
-<h3 id="Linked-Allocation-链接分配"><a href="#Linked-Allocation-链接分配" class="headerlink" title="Linked Allocation 链接分配"></a>Linked Allocation 链接分配</h3><p>每个文件是磁盘块的链表</p>
-<p>目录包括文件第一块的指针和最后一块的指针。每一块都有下一块的指针。</p>
-<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577509383605.png" style="zoom:50%;" />
-
-<p>没有外部碎片</p>
-<p>只要有空闲块，文件就可以增大</p>
-<p>Disadvantages: 不能随机访问，指针需要空间，不可靠</p>
-<p>对于指针需要空间，解决办法是将多个块组成簇(cluster)，代价是增加了内部碎片</p>
-<h4 id="FAT-file-allocation-table-文件分配表"><a href="#FAT-file-allocation-table-文件分配表" class="headerlink" title="FAT(file-allocation table)文件分配表"></a>FAT(file-allocation table)文件分配表</h4><p>used by MS-DOS and OS/2</p>
-<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577510977781.png" style="zoom:50%;" />
-
-<p>对FAT采用缓存</p>
-<p>支持直接访问</p>
-<h3 id="Indexed-Allocation-索引分配"><a href="#Indexed-Allocation-索引分配" class="headerlink" title="Indexed Allocation 索引分配"></a>Indexed Allocation 索引分配</h3><p>每个文件都有索引块，是一个磁盘块地址的数组</p>
-<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577511076567.png" style="zoom:50%;" />
-
-<p>目录条目包括索引块的地址</p>
-<p>支持直接访问</p>
-<p>没有外部碎片</p>
-<p>索引块应该多大</p>
-<ul>
-<li><p>linked scheme</p>
-<p>将多个索引块链接起来</p>
-</li>
-<li><p>two-level index</p>
-</li>
-<li><p>combined scheme</p>
-<p>UNIX采用</p>
-</li>
-</ul>
-<h3 id="性能"><a href="#性能" class="headerlink" title="性能"></a>性能</h3><p>contiguous great for sequential and random</p>
-<p>linked good for sequential, not random</p>
-<p>combine contiguous allocation with indexed allocation by using contiguous allocation for small files (up to three or four blocks), automatically switching to an indexed allocation if the file grows large.</p>
-<h3 id="free-space-management"><a href="#free-space-management" class="headerlink" title="free-space management"></a>free-space management</h3><p>文件系统需要维护free-space list记录空闲磁盘空间(不一定是链表)</p>
-<h4 id="bit-map-bit-vector"><a href="#bit-map-bit-vector" class="headerlink" title="bit map / bit vector"></a>bit map / bit vector</h4><p>每块用一位表示。空闲-1，已分配-0</p>
-<p>查找第一个和n个连续空闲块简单高效</p>
-<p>Bit map requires extra space.</p>
-<p>Easy to get contiguous files space.</p>
-<h4 id="linked-list-链表"><a href="#linked-list-链表" class="headerlink" title="linked list 链表"></a>linked list 链表</h4><p>将所有空闲块用链表链接</p>
-<p>将指向第一空闲块的指针缓存在内存</p>
-<p>Cannot get contiguous space easily.</p>
-<h4 id="grouping"><a href="#grouping" class="headerlink" title="grouping"></a>grouping</h4><p>将n个空闲块的地址存在第一个空闲块里。(前n-1确实为空，最后一块包含另外n个空闲块的地址)</p>
-<p>可以找到大量空闲块</p>
-<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577512314875.png" style="zoom:33%;" />
-
-<h4 id="counting"><a href="#counting" class="headerlink" title="counting"></a>counting</h4><p>记录第一块的地址和紧跟第一块的连续的空闲块的数量n</p>
-<p>can be stored in a balanced tree for efficiency</p>
-]]></content>
-      <categories>
-        <category>所学</category>
-        <category>操作系统</category>
-      </categories>
-      <tags>
-        <tag>操作系统</tag>
-        <tag>专业课笔记</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>操作系统笔记 CH10 File-System Interface</title>
     <url>/2020/02/28/OS10/</url>
     <content><![CDATA[<h2 id="file-concept"><a href="#file-concept" class="headerlink" title="file concept"></a>file concept</h2><p>文件：记录在外存上的 相关信息的 具有名称的 集合，逻辑内存的最小分配单元</p>
@@ -668,6 +525,149 @@
       </tags>
   </entry>
   <entry>
+    <title>操作系统笔记 CH11 File-System Implementation</title>
+    <url>/2020/02/28/OS11/</url>
+    <content><![CDATA[<h2 id="文件系统结构"><a href="#文件系统结构" class="headerlink" title="文件系统结构"></a>文件系统结构</h2><p>磁盘特点：可以原地重写，可以直接访问任意一块。</p>
+<p>内存和磁盘之间的IO以块为单位。每块为一个或多个扇区。扇区通常为512B</p>
+<p>File system resides on secondary storage (disks) OS通过文件系统存储、定位、提取数据</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577502786991.png" style="zoom: 50%;" />
+
+<ul>
+<li><p>IO control 最底层</p>
+<p>由device driver 和 Interrupt handlers组成</p>
+<p>实现内存和磁盘之间的信息传输。</p>
+<p>device driver可作为翻译器。输入是高层命令，输出是底层的、硬件特定的命令。命令用于控制hardware controller</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577503036078.png" style="zoom:50%;" />
+
+<p>device driver控制一类设备</p>
+</li>
+<li><p>basic file system</p>
+<p>Issue generic commands to the appropriate device driver to read and write physical blocks on the disk.</p>
+</li>
+<li><p>file-organization module</p>
+<p>将逻辑块地址 转换成 物理块地址</p>
+<p>也包括空闲空间管理器</p>
+</li>
+<li><p>logical file system</p>
+<p>管理metadata，元数据包括文件系统所有结构数据，而不包括实际数据</p>
+<p>管理目录结构</p>
+<p>通过FCB((inodes in UNIX))维护文件结构</p>
+<p>负责保护和安全</p>
+</li>
+</ul>
+<p>Layering useful for reducing complexity and redundancy, but adds overhead and can decrease performance.</p>
+<p>绝大多数OS支持多个文件系统</p>
+<p>UNIX使用UFS</p>
+<p>标准的Linux文件系统是extende file system</p>
+<h2 id="文件系统实现"><a href="#文件系统实现" class="headerlink" title="文件系统实现"></a>文件系统实现</h2><p>每个卷的boot control block：从该卷引导OS需要的信息。如果没有OS，该块为空，通常为卷的第一块。UFS称之为boot block，NTFS称之为partition boot sector</p>
+<p>每个卷的volume control blcok：包括卷(或分区)的详细信息，如分区的块数，块的大小…UFS称之为superblock，NTFS中它存在master file table中</p>
+<p>每个文件系统的目录结构用来组织文件。UFS中包含文件名和相关的inode号，NTFS中它存储在master file table中</p>
+<p>每个文件的FCB。UFS中是inode，NTFS存在master file table中，每个文件占一行</p>
+<h3 id="In-Memory-File-System-Structures"><a href="#In-Memory-File-System-Structures" class="headerlink" title="In-Memory File System Structures"></a>In-Memory File System Structures</h3><p>一个内存中的mount table(partition table)</p>
+<p>一个内存中的director structure cache</p>
+<p>system-wide open-file table: 包括每个打开文件的FCB副本</p>
+<p>per-process open-file table: Contains a pointer to the appropriate entry in the system-wide open-file table.</p>
+<p>buffers hold data blocks from secondary storage.</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577507477227.png" style="zoom:50%;" />
+
+<p>对于访问打开文件表的索引：UNIX称之为file descriptor，Windows称之为file handle. 只要文件没有关闭，所有文件操作都是通过打开文件表来进行的</p>
+<h3 id="partitions-and-mounting-分区和安装"><a href="#partitions-and-mounting-分区和安装" class="headerlink" title="partitions and mounting 分区和安装"></a>partitions and mounting 分区和安装</h3><p>一个disk可以分为多个partition，一个partition可以横跨多个disk(作为RAID的一种形式比较合适)</p>
+<p>分区可以是</p>
+<ul>
+<li>raw 没有文件系统</li>
+<li>cooked 含有文件系统</li>
+</ul>
+<p>引导信息能保存在多个分区中，通常为一组有序块，并作为镜像文件读入内存</p>
+<p>boot loader知道位于引导区的多个文件系统和多个操作系统，一旦装入，它可以引导位于磁盘上的一个操作系统。磁盘可以有多个分区，每个分区包含不同类型的文件系统和不同的操作系统。</p>
+<p>root partiton包括操作系统内核或其他系统文件，在引导时装入内存。</p>
+<p>内存中有Mount table – containing information about file systems that has been mounted.</p>
+<h3 id="virtual-file-system-VFS"><a href="#virtual-file-system-VFS" class="headerlink" title="virtual file system (VFS)"></a>virtual file system (VFS)</h3><p>Virtual file system (VFS) on most OSes, including Unix, use object-oriented techniques to implement the file system. 用户甚至可以访问位于网络上的操作系统</p>
+<p>VFS allows the same system call interface (the API) to be used for different types of file systems.</p>
+<p>Implements vnodes which hold inodes or network file details.</p>
+<p>The API is to the VFS interface, rather than any specific type of file system.</p>
+<p>多个VFS接口的实现可以共存在同一台机器上</p>
+<p>vnode表示位于整个网络范围内唯一的文件</p>
+<p>Linux has four object types: inode, file, superblock, dentry</p>
+<p>VFS defines a set of operations on the objects that must be implemented.</p>
+<h2 id="目录实现"><a href="#目录实现" class="headerlink" title="目录实现"></a>目录实现</h2><h3 id="linear-list-线性列表"><a href="#linear-list-线性列表" class="headerlink" title="linear list 线性列表"></a>linear list 线性列表</h3><p>linear search time费时</p>
+<p>sorted list允许binary search</p>
+<p>a balanced tree</p>
+<h3 id="hash-table"><a href="#hash-table" class="headerlink" title="hash table"></a>hash table</h3><p>decreases directory search time</p>
+<p>需要处理collision(两个文件名哈希到相同的位置)：chained-overflow</p>
+<p>Difficulties: fixed size, hash function</p>
+<h2 id="分配方法"><a href="#分配方法" class="headerlink" title="分配方法"></a>分配方法</h2><p>how disk blocks are allocated for files</p>
+<h3 id="Contiguous-Allocation-连续分配"><a href="#Contiguous-Allocation-连续分配" class="headerlink" title="Contiguous Allocation 连续分配"></a>Contiguous Allocation 连续分配</h3><p>每个文件在磁盘上占有一组连续的块</p>
+<p>访问连续分配文件所需寻道数最少</p>
+<p>用第一块的磁盘地址和连续块的数量来定义</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577509061560.png" style="zoom:50%;" />
+
+<p>sequential and direct access</p>
+<p>Best performance in most cases</p>
+<p>问题</p>
+<ul>
+<li>Difficult to find space for a new file: First-fit, best-fit</li>
+<li>External fragmentation</li>
+<li>compaction off-line (downtime) or on-line</li>
+</ul>
+<p>Extent-Based Systems, a modified contiguous allocation scheme 当空间不够时，另一块被称为扩展的连续空间会添加到原来的文件分配中</p>
+<h3 id="Linked-Allocation-链接分配"><a href="#Linked-Allocation-链接分配" class="headerlink" title="Linked Allocation 链接分配"></a>Linked Allocation 链接分配</h3><p>每个文件是磁盘块的链表</p>
+<p>目录包括文件第一块的指针和最后一块的指针。每一块都有下一块的指针。</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577509383605.png" style="zoom:50%;" />
+
+<p>没有外部碎片</p>
+<p>只要有空闲块，文件就可以增大</p>
+<p>Disadvantages: 不能随机访问，指针需要空间，不可靠</p>
+<p>对于指针需要空间，解决办法是将多个块组成簇(cluster)，代价是增加了内部碎片</p>
+<h4 id="FAT-file-allocation-table-文件分配表"><a href="#FAT-file-allocation-table-文件分配表" class="headerlink" title="FAT(file-allocation table)文件分配表"></a>FAT(file-allocation table)文件分配表</h4><p>used by MS-DOS and OS/2</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577510977781.png" style="zoom:50%;" />
+
+<p>对FAT采用缓存</p>
+<p>支持直接访问</p>
+<h3 id="Indexed-Allocation-索引分配"><a href="#Indexed-Allocation-索引分配" class="headerlink" title="Indexed Allocation 索引分配"></a>Indexed Allocation 索引分配</h3><p>每个文件都有索引块，是一个磁盘块地址的数组</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577511076567.png" style="zoom:50%;" />
+
+<p>目录条目包括索引块的地址</p>
+<p>支持直接访问</p>
+<p>没有外部碎片</p>
+<p>索引块应该多大</p>
+<ul>
+<li><p>linked scheme</p>
+<p>将多个索引块链接起来</p>
+</li>
+<li><p>two-level index</p>
+</li>
+<li><p>combined scheme</p>
+<p>UNIX采用</p>
+</li>
+</ul>
+<h3 id="性能"><a href="#性能" class="headerlink" title="性能"></a>性能</h3><p>contiguous great for sequential and random</p>
+<p>linked good for sequential, not random</p>
+<p>combine contiguous allocation with indexed allocation by using contiguous allocation for small files (up to three or four blocks), automatically switching to an indexed allocation if the file grows large.</p>
+<h3 id="free-space-management"><a href="#free-space-management" class="headerlink" title="free-space management"></a>free-space management</h3><p>文件系统需要维护free-space list记录空闲磁盘空间(不一定是链表)</p>
+<h4 id="bit-map-bit-vector"><a href="#bit-map-bit-vector" class="headerlink" title="bit map / bit vector"></a>bit map / bit vector</h4><p>每块用一位表示。空闲-1，已分配-0</p>
+<p>查找第一个和n个连续空闲块简单高效</p>
+<p>Bit map requires extra space.</p>
+<p>Easy to get contiguous files space.</p>
+<h4 id="linked-list-链表"><a href="#linked-list-链表" class="headerlink" title="linked list 链表"></a>linked list 链表</h4><p>将所有空闲块用链表链接</p>
+<p>将指向第一空闲块的指针缓存在内存</p>
+<p>Cannot get contiguous space easily.</p>
+<h4 id="grouping"><a href="#grouping" class="headerlink" title="grouping"></a>grouping</h4><p>将n个空闲块的地址存在第一个空闲块里。(前n-1确实为空，最后一块包含另外n个空闲块的地址)</p>
+<p>可以找到大量空闲块</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577512314875.png" style="zoom:33%;" />
+
+<h4 id="counting"><a href="#counting" class="headerlink" title="counting"></a>counting</h4><p>记录第一块的地址和紧跟第一块的连续的空闲块的数量n</p>
+<p>can be stored in a balanced tree for efficiency</p>
+]]></content>
+      <categories>
+        <category>所学</category>
+        <category>操作系统</category>
+      </categories>
+      <tags>
+        <tag>操作系统</tag>
+        <tag>专业课笔记</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>操作系统笔记 CH12 Mass-Storage Structure</title>
     <url>/2020/02/28/OS12/</url>
     <content><![CDATA[<h3 id="磁盘"><a href="#磁盘" class="headerlink" title="磁盘"></a>磁盘</h3><p>扇区0是最外面柱面的第一个磁道的第一个扇区。映射先按磁道内扇区顺序，再按柱面内磁道顺序，最后按从外到内的柱面顺序来排序的。</p>
@@ -754,6 +754,188 @@
 <p>对于复杂磁盘：</p>
 <p>​    控制器维护一个磁盘坏块链表，控制器可用备用块来逻辑地替换坏块 sector sparing(forwarding)</p>
 <p>​    sector slipping</p>
+]]></content>
+      <categories>
+        <category>所学</category>
+        <category>操作系统</category>
+      </categories>
+      <tags>
+        <tag>操作系统</tag>
+        <tag>专业课笔记</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>操作系统笔记 CH13 I/O Systems</title>
+    <url>/2020/02/28/OS13/</url>
+    <content><![CDATA[<p>the kernel is structured to use device-driver modules.</p>
+<p>device driver为IO子系统提供了统一设备访问接口</p>
+<p>两个趋势：接口日益标准化，设备多样性</p>
+<h2 id="IO-硬件"><a href="#IO-硬件" class="headerlink" title="IO 硬件"></a>IO 硬件</h2><p>port</p>
+<p>bus</p>
+<p>controller</p>
+<p>Controller usually have registers, where device driver places commands, addresses, and data to write, or read data from registers after command execution. Data-in register, data-out register, status register, control register</p>
+<p>设备有地址</p>
+<ul>
+<li><p>Direct I/O instructions</p>
+</li>
+<li><p>Memory-mapped I/O 内存映射IO</p>
+<p>设备控制寄存器 被映射到 处理器的地址空间</p>
+<p>Especially for large address spaces (graphics)</p>
+</li>
+</ul>
+<p>IO端口有4种寄存器：</p>
+<ul>
+<li>status</li>
+<li>control</li>
+<li>data-in</li>
+<li>data-out</li>
+</ul>
+<p>Techniques for Performing I/O</p>
+<ul>
+<li>Programmed I/O</li>
+<li>Interrupt-driven I/O</li>
+<li>Direct Memory Access (DMA)</li>
+</ul>
+<h3 id="polling-轮询"><a href="#polling-轮询" class="headerlink" title="polling 轮询"></a>polling 轮询</h3><p>控制器通过状态寄存器的busy bit显示其状态</p>
+<p>主机通过命令寄存器中的command-ready bit表示其意愿</p>
+<p>busy-waiting / polling 主机不断读状态寄存器直到忙位被清除</p>
+<p>Polling can happen in 3 instruction cycles, Read status, logical-and to extract status bit, branch if not zero</p>
+<h3 id="interrupts"><a href="#interrupts" class="headerlink" title="interrupts"></a>interrupts</h3><p>Interrupt-request line</p>
+<p>Interrupt handler receives interrupts. Maskable to ignore or delay some interrupts</p>
+<p>Interrupt vector to dispatch interrupt to correct handler</p>
+<p>中断向量：中断处理程序的内存地址</p>
+<p>计算机设备比向量内地址多。interrupt chaining 中断向量内的每个元素都指向中断处理程序列表的头</p>
+<p>实现了中断优先级</p>
+<p>Interrupt mechanism also used for exceptions</p>
+<p>Good uses: system calls, page fault</p>
+<p>Used for time-sensitive processing, frequent, must be fast.</p>
+<h3 id="DMA"><a href="#DMA" class="headerlink" title="DMA"></a>DMA</h3><p>Requires DMA controller, a special-purpose processor.</p>
+<p>Bypasses CPU to transfer data directly between I/O device and memory.</p>
+<p>Host writes a DMA command block into memory.</p>
+<p>CPU writes the address of this command block to the DMA controller.</p>
+<p>DMA controller operates the memory bus directly, placing address on the bus to perform transfers.</p>
+<p>When the entire transfer is finished, the DMA controller interrupts the CPU.</p>
+<p>Handshaking between the DMA controller and the device controller:</p>
+<p>​    performed via a pair of wires called DMA-request and DMA-acknowledge.</p>
+<p>DMA控制器抓住内存总线时，CPU暂时不能访问主存，但可以访问一级或二级高速缓存中的数据项。</p>
+<p>周期挪用cycle stealing可能放慢CPU计算，但数据传输工作交给DMA控制器改善整体性能</p>
+<p>DVMA (direct virtual memory access) can perform a transfer between two memory-mapped devices<br>without the intervention of the CPU or the use of main memory. 直接实现两个内存映射设备之间的传输，无需CPU的干涉或使用主存</p>
+<h2 id="IO应用接口"><a href="#IO应用接口" class="headerlink" title="IO应用接口"></a>IO应用接口</h2><p>设备驱动程序层device-driver layer为内核IO子系统隐藏设备控制器之间的差异</p>
+<p>Broadly I/O devices can be grouped by the OS into</p>
+<ul>
+<li>block IO</li>
+<li>character-stream IO</li>
+<li>memory-mapped file access</li>
+<li>network sockets</li>
+</ul>
+<p>OS存在后门(escape / back door)，允许应用程序将任何命令透明地传输到设备控制器</p>
+<p> Unix ioctl()</p>
+<h3 id="块与字符设备"><a href="#块与字符设备" class="headerlink" title="块与字符设备"></a>块与字符设备</h3><h4 id="Block-devices"><a href="#Block-devices" class="headerlink" title="Block devices"></a>Block devices</h4><p> include disk drives</p>
+<p>Commands include read(), write(), seek()</p>
+<p>Raw I/O, direct I/O, or file-system access</p>
+<p>Memory-mapped file access possible</p>
+<p>DMA</p>
+<h4 id="Character-devices"><a href="#Character-devices" class="headerlink" title="Character devices"></a>Character devices</h4><p> include keyboards, mice, serial ports</p>
+<p>Commands include get(), put()</p>
+<h3 id="网络设备"><a href="#网络设备" class="headerlink" title="网络设备"></a>网络设备</h3><p>The socket interface, Linux, Unix and Windows</p>
+<p>Includes select functionality: manages a set of sockets</p>
+<h3 id="clocks-and-timers"><a href="#clocks-and-timers" class="headerlink" title="clocks and timers"></a>clocks and timers</h3><p>Provide current time, elapsed time, timer</p>
+<p>Programmable interval timer used for timings, periodic interrupts.</p>
+<h3 id="Blocking-I-O-and-Nonblocking-I-O"><a href="#Blocking-I-O-and-Nonblocking-I-O" class="headerlink" title="Blocking I/O and Nonblocking I/O"></a>Blocking I/O and Nonblocking I/O</h3><p>Blocking - process suspended until I/O completed</p>
+<p>Nonblocking - I/O call returns as much as available</p>
+<p>Asynchronous - process runs while I/O executes 不必等待IO完成就可立即返回</p>
+<h2 id="Kernel-I-O-Subsystem"><a href="#Kernel-I-O-Subsystem" class="headerlink" title="Kernel I/O Subsystem"></a>Kernel I/O Subsystem</h2><h3 id="IO-scheduling"><a href="#IO-scheduling" class="headerlink" title="IO scheduling"></a>IO scheduling</h3><p>为每个设备维护一个请求队列</p>
+<h3 id="buffering"><a href="#buffering" class="headerlink" title="buffering"></a>buffering</h3><p>保存两个设备之间 或 设备和应用程序之间 所传输数据的内存区域</p>
+<h3 id="caching"><a href="#caching" class="headerlink" title="caching"></a>caching</h3><p>高速缓存是可以保留数据副本的高速存储器</p>
+<p>buffer可能是数据的唯一副本，而cache只是提供了一个 驻留在其他地方的数据 在高速存储上的一个副本</p>
+<p>有时同一内存区域可同时用作cache和buffer</p>
+<h3 id="Spooling假脱机-amp-Device-reservation"><a href="#Spooling假脱机-amp-Device-reservation" class="headerlink" title="Spooling假脱机 &amp; Device reservation"></a>Spooling假脱机 &amp; Device reservation</h3><p>Spooling - hold output for a device</p>
+<p>Device reservation( 预约) - provides exclusive access to a device</p>
+<h3 id="error-handling"><a href="#error-handling" class="headerlink" title="error handling"></a>error handling</h3><p>Most return an error number or code when I/O request fails.</p>
+<p>System error logs hold problem reports</p>
+<h3 id="IO-protection"><a href="#IO-protection" class="headerlink" title="IO protection"></a>IO protection</h3><p>所有IO指令为特权指令</p>
+<p>IO必须通过system call执行</p>
+<h3 id="内核数据结构"><a href="#内核数据结构" class="headerlink" title="内核数据结构"></a>内核数据结构</h3><p>Kernel keeps state information for I/O components, including open file tables, network connections, character device state.</p>
+<p>Many complex data structures to track buffers, memory allocation, “dirty” blocks.</p>
+<p>Some use object-oriented methods and message passing to implement I/O.</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577522127902.png" style="zoom:50%;" />
+
+<h2 id="把IO操作转换成硬件操作"><a href="#把IO操作转换成硬件操作" class="headerlink" title="把IO操作转换成硬件操作"></a>把IO操作转换成硬件操作</h2><img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577522223439.png" style="zoom:50%;" />]]></content>
+      <categories>
+        <category>所学</category>
+        <category>操作系统</category>
+      </categories>
+      <tags>
+        <tag>操作系统</tag>
+        <tag>专业课笔记</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>操作系统笔记 CH4 Threads</title>
+    <url>/2020/02/28/OS4/</url>
+    <content><![CDATA[<p>Dispatching is referred to as a thread. Resource of ownership is referred to as a process or<br>task.</p>
+<p>对进程的swapping和termination都牵扯它所有线程</p>
+<p>线程是CPU使用的基本单位。由thread ID, program counter, register set, stack组成</p>
+<h2 id="multithreading-models"><a href="#multithreading-models" class="headerlink" title="multithreading models"></a>multithreading models</h2><p>User threads, supported above the kernel and are managed without kernel support.</p>
+<p>Kernel threads, supported and managed directly by the operating system.</p>
+<ul>
+<li><p>many-to-one</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573189948482.png" style="zoom:50%;" /></li>
+<li><p>one-to-one</p>
+<p>一个线程阻塞，另一个还能运行</p>
+<p>并发。开销大。</p>
+<p>windows, linux, solaris 9 </p>
+</li>
+<li><p>many-to-many</p>
+<p>用户线程映射到数量相同或更少的内核线程</p>
+<p>When a thread performs a blocking system call, the kernel can schedule another thread for execution.</p>
+<p>two-level model:</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573562767512.png" style="zoom:50%;" /></li>
+</ul>
+<h2 id="thread-libraries"><a href="#thread-libraries" class="headerlink" title="thread libraries"></a>thread libraries</h2><p>两种方法实现：1 在用户空间提供一个没有内核支持的库 2 由OS直接支持的内核级的库</p>
+<ol>
+<li><p>POSIX Pthreads</p>
+<p>Portable Operating System Interface of UNIX</p>
+<p>Referred to user-level library</p>
+</li>
+<li><p>Win32 threads</p>
+<p>kernel-level threads library </p>
+</li>
+<li><p>Java threads</p>
+<p>provides support at the language level for the creation and management of threads.</p>
+<p>两种创建线程的方法</p>
+<ul>
+<li>extending thread class</li>
+<li>define a class that implements the Runnable interface</li>
+</ul>
+</li>
+</ol>
+<h2 id="thread-issues"><a href="#thread-issues" class="headerlink" title="thread issues"></a>thread issues</h2><h3 id="The-fork-and-exec-system-calls"><a href="#The-fork-and-exec-system-calls" class="headerlink" title="The fork() and exec() system calls"></a>The fork() and exec() system calls</h3><h3 id="thread-cancellation"><a href="#thread-cancellation" class="headerlink" title="thread cancellation"></a>thread cancellation</h3><p>Asynchronous cancellation 异步取消：立即取消</p>
+<p>Deferred cancellation 延迟取消：不断检查是否该终止</p>
+<h3 id="signal-handling"><a href="#signal-handling" class="headerlink" title="signal handling"></a>signal handling</h3><p>A signal is used in UNIX systems to notify a process that a particular event has occurred.</p>
+<p>Synchronous signal: illegal memory access, division by 0.</p>
+<p>Asynchronously signal: terminating a process with specific keystrokes, Ctrl+C ，由运行进程之外的事产生</p>
+<p>two possible handlers:</p>
+<ul>
+<li>a user-defined signal handler</li>
+<li>a default signal handler, which is run by the kernel</li>
+</ul>
+<p>同步信号送到需要发到产生它的线程</p>
+<h3 id="thread-pools"><a href="#thread-pools" class="headerlink" title="thread pools"></a>thread pools</h3><img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573563518826.png" style="zoom:50%;" />
+
+<p>优点：1 快 2 限制可用线程数量</p>
+<h3 id="thread-specific-data"><a href="#thread-specific-data" class="headerlink" title="thread-specific data"></a>thread-specific data</h3><p>Thread-specific data allows each thread to have its own copy of data (Thread-local storage (TLS) ).</p>
+<p> TLS visible across function invocations</p>
+<h3 id="scheduler-activation"><a href="#scheduler-activation" class="headerlink" title="scheduler activation"></a>scheduler activation</h3><img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573563717238.png" style="zoom:50%;" />
+
+<p>Scheduler activation – one scheme for communication between the user-thread library and the kernel.</p>
+<p>provides upcalls, the kernel inform an application about certain events.</p>
+<p>upcall handlers must run on a LWP.</p>
+<p>当一个应用线程要阻塞，内核向应用程序发upcall，分配一个新LWP给应用线程，应用线程在这个LWP上运行upcall handler</p>
+<p>当阻塞线程等待事件发生，内核向线程库发另一个upcall， kernel allocates a new LWP or preempt one of the user threads to run the upcall handler for this event.</p>
+<h2 id="OS-examples"><a href="#OS-examples" class="headerlink" title="OS examples"></a>OS examples</h2><h2 id="windows-XP-threads"><a href="#windows-XP-threads" class="headerlink" title="windows XP threads"></a>windows XP threads</h2><p>one-to-one</p>
+<p>ETHREAD (in kernel space), KTHREAD (in kernel space), TEB (in user space)</p>
+<h2 id="Linux-threads-tasks"><a href="#Linux-threads-tasks" class="headerlink" title="Linux threads - tasks"></a>Linux threads - tasks</h2><p>clone() system call</p>
 ]]></content>
       <categories>
         <category>所学</category>
@@ -921,112 +1103,6 @@
 </li>
 </ol>
 ]]></content>
-      <categories>
-        <category>所学</category>
-        <category>操作系统</category>
-      </categories>
-      <tags>
-        <tag>操作系统</tag>
-        <tag>专业课笔记</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>操作系统笔记 CH13 I/O Systems</title>
-    <url>/2020/02/28/OS13/</url>
-    <content><![CDATA[<p>the kernel is structured to use device-driver modules.</p>
-<p>device driver为IO子系统提供了统一设备访问接口</p>
-<p>两个趋势：接口日益标准化，设备多样性</p>
-<h2 id="IO-硬件"><a href="#IO-硬件" class="headerlink" title="IO 硬件"></a>IO 硬件</h2><p>port</p>
-<p>bus</p>
-<p>controller</p>
-<p>Controller usually have registers, where device driver places commands, addresses, and data to write, or read data from registers after command execution. Data-in register, data-out register, status register, control register</p>
-<p>设备有地址</p>
-<ul>
-<li><p>Direct I/O instructions</p>
-</li>
-<li><p>Memory-mapped I/O 内存映射IO</p>
-<p>设备控制寄存器 被映射到 处理器的地址空间</p>
-<p>Especially for large address spaces (graphics)</p>
-</li>
-</ul>
-<p>IO端口有4种寄存器：</p>
-<ul>
-<li>status</li>
-<li>control</li>
-<li>data-in</li>
-<li>data-out</li>
-</ul>
-<p>Techniques for Performing I/O</p>
-<ul>
-<li>Programmed I/O</li>
-<li>Interrupt-driven I/O</li>
-<li>Direct Memory Access (DMA)</li>
-</ul>
-<h3 id="polling-轮询"><a href="#polling-轮询" class="headerlink" title="polling 轮询"></a>polling 轮询</h3><p>控制器通过状态寄存器的busy bit显示其状态</p>
-<p>主机通过命令寄存器中的command-ready bit表示其意愿</p>
-<p>busy-waiting / polling 主机不断读状态寄存器直到忙位被清除</p>
-<p>Polling can happen in 3 instruction cycles, Read status, logical-and to extract status bit, branch if not zero</p>
-<h3 id="interrupts"><a href="#interrupts" class="headerlink" title="interrupts"></a>interrupts</h3><p>Interrupt-request line</p>
-<p>Interrupt handler receives interrupts. Maskable to ignore or delay some interrupts</p>
-<p>Interrupt vector to dispatch interrupt to correct handler</p>
-<p>中断向量：中断处理程序的内存地址</p>
-<p>计算机设备比向量内地址多。interrupt chaining 中断向量内的每个元素都指向中断处理程序列表的头</p>
-<p>实现了中断优先级</p>
-<p>Interrupt mechanism also used for exceptions</p>
-<p>Good uses: system calls, page fault</p>
-<p>Used for time-sensitive processing, frequent, must be fast.</p>
-<h3 id="DMA"><a href="#DMA" class="headerlink" title="DMA"></a>DMA</h3><p>Requires DMA controller, a special-purpose processor.</p>
-<p>Bypasses CPU to transfer data directly between I/O device and memory.</p>
-<p>Host writes a DMA command block into memory.</p>
-<p>CPU writes the address of this command block to the DMA controller.</p>
-<p>DMA controller operates the memory bus directly, placing address on the bus to perform transfers.</p>
-<p>When the entire transfer is finished, the DMA controller interrupts the CPU.</p>
-<p>Handshaking between the DMA controller and the device controller:</p>
-<p>​    performed via a pair of wires called DMA-request and DMA-acknowledge.</p>
-<p>DMA控制器抓住内存总线时，CPU暂时不能访问主存，但可以访问一级或二级高速缓存中的数据项。</p>
-<p>周期挪用cycle stealing可能放慢CPU计算，但数据传输工作交给DMA控制器改善整体性能</p>
-<p>DVMA (direct virtual memory access) can perform a transfer between two memory-mapped devices<br>without the intervention of the CPU or the use of main memory. 直接实现两个内存映射设备之间的传输，无需CPU的干涉或使用主存</p>
-<h2 id="IO应用接口"><a href="#IO应用接口" class="headerlink" title="IO应用接口"></a>IO应用接口</h2><p>设备驱动程序层device-driver layer为内核IO子系统隐藏设备控制器之间的差异</p>
-<p>Broadly I/O devices can be grouped by the OS into</p>
-<ul>
-<li>block IO</li>
-<li>character-stream IO</li>
-<li>memory-mapped file access</li>
-<li>network sockets</li>
-</ul>
-<p>OS存在后门(escape / back door)，允许应用程序将任何命令透明地传输到设备控制器</p>
-<p> Unix ioctl()</p>
-<h3 id="块与字符设备"><a href="#块与字符设备" class="headerlink" title="块与字符设备"></a>块与字符设备</h3><h4 id="Block-devices"><a href="#Block-devices" class="headerlink" title="Block devices"></a>Block devices</h4><p> include disk drives</p>
-<p>Commands include read(), write(), seek()</p>
-<p>Raw I/O, direct I/O, or file-system access</p>
-<p>Memory-mapped file access possible</p>
-<p>DMA</p>
-<h4 id="Character-devices"><a href="#Character-devices" class="headerlink" title="Character devices"></a>Character devices</h4><p> include keyboards, mice, serial ports</p>
-<p>Commands include get(), put()</p>
-<h3 id="网络设备"><a href="#网络设备" class="headerlink" title="网络设备"></a>网络设备</h3><p>The socket interface, Linux, Unix and Windows</p>
-<p>Includes select functionality: manages a set of sockets</p>
-<h3 id="clocks-and-timers"><a href="#clocks-and-timers" class="headerlink" title="clocks and timers"></a>clocks and timers</h3><p>Provide current time, elapsed time, timer</p>
-<p>Programmable interval timer used for timings, periodic interrupts.</p>
-<h3 id="Blocking-I-O-and-Nonblocking-I-O"><a href="#Blocking-I-O-and-Nonblocking-I-O" class="headerlink" title="Blocking I/O and Nonblocking I/O"></a>Blocking I/O and Nonblocking I/O</h3><p>Blocking - process suspended until I/O completed</p>
-<p>Nonblocking - I/O call returns as much as available</p>
-<p>Asynchronous - process runs while I/O executes 不必等待IO完成就可立即返回</p>
-<h2 id="Kernel-I-O-Subsystem"><a href="#Kernel-I-O-Subsystem" class="headerlink" title="Kernel I/O Subsystem"></a>Kernel I/O Subsystem</h2><h3 id="IO-scheduling"><a href="#IO-scheduling" class="headerlink" title="IO scheduling"></a>IO scheduling</h3><p>为每个设备维护一个请求队列</p>
-<h3 id="buffering"><a href="#buffering" class="headerlink" title="buffering"></a>buffering</h3><p>保存两个设备之间 或 设备和应用程序之间 所传输数据的内存区域</p>
-<h3 id="caching"><a href="#caching" class="headerlink" title="caching"></a>caching</h3><p>高速缓存是可以保留数据副本的高速存储器</p>
-<p>buffer可能是数据的唯一副本，而cache只是提供了一个 驻留在其他地方的数据 在高速存储上的一个副本</p>
-<p>有时同一内存区域可同时用作cache和buffer</p>
-<h3 id="Spooling假脱机-amp-Device-reservation"><a href="#Spooling假脱机-amp-Device-reservation" class="headerlink" title="Spooling假脱机 &amp; Device reservation"></a>Spooling假脱机 &amp; Device reservation</h3><p>Spooling - hold output for a device</p>
-<p>Device reservation( 预约) - provides exclusive access to a device</p>
-<h3 id="error-handling"><a href="#error-handling" class="headerlink" title="error handling"></a>error handling</h3><p>Most return an error number or code when I/O request fails.</p>
-<p>System error logs hold problem reports</p>
-<h3 id="IO-protection"><a href="#IO-protection" class="headerlink" title="IO protection"></a>IO protection</h3><p>所有IO指令为特权指令</p>
-<p>IO必须通过system call执行</p>
-<h3 id="内核数据结构"><a href="#内核数据结构" class="headerlink" title="内核数据结构"></a>内核数据结构</h3><p>Kernel keeps state information for I/O components, including open file tables, network connections, character device state.</p>
-<p>Many complex data structures to track buffers, memory allocation, “dirty” blocks.</p>
-<p>Some use object-oriented methods and message passing to implement I/O.</p>
-<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577522127902.png" style="zoom:50%;" />
-
-<h2 id="把IO操作转换成硬件操作"><a href="#把IO操作转换成硬件操作" class="headerlink" title="把IO操作转换成硬件操作"></a>把IO操作转换成硬件操作</h2><img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577522223439.png" style="zoom:50%;" />]]></content>
       <categories>
         <category>所学</category>
         <category>操作系统</category>
@@ -1339,71 +1415,85 @@
       </tags>
   </entry>
   <entry>
-    <title>操作系统笔记 CH4 Threads</title>
-    <url>/2020/02/28/OS4/</url>
-    <content><![CDATA[<p>Dispatching is referred to as a thread. Resource of ownership is referred to as a process or<br>task.</p>
-<p>对进程的swapping和termination都牵扯它所有线程</p>
-<p>线程是CPU使用的基本单位。由thread ID, program counter, register set, stack组成</p>
-<h2 id="multithreading-models"><a href="#multithreading-models" class="headerlink" title="multithreading models"></a>multithreading models</h2><p>User threads, supported above the kernel and are managed without kernel support.</p>
-<p>Kernel threads, supported and managed directly by the operating system.</p>
+    <title>操作系统笔记 CH7 Deadlocks</title>
+    <url>/2020/02/28/OS7/</url>
+    <content><![CDATA[<h2 id="deadlock-characteristics"><a href="#deadlock-characteristics" class="headerlink" title="deadlock characteristics"></a>deadlock characteristics</h2><h3 id="necessary-conditions"><a href="#necessary-conditions" class="headerlink" title="necessary conditions"></a>necessary conditions</h3><p>4个条件同时满足，引起死锁：</p>
 <ul>
-<li><p>many-to-one</p>
-<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573189948482.png" style="zoom:50%;" /></li>
-<li><p>one-to-one</p>
-<p>一个线程阻塞，另一个还能运行</p>
-<p>并发。开销大。</p>
-<p>windows, linux, solaris 9 </p>
+<li><p>mutual exclusion</p>
+<p>至少有一个资源处于非共享模式，一次只能有一个进程使用</p>
 </li>
-<li><p>many-to-many</p>
-<p>用户线程映射到数量相同或更少的内核线程</p>
-<p>When a thread performs a blocking system call, the kernel can schedule another thread for execution.</p>
-<p>two-level model:</p>
-<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573562767512.png" style="zoom:50%;" /></li>
+<li><p>hold and wait</p>
+<p>占有至少一个资源，等待另一为其他进程所占资源</p>
+</li>
+<li><p>no preemption</p>
+<p>资源不能被抢占</p>
+</li>
+<li><p>circular wait</p>
+</li>
 </ul>
-<h2 id="thread-libraries"><a href="#thread-libraries" class="headerlink" title="thread libraries"></a>thread libraries</h2><p>两种方法实现：1 在用户空间提供一个没有内核支持的库 2 由OS直接支持的内核级的库</p>
-<ol>
-<li><p>POSIX Pthreads</p>
-<p>Portable Operating System Interface of UNIX</p>
-<p>Referred to user-level library</p>
-</li>
-<li><p>Win32 threads</p>
-<p>kernel-level threads library </p>
-</li>
-<li><p>Java threads</p>
-<p>provides support at the language level for the creation and management of threads.</p>
-<p>两种创建线程的方法</p>
-<ul>
-<li>extending thread class</li>
-<li>define a class that implements the Runnable interface</li>
-</ul>
-</li>
-</ol>
-<h2 id="thread-issues"><a href="#thread-issues" class="headerlink" title="thread issues"></a>thread issues</h2><h3 id="The-fork-and-exec-system-calls"><a href="#The-fork-and-exec-system-calls" class="headerlink" title="The fork() and exec() system calls"></a>The fork() and exec() system calls</h3><h3 id="thread-cancellation"><a href="#thread-cancellation" class="headerlink" title="thread cancellation"></a>thread cancellation</h3><p>Asynchronous cancellation 异步取消：立即取消</p>
-<p>Deferred cancellation 延迟取消：不断检查是否该终止</p>
-<h3 id="signal-handling"><a href="#signal-handling" class="headerlink" title="signal handling"></a>signal handling</h3><p>A signal is used in UNIX systems to notify a process that a particular event has occurred.</p>
-<p>Synchronous signal: illegal memory access, division by 0.</p>
-<p>Asynchronously signal: terminating a process with specific keystrokes, Ctrl+C ，由运行进程之外的事产生</p>
-<p>two possible handlers:</p>
-<ul>
-<li>a user-defined signal handler</li>
-<li>a default signal handler, which is run by the kernel</li>
-</ul>
-<p>同步信号送到需要发到产生它的线程</p>
-<h3 id="thread-pools"><a href="#thread-pools" class="headerlink" title="thread pools"></a>thread pools</h3><img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573563518826.png" style="zoom:50%;" />
+<h3 id="resource-allocation-graph"><a href="#resource-allocation-graph" class="headerlink" title="resource-allocation graph"></a>resource-allocation graph</h3><p>request edge : Pi-&gt;Rj</p>
+<p>assignment edge : Rj-&gt;Pi</p>
+<p>申请边只用指向矩形，但分配边必须从某个原点开始</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573293211940.png" style="zoom:67%;" />
 
-<p>优点：1 快 2 限制可用线程数量</p>
-<h3 id="thread-specific-data"><a href="#thread-specific-data" class="headerlink" title="thread-specific data"></a>thread-specific data</h3><p>Thread-specific data allows each thread to have its own copy of data (Thread-local storage (TLS) ).</p>
-<p> TLS visible across function invocations</p>
-<h3 id="scheduler-activation"><a href="#scheduler-activation" class="headerlink" title="scheduler activation"></a>scheduler activation</h3><img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573563717238.png" style="zoom:50%;" />
+<p>资源分配图有环是死锁的必要条件。若每类资源只有一个实例，含环是充分必要条件。若同类资源数&gt;1,不一定有死锁。</p>
+<h2 id="methods-for-handling-deadlocks"><a href="#methods-for-handling-deadlocks" class="headerlink" title="methods for handling deadlocks"></a>methods for handling deadlocks</h2><p>1.预防或避免死锁</p>
+<p>2.允许进入死锁，检测并恢复</p>
+<p>3.忽视这个问题(为多数OS所用)</p>
+<p>deadlock prevention: 确保至少一个必要条件不成立，通过限制如何申请资源</p>
+<p>deadlock avoidance: 事先得到进程申请和使用资源的额外信息，系统可确定对于一个申请，进程是否等待(申请允许还是延迟)，考虑可用、已分配、进程将来申请和释放的资源</p>
+<h2 id="deadlock-prevention"><a href="#deadlock-prevention" class="headerlink" title="deadlock prevention"></a>deadlock prevention</h2><p>确保4个必要条件至少1个不成立</p>
+<ul>
+<li><p>mutual exclusion</p>
+<p>通常不通过这个条件…</p>
+</li>
+<li><p>hold and wait</p>
+<ul>
+<li><p>每个进程在执行前申请并获得所有资源</p>
+</li>
+<li><p>进程在没有资源时才可申请资源(申请更多资源前，先释放已分配的资源)</p>
+</li>
+</ul>
+<p>缺点:1.资源利用率低 2.starvation</p>
+</li>
+<li><p>no preemption</p>
+<p>如果一个进程占有资源并申请另一个不能立即分配的资源，其现在已分配的资源都可被抢占(被隐式释放)。</p>
+<p>进程申请资源时，不可用也不被其他等待进程占有时，等待</p>
+<p>常应用于状态可以保存恢复的资源，如CPU寄存器和内存，不适用于打印机和磁带驱动器等。</p>
+</li>
+<li><p>circular wait</p>
+<p>对所有资源类型进行完全排序。每个进程只按递增顺序申请资源。(只能申请编号比它大的)</p>
+</li>
+</ul>
+<h2 id="deadlock-avoidance"><a href="#deadlock-avoidance" class="headerlink" title="deadlock avoidance"></a>deadlock avoidance</h2><p>死锁避免比死锁预防要求低</p>
+<p>deadlock prevention 低设备使用率和吞吐率</p>
+<p>a system is in a safe state only if there exists a safe sequence</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573295674796.png" style="zoom:50%;" />
 
-<p>Scheduler activation – one scheme for communication between the user-thread library and the kernel.</p>
-<p>provides upcalls, the kernel inform an application about certain events.</p>
-<p>upcall handlers must run on a LWP.</p>
-<p>当一个应用线程要阻塞，内核向应用程序发upcall，分配一个新LWP给应用线程，应用线程在这个LWP上运行upcall handler</p>
-<p>当阻塞线程等待事件发生，内核向线程库发另一个upcall， kernel allocates a new LWP or preempt one of the user threads to run the upcall handler for this event.</p>
-<h2 id="OS-examples"><a href="#OS-examples" class="headerlink" title="OS examples"></a>OS examples</h2><h2 id="windows-XP-threads"><a href="#windows-XP-threads" class="headerlink" title="windows XP threads"></a>windows XP threads</h2><p>one-to-one</p>
-<p>ETHREAD (in kernel space), KTHREAD (in kernel space), TEB (in user space)</p>
-<h2 id="Linux-threads-tasks"><a href="#Linux-threads-tasks" class="headerlink" title="Linux threads - tasks"></a>Linux threads - tasks</h2><p>clone() system call</p>
+<h3 id="resource-allocation-graph-algorithm"><a href="#resource-allocation-graph-algorithm" class="headerlink" title="resource-allocation-graph algorithm"></a>resource-allocation-graph algorithm</h3><p>增加claim edge(需求边)，虚线</p>
+<p>当进程Pi开始执行时，所有需求边必须先处于资源分配图。(可放宽为只要与Pi有关的需求边)</p>
+<p>只有在申请边Pi-&gt;Rj变成分配边Rj-&gt;Pi，而不会出现环时，才允许申请。环存在是unsafe state</p>
+<p>cycle-detection algorithm</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573296280721.png" style="zoom:50%;" />
+
+<h3 id="banker’s-algorithm"><a href="#banker’s-algorithm" class="headerlink" title="banker’s algorithm"></a>banker’s algorithm</h3><p>自己看书做题去 P247</p>
+<h2 id="deadlock-detection"><a href="#deadlock-detection" class="headerlink" title="deadlock detection"></a>deadlock detection</h2><p>不采用prevention和avoidance，应提供检查是否出现死锁&amp;恢复算法。</p>
+<h3 id="每种资源类型单个实例"><a href="#每种资源类型单个实例" class="headerlink" title="每种资源类型单个实例"></a>每种资源类型单个实例</h3><p>wait-for graph: Pi等待Pj释放一个Pi需要的资源</p>
+<p>Pi-&gt;Pj iff 资源分配图中 Pi-&gt;Rq, Rq-&gt;Pj</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573296978952.png" style="zoom:33%;" />
+
+<p>图中有环 &lt;-&gt; 死锁</p>
+<h3 id="每种资源类型多个实例"><a href="#每种资源类型多个实例" class="headerlink" title="每种资源类型多个实例"></a>每种资源类型多个实例</h3><p>detection algorithm</p>
+<p><img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573297606742.png"></p>
+<h3 id="资源图消边法"><a href="#资源图消边法" class="headerlink" title="资源图消边法"></a>资源图消边法</h3><p>PPT P45 + 看橘</p>
+<h2 id="recovery-from-deadlock"><a href="#recovery-from-deadlock" class="headerlink" title="recovery from deadlock"></a>recovery from deadlock</h2><h3 id="process-termination"><a href="#process-termination" class="headerlink" title="process termination"></a>process termination</h3><p>不管哪种进程终止方法，系统都会收回分配给终止进程的所有资源</p>
+<ul>
+<li>终止所有死锁进程</li>
+<li>一次终止一个，调用死锁检测，直到取消死锁循环</li>
+</ul>
+<h3 id="resource-preemption"><a href="#resource-preemption" class="headerlink" title="resource preemption"></a>resource preemption</h3><p>select a victim: which resources and which processes are to be preempted 代价因素 cost factors</p>
+<p>rollback: 抢占资源后对进程做什么安排 roll back to some safe state. simplest: total rollback</p>
+<p>starvation: 如何保证资源总是从一个进程抢占 在代价因素中加上回滚次数</p>
 ]]></content>
       <categories>
         <category>所学</category>
@@ -1611,96 +1701,6 @@
       </tags>
   </entry>
   <entry>
-    <title>操作系统笔记 CH7 Deadlocks</title>
-    <url>/2020/02/28/OS7/</url>
-    <content><![CDATA[<h2 id="deadlock-characteristics"><a href="#deadlock-characteristics" class="headerlink" title="deadlock characteristics"></a>deadlock characteristics</h2><h3 id="necessary-conditions"><a href="#necessary-conditions" class="headerlink" title="necessary conditions"></a>necessary conditions</h3><p>4个条件同时满足，引起死锁：</p>
-<ul>
-<li><p>mutual exclusion</p>
-<p>至少有一个资源处于非共享模式，一次只能有一个进程使用</p>
-</li>
-<li><p>hold and wait</p>
-<p>占有至少一个资源，等待另一为其他进程所占资源</p>
-</li>
-<li><p>no preemption</p>
-<p>资源不能被抢占</p>
-</li>
-<li><p>circular wait</p>
-</li>
-</ul>
-<h3 id="resource-allocation-graph"><a href="#resource-allocation-graph" class="headerlink" title="resource-allocation graph"></a>resource-allocation graph</h3><p>request edge : Pi-&gt;Rj</p>
-<p>assignment edge : Rj-&gt;Pi</p>
-<p>申请边只用指向矩形，但分配边必须从某个原点开始</p>
-<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573293211940.png" style="zoom:67%;" />
-
-<p>资源分配图有环是死锁的必要条件。若每类资源只有一个实例，含环是充分必要条件。若同类资源数&gt;1,不一定有死锁。</p>
-<h2 id="methods-for-handling-deadlocks"><a href="#methods-for-handling-deadlocks" class="headerlink" title="methods for handling deadlocks"></a>methods for handling deadlocks</h2><p>1.预防或避免死锁</p>
-<p>2.允许进入死锁，检测并恢复</p>
-<p>3.忽视这个问题(为多数OS所用)</p>
-<p>deadlock prevention: 确保至少一个必要条件不成立，通过限制如何申请资源</p>
-<p>deadlock avoidance: 事先得到进程申请和使用资源的额外信息，系统可确定对于一个申请，进程是否等待(申请允许还是延迟)，考虑可用、已分配、进程将来申请和释放的资源</p>
-<h2 id="deadlock-prevention"><a href="#deadlock-prevention" class="headerlink" title="deadlock prevention"></a>deadlock prevention</h2><p>确保4个必要条件至少1个不成立</p>
-<ul>
-<li><p>mutual exclusion</p>
-<p>通常不通过这个条件…</p>
-</li>
-<li><p>hold and wait</p>
-<ul>
-<li><p>每个进程在执行前申请并获得所有资源</p>
-</li>
-<li><p>进程在没有资源时才可申请资源(申请更多资源前，先释放已分配的资源)</p>
-</li>
-</ul>
-<p>缺点:1.资源利用率低 2.starvation</p>
-</li>
-<li><p>no preemption</p>
-<p>如果一个进程占有资源并申请另一个不能立即分配的资源，其现在已分配的资源都可被抢占(被隐式释放)。</p>
-<p>进程申请资源时，不可用也不被其他等待进程占有时，等待</p>
-<p>常应用于状态可以保存恢复的资源，如CPU寄存器和内存，不适用于打印机和磁带驱动器等。</p>
-</li>
-<li><p>circular wait</p>
-<p>对所有资源类型进行完全排序。每个进程只按递增顺序申请资源。(只能申请编号比它大的)</p>
-</li>
-</ul>
-<h2 id="deadlock-avoidance"><a href="#deadlock-avoidance" class="headerlink" title="deadlock avoidance"></a>deadlock avoidance</h2><p>死锁避免比死锁预防要求低</p>
-<p>deadlock prevention 低设备使用率和吞吐率</p>
-<p>a system is in a safe state only if there exists a safe sequence</p>
-<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573295674796.png" style="zoom:50%;" />
-
-<h3 id="resource-allocation-graph-algorithm"><a href="#resource-allocation-graph-algorithm" class="headerlink" title="resource-allocation-graph algorithm"></a>resource-allocation-graph algorithm</h3><p>增加claim edge(需求边)，虚线</p>
-<p>当进程Pi开始执行时，所有需求边必须先处于资源分配图。(可放宽为只要与Pi有关的需求边)</p>
-<p>只有在申请边Pi-&gt;Rj变成分配边Rj-&gt;Pi，而不会出现环时，才允许申请。环存在是unsafe state</p>
-<p>cycle-detection algorithm</p>
-<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573296280721.png" style="zoom:50%;" />
-
-<h3 id="banker’s-algorithm"><a href="#banker’s-algorithm" class="headerlink" title="banker’s algorithm"></a>banker’s algorithm</h3><p>自己看书做题去 P247</p>
-<h2 id="deadlock-detection"><a href="#deadlock-detection" class="headerlink" title="deadlock detection"></a>deadlock detection</h2><p>不采用prevention和avoidance，应提供检查是否出现死锁&amp;恢复算法。</p>
-<h3 id="每种资源类型单个实例"><a href="#每种资源类型单个实例" class="headerlink" title="每种资源类型单个实例"></a>每种资源类型单个实例</h3><p>wait-for graph: Pi等待Pj释放一个Pi需要的资源</p>
-<p>Pi-&gt;Pj iff 资源分配图中 Pi-&gt;Rq, Rq-&gt;Pj</p>
-<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573296978952.png" style="zoom:33%;" />
-
-<p>图中有环 &lt;-&gt; 死锁</p>
-<h3 id="每种资源类型多个实例"><a href="#每种资源类型多个实例" class="headerlink" title="每种资源类型多个实例"></a>每种资源类型多个实例</h3><p>detection algorithm</p>
-<p><img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573297606742.png"></p>
-<h3 id="资源图消边法"><a href="#资源图消边法" class="headerlink" title="资源图消边法"></a>资源图消边法</h3><p>PPT P45 + 看橘</p>
-<h2 id="recovery-from-deadlock"><a href="#recovery-from-deadlock" class="headerlink" title="recovery from deadlock"></a>recovery from deadlock</h2><h3 id="process-termination"><a href="#process-termination" class="headerlink" title="process termination"></a>process termination</h3><p>不管哪种进程终止方法，系统都会收回分配给终止进程的所有资源</p>
-<ul>
-<li>终止所有死锁进程</li>
-<li>一次终止一个，调用死锁检测，直到取消死锁循环</li>
-</ul>
-<h3 id="resource-preemption"><a href="#resource-preemption" class="headerlink" title="resource preemption"></a>resource preemption</h3><p>select a victim: which resources and which processes are to be preempted 代价因素 cost factors</p>
-<p>rollback: 抢占资源后对进程做什么安排 roll back to some safe state. simplest: total rollback</p>
-<p>starvation: 如何保证资源总是从一个进程抢占 在代价因素中加上回滚次数</p>
-]]></content>
-      <categories>
-        <category>所学</category>
-        <category>操作系统</category>
-      </categories>
-      <tags>
-        <tag>操作系统</tag>
-        <tag>专业课笔记</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>操作系统笔记 CH9 Virtual Memory</title>
     <url>/2020/02/28/OS9/</url>
     <content><![CDATA[<h2 id="background"><a href="#background" class="headerlink" title="background"></a>background</h2><p>CH8的内存管理方案需要将整个进程放入内存，动态载入只能减轻这一限制</p>
@@ -1852,6 +1852,23 @@
       </tags>
   </entry>
   <entry>
+    <title>PAT刷题记录 1033 To Fill or Not to Fill</title>
+    <url>/2020/04/19/PAT-1033/</url>
+    <content><![CDATA[<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">double</span> cmax, davg, dall;</span><br><span class="line"><span class="keyword">int</span> n;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Node</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">	<span class="keyword">double</span> price;</span><br><span class="line">	<span class="keyword">double</span> dis;</span><br><span class="line">&#125;sta[<span class="number">505</span>];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">cmp1</span><span class="params">(Node a, Node b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> a.dis &lt; b.dis;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%lf%lf%lf%d&quot;</span>, &amp;cmax, &amp;dall, &amp;davg, &amp;n);</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; ++i)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">scanf</span>(<span class="string">&quot;%lf%lf&quot;</span>, &amp;sta[i].price, &amp;sta[i].dis);</span><br><span class="line">	&#125;</span><br><span class="line">	sort(sta, sta + n, cmp1);</span><br><span class="line">	<span class="keyword">bool</span> flag = <span class="literal">false</span>;</span><br><span class="line">	<span class="keyword">double</span> far = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">int</span> ns = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">int</span> i1 = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">double</span> min1 = <span class="number">9999999</span>;</span><br><span class="line">	<span class="keyword">double</span> cost = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">double</span> cnow = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">double</span> bestprice;</span><br><span class="line">	<span class="keyword">while</span> (sta[i1].dis == <span class="number">0</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (sta[i1].price &lt; min1)</span><br><span class="line">		&#123;</span><br><span class="line">			min1 = sta[i1].price;</span><br><span class="line">			ns = i1;</span><br><span class="line">			far = cmax * davg;</span><br><span class="line">			bestprice = sta[i1].price;</span><br><span class="line">		&#125;</span><br><span class="line">		i1++;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> (min1 == <span class="number">9999999</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;The maximum travel distance = 0.00&quot;</span>);</span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">while</span> (ns &lt; n)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">int</span> i;</span><br><span class="line">		<span class="keyword">int</span> u = <span class="number">-1</span>;</span><br><span class="line">		<span class="keyword">double</span> min = <span class="number">9999999</span>;</span><br><span class="line">		<span class="keyword">for</span> (i = ns + <span class="number">1</span>; sta[i].dis &lt;= far &amp;&amp; i &lt; n; ++i)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">if</span> (sta[i].price &lt; min)</span><br><span class="line">			&#123;</span><br><span class="line">				min = sta[i].price;</span><br><span class="line">				u = i;</span><br><span class="line">				<span class="keyword">if</span> (min &lt; sta[ns].price) <span class="comment">//这一步超级重要！！！第一个比当前小的，就可以停了！后面有更小的，用现在贵的油跑更多也是浪费！</span></span><br><span class="line">					<span class="keyword">break</span>;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span> (u &gt;= <span class="number">0</span> &amp;&amp; min &lt; sta[ns].price) <span class="comment">//如果下一个比当前便宜，只用加到够跑到下一站的油就够了</span></span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">if</span> (cnow &lt; ((sta[u].dis - sta[ns].dis) / davg)) <span class="comment">//因为之前会存在多加油的情况，要判断在那个基础上再加油，解释一下:cnow是当前油量(这里是在更新)</span></span><br><span class="line">			&#123;</span><br><span class="line">				cost += ((sta[u].dis - sta[ns].dis) / davg - cnow) * sta[ns].price;</span><br><span class="line">				cnow = <span class="number">0</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">else</span></span><br><span class="line">			&#123;</span><br><span class="line">				cnow -= (sta[u].dis - sta[ns].dis) / davg;</span><br><span class="line">			&#125;</span><br><span class="line">			far = sta[u].dis + cmax * davg;</span><br><span class="line">			ns = u;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span> <span class="keyword">if</span> (u &gt;= <span class="number">0</span> &amp;&amp; min &gt;= sta[ns].price) <span class="comment">//如果下一个反而贵，在当前就加满！</span></span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">if</span> (far &gt;= dall) <span class="comment">//事实证明这一步也很重要，结束的条件并不一定都是u==-1(也就是找不到下一个了)，现在就能去终点，且下一站的油费比现在贵，现在就应该停</span></span><br><span class="line">			&#123;</span><br><span class="line">				<span class="keyword">if</span> (cnow &lt; ((dall - sta[ns].dis) / davg))</span><br><span class="line">				&#123;</span><br><span class="line">					cost += ((dall - sta[ns].dis) / davg - cnow) * sta[ns].price;</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="built_in">printf</span>(<span class="string">&quot;%.2f&quot;</span>, cost);</span><br><span class="line">				<span class="keyword">break</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			cost += (cmax - cnow) * sta[ns].price;</span><br><span class="line">			cnow = cmax - (sta[u].dis - sta[ns].dis) / davg;</span><br><span class="line">			far = sta[u].dis + cmax * davg;</span><br><span class="line">			ns = u;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span> <span class="keyword">if</span> (u == <span class="number">-1</span> &amp;&amp; far &gt;= dall)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">if</span> (cnow &lt; ((dall - sta[ns].dis) / davg))</span><br><span class="line">			&#123;</span><br><span class="line">				cost += ((dall - sta[ns].dis) / davg - cnow) * sta[ns].price;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="built_in">printf</span>(<span class="string">&quot;%.2f&quot;</span>, cost);</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span> <span class="keyword">if</span> (u == <span class="number">-1</span> &amp;&amp; far &lt; dall)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="built_in">printf</span>(<span class="string">&quot;The maximum travel distance = %.2f&quot;</span>, far);</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>下一个加油站的选择，不是可到达范围里油费最便宜的，而是第一个比当前加油站油费便宜的！这一步自己刚开始一直是错的orz，典型的想当然</p>
+<p>如果不能找到更便宜的下一站，这一站要加满。</p>
+<p>还有一个点是判断结束的条件，现在可到达终点且之后的都贵，就可以停了。</p>]]></content>
+      <categories>
+        <category>所学</category>
+        <category>PAT</category>
+      </categories>
+      <tags>
+        <tag>PAT</tag>
+        <tag>贪心</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>PAT刷题记录 1038 Recover the Smallest Number</title>
     <url>/2020/04/19/PAT-1038/</url>
     <content><![CDATA[<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;map&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt; num;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">cmp1</span><span class="params">(<span class="built_in">string</span> a, <span class="built_in">string</span> b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> la = a.length(), lb = b.length();</span><br><span class="line">	<span class="built_in">string</span> temp;</span><br><span class="line">	<span class="keyword">if</span> (la == lb)</span><br><span class="line">		<span class="keyword">return</span> a &lt;= b;</span><br><span class="line">	<span class="keyword">else</span> <span class="keyword">if</span> (la &lt; lb) <span class="comment">//自己重新定义字符串比较的定义</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (a.compare(b.substr(<span class="number">0</span>, la)) == <span class="number">0</span>)</span><br><span class="line">		&#123;</span><br><span class="line">			temp = b.substr(la) + a;</span><br><span class="line">			<span class="keyword">if</span> (temp &lt;= b)</span><br><span class="line">				<span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">			<span class="keyword">else</span></span><br><span class="line">				<span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span></span><br><span class="line">			<span class="keyword">return</span> a &lt;= b;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span> <span class="keyword">if</span> (la &gt; lb)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (b.compare(a.substr(<span class="number">0</span>, lb)) == <span class="number">0</span>)</span><br><span class="line">		&#123;</span><br><span class="line">			temp = a.substr(lb) + b;</span><br><span class="line">			<span class="keyword">if</span> (temp &lt;= a)</span><br><span class="line">				<span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">			<span class="keyword">else</span></span><br><span class="line">				<span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span></span><br><span class="line">			<span class="keyword">return</span> a &lt;= b;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> n;</span><br><span class="line">	<span class="built_in">cin</span> &gt;&gt; n;</span><br><span class="line">	<span class="built_in">string</span> s;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; ++i)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">cin</span> &gt;&gt; s;</span><br><span class="line">		num.push_back(s);</span><br><span class="line">	&#125;</span><br><span class="line">	sort(num.begin(), num.end(), cmp1);</span><br><span class="line">	<span class="keyword">int</span> len = num.size();</span><br><span class="line">	<span class="built_in">string</span> ans = <span class="string">&quot;&quot;</span>;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; len; ++i)</span><br><span class="line">	&#123;</span><br><span class="line">		ans += num[i];</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">int</span> pos = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">bool</span> flag = <span class="literal">false</span>;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; ans.length(); ++i)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (ans[i] != <span class="string">&#x27;0&#x27;</span>)</span><br><span class="line">		&#123;</span><br><span class="line">			pos = i;</span><br><span class="line">			flag = <span class="literal">true</span>;</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> (flag == <span class="literal">false</span>) <span class="comment">//要注意全是0的情况！</span></span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;0&quot;</span>;</span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; ans.substr(pos);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -1874,23 +1891,6 @@
       </categories>
       <tags>
         <tag>PAT</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>PAT刷题记录 1033 To Fill or Not to Fill</title>
-    <url>/2020/04/19/PAT-1033/</url>
-    <content><![CDATA[<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">double</span> cmax, davg, dall;</span><br><span class="line"><span class="keyword">int</span> n;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Node</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">	<span class="keyword">double</span> price;</span><br><span class="line">	<span class="keyword">double</span> dis;</span><br><span class="line">&#125;sta[<span class="number">505</span>];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">cmp1</span><span class="params">(Node a, Node b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> a.dis &lt; b.dis;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%lf%lf%lf%d&quot;</span>, &amp;cmax, &amp;dall, &amp;davg, &amp;n);</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; ++i)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">scanf</span>(<span class="string">&quot;%lf%lf&quot;</span>, &amp;sta[i].price, &amp;sta[i].dis);</span><br><span class="line">	&#125;</span><br><span class="line">	sort(sta, sta + n, cmp1);</span><br><span class="line">	<span class="keyword">bool</span> flag = <span class="literal">false</span>;</span><br><span class="line">	<span class="keyword">double</span> far = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">int</span> ns = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">int</span> i1 = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">double</span> min1 = <span class="number">9999999</span>;</span><br><span class="line">	<span class="keyword">double</span> cost = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">double</span> cnow = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">double</span> bestprice;</span><br><span class="line">	<span class="keyword">while</span> (sta[i1].dis == <span class="number">0</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (sta[i1].price &lt; min1)</span><br><span class="line">		&#123;</span><br><span class="line">			min1 = sta[i1].price;</span><br><span class="line">			ns = i1;</span><br><span class="line">			far = cmax * davg;</span><br><span class="line">			bestprice = sta[i1].price;</span><br><span class="line">		&#125;</span><br><span class="line">		i1++;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> (min1 == <span class="number">9999999</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;The maximum travel distance = 0.00&quot;</span>);</span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">while</span> (ns &lt; n)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">int</span> i;</span><br><span class="line">		<span class="keyword">int</span> u = <span class="number">-1</span>;</span><br><span class="line">		<span class="keyword">double</span> min = <span class="number">9999999</span>;</span><br><span class="line">		<span class="keyword">for</span> (i = ns + <span class="number">1</span>; sta[i].dis &lt;= far &amp;&amp; i &lt; n; ++i)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">if</span> (sta[i].price &lt; min)</span><br><span class="line">			&#123;</span><br><span class="line">				min = sta[i].price;</span><br><span class="line">				u = i;</span><br><span class="line">				<span class="keyword">if</span> (min &lt; sta[ns].price) <span class="comment">//这一步超级重要！！！第一个比当前小的，就可以停了！后面有更小的，用现在贵的油跑更多也是浪费！</span></span><br><span class="line">					<span class="keyword">break</span>;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span> (u &gt;= <span class="number">0</span> &amp;&amp; min &lt; sta[ns].price) <span class="comment">//如果下一个比当前便宜，只用加到够跑到下一站的油就够了</span></span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">if</span> (cnow &lt; ((sta[u].dis - sta[ns].dis) / davg)) <span class="comment">//因为之前会存在多加油的情况，要判断在那个基础上再加油，解释一下:cnow是当前油量(这里是在更新)</span></span><br><span class="line">			&#123;</span><br><span class="line">				cost += ((sta[u].dis - sta[ns].dis) / davg - cnow) * sta[ns].price;</span><br><span class="line">				cnow = <span class="number">0</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">else</span></span><br><span class="line">			&#123;</span><br><span class="line">				cnow -= (sta[u].dis - sta[ns].dis) / davg;</span><br><span class="line">			&#125;</span><br><span class="line">			far = sta[u].dis + cmax * davg;</span><br><span class="line">			ns = u;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span> <span class="keyword">if</span> (u &gt;= <span class="number">0</span> &amp;&amp; min &gt;= sta[ns].price) <span class="comment">//如果下一个反而贵，在当前就加满！</span></span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">if</span> (far &gt;= dall) <span class="comment">//事实证明这一步也很重要，结束的条件并不一定都是u==-1(也就是找不到下一个了)，现在就能去终点，且下一站的油费比现在贵，现在就应该停</span></span><br><span class="line">			&#123;</span><br><span class="line">				<span class="keyword">if</span> (cnow &lt; ((dall - sta[ns].dis) / davg))</span><br><span class="line">				&#123;</span><br><span class="line">					cost += ((dall - sta[ns].dis) / davg - cnow) * sta[ns].price;</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="built_in">printf</span>(<span class="string">&quot;%.2f&quot;</span>, cost);</span><br><span class="line">				<span class="keyword">break</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			cost += (cmax - cnow) * sta[ns].price;</span><br><span class="line">			cnow = cmax - (sta[u].dis - sta[ns].dis) / davg;</span><br><span class="line">			far = sta[u].dis + cmax * davg;</span><br><span class="line">			ns = u;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span> <span class="keyword">if</span> (u == <span class="number">-1</span> &amp;&amp; far &gt;= dall)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">if</span> (cnow &lt; ((dall - sta[ns].dis) / davg))</span><br><span class="line">			&#123;</span><br><span class="line">				cost += ((dall - sta[ns].dis) / davg - cnow) * sta[ns].price;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="built_in">printf</span>(<span class="string">&quot;%.2f&quot;</span>, cost);</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span> <span class="keyword">if</span> (u == <span class="number">-1</span> &amp;&amp; far &lt; dall)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="built_in">printf</span>(<span class="string">&quot;The maximum travel distance = %.2f&quot;</span>, far);</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>下一个加油站的选择，不是可到达范围里油费最便宜的，而是第一个比当前加油站油费便宜的！这一步自己刚开始一直是错的orz，典型的想当然</p>
-<p>如果不能找到更便宜的下一站，这一站要加满。</p>
-<p>还有一个点是判断结束的条件，现在可到达终点且之后的都贵，就可以停了。</p>]]></content>
-      <categories>
-        <category>所学</category>
-        <category>PAT</category>
-      </categories>
-      <tags>
-        <tag>PAT</tag>
-        <tag>贪心</tag>
       </tags>
   </entry>
   <entry>
@@ -1941,27 +1941,6 @@
       </tags>
   </entry>
   <entry>
-    <title>没有色彩的多崎作和他的巡礼之年 摘</title>
-    <url>/2020/02/28/%E5%A4%9A%E5%B4%8E%E4%BD%9Cnotes/</url>
-    <content><![CDATA[<p>厨师仇恨服务生，他们一起仇恨客人””灰田说道。“出自于阿诺德韦斯克(Arnold Wesker)的一部戏剧“厨房the kitchen”。被剥夺了自由的人一定会开始仇恨别人。你不这么觉得呢？我不愿过这样的生活。”</p>
-<hr>
-<p>也许我就是这样的命运，注定最后变成孤身一人。作忍不住的要这么想。大家都这样到他身边，不久之后又离开了。他们想要在作身上寻求些什么，但却没能找到，或是说找到了也不令他们满意，然后放弃了（或是失望了，愤怒了）离开了他。在某一天，他们出其不意地消失了，没有解释，就连像样的招呼都不打一个。就像纽带还流着温热鲜血，尚且还有脉搏，就被人用锋利的大刀利索地切断了一般。 自己身上一定有些根本性的，让人失望的东西存在。他发出声音说道，缺少颜色的多崎作。</p>
-<hr>
-<p>没有办法啊，作对自己是，不过是原本空荡荡的东西又重新变回空荡荡而已啊。又能向谁诉苦呢？大家都来到他身边，然后确认了他有多么虚无之后，又离开他去了别处。虚无的、或是说更加虚无的多崎作又被剩了下来。不过就这么回事罢了。</p>
-<hr>
-<p>作觉得，大概。我是毫无内容的一个空虚之人。但也正因为是空荡荡的，就算一段时间也罢，总有人为了这份空缺而来，就像在夜间活动的孤鸟，找一处无人住的阁楼当做白天安全的休憩处那样。鸟儿们好像很喜欢空旷静默而昏暗的空间。这样的话，作倒应该庆幸自己的空虚了。</p>
-<hr>
-<p>「并不是一切都会消失在时间之流里。」 这是作在芬兰的湖畔,和惠理临别时该传达的话—但那时候说不出话来。 「我们那时候强烈地相信什麽,拥有可以强烈相信什麽的自己。那种心倩并不会就那样空虚地消失掉。</p>
-<hr>
-<p><code>高中一个暑假读的吧...现在想起来，高中读的最多的一是村上二是黑塞。荒原狼太适合中二时期的高中生读了，当时那种人手一本荒原狼在课桌抽屉里摊着的情景想想还是很乌托邦。要是高中先看春雪而不是金阁寺的话，那我会在那个时候就喜欢上三岛吧。三岛和黑塞，那就真和我特别喜欢的学姐喜好一模一样了。那时候的自己是不是也算痴汉了...找学校里印的各种作文选，各种校园杂志，甚至高一届的模考作文范文，就想看看崇敬的学姐的文章...也完全不认识人家，觉得那样好像就能心灵相通一样...</code></p>
-<p><code>当时觉得自己很像多崎作。自己就是个空壳，不能自洽，完全不懂自己有什么底气可以理所当然，自己首先边缘化自己。</code></p>
-]]></content>
-      <categories>
-        <category>所读</category>
-        <category>Kindle clippings</category>
-      </categories>
-  </entry>
-  <entry>
     <title>Win10 下 Linux 子系统 (WSL) 配置小记</title>
     <url>/2021/03/21/wsl/</url>
     <content><![CDATA[<h2 id="网络代理配置"><a href="#网络代理配置" class="headerlink" title="网络代理配置"></a>网络代理配置</h2><p>刚开始用 <code>apt-get</code> 就被卡到。</p>
@@ -1998,6 +1977,27 @@
       <categories>
         <category>所思</category>
         <category>废话啦</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>没有色彩的多崎作和他的巡礼之年 摘</title>
+    <url>/2020/02/28/%E5%A4%9A%E5%B4%8E%E4%BD%9Cnotes/</url>
+    <content><![CDATA[<p>厨师仇恨服务生，他们一起仇恨客人””灰田说道。“出自于阿诺德韦斯克(Arnold Wesker)的一部戏剧“厨房the kitchen”。被剥夺了自由的人一定会开始仇恨别人。你不这么觉得呢？我不愿过这样的生活。”</p>
+<hr>
+<p>也许我就是这样的命运，注定最后变成孤身一人。作忍不住的要这么想。大家都这样到他身边，不久之后又离开了。他们想要在作身上寻求些什么，但却没能找到，或是说找到了也不令他们满意，然后放弃了（或是失望了，愤怒了）离开了他。在某一天，他们出其不意地消失了，没有解释，就连像样的招呼都不打一个。就像纽带还流着温热鲜血，尚且还有脉搏，就被人用锋利的大刀利索地切断了一般。 自己身上一定有些根本性的，让人失望的东西存在。他发出声音说道，缺少颜色的多崎作。</p>
+<hr>
+<p>没有办法啊，作对自己是，不过是原本空荡荡的东西又重新变回空荡荡而已啊。又能向谁诉苦呢？大家都来到他身边，然后确认了他有多么虚无之后，又离开他去了别处。虚无的、或是说更加虚无的多崎作又被剩了下来。不过就这么回事罢了。</p>
+<hr>
+<p>作觉得，大概。我是毫无内容的一个空虚之人。但也正因为是空荡荡的，就算一段时间也罢，总有人为了这份空缺而来，就像在夜间活动的孤鸟，找一处无人住的阁楼当做白天安全的休憩处那样。鸟儿们好像很喜欢空旷静默而昏暗的空间。这样的话，作倒应该庆幸自己的空虚了。</p>
+<hr>
+<p>「并不是一切都会消失在时间之流里。」 这是作在芬兰的湖畔,和惠理临别时该传达的话—但那时候说不出话来。 「我们那时候强烈地相信什麽,拥有可以强烈相信什麽的自己。那种心倩并不会就那样空虚地消失掉。</p>
+<hr>
+<p><code>高中一个暑假读的吧...现在想起来，高中读的最多的一是村上二是黑塞。荒原狼太适合中二时期的高中生读了，当时那种人手一本荒原狼在课桌抽屉里摊着的情景想想还是很乌托邦。要是高中先看春雪而不是金阁寺的话，那我会在那个时候就喜欢上三岛吧。三岛和黑塞，那就真和我特别喜欢的学姐喜好一模一样了。那时候的自己是不是也算痴汉了...找学校里印的各种作文选，各种校园杂志，甚至高一届的模考作文范文，就想看看崇敬的学姐的文章...也完全不认识人家，觉得那样好像就能心灵相通一样...</code></p>
+<p><code>当时觉得自己很像多崎作。自己就是个空壳，不能自洽，完全不懂自己有什么底气可以理所当然，自己首先边缘化自己。</code></p>
+]]></content>
+      <categories>
+        <category>所读</category>
+        <category>Kindle clippings</category>
       </categories>
   </entry>
   <entry>
@@ -2057,54 +2057,6 @@
         <category>所读</category>
         <category>Kindle clippings</category>
       </categories>
-  </entry>
-  <entry>
-    <title>语言学概论 笔记</title>
-    <url>/2020/04/05/%E8%AF%AD%E8%A8%80%E5%AD%A6%E6%A6%82%E7%8E%87-%E7%AC%94%E8%AE%B0/</url>
-    <content><![CDATA[<h1 id="CH1-语言能力与语言系统"><a href="#CH1-语言能力与语言系统" class="headerlink" title="CH1 语言能力与语言系统"></a>CH1 语言能力与语言系统</h1><h2 id="易境性"><a href="#易境性" class="headerlink" title="易境性"></a>易境性</h2><p>动物交流的特点：在场。在场与直接经验。人类不必在场传递经验，关键在语言。通过语言传递知识与经验，不必在场。</p>
-<h2 id="还原生成性"><a href="#还原生成性" class="headerlink" title="还原生成性"></a>还原生成性</h2><p>基于类推原则的还原生成能力。从单词到句子，是一种创造性行为。乔姆斯基：语言是有限规则和单位生成无限的句子。</p>
-<p>还原生成能力：通过有限的句子还原出有限的规则和单位，并通过这些单位生成无限的句子。</p>
-<p>人类语言学习的自然还原能力。只要存在一定数量的句子，不需要人为切分，就可以还原出有限的规则和单位，生产无限的句子。(我们不必看过全部的句子，自然通过对比就实现切分)(小孩是如何自然学习语法的。成人所总结的语法未必是正确的。所以我们希望学习方法论。)</p>
-<p>动物语言能力。呼叫或姿态大多是整体，句子有限。</p>
-<h2 id="任意性"><a href="#任意性" class="headerlink" title="任意性"></a>任意性</h2><p>语言能力在特定文化中的运用形成语言系统。核心部分：</p>
-<ul>
-<li>基于任意性的符号编码能力</li>
-<li>基于类推性的还原生成能力</li>
-<li>区分两种基本单位的能力(体现为符号的两层性)</li>
-</ul>
-<p>编码能力：能在任意性原则上把所指和能指结合成符号的能力</p>
-<p>任意性：词的语音形式A和意义B的关系是任意的</p>
-<p>动物语言的形式与意义之间任意性成分很少。</p>
-<p>我们的符号系统里加入的非任意性的成分，不是语言学符号，是象征。</p>
-<p>反对任意性原则的学说可以称为音义关联说。证据：拟声说，右文说。</p>
-<p>拟声不是自然语音的必要条件。声音的临摹，语序的临摹，这两种临摹方式是有限的。</p>
-<p>右文说的本质：引申</p>
-<p>任意性，支持材料：</p>
-<ul>
-<li>同一个概念在不同的语言中声音不一样</li>
-<li>语言中有大量的虚词、抽象词无法象声</li>
-</ul>
-<h2 id="两层性"><a href="#两层性" class="headerlink" title="两层性"></a>两层性</h2><p>自然语言有两种最基本的单位：</p>
-<ul>
-<li><p>音位</p>
-<p>区别意义的单位</p>
-</li>
-<li><p>语素</p>
-<p>表达意义的单位</p>
-</li>
-</ul>
-<p>两层性的文化功能在于用最少的区别性表达尽可能多的符号。</p>
-<p>两层性意味着可以用有限的手段(主要是语音)产生无限的符号形式(和有限的符号产生无限的符号组合不一样)</p>
-<p>人类自然语音从低到高有音位层、音节层、语素层、词汇层、词组层、句子层。音位系统是区别意义层，语素系统是表达意义层。</p>
-<p>一般认为汉语中有27个音质音位。</p>
-<p>语音是人类社会的一部分。是我们先天还是后天的能力。即使有先天的语言能力，必须有后天的交流环境，语言系统。语言学习关键期。</p>
-<h1 id="CH2-语言和思维"><a href="#CH2-语言和思维" class="headerlink" title="CH2 语言和思维"></a>CH2 语言和思维</h1>]]></content>
-      <categories>
-        <category>所学</category>
-      </categories>
-      <tags>
-        <tag>语言学</tag>
-      </tags>
   </entry>
   <entry>
     <title>春雪 摘</title>
@@ -2243,56 +2195,52 @@
       </categories>
   </entry>
   <entry>
-    <title>那不勒斯四部曲：离开的，留下的 摘</title>
-    <url>/2020/02/28/%E9%82%A3%E4%B8%8D%E5%8B%92%E6%96%AF3/</url>
-    <content><![CDATA[<p>哦，或者不行，我太学究了，太无知了，太有控制力了，太习惯于冷静地生活，存储那些思想和数据，我太接近于婚姻和最后的归宿了，总之我太愚钝了，我把自己安置在已经日薄西山的秩序里。</p>
-<hr>
-<p>拉法埃拉·赛鲁罗被销毁了，她已经失去了自己的形状，她已经融化在斯特凡诺的轮廓里，成为了他的附属品：卡拉奇太太。</p>
-<hr>
-<p>我们就这样走了一个小时，边走边聊。陌生人在我们周围熙熙攘攘，说的都是很粗鲁的方言，<u>我们觉得自己独一无二，只有我和他，用那种非常考究的意大利语，说着只有我们感兴趣、其他人不了解的话题</u>。我们在做什么呢？在进行一场讨论吗？在为我们的未来做准备吗？来面对那些和我们一样，学会了使用语言的人们吗？<u>我们在进行符号的交流，就是为了证实我们漫长的友谊是有基础的，而且会产生丰硕的结果吗</u>？是<u>对情欲的一种文雅的掩饰</u>？我不知道，我对于那些话题没有什么兴趣，对于他提出的那些真实的人和事件也没有激情。那不是因为教养，也不是因为习惯，我只是像往常一样，不想丢脸而已。</p>
-<p><code>莱农在第二部里很多这样的内心活动，太熟悉了。太真实了。我们的痛点。</code></p>
-<hr>
-<p>他迫切地需要表达自己，复述他读过的东西，表达自己观察到的事物。这是他整理自己的思想的方式——谈话，谈话，谈话，但我想这也是他寂寞的一种表现。我觉得自己和他很像，这让我觉得很自豪，我和他一样都想塑造自己作为读书人的形象，并且让别人承认这一点，就像在说：<u>这就是我所知道的事情，这就是我要成为的人。</u></p>
-<hr>
-<p>她几乎一直在用方言说话，就好像要表现出谦卑和虚心：我不矫饰，我用我的话来说。她非常诚恳地把那些散乱的事实列举出来，没有像往常一样用一条主线把它们联系起来。</p>
-<hr>
-<p>从那时开始，我为我们度过午后的方式感到懊悔，因为我们一直在紧张地聊天，他迫不及待地表达自己的想法，我也焦急地想说出一些概念，想得到他的认同，再也没有那种他拉着我的手的时刻，他也没有再邀请我坐到他的毛巾上。当我看到布鲁诺和皮诺奇娅为一些很简单的事情哈哈大笑，我很嫉妒他们。我多想和尼诺一起，像他们那样哈哈大笑，我什么也不想要，只希望我们能亲密一点，就像皮诺奇娅和布鲁诺那样就行，我并不奢求太多。</p>
-<hr>
-<p>尽管我一直推着自己向前走，实际上我一直随时准备后退？为什么当事情行不通时，我总是做出一副甜美的笑脸，发出幸福的笑声？为什么我迟早都要给那些让我遭受痛苦的人找到合理的理由？</p>
-<hr>
-<p>只有在这种不可实现的情况下，在大海中央，尼诺给莉拉的那个吻才说得过去。</p>
-<hr>
-<p>最让我感到震撼的是，他从来没有把自己的个人的问题，转化成一个普遍的问题，就像他通常会做的那样。他只谈论他和莉拉，莉拉和他，他没有谈论爱情。他没有说他为什么爱这个人，而不是另一个人。</p>
-<hr>
-<p>是的，莉拉说得对，事情的美丽都是一种假象，天空是让人恐惧的苍穹；我现在活着，距我十步之遥就是海水，这一点儿也不美，这是让人恐惧的情景；我是这个沙滩、这片海的一部分，我是熙熙攘攘的万物中的一员。这是一种宇宙性的恐怖；这时候，我是一个无穷小的分子，通过这个分子，我能觉察到对万物的恐惧；</p>
-<hr>
-<p>我会明白她遭遇了一种我可以了解的东西，那是我对于尼诺的感受，但实际上我并不了解那种感受，也许我永远也不会了解，我只能浮光掠影，有一点粗浅的感觉。我会明白她不是在玩一场夏天的轻浮游戏，而是内心感受到一种极端强烈的冲击，这种感觉从头到脚席卷了她。</p>
-<hr>
-<p>是的，是莉拉让我的讲述变得艰难。我的生活推动着我，我总是想象着假如她在我的位置上，假如她有这份幸运，她会怎么做。她的生活不停出现在我的对面，出现在我说的话里，出现在我的那些决绝的动作里。我的话里常常有她影响的痕迹，是她在暗地里左右着我，有时候多一点，有时候少一些。我还没有考虑过那些她从来没说过的话，那些我可以推测到的话，那些我不知道的事情，后来我在她的笔记里读到的事情，都是经过过滤的，有些是真的，有很多隐含的事情，还有的是谎言。所有的这些事情，都带着对逝去的时光的艰难衡量，而这一切都建立在不可靠的语言的基础之上。</p>
-<hr>
-<p>但莉拉并没有坐以待毙，对于她来说，世界就好像一盘棋，只要移开一道绘制的背景，移动一下棋子，就可以别开生面。</p>
-<hr>
-<p>在这对父女身上，我看到了我从来没有过的体验，我永远都不可能有的体验。这种体验是什么呢？我一时也无法具体地说出来，那也许是一种因训练而得来的能力，让世界上的事情成为自己私事的能力；</p>
-<hr>
-<p>哦，或者不行，我太学究了，太无知了，太有控制力了，太习惯于冷静地生活，存储那些思想和数据，我太接近于婚姻和最后的归宿了，总之我太愚钝了，我把自己安置在已经日薄西山的秩序里。</p>
-<hr>
-<p>“这本书里没什么重要的内容，埃莱娜，你觉得在那些小情小爱，还有你隐藏的往上爬的狂热里，有什么值得讲述的东西？” “也就是说？” “算了吧，谈话已经结束了，我们要休息了。”他尽量做出一副开玩笑的样子，但实际上，他还是保留了那种新语气——一个肩负重要使命的人所采用的语气，其他事对他来说已经不重要了。“你已经尽了最大努力，不是吗？但客观上来说，这不是写小说的时候。”</p>
-<hr>
-<p>“我们从小有一个约定：我是那个坏女孩。”</p>
-<p><code>我知道这很俗气。但我真的很想哭。</code></p>
-<hr>
-<p>“别让我再读别的东西了，我不适合。我对你期望很高，我非常肯定，你能做得很好，我希望你做得更好，这是我最渴望的事儿。假如你不是很棒的话，那我是谁？我是谁呢？”</p>
-<hr>
-<p>我是他的妻子，一个受过高等教育的妻子，他期望在他谈论政治、他的研究，以及他正焚膏继晷、踌躇满怀写的新书时，我能仔细听他的话，但这种关注只是情感方面的，他不想听到我的看法，尤其是当我对他表示怀疑时。他对我说话，那就像他在大声思考，只是想让自己思路清晰。</p>
-<hr>
-<p>我说，对于弗朗科来说，我是他的延伸，是他女性的一面，这构建了他的权力，展示出他不仅仅能成为一个理想的男人，也能成为一个理想的女人。现在，他感觉我不再是他的一部分，他觉得我背叛了他。”</p>
-<hr>
-<p><code>说实话，我不怎么排斥弗朗科。我觉得弗朗科其实可以说是莱农的一个踏板了。但第三部看的很灰暗，看完之后在豆瓣上写，是不是人到中年之后，生活的表面崩开也只剩泥沙俱下了。所以放弃看第四部了。</code></p>
-]]></content>
+    <title>语言学概论 笔记</title>
+    <url>/2020/04/05/%E8%AF%AD%E8%A8%80%E5%AD%A6%E6%A6%82%E7%8E%87-%E7%AC%94%E8%AE%B0/</url>
+    <content><![CDATA[<h1 id="CH1-语言能力与语言系统"><a href="#CH1-语言能力与语言系统" class="headerlink" title="CH1 语言能力与语言系统"></a>CH1 语言能力与语言系统</h1><h2 id="易境性"><a href="#易境性" class="headerlink" title="易境性"></a>易境性</h2><p>动物交流的特点：在场。在场与直接经验。人类不必在场传递经验，关键在语言。通过语言传递知识与经验，不必在场。</p>
+<h2 id="还原生成性"><a href="#还原生成性" class="headerlink" title="还原生成性"></a>还原生成性</h2><p>基于类推原则的还原生成能力。从单词到句子，是一种创造性行为。乔姆斯基：语言是有限规则和单位生成无限的句子。</p>
+<p>还原生成能力：通过有限的句子还原出有限的规则和单位，并通过这些单位生成无限的句子。</p>
+<p>人类语言学习的自然还原能力。只要存在一定数量的句子，不需要人为切分，就可以还原出有限的规则和单位，生产无限的句子。(我们不必看过全部的句子，自然通过对比就实现切分)(小孩是如何自然学习语法的。成人所总结的语法未必是正确的。所以我们希望学习方法论。)</p>
+<p>动物语言能力。呼叫或姿态大多是整体，句子有限。</p>
+<h2 id="任意性"><a href="#任意性" class="headerlink" title="任意性"></a>任意性</h2><p>语言能力在特定文化中的运用形成语言系统。核心部分：</p>
+<ul>
+<li>基于任意性的符号编码能力</li>
+<li>基于类推性的还原生成能力</li>
+<li>区分两种基本单位的能力(体现为符号的两层性)</li>
+</ul>
+<p>编码能力：能在任意性原则上把所指和能指结合成符号的能力</p>
+<p>任意性：词的语音形式A和意义B的关系是任意的</p>
+<p>动物语言的形式与意义之间任意性成分很少。</p>
+<p>我们的符号系统里加入的非任意性的成分，不是语言学符号，是象征。</p>
+<p>反对任意性原则的学说可以称为音义关联说。证据：拟声说，右文说。</p>
+<p>拟声不是自然语音的必要条件。声音的临摹，语序的临摹，这两种临摹方式是有限的。</p>
+<p>右文说的本质：引申</p>
+<p>任意性，支持材料：</p>
+<ul>
+<li>同一个概念在不同的语言中声音不一样</li>
+<li>语言中有大量的虚词、抽象词无法象声</li>
+</ul>
+<h2 id="两层性"><a href="#两层性" class="headerlink" title="两层性"></a>两层性</h2><p>自然语言有两种最基本的单位：</p>
+<ul>
+<li><p>音位</p>
+<p>区别意义的单位</p>
+</li>
+<li><p>语素</p>
+<p>表达意义的单位</p>
+</li>
+</ul>
+<p>两层性的文化功能在于用最少的区别性表达尽可能多的符号。</p>
+<p>两层性意味着可以用有限的手段(主要是语音)产生无限的符号形式(和有限的符号产生无限的符号组合不一样)</p>
+<p>人类自然语音从低到高有音位层、音节层、语素层、词汇层、词组层、句子层。音位系统是区别意义层，语素系统是表达意义层。</p>
+<p>一般认为汉语中有27个音质音位。</p>
+<p>语音是人类社会的一部分。是我们先天还是后天的能力。即使有先天的语言能力，必须有后天的交流环境，语言系统。语言学习关键期。</p>
+<h1 id="CH2-语言和思维"><a href="#CH2-语言和思维" class="headerlink" title="CH2 语言和思维"></a>CH2 语言和思维</h1>]]></content>
       <categories>
-        <category>所读</category>
-        <category>Kindle clippings</category>
+        <category>所学</category>
       </categories>
+      <tags>
+        <tag>语言学</tag>
+      </tags>
   </entry>
   <entry>
     <title>赎罪 摘</title>
@@ -2375,6 +2323,58 @@
 <p>在这对父女身上，我看到了我从来没有过的体验，我永远都不可能有的体验。这种体验是什么呢？我一时也无法具体地说出来，那也许是一种因训练而得来的能力，让世界上的事情成为自己私事的能力；</p>
 <hr>
 <p><code>毋庸置疑，第二部是观感最精彩的一部。尤其是先看了第一部的电视剧，再开始读第二部，整个画面感太融洽了，而且你本人也并不会很抗拒先入为主的印象抹杀了你想象力的可能性，因为贴合度太高。</code></p>
+]]></content>
+      <categories>
+        <category>所读</category>
+        <category>Kindle clippings</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>那不勒斯四部曲：离开的，留下的 摘</title>
+    <url>/2020/02/28/%E9%82%A3%E4%B8%8D%E5%8B%92%E6%96%AF3/</url>
+    <content><![CDATA[<p>哦，或者不行，我太学究了，太无知了，太有控制力了，太习惯于冷静地生活，存储那些思想和数据，我太接近于婚姻和最后的归宿了，总之我太愚钝了，我把自己安置在已经日薄西山的秩序里。</p>
+<hr>
+<p>拉法埃拉·赛鲁罗被销毁了，她已经失去了自己的形状，她已经融化在斯特凡诺的轮廓里，成为了他的附属品：卡拉奇太太。</p>
+<hr>
+<p>我们就这样走了一个小时，边走边聊。陌生人在我们周围熙熙攘攘，说的都是很粗鲁的方言，<u>我们觉得自己独一无二，只有我和他，用那种非常考究的意大利语，说着只有我们感兴趣、其他人不了解的话题</u>。我们在做什么呢？在进行一场讨论吗？在为我们的未来做准备吗？来面对那些和我们一样，学会了使用语言的人们吗？<u>我们在进行符号的交流，就是为了证实我们漫长的友谊是有基础的，而且会产生丰硕的结果吗</u>？是<u>对情欲的一种文雅的掩饰</u>？我不知道，我对于那些话题没有什么兴趣，对于他提出的那些真实的人和事件也没有激情。那不是因为教养，也不是因为习惯，我只是像往常一样，不想丢脸而已。</p>
+<p><code>莱农在第二部里很多这样的内心活动，太熟悉了。太真实了。我们的痛点。</code></p>
+<hr>
+<p>他迫切地需要表达自己，复述他读过的东西，表达自己观察到的事物。这是他整理自己的思想的方式——谈话，谈话，谈话，但我想这也是他寂寞的一种表现。我觉得自己和他很像，这让我觉得很自豪，我和他一样都想塑造自己作为读书人的形象，并且让别人承认这一点，就像在说：<u>这就是我所知道的事情，这就是我要成为的人。</u></p>
+<hr>
+<p>她几乎一直在用方言说话，就好像要表现出谦卑和虚心：我不矫饰，我用我的话来说。她非常诚恳地把那些散乱的事实列举出来，没有像往常一样用一条主线把它们联系起来。</p>
+<hr>
+<p>从那时开始，我为我们度过午后的方式感到懊悔，因为我们一直在紧张地聊天，他迫不及待地表达自己的想法，我也焦急地想说出一些概念，想得到他的认同，再也没有那种他拉着我的手的时刻，他也没有再邀请我坐到他的毛巾上。当我看到布鲁诺和皮诺奇娅为一些很简单的事情哈哈大笑，我很嫉妒他们。我多想和尼诺一起，像他们那样哈哈大笑，我什么也不想要，只希望我们能亲密一点，就像皮诺奇娅和布鲁诺那样就行，我并不奢求太多。</p>
+<hr>
+<p>尽管我一直推着自己向前走，实际上我一直随时准备后退？为什么当事情行不通时，我总是做出一副甜美的笑脸，发出幸福的笑声？为什么我迟早都要给那些让我遭受痛苦的人找到合理的理由？</p>
+<hr>
+<p>只有在这种不可实现的情况下，在大海中央，尼诺给莉拉的那个吻才说得过去。</p>
+<hr>
+<p>最让我感到震撼的是，他从来没有把自己的个人的问题，转化成一个普遍的问题，就像他通常会做的那样。他只谈论他和莉拉，莉拉和他，他没有谈论爱情。他没有说他为什么爱这个人，而不是另一个人。</p>
+<hr>
+<p>是的，莉拉说得对，事情的美丽都是一种假象，天空是让人恐惧的苍穹；我现在活着，距我十步之遥就是海水，这一点儿也不美，这是让人恐惧的情景；我是这个沙滩、这片海的一部分，我是熙熙攘攘的万物中的一员。这是一种宇宙性的恐怖；这时候，我是一个无穷小的分子，通过这个分子，我能觉察到对万物的恐惧；</p>
+<hr>
+<p>我会明白她遭遇了一种我可以了解的东西，那是我对于尼诺的感受，但实际上我并不了解那种感受，也许我永远也不会了解，我只能浮光掠影，有一点粗浅的感觉。我会明白她不是在玩一场夏天的轻浮游戏，而是内心感受到一种极端强烈的冲击，这种感觉从头到脚席卷了她。</p>
+<hr>
+<p>是的，是莉拉让我的讲述变得艰难。我的生活推动着我，我总是想象着假如她在我的位置上，假如她有这份幸运，她会怎么做。她的生活不停出现在我的对面，出现在我说的话里，出现在我的那些决绝的动作里。我的话里常常有她影响的痕迹，是她在暗地里左右着我，有时候多一点，有时候少一些。我还没有考虑过那些她从来没说过的话，那些我可以推测到的话，那些我不知道的事情，后来我在她的笔记里读到的事情，都是经过过滤的，有些是真的，有很多隐含的事情，还有的是谎言。所有的这些事情，都带着对逝去的时光的艰难衡量，而这一切都建立在不可靠的语言的基础之上。</p>
+<hr>
+<p>但莉拉并没有坐以待毙，对于她来说，世界就好像一盘棋，只要移开一道绘制的背景，移动一下棋子，就可以别开生面。</p>
+<hr>
+<p>在这对父女身上，我看到了我从来没有过的体验，我永远都不可能有的体验。这种体验是什么呢？我一时也无法具体地说出来，那也许是一种因训练而得来的能力，让世界上的事情成为自己私事的能力；</p>
+<hr>
+<p>哦，或者不行，我太学究了，太无知了，太有控制力了，太习惯于冷静地生活，存储那些思想和数据，我太接近于婚姻和最后的归宿了，总之我太愚钝了，我把自己安置在已经日薄西山的秩序里。</p>
+<hr>
+<p>“这本书里没什么重要的内容，埃莱娜，你觉得在那些小情小爱，还有你隐藏的往上爬的狂热里，有什么值得讲述的东西？” “也就是说？” “算了吧，谈话已经结束了，我们要休息了。”他尽量做出一副开玩笑的样子，但实际上，他还是保留了那种新语气——一个肩负重要使命的人所采用的语气，其他事对他来说已经不重要了。“你已经尽了最大努力，不是吗？但客观上来说，这不是写小说的时候。”</p>
+<hr>
+<p>“我们从小有一个约定：我是那个坏女孩。”</p>
+<p><code>我知道这很俗气。但我真的很想哭。</code></p>
+<hr>
+<p>“别让我再读别的东西了，我不适合。我对你期望很高，我非常肯定，你能做得很好，我希望你做得更好，这是我最渴望的事儿。假如你不是很棒的话，那我是谁？我是谁呢？”</p>
+<hr>
+<p>我是他的妻子，一个受过高等教育的妻子，他期望在他谈论政治、他的研究，以及他正焚膏继晷、踌躇满怀写的新书时，我能仔细听他的话，但这种关注只是情感方面的，他不想听到我的看法，尤其是当我对他表示怀疑时。他对我说话，那就像他在大声思考，只是想让自己思路清晰。</p>
+<hr>
+<p>我说，对于弗朗科来说，我是他的延伸，是他女性的一面，这构建了他的权力，展示出他不仅仅能成为一个理想的男人，也能成为一个理想的女人。现在，他感觉我不再是他的一部分，他觉得我背叛了他。”</p>
+<hr>
+<p><code>说实话，我不怎么排斥弗朗科。我觉得弗朗科其实可以说是莱农的一个踏板了。但第三部看的很灰暗，看完之后在豆瓣上写，是不是人到中年之后，生活的表面崩开也只剩泥沙俱下了。所以放弃看第四部了。</code></p>
 ]]></content>
       <categories>
         <category>所读</category>
