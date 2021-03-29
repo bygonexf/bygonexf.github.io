@@ -1,6 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Anaconda一些命令</title>
+    <url>/2020/02/29/Anaconda%E4%B8%80%E4%BA%9B%E5%91%BD%E4%BB%A4/</url>
+    <content><![CDATA[<p>创建环境</p>
+<figure class="highlight sas"><table><tr><td class="code"><pre><span class="line">conda <span class="meta">create</span> -n envname python=<span class="meta">x</span>.<span class="meta">x</span></span><br></pre></td></tr></table></figure>
+
+<p>删除环境</p>
+<figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">conda <span class="built_in">remove</span> -n envname <span class="comment">--all</span></span><br></pre></td></tr></table></figure>
+
+<p>进入环境conda activate 退出环境conda deactivate</p>
+<p>列出安装的库</p>
+<figure class="highlight ebnf"><table><tr><td class="code"><pre><span class="line"><span class="attribute">conda list</span></span><br></pre></td></tr></table></figure>
+
+<p>升级所有库</p>
+<figure class="highlight livecodeserver"><table><tr><td class="code"><pre><span class="line">conda upgrade <span class="comment">--all</span></span><br></pre></td></tr></table></figure>
+
+<p>换源</p>
+<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">conda config --add channels https:<span class="regexp">//mi</span>rrors.tuna.tsinghua.edu.cn<span class="regexp">/anaconda/</span>pkgs<span class="regexp">/free/</span></span><br><span class="line"></span><br><span class="line">conda config --add channels https:<span class="regexp">//mi</span>rrors.tuna.tsinghua.edu.cn<span class="regexp">/anaconda/</span>pkgs<span class="regexp">/main/</span></span><br><span class="line"></span><br><span class="line">conda config --set show_channel_urls yes</span><br></pre></td></tr></table></figure>
+
+<p>pip install -i <a href="https://pypi.tuna.tsinghua.edu.cn/simple">https://pypi.tuna.tsinghua.edu.cn/simple</a> xxx</p>
+]]></content>
+      <categories>
+        <category>所学</category>
+        <category>折腾</category>
+      </categories>
+  </entry>
+  <entry>
     <title>Hexo NexT 主题优化</title>
     <url>/2020/02/10/Hexo%20Next%20%E4%B8%BB%E9%A2%98%E4%BC%98%E5%8C%96/</url>
     <content><![CDATA[<h2 id="已折腾的优化"><a href="#已折腾的优化" class="headerlink" title="已折腾的优化"></a>已折腾的优化</h2><ol>
@@ -66,32 +92,6 @@
 <li> <a href="https://uigradients.com/#SublimeLight">uiGradients - Beautiful colored gradients</a> </li>
 <li> <a href="https://www.emojicopy.com/">EmojiCopy | Simple emoji copy and paste by JoyPixels™</a> </li>
 </ul>
-]]></content>
-      <categories>
-        <category>所学</category>
-        <category>折腾</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>Anaconda一些命令</title>
-    <url>/2020/02/29/Anaconda%E4%B8%80%E4%BA%9B%E5%91%BD%E4%BB%A4/</url>
-    <content><![CDATA[<p>创建环境</p>
-<figure class="highlight sas"><table><tr><td class="code"><pre><span class="line">conda <span class="meta">create</span> -n envname python=<span class="meta">x</span>.<span class="meta">x</span></span><br></pre></td></tr></table></figure>
-
-<p>删除环境</p>
-<figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">conda <span class="built_in">remove</span> -n envname <span class="comment">--all</span></span><br></pre></td></tr></table></figure>
-
-<p>进入环境conda activate 退出环境conda deactivate</p>
-<p>列出安装的库</p>
-<figure class="highlight ebnf"><table><tr><td class="code"><pre><span class="line"><span class="attribute">conda list</span></span><br></pre></td></tr></table></figure>
-
-<p>升级所有库</p>
-<figure class="highlight livecodeserver"><table><tr><td class="code"><pre><span class="line">conda upgrade <span class="comment">--all</span></span><br></pre></td></tr></table></figure>
-
-<p>换源</p>
-<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">conda config --add channels https:<span class="regexp">//mi</span>rrors.tuna.tsinghua.edu.cn<span class="regexp">/anaconda/</span>pkgs<span class="regexp">/free/</span></span><br><span class="line"></span><br><span class="line">conda config --add channels https:<span class="regexp">//mi</span>rrors.tuna.tsinghua.edu.cn<span class="regexp">/anaconda/</span>pkgs<span class="regexp">/main/</span></span><br><span class="line"></span><br><span class="line">conda config --set show_channel_urls yes</span><br></pre></td></tr></table></figure>
-
-<p>pip install -i <a href="https://pypi.tuna.tsinghua.edu.cn/simple">https://pypi.tuna.tsinghua.edu.cn/simple</a> xxx</p>
 ]]></content>
       <categories>
         <category>所学</category>
@@ -1269,49 +1269,6 @@
       </tags>
   </entry>
   <entry>
-    <title>操作系统笔记 CH6 Process Synchronization</title>
-    <url>/2020/02/28/OS6/</url>
-    <content><![CDATA[<p>race condition: 多个进程并发访问和操作同一数据，结果与访问顺序有关</p>
-<h2 id="critical-section"><a href="#critical-section" class="headerlink" title="critical section"></a>critical section</h2><img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573274792092.png" style="zoom:50%;" />
-
-<p>critical section: 进程可能改变共同变量，更新表，写文件的代码段</p>
-<p>entry section: 实现请求进入其临界区的代码段</p>
-<p>临界区问题三要求：</p>
-<ul>
-<li>mutual exclusion 同一时间临界区存在一个进程</li>
-<li>progress 如果一个进程想进入临界区，它终将成功</li>
-<li>bounded waiting 从一个进程做出进入临界区的请求，到该请求被允许，其他进程允许进入临界区的次数有限</li>
-</ul>
-<p>kernel code可能会出现race condition</p>
-<p>两种方法: 1.preemptive kernel 2.non-preemptive kernel 抢占内核更适合real-time programming,且更responsive</p>
-<h2 id="Peterson’s-solution"><a href="#Peterson’s-solution" class="headerlink" title="Peterson’s solution"></a>Peterson’s solution</h2><p>software-based solution to the critical section problem 基于软件</p>
-<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573283076982.png" style="zoom:50%;" />
-
-<h2 id="synchronization-hardware"><a href="#synchronization-hardware" class="headerlink" title="synchronization hardware"></a>synchronization hardware</h2><p>基于硬件</p>
-<p>特殊硬件指令 原子地(不可中断)检查、修改、交换字内容</p>
-<p>disable interrupt, a lock</p>
-<p>TestAndSet()</p>
-<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573283946058.png" style="zoom:67%;" />
-
-<p>返回的是原来的值，进入过testandset，之后就变成true</p>
-<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573284042418.png" style="zoom:67%;" />
-
-
-
-<p>实现有限等待互斥：</p>
-<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573284642763.png" style="zoom:67%;" />
-
-]]></content>
-      <categories>
-        <category>所学</category>
-        <category>计算机基础</category>
-      </categories>
-      <tags>
-        <tag>操作系统</tag>
-        <tag>专业课笔记</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>操作系统笔记 CH5 CPU Scheduling</title>
     <url>/2020/02/28/OS5/</url>
     <content><![CDATA[<p>dispatcher: gives control of the CPU to the process selected by the short-term scheduler;</p>
@@ -1405,6 +1362,49 @@
 <img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573271651221.png" style="zoom:50%;" />
 
 <p>simulation模拟 trace tape</p>
+]]></content>
+      <categories>
+        <category>所学</category>
+        <category>计算机基础</category>
+      </categories>
+      <tags>
+        <tag>操作系统</tag>
+        <tag>专业课笔记</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>操作系统笔记 CH6 Process Synchronization</title>
+    <url>/2020/02/28/OS6/</url>
+    <content><![CDATA[<p>race condition: 多个进程并发访问和操作同一数据，结果与访问顺序有关</p>
+<h2 id="critical-section"><a href="#critical-section" class="headerlink" title="critical section"></a>critical section</h2><img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573274792092.png" style="zoom:50%;" />
+
+<p>critical section: 进程可能改变共同变量，更新表，写文件的代码段</p>
+<p>entry section: 实现请求进入其临界区的代码段</p>
+<p>临界区问题三要求：</p>
+<ul>
+<li>mutual exclusion 同一时间临界区存在一个进程</li>
+<li>progress 如果一个进程想进入临界区，它终将成功</li>
+<li>bounded waiting 从一个进程做出进入临界区的请求，到该请求被允许，其他进程允许进入临界区的次数有限</li>
+</ul>
+<p>kernel code可能会出现race condition</p>
+<p>两种方法: 1.preemptive kernel 2.non-preemptive kernel 抢占内核更适合real-time programming,且更responsive</p>
+<h2 id="Peterson’s-solution"><a href="#Peterson’s-solution" class="headerlink" title="Peterson’s solution"></a>Peterson’s solution</h2><p>software-based solution to the critical section problem 基于软件</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573283076982.png" style="zoom:50%;" />
+
+<h2 id="synchronization-hardware"><a href="#synchronization-hardware" class="headerlink" title="synchronization hardware"></a>synchronization hardware</h2><p>基于硬件</p>
+<p>特殊硬件指令 原子地(不可中断)检查、修改、交换字内容</p>
+<p>disable interrupt, a lock</p>
+<p>TestAndSet()</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573283946058.png" style="zoom:67%;" />
+
+<p>返回的是原来的值，进入过testandset，之后就变成true</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573284042418.png" style="zoom:67%;" />
+
+
+
+<p>实现有限等待互斥：</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573284642763.png" style="zoom:67%;" />
+
 ]]></content>
       <categories>
         <category>所学</category>
@@ -1942,6 +1942,120 @@
       </categories>
   </entry>
   <entry>
+    <title>也许是什么的开始...</title>
+    <url>/2019/09/07/%E4%B9%9F%E8%AE%B8%E6%98%AF%E4%BB%80%E4%B9%88%E7%9A%84%E5%BC%80%E5%A7%8B/</url>
+    <content><![CDATA[<p>感觉自己不学无术…</p>
+<p>夜里12点了，在宿舍床上的电脑桌上敲我的第一篇博客。</p>
+<p>如题，希望是什么的开始。</p>
+<p>TBC</p>]]></content>
+      <categories>
+        <category>所思</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>多媒体基础知识</title>
+    <url>/2021/03/29/multimedia-basics/</url>
+    <content><![CDATA[<h2 id="图像数值表示"><a href="#图像数值表示" class="headerlink" title="图像数值表示"></a>图像数值表示</h2><h3 id="分辨率"><a href="#分辨率" class="headerlink" title="分辨率"></a>分辨率</h3><p>分辨率的基础单位是像素。1280 * 720 P 的分辨率代表共有 1280 * 720 个像素点。</p>
+<p>一台物理设备出厂时就已经定下了它所能拥有的最大像素点是多少。电脑显示屏调整分辨率是系统通过运算来给出模拟色彩块填充适配的。</p>
+<p>下述像素排列方式内容为 expansion pack，可略过。</p>
+<h3 id="像素排列方式"><a href="#像素排列方式" class="headerlink" title="像素排列方式"></a>像素排列方式</h3><h4 id="标准-RGB-排列"><a href="#标准-RGB-排列" class="headerlink" title="标准 RGB 排列"></a>标准 RGB 排列</h4><p>LCD 屏幕上常采用标准 RGB 排列，会将一个像素分为 3 个子像素并排排列，通过红、绿、蓝滤色片将 LCD 背光模组的白光过滤后形成相应的 RGB 子像素排列。当需要显示不同颜色的时候，3 个子像素以不同的亮度发光，在视觉上会混合成所需要的颜色。</p>
+<img src="https://i2.kknews.cc/SIG=mpi6tq/ctp-vzntr/5sq208q374ro467088rqp1119p4859o1.jpg" alt="img" style="zoom:30%;" />
+
+<h4 id="PenTile-排列"><a href="#PenTile-排列" class="headerlink" title="PenTile 排列"></a>PenTile 排列</h4><p>PenTile 排列多见于 OLED 屏幕上，因子像素呈现钻石排列而得名。PenTile 排列的每个像素由红、绿和蓝、绿子像素组合而成，绿色像素是完整的，而红蓝像素相比传统 RGB 排列各减少二分之一，子像素总数减少了约三分之一。</p>
+<p>不像标准 RGB 排列每个像素更加独立，PenTile 排列在显示许多内容时需要借用相邻像素，显示精细内容时同分辨率下相较标准 RGB 排列的屏幕细腻度不足。</p>
+<p>蓝色 OLED 的发光效率要比红色和绿色低，达到相同的发光强度必须使用更高的通过电流，因而蓝色像素衰减速度更快，也就会加速“烧屏”现象的产生。</p>
+<h3 id="YUV-表示方式"><a href="#YUV-表示方式" class="headerlink" title="YUV 表示方式"></a>YUV 表示方式</h3><p>对于视频裸数据而言，更多使用 YUV 数据格式显示。</p>
+<ul>
+<li>Y 表示明亮度 (Luminance / Luma)，即灰阶值</li>
+<li>U、V 表示色度 (Chrominance / Chroma)，描述色调饱和度</li>
+</ul>
+<p>亮度通过 RGB 输入信号来建立，方法是将 RGB 信号的特定部分叠加到一起。色度定义了颜色的色彩和饱和度，分别用 Cr 和 Cb 表示。Cr 表示 RGB 输入信号红色部分与 RGB 亮度值之间的差异，Cb 表示 RGB 输入信号蓝色部分与 RGB 信号亮度值之间的差异。</p>
+<h4 id="YUV-优点"><a href="#YUV-优点" class="headerlink" title="YUV 优点"></a>YUV 优点</h4><ol>
+<li><p>与黑白电视机也能兼容</p>
+<p>Y 和 UV 分量分离，只有 Y 分量就是黑白图像。</p>
+</li>
+<li><p>相较于 RGB，YUV 数据格式占用空间小</p>
+<p>人眼对色度的敏感程度低于对亮度的敏感程度（因为识别亮度的视网膜杆细胞比识别色度的视网膜锥细胞多）。将色的信息减少，人眼也无法察觉。且并不是每个像素点都需要包含 YUV 三个分量，根据不同的采用格式，每个 Y 分量可以对应自己的 UV 分量。</p>
+</li>
+</ol>
+<h4 id="YUV-采样格式"><a href="#YUV-采样格式" class="headerlink" title="YUV 采样格式"></a>YUV 采样格式</h4><h5 id="YUV-4-4-4-采样"><a href="#YUV-4-4-4-采样" class="headerlink" title="YUV 4:4:4 采样"></a>YUV 4:4:4 采样</h5><p>每个像素三个分量信息完整。</p>
+<p>举个例子，一张 1 * 4 的图片：</p>
+<blockquote>
+<p>图像像素为：[Y0 U0 V0]、[Y1 U1 V1]、[Y2 U2 V2]、[Y3 U3 V3]</p>
+<p>采样码流为：Y0 U0 V0 Y1 U1 V1 Y2 U2 V2 Y3 U3 V3</p>
+<p>最后映射出的像素点依旧为 [Y0 U0 V0]、[Y1 U1 V1]、[Y2 U2 V2]、[Y3 U3 V3]</p>
+</blockquote>
+<p>一张 1280 * 720P 的图片使用 YUV 4:4:4 采样，大小为：</p>
+<figure class="highlight basic"><table><tr><td class="code"><pre><span class="line"><span class="symbol">1280 </span>* <span class="number">720</span> * <span class="number">3</span> / <span class="number">1024</span> / <span class="number">1024</span> = <span class="number">2.636</span> MB</span><br></pre></td></tr></table></figure>
+
+<h5 id="YUV-4-2-2-采样"><a href="#YUV-4-2-2-采样" class="headerlink" title="YUV 4:2:2 采样"></a>YUV 4:2:2 采样</h5><p>Y 分量和 UV 分量按 2:1 的比例采样。</p>
+<p>举个例子，一张 1 * 4 的图片：</p>
+<blockquote>
+<p>图像像素为：[Y0 U0 V0]、[Y1 U1 V1]、[Y2 U2 V2]、[Y3 U3 V3]</p>
+<p>采样码流为：Y0 U0 Y1 V1 Y2 U2 Y3 V3</p>
+<p>最后映射出的像素点依旧为 [Y0 U0 V1]、[Y1 U0 V1]、[Y2 U2 V3]、[Y3 U2 V3]</p>
+</blockquote>
+<p>一张 1280 * 720 P 的图片使用 YUV 4:2:2 采样，大小为：</p>
+<figure class="highlight tap"><table><tr><td class="code"><pre><span class="line">(1280 *<span class="number"> 720 </span>+<span class="number"> 1280 </span>*<span class="number"> 720 </span>* 0.5 * 2) /<span class="number"> 1024 </span>/<span class="number"> 1024 </span>= 1.759 MB</span><br></pre></td></tr></table></figure>
+
+<h5 id="YUV-4-2-0-采样"><a href="#YUV-4-2-0-采样" class="headerlink" title="YUV 4:2:0 采样"></a>YUV 4:2:0 采样</h5><p>不是指没有 Cb，而是意味着第一行 Y 分量和 U 分量按 2:1 的比例采样，第二行 Y 分量和 V 分量按 2:1 的比例采样。Y 分量和 UV 分量按 4:1 的比例采样。</p>
+<p>举个例子，一张 2* 4 的图片：</p>
+<blockquote>
+<p>图像像素为：[Y0 U0 V0]、[Y1 U1 V1]、[Y2 U2 V2]、[Y3 U3 V3]、[Y4 U4 V4]、[Y5 U5 V5]、[Y6 U6 V6]、[Y7 U7 V7]</p>
+<p>采样码流为：Y0 U0 Y1 Y2 U2 Y3 Y4 V4 Y5 Y6 V6 Y7</p>
+<p>最后映射出的像素点依旧为 [Y0 U0 V4]、[Y1 U0 V4]、[Y2 U2 V6]、[Y3 U2 V6]、[Y4 U0 V4]、[Y5 U0 V4]、[Y6 U2 V6]、[Y7 U2 V6]</p>
+</blockquote>
+<p>一张 1280 * 720 P 的图片使用 YUV 4:2:0 采样，大小为：</p>
+<figure class="highlight tap"><table><tr><td class="code"><pre><span class="line">(1280 *<span class="number"> 720 </span>+<span class="number"> 1280 </span>*<span class="number"> 720 </span>* 0.25 * 2) /<span class="number"> 1024 </span>/<span class="number"> 1024 </span>= 1.318 MB</span><br></pre></td></tr></table></figure>
+
+<h4 id="YUV-存储格式"><a href="#YUV-存储格式" class="headerlink" title="YUV 存储格式"></a>YUV 存储格式</h4><ul>
+<li><p>planar 平面格式</p>
+<p>先连续存储所有像素点的 Y 分量，然后存储 UV 分量。</p>
+</li>
+<li><p>packed 打包模式</p>
+<p>每个像素点的 YUV 分量连续交替存储。</p>
+</li>
+</ul>
+<h4 id="RGB-和-YUV-转化"><a href="#RGB-和-YUV-转化" class="headerlink" title="RGB 和 YUV 转化"></a>RGB 和 YUV 转化</h4><p>对于图像显示器来说，它是通过 RGB 模型显示图像的，而在传输图像数据时又是使用 YUV 模型的。因此两种模型需要互相转化。</p>
+<p>有如下公式：</p>
+<figure class="highlight apache"><table><tr><td class="code"><pre><span class="line"><span class="attribute">Y</span> = <span class="number">0</span>.<span class="number">299</span> * R + <span class="number">0</span>.<span class="number">587</span> * G + <span class="number">0</span>.<span class="number">114</span> * B</span><br><span class="line"><span class="attribute">U</span> = - <span class="number">0</span>.<span class="number">147</span> * R - <span class="number">0</span>.<span class="number">289</span> * G + <span class="number">0</span>.<span class="number">436</span> * B</span><br><span class="line"><span class="attribute">V</span> = <span class="number">0</span>.<span class="number">615</span> * R - <span class="number">0</span>.<span class="number">515</span> * G - <span class="number">0</span>.<span class="number">100</span> * B</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight apache"><table><tr><td class="code"><pre><span class="line"><span class="attribute">R</span> = Y + <span class="number">1</span>.<span class="number">14</span> * V</span><br><span class="line"><span class="attribute">G</span> = Y - <span class="number">0</span>.<span class="number">39</span> * U - <span class="number">0</span>.<span class="number">58</span> * V</span><br><span class="line"><span class="attribute">B</span> = Y + <span class="number">2</span>.<span class="number">03</span> * U</span><br></pre></td></tr></table></figure>
+
+<h2 id="IBP-帧"><a href="#IBP-帧" class="headerlink" title="IBP 帧"></a>IBP 帧</h2><ul>
+<li><p>I 帧 (intra picture)</p>
+<p>内部编码帧（也称为关键帧），通常是每个 GOP 片段的第一帧，经过适度压缩，作为随机访问的参考点，可以当作静态图像。I 帧压缩可去掉视频的空间冗余信息。</p>
+</li>
+<li><p>P 帧 (predictive-frame)</p>
+<p>前向预测编码帧（也称为预测帧），通过将图像序列中前面已编码帧的时间冗余信息去充分去除压缩传输数据量的编码图像，需要参考前面的一个 I 帧或者 P 帧才能解码成一张完整的图像。P 帧可以简单理解为当前帧画面与前一帧的差别。</p>
+</li>
+<li><p>B 帧 (bi-directional interpolated prediction frame)</p>
+<p>双向预测内插编码帧（也称双向预测帧），需要参考前面的一个 I 帧或者 P 帧以及后面的一个 P 帧才能编码成一张完整的图像。</p>
+</li>
+</ul>
+<p>简单来说，I 帧是一个完整的画面，而 P 帧和 B 帧记录的是相对于 I 帧的变化。如果没有 I 帧，P 帧和 B 帧就无法解码。压缩比 I 帧 &lt; P 帧 &lt; B 帧。</p>
+<h2 id="GOP"><a href="#GOP" class="headerlink" title="GOP"></a>GOP</h2><p><img src="https://cdn.nlark.com/yuque/0/2019/png/198452/1577589083690-95c3858b-1fb6-418e-8596-5cac6dc5d7b8.png" alt="image.png"></p>
+<p>编码器将多张图像进行编码后生产成一段一段的 GOP (Group of Pictures)，解码器在播放时则是读取一段一段的 GOP 进行编码后读取画面再渲染显示。GOP 是一组连续的画面，由一张 I 帧和数张 B / P 帧组成，是视频图像编码器和解码器存取的基本单位。gop_size 描述的是两个 I 帧之间的帧数目。</p>
+<h2 id="码率和帧率"><a href="#码率和帧率" class="headerlink" title="码率和帧率"></a>码率和帧率</h2><h3 id="帧率-Frame-Rate"><a href="#帧率-Frame-Rate" class="headerlink" title="帧率 (Frame Rate)"></a>帧率 (Frame Rate)</h3><p>表示每秒实践显示的帧数（Frames per Second，简称 FPS）。</p>
+<p>对于人眼来说，如果所看画面的帧率高于 24，就会认为是连贯的，此现象称为视觉暂留。</p>
+<h3 id="码率（比特率）"><a href="#码率（比特率）" class="headerlink" title="码率（比特率）"></a>码率（比特率）</h3><p>码率指每秒传输的比特数，单位为 bps (Bits Per Second)，通俗一点讲就是取样率，单位时间内取样率越大，精度就越高，处理出的文件就越接近原始文件。</p>
+<p>文件体积与取样率成正比，所有的编码格式都很重视如何用最低的码率达到最少的失真。</p>
+<p>码率简单来说是指再压缩视频时给这个视频指定一个参数，用以告诉压缩软件<strong>期望的压缩后视频的大小</strong>。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><p>视频基础知识扫盲</p>
+</li>
+<li><p><a href="https://glumes.com/post/ffmpeg/understand-yuv-format/">一文读懂 YUV 的采样与格式</a></p>
+</li>
+<li><p><a href="https://www.yuque.com/webmedia/handbook/ibp">IPB帧</a></p>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>所学</category>
+        <category>视频编码</category>
+      </categories>
+  </entry>
+  <entry>
     <title>Win10 下 Linux 子系统 (WSL) 配置小记</title>
     <url>/2021/03/21/wsl/</url>
     <content><![CDATA[<h2 id="网络代理配置"><a href="#网络代理配置" class="headerlink" title="网络代理配置"></a>网络代理配置</h2><p>刚开始用 <code>apt-get</code> 就被卡到。</p>
@@ -1969,17 +2083,6 @@
       </tags>
   </entry>
   <entry>
-    <title>也许是什么的开始...</title>
-    <url>/2019/09/07/%E4%B9%9F%E8%AE%B8%E6%98%AF%E4%BB%80%E4%B9%88%E7%9A%84%E5%BC%80%E5%A7%8B/</url>
-    <content><![CDATA[<p>感觉自己不学无术…</p>
-<p>夜里12点了，在宿舍床上的电脑桌上敲我的第一篇博客。</p>
-<p>如题，希望是什么的开始。</p>
-<p>TBC</p>]]></content>
-      <categories>
-        <category>所思</category>
-      </categories>
-  </entry>
-  <entry>
     <title>没有色彩的多崎作和他的巡礼之年 摘</title>
     <url>/2020/02/28/%E5%A4%9A%E5%B4%8E%E4%BD%9Cnotes/</url>
     <content><![CDATA[<p>厨师仇恨服务生，他们一起仇恨客人””灰田说道。“出自于阿诺德韦斯克(Arnold Wesker)的一部戏剧“厨房the kitchen”。被剥夺了自由的人一定会开始仇恨别人。你不这么觉得呢？我不愿过这样的生活。”</p>
@@ -1999,55 +2102,6 @@
         <category>所读</category>
         <category>Kindle clippings</category>
       </categories>
-  </entry>
-  <entry>
-    <title>语言学概论 笔记</title>
-    <url>/2020/04/05/%E8%AF%AD%E8%A8%80%E5%AD%A6%E6%A6%82%E7%8E%87-%E7%AC%94%E8%AE%B0/</url>
-    <content><![CDATA[<h1 id="CH1-语言能力与语言系统"><a href="#CH1-语言能力与语言系统" class="headerlink" title="CH1 语言能力与语言系统"></a>CH1 语言能力与语言系统</h1><h2 id="易境性"><a href="#易境性" class="headerlink" title="易境性"></a>易境性</h2><p>动物交流的特点：在场。在场与直接经验。人类不必在场传递经验，关键在语言。通过语言传递知识与经验，不必在场。</p>
-<h2 id="还原生成性"><a href="#还原生成性" class="headerlink" title="还原生成性"></a>还原生成性</h2><p>基于类推原则的还原生成能力。从单词到句子，是一种创造性行为。乔姆斯基：语言是有限规则和单位生成无限的句子。</p>
-<p>还原生成能力：通过有限的句子还原出有限的规则和单位，并通过这些单位生成无限的句子。</p>
-<p>人类语言学习的自然还原能力。只要存在一定数量的句子，不需要人为切分，就可以还原出有限的规则和单位，生产无限的句子。(我们不必看过全部的句子，自然通过对比就实现切分)(小孩是如何自然学习语法的。成人所总结的语法未必是正确的。所以我们希望学习方法论。)</p>
-<p>动物语言能力。呼叫或姿态大多是整体，句子有限。</p>
-<h2 id="任意性"><a href="#任意性" class="headerlink" title="任意性"></a>任意性</h2><p>语言能力在特定文化中的运用形成语言系统。核心部分：</p>
-<ul>
-<li>基于任意性的符号编码能力</li>
-<li>基于类推性的还原生成能力</li>
-<li>区分两种基本单位的能力(体现为符号的两层性)</li>
-</ul>
-<p>编码能力：能在任意性原则上把所指和能指结合成符号的能力</p>
-<p>任意性：词的语音形式A和意义B的关系是任意的</p>
-<p>动物语言的形式与意义之间任意性成分很少。</p>
-<p>我们的符号系统里加入的非任意性的成分，不是语言学符号，是象征。</p>
-<p>反对任意性原则的学说可以称为音义关联说。证据：拟声说，右文说。</p>
-<p>拟声不是自然语音的必要条件。声音的临摹，语序的临摹，这两种临摹方式是有限的。</p>
-<p>右文说的本质：引申</p>
-<p>任意性，支持材料：</p>
-<ul>
-<li>同一个概念在不同的语言中声音不一样</li>
-<li>语言中有大量的虚词、抽象词无法象声</li>
-</ul>
-<h2 id="两层性"><a href="#两层性" class="headerlink" title="两层性"></a>两层性</h2><p>自然语言有两种最基本的单位：</p>
-<ul>
-<li><p>音位</p>
-<p>区别意义的单位</p>
-</li>
-<li><p>语素</p>
-<p>表达意义的单位</p>
-</li>
-</ul>
-<p>两层性的文化功能在于用最少的区别性表达尽可能多的符号。</p>
-<p>两层性意味着可以用有限的手段(主要是语音)产生无限的符号形式(和有限的符号产生无限的符号组合不一样)</p>
-<p>人类自然语音从低到高有音位层、音节层、语素层、词汇层、词组层、句子层。音位系统是区别意义层，语素系统是表达意义层。</p>
-<p>一般认为汉语中有27个音质音位。</p>
-<p>语音是人类社会的一部分。是我们先天还是后天的能力。即使有先天的语言能力，必须有后天的交流环境，语言系统。语言学习关键期。</p>
-<h1 id="CH2-语言和思维"><a href="#CH2-语言和思维" class="headerlink" title="CH2 语言和思维"></a>CH2 语言和思维</h1>]]></content>
-      <categories>
-        <category>所学</category>
-        <category>文艺</category>
-      </categories>
-      <tags>
-        <tag>语言学</tag>
-      </tags>
   </entry>
   <entry>
     <title>德米安 摘</title>
@@ -2244,6 +2298,55 @@
       </categories>
   </entry>
   <entry>
+    <title>语言学概论 笔记</title>
+    <url>/2020/04/05/%E8%AF%AD%E8%A8%80%E5%AD%A6%E6%A6%82%E7%8E%87-%E7%AC%94%E8%AE%B0/</url>
+    <content><![CDATA[<h1 id="CH1-语言能力与语言系统"><a href="#CH1-语言能力与语言系统" class="headerlink" title="CH1 语言能力与语言系统"></a>CH1 语言能力与语言系统</h1><h2 id="易境性"><a href="#易境性" class="headerlink" title="易境性"></a>易境性</h2><p>动物交流的特点：在场。在场与直接经验。人类不必在场传递经验，关键在语言。通过语言传递知识与经验，不必在场。</p>
+<h2 id="还原生成性"><a href="#还原生成性" class="headerlink" title="还原生成性"></a>还原生成性</h2><p>基于类推原则的还原生成能力。从单词到句子，是一种创造性行为。乔姆斯基：语言是有限规则和单位生成无限的句子。</p>
+<p>还原生成能力：通过有限的句子还原出有限的规则和单位，并通过这些单位生成无限的句子。</p>
+<p>人类语言学习的自然还原能力。只要存在一定数量的句子，不需要人为切分，就可以还原出有限的规则和单位，生产无限的句子。(我们不必看过全部的句子，自然通过对比就实现切分)(小孩是如何自然学习语法的。成人所总结的语法未必是正确的。所以我们希望学习方法论。)</p>
+<p>动物语言能力。呼叫或姿态大多是整体，句子有限。</p>
+<h2 id="任意性"><a href="#任意性" class="headerlink" title="任意性"></a>任意性</h2><p>语言能力在特定文化中的运用形成语言系统。核心部分：</p>
+<ul>
+<li>基于任意性的符号编码能力</li>
+<li>基于类推性的还原生成能力</li>
+<li>区分两种基本单位的能力(体现为符号的两层性)</li>
+</ul>
+<p>编码能力：能在任意性原则上把所指和能指结合成符号的能力</p>
+<p>任意性：词的语音形式A和意义B的关系是任意的</p>
+<p>动物语言的形式与意义之间任意性成分很少。</p>
+<p>我们的符号系统里加入的非任意性的成分，不是语言学符号，是象征。</p>
+<p>反对任意性原则的学说可以称为音义关联说。证据：拟声说，右文说。</p>
+<p>拟声不是自然语音的必要条件。声音的临摹，语序的临摹，这两种临摹方式是有限的。</p>
+<p>右文说的本质：引申</p>
+<p>任意性，支持材料：</p>
+<ul>
+<li>同一个概念在不同的语言中声音不一样</li>
+<li>语言中有大量的虚词、抽象词无法象声</li>
+</ul>
+<h2 id="两层性"><a href="#两层性" class="headerlink" title="两层性"></a>两层性</h2><p>自然语言有两种最基本的单位：</p>
+<ul>
+<li><p>音位</p>
+<p>区别意义的单位</p>
+</li>
+<li><p>语素</p>
+<p>表达意义的单位</p>
+</li>
+</ul>
+<p>两层性的文化功能在于用最少的区别性表达尽可能多的符号。</p>
+<p>两层性意味着可以用有限的手段(主要是语音)产生无限的符号形式(和有限的符号产生无限的符号组合不一样)</p>
+<p>人类自然语音从低到高有音位层、音节层、语素层、词汇层、词组层、句子层。音位系统是区别意义层，语素系统是表达意义层。</p>
+<p>一般认为汉语中有27个音质音位。</p>
+<p>语音是人类社会的一部分。是我们先天还是后天的能力。即使有先天的语言能力，必须有后天的交流环境，语言系统。语言学习关键期。</p>
+<h1 id="CH2-语言和思维"><a href="#CH2-语言和思维" class="headerlink" title="CH2 语言和思维"></a>CH2 语言和思维</h1>]]></content>
+      <categories>
+        <category>所学</category>
+        <category>文艺</category>
+      </categories>
+      <tags>
+        <tag>语言学</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>赎罪 摘</title>
     <url>/2020/02/28/%E8%B5%8E%E7%BD%AAmnotes/</url>
     <content><![CDATA[<p>但这第一次笨拙的尝试就让她明白，想象力本身就是秘密的一大源泉：她一旦开始写故事，就谁也不能透露。用文字假托思想，这太没把握，太不堪一击，太令人难堪了，所以绝对不能让任何人知道。</p>
@@ -2285,6 +2388,45 @@
 <p>维度是知觉的函数</p>
 <hr>
 <p><code>基本你可以看出来，麦克尤恩字里行间有那种锋利精巧的聪明感。大一还是大二的时候正好麦克尤恩还来北京有个活动，当时还报名去了现场。之后写了一些记录，这里就略过了。赎罪的电影也不错，罗南、一美、本尼，以及凯拉奈特莉的那身绿裙子也非常经典。</code></p>
+]]></content>
+      <categories>
+        <category>所读</category>
+        <category>Kindle clippings</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>那不勒斯四部曲：新名字的故事 摘</title>
+    <url>/2020/02/28/%E9%82%A3%E4%B8%8D%E5%8B%92%E6%96%AF2/</url>
+    <content><![CDATA[<p>那个女性的身体因为仇恨而被消解，因为报仇雪恨，或者说因为正义，那个女性的身体失去了女性气质。</p>
+<hr>
+<p>拉法埃拉·赛鲁罗被销毁了，她已经失去了自己的形状，她已经融化在斯特凡诺的轮廓里，成为了他的附属品：卡拉奇太太。</p>
+<hr>
+<p>我们就这样走了一个小时，边走边聊。陌生人在我们周围熙熙攘攘，说的都是很粗鲁的方言，<u>我们觉得自己独一无二，只有我和他，用那种非常考究的意大利语，说着只有我们感兴趣、其他人不了解的话题</u>。我们在做什么呢？在进行一场讨论吗？在为我们的未来做准备吗？来面对那些和我们一样，学会了使用语言的人们吗？<u>我们在进行符号的交流，就是为了证实我们漫长的友谊是有基础的，而且会产生丰硕的结果吗</u>？是<u>对情欲的一种文雅的掩饰</u>？我不知道，我对于那些话题没有什么兴趣，对于他提出的那些真实的人和事件也没有激情。那不是因为教养，也不是因为习惯，我只是像往常一样，不想丢脸而已。</p>
+<p><code>莱农在第二部里很多这样的内心活动，太熟悉了。太真实了。我们的痛点。</code></p>
+<hr>
+<p>他迫切地需要表达自己，复述他读过的东西，表达自己观察到的事物。这是他整理自己的思想的方式——谈话，谈话，谈话，但我想这也是他寂寞的一种表现。我觉得自己和他很像，这让我觉得很自豪，我和他一样都想塑造自己作为读书人的形象，并且让别人承认这一点，就像在说：<u>这就是我所知道的事情，这就是我要成为的人。</u></p>
+<hr>
+<p>她几乎一直在用方言说话，就好像要表现出谦卑和虚心：我不矫饰，我用我的话来说。她非常诚恳地把那些散乱的事实列举出来，没有像往常一样用一条主线把它们联系起来。</p>
+<hr>
+<p>从那时开始，我为我们度过午后的方式感到懊悔，因为我们一直在紧张地聊天，他迫不及待地表达自己的想法，我也焦急地想说出一些概念，想得到他的认同，再也没有那种他拉着我的手的时刻，他也没有再邀请我坐到他的毛巾上。当我看到布鲁诺和皮诺奇娅为一些很简单的事情哈哈大笑，我很嫉妒他们。我多想和尼诺一起，像他们那样哈哈大笑，我什么也不想要，只希望我们能亲密一点，就像皮诺奇娅和布鲁诺那样就行，我并不奢求太多。</p>
+<hr>
+<p>尽管我一直推着自己向前走，实际上我一直随时准备后退？为什么当事情行不通时，我总是做出一副甜美的笑脸，发出幸福的笑声？为什么我迟早都要给那些让我遭受痛苦的人找到合理的理由？</p>
+<hr>
+<p>只有在这种不可实现的情况下，在大海中央，尼诺给莉拉的那个吻才说得过去。</p>
+<hr>
+<p>最让我感到震撼的是，他从来没有把自己的个人的问题，转化成一个普遍的问题，就像他通常会做的那样。他只谈论他和莉拉，莉拉和他，他没有谈论爱情。他没有说他为什么爱这个人，而不是另一个人。</p>
+<hr>
+<p>是的，莉拉说得对，事情的美丽都是一种假象，天空是让人恐惧的苍穹；我现在活着，距我十步之遥就是海水，这一点儿也不美，这是让人恐惧的情景；我是这个沙滩、这片海的一部分，我是熙熙攘攘的万物中的一员。这是一种宇宙性的恐怖；这时候，我是一个无穷小的分子，通过这个分子，我能觉察到对万物的恐惧；</p>
+<hr>
+<p>我会明白她遭遇了一种我可以了解的东西，那是我对于尼诺的感受，但实际上我并不了解那种感受，也许我永远也不会了解，我只能浮光掠影，有一点粗浅的感觉。我会明白她不是在玩一场夏天的轻浮游戏，而是内心感受到一种极端强烈的冲击，这种感觉从头到脚席卷了她。</p>
+<hr>
+<p>是的，是莉拉让我的讲述变得艰难。我的生活推动着我，我总是想象着假如她在我的位置上，假如她有这份幸运，她会怎么做。她的生活不停出现在我的对面，出现在我说的话里，出现在我的那些决绝的动作里。我的话里常常有她影响的痕迹，是她在暗地里左右着我，有时候多一点，有时候少一些。我还没有考虑过那些她从来没说过的话，那些我可以推测到的话，那些我不知道的事情，后来我在她的笔记里读到的事情，都是经过过滤的，有些是真的，有很多隐含的事情，还有的是谎言。所有的这些事情，都带着对逝去的时光的艰难衡量，而这一切都建立在不可靠的语言的基础之上。</p>
+<hr>
+<p>但莉拉并没有坐以待毙，对于她来说，世界就好像一盘棋，只要移开一道绘制的背景，移动一下棋子，就可以别开生面。</p>
+<hr>
+<p>在这对父女身上，我看到了我从来没有过的体验，我永远都不可能有的体验。这种体验是什么呢？我一时也无法具体地说出来，那也许是一种因训练而得来的能力，让世界上的事情成为自己私事的能力；</p>
+<hr>
+<p><code>毋庸置疑，第二部是观感最精彩的一部。尤其是先看了第一部的电视剧，再开始读第二部，整个画面感太融洽了，而且你本人也并不会很抗拒先入为主的印象抹杀了你想象力的可能性，因为贴合度太高。</code></p>
 ]]></content>
       <categories>
         <category>所读</category>
@@ -2337,45 +2479,6 @@
 <p>我说，对于弗朗科来说，我是他的延伸，是他女性的一面，这构建了他的权力，展示出他不仅仅能成为一个理想的男人，也能成为一个理想的女人。现在，他感觉我不再是他的一部分，他觉得我背叛了他。”</p>
 <hr>
 <p><code>说实话，我不怎么排斥弗朗科。我觉得弗朗科其实可以说是莱农的一个踏板了。但第三部看的很灰暗，看完之后在豆瓣上写，是不是人到中年之后，生活的表面崩开也只剩泥沙俱下了。所以放弃看第四部了。</code></p>
-]]></content>
-      <categories>
-        <category>所读</category>
-        <category>Kindle clippings</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>那不勒斯四部曲：新名字的故事 摘</title>
-    <url>/2020/02/28/%E9%82%A3%E4%B8%8D%E5%8B%92%E6%96%AF2/</url>
-    <content><![CDATA[<p>那个女性的身体因为仇恨而被消解，因为报仇雪恨，或者说因为正义，那个女性的身体失去了女性气质。</p>
-<hr>
-<p>拉法埃拉·赛鲁罗被销毁了，她已经失去了自己的形状，她已经融化在斯特凡诺的轮廓里，成为了他的附属品：卡拉奇太太。</p>
-<hr>
-<p>我们就这样走了一个小时，边走边聊。陌生人在我们周围熙熙攘攘，说的都是很粗鲁的方言，<u>我们觉得自己独一无二，只有我和他，用那种非常考究的意大利语，说着只有我们感兴趣、其他人不了解的话题</u>。我们在做什么呢？在进行一场讨论吗？在为我们的未来做准备吗？来面对那些和我们一样，学会了使用语言的人们吗？<u>我们在进行符号的交流，就是为了证实我们漫长的友谊是有基础的，而且会产生丰硕的结果吗</u>？是<u>对情欲的一种文雅的掩饰</u>？我不知道，我对于那些话题没有什么兴趣，对于他提出的那些真实的人和事件也没有激情。那不是因为教养，也不是因为习惯，我只是像往常一样，不想丢脸而已。</p>
-<p><code>莱农在第二部里很多这样的内心活动，太熟悉了。太真实了。我们的痛点。</code></p>
-<hr>
-<p>他迫切地需要表达自己，复述他读过的东西，表达自己观察到的事物。这是他整理自己的思想的方式——谈话，谈话，谈话，但我想这也是他寂寞的一种表现。我觉得自己和他很像，这让我觉得很自豪，我和他一样都想塑造自己作为读书人的形象，并且让别人承认这一点，就像在说：<u>这就是我所知道的事情，这就是我要成为的人。</u></p>
-<hr>
-<p>她几乎一直在用方言说话，就好像要表现出谦卑和虚心：我不矫饰，我用我的话来说。她非常诚恳地把那些散乱的事实列举出来，没有像往常一样用一条主线把它们联系起来。</p>
-<hr>
-<p>从那时开始，我为我们度过午后的方式感到懊悔，因为我们一直在紧张地聊天，他迫不及待地表达自己的想法，我也焦急地想说出一些概念，想得到他的认同，再也没有那种他拉着我的手的时刻，他也没有再邀请我坐到他的毛巾上。当我看到布鲁诺和皮诺奇娅为一些很简单的事情哈哈大笑，我很嫉妒他们。我多想和尼诺一起，像他们那样哈哈大笑，我什么也不想要，只希望我们能亲密一点，就像皮诺奇娅和布鲁诺那样就行，我并不奢求太多。</p>
-<hr>
-<p>尽管我一直推着自己向前走，实际上我一直随时准备后退？为什么当事情行不通时，我总是做出一副甜美的笑脸，发出幸福的笑声？为什么我迟早都要给那些让我遭受痛苦的人找到合理的理由？</p>
-<hr>
-<p>只有在这种不可实现的情况下，在大海中央，尼诺给莉拉的那个吻才说得过去。</p>
-<hr>
-<p>最让我感到震撼的是，他从来没有把自己的个人的问题，转化成一个普遍的问题，就像他通常会做的那样。他只谈论他和莉拉，莉拉和他，他没有谈论爱情。他没有说他为什么爱这个人，而不是另一个人。</p>
-<hr>
-<p>是的，莉拉说得对，事情的美丽都是一种假象，天空是让人恐惧的苍穹；我现在活着，距我十步之遥就是海水，这一点儿也不美，这是让人恐惧的情景；我是这个沙滩、这片海的一部分，我是熙熙攘攘的万物中的一员。这是一种宇宙性的恐怖；这时候，我是一个无穷小的分子，通过这个分子，我能觉察到对万物的恐惧；</p>
-<hr>
-<p>我会明白她遭遇了一种我可以了解的东西，那是我对于尼诺的感受，但实际上我并不了解那种感受，也许我永远也不会了解，我只能浮光掠影，有一点粗浅的感觉。我会明白她不是在玩一场夏天的轻浮游戏，而是内心感受到一种极端强烈的冲击，这种感觉从头到脚席卷了她。</p>
-<hr>
-<p>是的，是莉拉让我的讲述变得艰难。我的生活推动着我，我总是想象着假如她在我的位置上，假如她有这份幸运，她会怎么做。她的生活不停出现在我的对面，出现在我说的话里，出现在我的那些决绝的动作里。我的话里常常有她影响的痕迹，是她在暗地里左右着我，有时候多一点，有时候少一些。我还没有考虑过那些她从来没说过的话，那些我可以推测到的话，那些我不知道的事情，后来我在她的笔记里读到的事情，都是经过过滤的，有些是真的，有很多隐含的事情，还有的是谎言。所有的这些事情，都带着对逝去的时光的艰难衡量，而这一切都建立在不可靠的语言的基础之上。</p>
-<hr>
-<p>但莉拉并没有坐以待毙，对于她来说，世界就好像一盘棋，只要移开一道绘制的背景，移动一下棋子，就可以别开生面。</p>
-<hr>
-<p>在这对父女身上，我看到了我从来没有过的体验，我永远都不可能有的体验。这种体验是什么呢？我一时也无法具体地说出来，那也许是一种因训练而得来的能力，让世界上的事情成为自己私事的能力；</p>
-<hr>
-<p><code>毋庸置疑，第二部是观感最精彩的一部。尤其是先看了第一部的电视剧，再开始读第二部，整个画面感太融洽了，而且你本人也并不会很抗拒先入为主的印象抹杀了你想象力的可能性，因为贴合度太高。</code></p>
 ]]></content>
       <categories>
         <category>所读</category>
