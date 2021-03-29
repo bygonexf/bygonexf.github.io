@@ -13,8 +13,6 @@
 <p>一台物理设备出厂时就已经定下了它所能拥有的最大像素点是多少。电脑显示屏调整分辨率是系统通过运算来给出模拟色彩块填充适配的。</p>
 <p>下述像素排列方式内容为 expansion pack，可略过。</p>
 <h3 id="像素排列方式"><a href="#像素排列方式" class="headerlink" title="像素排列方式"></a>像素排列方式</h3><h4 id="标准-RGB-排列"><a href="#标准-RGB-排列" class="headerlink" title="标准 RGB 排列"></a>标准 RGB 排列</h4><p>LCD 屏幕上常采用标准 RGB 排列，会将一个像素分为 3 个子像素并排排列，通过红、绿、蓝滤色片将 LCD 背光模组的白光过滤后形成相应的 RGB 子像素排列。当需要显示不同颜色的时候，3 个子像素以不同的亮度发光，在视觉上会混合成所需要的颜色。</p>
-<img src="https://i2.kknews.cc/SIG=mpi6tq/ctp-vzntr/5sq208q374ro467088rqp1119p4859o1.jpg" alt="img" style="zoom:30%;" />
-
 <h4 id="PenTile-排列"><a href="#PenTile-排列" class="headerlink" title="PenTile 排列"></a>PenTile 排列</h4><p>PenTile 排列多见于 OLED 屏幕上，因子像素呈现钻石排列而得名。PenTile 排列的每个像素由红、绿和蓝、绿子像素组合而成，绿色像素是完整的，而红蓝像素相比传统 RGB 排列各减少二分之一，子像素总数减少了约三分之一。</p>
 <p>不像标准 RGB 排列每个像素更加独立，PenTile 排列在显示许多内容时需要借用相邻像素，显示精细内容时同分辨率下相较标准 RGB 排列的屏幕细腻度不足。</p>
 <p>蓝色 OLED 的发光效率要比红色和绿色低，达到相同的发光强度必须使用更高的通过电流，因而蓝色像素衰减速度更快，也就会加速“烧屏”现象的产生。</p>
@@ -88,7 +86,7 @@
 </li>
 </ul>
 <p>简单来说，I 帧是一个完整的画面，而 P 帧和 B 帧记录的是相对于 I 帧的变化。如果没有 I 帧，P 帧和 B 帧就无法解码。压缩比 I 帧 &lt; P 帧 &lt; B 帧。</p>
-<h2 id="GOP"><a href="#GOP" class="headerlink" title="GOP"></a>GOP</h2><p><img src="https://cdn.nlark.com/yuque/0/2019/png/198452/1577589083690-95c3858b-1fb6-418e-8596-5cac6dc5d7b8.png" alt="image.png"></p>
+<h2 id="GOP"><a href="#GOP" class="headerlink" title="GOP"></a>GOP</h2><p><img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/20210329171222.png"></p>
 <p>编码器将多张图像进行编码后生产成一段一段的 GOP (Group of Pictures)，解码器在播放时则是读取一段一段的 GOP 进行编码后读取画面再渲染显示。GOP 是一组连续的画面，由一张 I 帧和数张 B / P 帧组成，是视频图像编码器和解码器存取的基本单位。gop_size 描述的是两个 I 帧之间的帧数目。</p>
 <h2 id="码率和帧率"><a href="#码率和帧率" class="headerlink" title="码率和帧率"></a>码率和帧率</h2><h3 id="帧率-Frame-Rate"><a href="#帧率-Frame-Rate" class="headerlink" title="帧率 (Frame Rate)"></a>帧率 (Frame Rate)</h3><p>表示每秒实践显示的帧数（Frames per Second，简称 FPS）。</p>
 <p>对于人眼来说，如果所看画面的帧率高于 24，就会认为是连贯的，此现象称为视觉暂留。</p>
@@ -100,7 +98,7 @@
 </li>
 <li><p><a target="_blank" rel="noopener" href="https://glumes.com/post/ffmpeg/understand-yuv-format/">一文读懂 YUV 的采样与格式</a></p>
 </li>
-<li><p><a target="_blank" rel="noopener" href="https://www.yuque.com/webmedia/handbook/ibp">IPB帧</a></p>
+<li><p><a target="_blank" rel="noopener" href="https://www.yuque.com/webmedia/handbook/ibp">IBP帧</a></p>
 </li>
 </ul>
 </div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Choco</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://bygonexf.github.io/2021/03/29/multimedia-basics/">https://bygonexf.github.io/2021/03/29/multimedia-basics/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://bygonexf.github.io">Choco Box</a>！</span></div></div><div class="post-meta__tag-list"></div><nav id="pagination"><div class="next-post pull-right"><a href="/2021/03/21/wsl/"><span>Win10 下 Linux 子系统 (WSL) 配置小记</span><i class="fa fa-chevron-right"></i></a></div></nav><div id="vcomment"></div><script src="https://cdn1.lncld.net/static/js/3.0.4/av-min.js"></script><script src="https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js"></script><script>var notify = 'false' == 'true';
