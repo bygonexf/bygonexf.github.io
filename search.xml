@@ -1,78 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Hexo NexT 主题优化</title>
-    <url>/2020/02/10/Hexo%20Next%20%E4%B8%BB%E9%A2%98%E4%BC%98%E5%8C%96/</url>
-    <content><![CDATA[<h2 id="已折腾的优化"><a href="#已折腾的优化" class="headerlink" title="已折腾的优化"></a>已折腾的优化</h2><ol>
-<li><p>搜索功能</p>
-</li>
-<li><p>访客数和访问量</p>
-</li>
-<li><p>顶部加载进度条</p>
-</li>
-<li><p>评论区(Valine评论系统)</p>
-</li>
-<li><p>修改网站图标</p>
-</li>
-<li><p>修改背景图</p>
-</li>
-<li><p>修改字体为思源宋体</p>
-<p>字体也太重要了呜呜呜</p>
-</li>
-<li><p>增大文字区宽度</p>
-</li>
-<li><p>修改标签云颜色</p>
-</li>
-<li><p>利用gulp压缩代码</p>
-</li>
-<li><p>代码复制功能</p>
-</li>
-</ol>
-<h2 id="待折腾的优化"><a href="#待折腾的优化" class="headerlink" title="待折腾的优化"></a>待折腾的优化</h2><ul>
-<li>访问速度</li>
-<li>引用和代码块的颜色问题</li>
-<li>SEO</li>
-</ul>
-<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><ul>
-<li><p> <a href="http://shenzekun.cn/hexo%E7%9A%84next%E4%B8%BB%E9%A2%98%E4%B8%AA%E6%80%A7%E5%8C%96%E9%85%8D%E7%BD%AE%E6%95%99%E7%A8%8B.html">hexo的next主题个性化教程:打造炫酷网站 | Moorez</a> </p>
-</li>
-<li><p> <a href="https://io-oi.me/tech/hexo-next-optimization/">打造个性超赞博客 Hexo + NexT + GitHub Pages 的超深度优化 | reuixiy</a> </p>
-</li>
-</ul>
-<p>  大佬的博客太赏心悦目了</p>
-<ul>
-<li><p> <a href="https://bestzuo.cn/posts/763113948.html">hexo博客valine评论样式美化 - Sanarous的博客</a> </p>
-</li>
-<li><p>  <a href="https://bestzuo.cn/posts/blog-establish.html">Hexo博客+Next主题深度优化与定制 - Sanarous的博客</a> </p>
-</li>
-</ul>
-<p>   这个大佬也写得好好</p>
-<h2 id="踩过的坑和心得"><a href="#踩过的坑和心得" class="headerlink" title="踩过的坑和心得"></a>踩过的坑和心得</h2><ol>
-<li><p>记得hexo clean</p>
-</li>
-<li><p>“fatal: LF would be replaced by CRLF “</p>
-<figure class="highlight diff"><table><tr><td class="code"><pre><span class="line">[core]</span><br><span class="line">	repositoryformatversion = 0</span><br><span class="line">	filemode = false</span><br><span class="line">	bare = false</span><br><span class="line">	logallrefupdates = true</span><br><span class="line">	symlinks = false</span><br><span class="line">	ignorecase = true</span><br><span class="line"><span class="addition">+	autocrlf = false</span></span><br><span class="line"><span class="addition">+	safecrlf = false</span></span><br></pre></td></tr></table></figure></li>
-<li><p>修改文字区宽度有部分方法不适用</p>
-<p>就在blog\themes\next\source\css_variables的base.styl改好了</p>
-</li>
-<li><p>偷懒建议，背景图的话，貌似选择深蓝色系和原有其他设定比较搭(啊，就夜深人静的时候点开博客会有一种私人避难所的感觉…莫名的安心感)</p>
-</li>
-<li><p>F12大法好</p>
-</li>
-</ol>
-<h2 id="实用网站"><a href="#实用网站" class="headerlink" title="实用网站"></a>实用网站</h2><ul>
-<li> <a href="https://www.easyicon.net/iconsearch/bear/?s=addtime_DESC">图标 - Easyicon</a> </li>
-<li> <a href="https://htmlcolorcodes.com/">HTML Color Codes</a> </li>
-<li> <a href="https://uigradients.com/#SublimeLight">uiGradients - Beautiful colored gradients</a> </li>
-<li> <a href="https://www.emojicopy.com/">EmojiCopy | Simple emoji copy and paste by JoyPixels™</a> </li>
-</ul>
-]]></content>
-      <categories>
-        <category>所学</category>
-        <category>折腾</category>
-      </categories>
-  </entry>
-  <entry>
     <title>操作系统笔记 CH1 Intro</title>
     <url>/2020/02/28/OS1/</url>
     <content><![CDATA[<h2 id="What-OS-do"><a href="#What-OS-do" class="headerlink" title="What OS do"></a>What OS do</h2><p>操作系统是管理计算机硬件的程序</p>
@@ -295,6 +223,104 @@
       </tags>
   </entry>
   <entry>
+    <title>Anaconda一些命令</title>
+    <url>/2020/02/29/Anaconda%E4%B8%80%E4%BA%9B%E5%91%BD%E4%BB%A4/</url>
+    <content><![CDATA[<p>创建环境</p>
+<figure class="highlight sas"><table><tr><td class="code"><pre><span class="line">conda <span class="meta">create</span> -n envname python=<span class="meta">x</span>.<span class="meta">x</span></span><br></pre></td></tr></table></figure>
+
+<p>删除环境</p>
+<figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">conda <span class="built_in">remove</span> -n envname <span class="comment">--all</span></span><br></pre></td></tr></table></figure>
+
+<p>进入环境conda activate 退出环境conda deactivate</p>
+<p>列出安装的库</p>
+<figure class="highlight ebnf"><table><tr><td class="code"><pre><span class="line"><span class="attribute">conda list</span></span><br></pre></td></tr></table></figure>
+
+<p>升级所有库</p>
+<figure class="highlight livecodeserver"><table><tr><td class="code"><pre><span class="line">conda upgrade <span class="comment">--all</span></span><br></pre></td></tr></table></figure>
+
+<p>换源</p>
+<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">conda config --add channels https:<span class="regexp">//mi</span>rrors.tuna.tsinghua.edu.cn<span class="regexp">/anaconda/</span>pkgs<span class="regexp">/free/</span></span><br><span class="line"></span><br><span class="line">conda config --add channels https:<span class="regexp">//mi</span>rrors.tuna.tsinghua.edu.cn<span class="regexp">/anaconda/</span>pkgs<span class="regexp">/main/</span></span><br><span class="line"></span><br><span class="line">conda config --set show_channel_urls yes</span><br></pre></td></tr></table></figure>
+
+<p>pip install -i <a href="https://pypi.tuna.tsinghua.edu.cn/simple">https://pypi.tuna.tsinghua.edu.cn/simple</a> xxx</p>
+]]></content>
+      <categories>
+        <category>所学</category>
+        <category>折腾</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>Hexo NexT 主题优化</title>
+    <url>/2020/02/10/Hexo%20Next%20%E4%B8%BB%E9%A2%98%E4%BC%98%E5%8C%96/</url>
+    <content><![CDATA[<h2 id="已折腾的优化"><a href="#已折腾的优化" class="headerlink" title="已折腾的优化"></a>已折腾的优化</h2><ol>
+<li><p>搜索功能</p>
+</li>
+<li><p>访客数和访问量</p>
+</li>
+<li><p>顶部加载进度条</p>
+</li>
+<li><p>评论区(Valine评论系统)</p>
+</li>
+<li><p>修改网站图标</p>
+</li>
+<li><p>修改背景图</p>
+</li>
+<li><p>修改字体为思源宋体</p>
+<p>字体也太重要了呜呜呜</p>
+</li>
+<li><p>增大文字区宽度</p>
+</li>
+<li><p>修改标签云颜色</p>
+</li>
+<li><p>利用gulp压缩代码</p>
+</li>
+<li><p>代码复制功能</p>
+</li>
+</ol>
+<h2 id="待折腾的优化"><a href="#待折腾的优化" class="headerlink" title="待折腾的优化"></a>待折腾的优化</h2><ul>
+<li>访问速度</li>
+<li>引用和代码块的颜色问题</li>
+<li>SEO</li>
+</ul>
+<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><ul>
+<li><p> <a href="http://shenzekun.cn/hexo%E7%9A%84next%E4%B8%BB%E9%A2%98%E4%B8%AA%E6%80%A7%E5%8C%96%E9%85%8D%E7%BD%AE%E6%95%99%E7%A8%8B.html">hexo的next主题个性化教程:打造炫酷网站 | Moorez</a> </p>
+</li>
+<li><p> <a href="https://io-oi.me/tech/hexo-next-optimization/">打造个性超赞博客 Hexo + NexT + GitHub Pages 的超深度优化 | reuixiy</a> </p>
+</li>
+</ul>
+<p>  大佬的博客太赏心悦目了</p>
+<ul>
+<li><p> <a href="https://bestzuo.cn/posts/763113948.html">hexo博客valine评论样式美化 - Sanarous的博客</a> </p>
+</li>
+<li><p>  <a href="https://bestzuo.cn/posts/blog-establish.html">Hexo博客+Next主题深度优化与定制 - Sanarous的博客</a> </p>
+</li>
+</ul>
+<p>   这个大佬也写得好好</p>
+<h2 id="踩过的坑和心得"><a href="#踩过的坑和心得" class="headerlink" title="踩过的坑和心得"></a>踩过的坑和心得</h2><ol>
+<li><p>记得hexo clean</p>
+</li>
+<li><p>“fatal: LF would be replaced by CRLF “</p>
+<figure class="highlight diff"><table><tr><td class="code"><pre><span class="line">[core]</span><br><span class="line">	repositoryformatversion = 0</span><br><span class="line">	filemode = false</span><br><span class="line">	bare = false</span><br><span class="line">	logallrefupdates = true</span><br><span class="line">	symlinks = false</span><br><span class="line">	ignorecase = true</span><br><span class="line"><span class="addition">+	autocrlf = false</span></span><br><span class="line"><span class="addition">+	safecrlf = false</span></span><br></pre></td></tr></table></figure></li>
+<li><p>修改文字区宽度有部分方法不适用</p>
+<p>就在blog\themes\next\source\css_variables的base.styl改好了</p>
+</li>
+<li><p>偷懒建议，背景图的话，貌似选择深蓝色系和原有其他设定比较搭(啊，就夜深人静的时候点开博客会有一种私人避难所的感觉…莫名的安心感)</p>
+</li>
+<li><p>F12大法好</p>
+</li>
+</ol>
+<h2 id="实用网站"><a href="#实用网站" class="headerlink" title="实用网站"></a>实用网站</h2><ul>
+<li> <a href="https://www.easyicon.net/iconsearch/bear/?s=addtime_DESC">图标 - Easyicon</a> </li>
+<li> <a href="https://htmlcolorcodes.com/">HTML Color Codes</a> </li>
+<li> <a href="https://uigradients.com/#SublimeLight">uiGradients - Beautiful colored gradients</a> </li>
+<li> <a href="https://www.emojicopy.com/">EmojiCopy | Simple emoji copy and paste by JoyPixels™</a> </li>
+</ul>
+]]></content>
+      <categories>
+        <category>所学</category>
+        <category>折腾</category>
+      </categories>
+  </entry>
+  <entry>
     <title>操作系统笔记 CH10 File-System Interface</title>
     <url>/2020/02/28/OS10/</url>
     <content><![CDATA[<h2 id="file-concept"><a href="#file-concept" class="headerlink" title="file concept"></a>file concept</h2><p>文件：记录在外存上的 相关信息的 具有名称的 集合，逻辑内存的最小分配单元</p>
@@ -498,32 +524,6 @@
         <tag>操作系统</tag>
         <tag>专业课笔记</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>Anaconda一些命令</title>
-    <url>/2020/02/29/Anaconda%E4%B8%80%E4%BA%9B%E5%91%BD%E4%BB%A4/</url>
-    <content><![CDATA[<p>创建环境</p>
-<figure class="highlight sas"><table><tr><td class="code"><pre><span class="line">conda <span class="meta">create</span> -n envname python=<span class="meta">x</span>.<span class="meta">x</span></span><br></pre></td></tr></table></figure>
-
-<p>删除环境</p>
-<figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">conda <span class="built_in">remove</span> -n envname <span class="comment">--all</span></span><br></pre></td></tr></table></figure>
-
-<p>进入环境conda activate 退出环境conda deactivate</p>
-<p>列出安装的库</p>
-<figure class="highlight ebnf"><table><tr><td class="code"><pre><span class="line"><span class="attribute">conda list</span></span><br></pre></td></tr></table></figure>
-
-<p>升级所有库</p>
-<figure class="highlight livecodeserver"><table><tr><td class="code"><pre><span class="line">conda upgrade <span class="comment">--all</span></span><br></pre></td></tr></table></figure>
-
-<p>换源</p>
-<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">conda config --add channels https:<span class="regexp">//mi</span>rrors.tuna.tsinghua.edu.cn<span class="regexp">/anaconda/</span>pkgs<span class="regexp">/free/</span></span><br><span class="line"></span><br><span class="line">conda config --add channels https:<span class="regexp">//mi</span>rrors.tuna.tsinghua.edu.cn<span class="regexp">/anaconda/</span>pkgs<span class="regexp">/main/</span></span><br><span class="line"></span><br><span class="line">conda config --set show_channel_urls yes</span><br></pre></td></tr></table></figure>
-
-<p>pip install -i <a href="https://pypi.tuna.tsinghua.edu.cn/simple">https://pypi.tuna.tsinghua.edu.cn/simple</a> xxx</p>
-]]></content>
-      <categories>
-        <category>所学</category>
-        <category>折腾</category>
-      </categories>
   </entry>
   <entry>
     <title>操作系统笔记 CH11 File-System Implementation</title>
@@ -1914,6 +1914,34 @@
       </tags>
   </entry>
   <entry>
+    <title>P问题和NP问题</title>
+    <url>/2020/02/06/P%E9%97%AE%E9%A2%98%E5%92%8CNP%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<ul>
+<li><p>P问题</p>
+<p>可以在多项式时间内被解决的问题</p>
+</li>
+<li><p>NP问题</p>
+<p>可以在多项式时间内被验证的问题</p>
+<p>图着色，哈密顿回路，TSP…</p>
+</li>
+<li><p>NP-hard问题</p>
+<p>如果可以证明某问题有一个子问题是NP-Hard问题，那么该问题是一个NP-Hard问题。</p>
+<p>通俗的讲，已经有一个很难的问题L’,而L问题比L’更难解决，那么该问题就是NP-Hard问题。  </p>
+<p>NP-Hard问题不确定是否可以在多项式时间内被验证。 </p>
+<p>停机问题(给出一个程序和输入，判定它的运行是否会终止)是NP-hard但不是NP-complete</p>
+</li>
+<li><p>NPC问题(NP-complete)</p>
+<p>既是NP问题，也是NP-hard问题</p>
+</li>
+</ul>
+<p>NP问题是否是P问题？</p>
+<p> <img src="https://pic1.zhimg.com/80/674c06a71f0a34196da51fe8ce6501a6_hd.jpg" alt="img"> </p>]]></content>
+      <categories>
+        <category>所学</category>
+        <category>计算机基础</category>
+      </categories>
+  </entry>
+  <entry>
     <title>多媒体基础知识</title>
     <url>/2021/03/29/multimedia-basics/</url>
     <content><![CDATA[<h2 id="图像数值表示"><a href="#图像数值表示" class="headerlink" title="图像数值表示"></a>图像数值表示</h2><h3 id="分辨率"><a href="#分辨率" class="headerlink" title="分辨率"></a>分辨率</h3><p>分辨率的基础单位是像素。1280 * 720 P 的分辨率代表共有 1280 * 720 个像素点。</p>
@@ -2015,45 +2043,6 @@
       </categories>
   </entry>
   <entry>
-    <title>也许是什么的开始...</title>
-    <url>/2019/09/07/%E4%B9%9F%E8%AE%B8%E6%98%AF%E4%BB%80%E4%B9%88%E7%9A%84%E5%BC%80%E5%A7%8B/</url>
-    <content><![CDATA[<p>感觉自己不学无术…</p>
-<p>夜里12点了，在宿舍床上的电脑桌上敲我的第一篇博客。</p>
-<p>如题，希望是什么的开始。</p>
-<p>TBC</p>]]></content>
-      <categories>
-        <category>所思</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>P问题和NP问题</title>
-    <url>/2020/02/06/P%E9%97%AE%E9%A2%98%E5%92%8CNP%E9%97%AE%E9%A2%98/</url>
-    <content><![CDATA[<ul>
-<li><p>P问题</p>
-<p>可以在多项式时间内被解决的问题</p>
-</li>
-<li><p>NP问题</p>
-<p>可以在多项式时间内被验证的问题</p>
-<p>图着色，哈密顿回路，TSP…</p>
-</li>
-<li><p>NP-hard问题</p>
-<p>如果可以证明某问题有一个子问题是NP-Hard问题，那么该问题是一个NP-Hard问题。</p>
-<p>通俗的讲，已经有一个很难的问题L’,而L问题比L’更难解决，那么该问题就是NP-Hard问题。  </p>
-<p>NP-Hard问题不确定是否可以在多项式时间内被验证。 </p>
-<p>停机问题(给出一个程序和输入，判定它的运行是否会终止)是NP-hard但不是NP-complete</p>
-</li>
-<li><p>NPC问题(NP-complete)</p>
-<p>既是NP问题，也是NP-hard问题</p>
-</li>
-</ul>
-<p>NP问题是否是P问题？</p>
-<p> <img src="https://pic1.zhimg.com/80/674c06a71f0a34196da51fe8ce6501a6_hd.jpg" alt="img"> </p>]]></content>
-      <categories>
-        <category>所学</category>
-        <category>计算机基础</category>
-      </categories>
-  </entry>
-  <entry>
     <title>Win10 下 Linux 子系统 (WSL) 配置小记</title>
     <url>/2021/03/21/wsl/</url>
     <content><![CDATA[<h2 id="网络代理配置"><a href="#网络代理配置" class="headerlink" title="网络代理配置"></a>网络代理配置</h2><p>刚开始用 <code>apt-get</code> 就被卡到。</p>
@@ -2084,6 +2073,17 @@
       <tags>
         <tag>WSL</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>也许是什么的开始...</title>
+    <url>/2019/09/07/%E4%B9%9F%E8%AE%B8%E6%98%AF%E4%BB%80%E4%B9%88%E7%9A%84%E5%BC%80%E5%A7%8B/</url>
+    <content><![CDATA[<p>感觉自己不学无术…</p>
+<p>夜里12点了，在宿舍床上的电脑桌上敲我的第一篇博客。</p>
+<p>如题，希望是什么的开始。</p>
+<p>TBC</p>]]></content>
+      <categories>
+        <category>所思</category>
+      </categories>
   </entry>
   <entry>
     <title>没有色彩的多崎作和他的巡礼之年 摘</title>
