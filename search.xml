@@ -1,32 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Anaconda一些命令</title>
-    <url>/2020/02/29/Anaconda%E4%B8%80%E4%BA%9B%E5%91%BD%E4%BB%A4/</url>
-    <content><![CDATA[<p>创建环境</p>
-<figure class="highlight sas"><table><tr><td class="code"><pre><span class="line">conda <span class="meta">create</span> -n envname python=<span class="meta">x</span>.<span class="meta">x</span></span><br></pre></td></tr></table></figure>
-
-<p>删除环境</p>
-<figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">conda <span class="built_in">remove</span> -n envname <span class="comment">--all</span></span><br></pre></td></tr></table></figure>
-
-<p>进入环境conda activate 退出环境conda deactivate</p>
-<p>列出安装的库</p>
-<figure class="highlight ebnf"><table><tr><td class="code"><pre><span class="line"><span class="attribute">conda list</span></span><br></pre></td></tr></table></figure>
-
-<p>升级所有库</p>
-<figure class="highlight livecodeserver"><table><tr><td class="code"><pre><span class="line">conda upgrade <span class="comment">--all</span></span><br></pre></td></tr></table></figure>
-
-<p>换源</p>
-<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">conda config --add channels https:<span class="regexp">//mi</span>rrors.tuna.tsinghua.edu.cn<span class="regexp">/anaconda/</span>pkgs<span class="regexp">/free/</span></span><br><span class="line"></span><br><span class="line">conda config --add channels https:<span class="regexp">//mi</span>rrors.tuna.tsinghua.edu.cn<span class="regexp">/anaconda/</span>pkgs<span class="regexp">/main/</span></span><br><span class="line"></span><br><span class="line">conda config --set show_channel_urls yes</span><br></pre></td></tr></table></figure>
-
-<p>pip install -i <a href="https://pypi.tuna.tsinghua.edu.cn/simple">https://pypi.tuna.tsinghua.edu.cn/simple</a> xxx</p>
-]]></content>
-      <categories>
-        <category>所学</category>
-        <category>折腾</category>
-      </categories>
-  </entry>
-  <entry>
     <title>Hexo NexT 主题优化</title>
     <url>/2020/02/10/Hexo%20Next%20%E4%B8%BB%E9%A2%98%E4%BC%98%E5%8C%96/</url>
     <content><![CDATA[<h2 id="已折腾的优化"><a href="#已折腾的优化" class="headerlink" title="已折腾的优化"></a>已折腾的优化</h2><ol>
@@ -319,6 +293,237 @@
         <tag>操作系统</tag>
         <tag>专业课笔记</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>操作系统笔记 CH10 File-System Interface</title>
+    <url>/2020/02/28/OS10/</url>
+    <content><![CDATA[<h2 id="file-concept"><a href="#file-concept" class="headerlink" title="file concept"></a>file concept</h2><p>文件：记录在外存上的 相关信息的 具有名称的 集合，逻辑内存的最小分配单元</p>
+<p>通常，文件表示程序和数据</p>
+<p>free form or may be formatted rigidly</p>
+<h3 id="file-attributes"><a href="#file-attributes" class="headerlink" title="file attributes"></a>file attributes</h3><ul>
+<li>name: human-readable</li>
+<li>identifier: a unique number, non-human-readable name</li>
+<li>type</li>
+<li>location</li>
+<li>size</li>
+<li>protection</li>
+<li>time, date and user identification</li>
+</ul>
+<p>文件的信息存在directory中，directory也存在外存上</p>
+<p>A directory entry consists of the file’s name and its unique id. The id in turn locates the other file attributes.</p>
+<h3 id="file-operations"><a href="#file-operations" class="headerlink" title="file operations"></a>file operations</h3><p>6个基本文件操作：</p>
+<ul>
+<li><p>create</p>
+</li>
+<li><p>write</p>
+<p>write pointer</p>
+</li>
+<li><p>read</p>
+<p>read pointer</p>
+<p>A per-process current-file-position pointer</p>
+</li>
+<li><p>reposition</p>
+<p>file seek, not need I/O</p>
+</li>
+<li><p>delete</p>
+<p>release file space, erase directory entry</p>
+</li>
+<li><p>truncate</p>
+<p>reset length to 0, release file space</p>
+<p>只删除内容，保留属性</p>
+</li>
+</ul>
+<p>基本操作可以组合成其他操作</p>
+<p>Most file operations involve searching the directory for the entry associated with the named file</p>
+<p>首次使用文件时，使用系统调用open()</p>
+<p>OS维护一个包含所有打开文件的信息表(open-file table)。当需要一个文件操作时，通过该表的一个索引指定文件，无需搜索。文件不再使用时，进程可关闭它，OS从open-file table删除这一条目。系统调用create和delete操作的是关闭文件，而不是打开文件。</p>
+<p>系统调用open()返回一个指向open-file table中一个条目的指针。通过使用该指针，而不是真实文件名称，进行所有IO操作。also accept access mode information, such as create, read-only, read-write, append-only, etc.</p>
+<p>close(Fi), move the content of entry Fi in open-file table to directory structure on disk.</p>
+<p>多进程可能同时打开同一文件。OS采用两级内部表。</p>
+<ul>
+<li><p>Process open-file table, a per-process table</p>
+<p>该进程所使用的文件信息</p>
+<p>单个进程表的每个条目相应地指向整个系统的打开文件表</p>
+</li>
+<li><p>System open-file table, a system-wide table</p>
+<p>包含进程无关信息(如文件在磁盘上的位置，访问日期和文件大小)</p>
+<p>一旦一个进程打开文件，System open-file table会增加相应条目，当另一个进程执行调用open()，在其Process open-file table增加一个条目，并指向System open-file table相应条目</p>
+<p>每个文件有一个open count，记录多少进程打开了该文件。当open count=0，该文件条目可删除。</p>
+</li>
+</ul>
+<p>每个打开文件有如下信息：</p>
+<ul>
+<li><p>file pointer</p>
+<p>pointer to last read/write location</p>
+<p>对每个进程唯一</p>
+</li>
+<li><p>file-open count</p>
+</li>
+<li><p>disk location of file</p>
+</li>
+<li><p>access rights</p>
+<p>每个进程用一个访问模式打开文件</p>
+<p>保存在单个进程打开文件表中</p>
+</li>
+</ul>
+<h4 id="文件锁-file-locks"><a href="#文件锁-file-locks" class="headerlink" title="文件锁(file locks)"></a>文件锁(file locks)</h4><p>shared lock: 多个进程并发获取</p>
+<p>exclusive lock: 只有一个进程可以获取</p>
+<p>加锁机制：</p>
+<p>mandatory强制：一个进程获得锁，阻止其他进程访问已加锁的文件。access is denied depending on locks held and requested. – Windows OS. </p>
+<p>advisory建议：processes can find status of locks and decide what to do. – Unix OS.</p>
+<h3 id="file-types"><a href="#file-types" class="headerlink" title="file types"></a>file types</h3><p>实现文件类型的常用技术：在文件名称内包含类型。名称可分为两部分：name , extension</p>
+<p>Some OS, each file has a type, and a creator attribute containing the name of the program that created it.</p>
+<p>UNIX, a magic number stored at the beginning of some files to indicate roughly the type of the file.</p>
+<h2 id="access-methods"><a href="#access-methods" class="headerlink" title="access methods"></a>access methods</h2><p>Criteria for File Organization: Rapid access, Ease of update, Economy of storage, Simple maintenance, Reliability</p>
+<h3 id="sequential-access-顺序访问"><a href="#sequential-access-顺序访问" class="headerlink" title="sequential access 顺序访问"></a>sequential access 顺序访问</h3><p>基于文件的磁带模型。不仅适用于顺序访问设备，也适用于随机访问设备</p>
+<h3 id="direct-access-直接访问"><a href="#direct-access-直接访问" class="headerlink" title="direct access 直接访问"></a>direct access 直接访问</h3><p>文件由固定长度的逻辑记录组成。基于文件的磁盘模型。可立即访问大量信息。数据库常采用这种类型的文件。</p>
+<p>提供的是相对块号。</p>
+<p>对直接访问文件，可容易地模拟顺序访问。反过来很低效。</p>
+<h3 id="其他访问方式"><a href="#其他访问方式" class="headerlink" title="其他访问方式"></a>其他访问方式</h3><p>通常涉及创建索引</p>
+<h2 id="directory-structure"><a href="#directory-structure" class="headerlink" title="directory structure"></a>directory structure</h2><p>有时需要在一个磁盘上装多种文件系统</p>
+<p>Disk can be subdivided into partitions.</p>
+<p>Disk or partition can be used：</p>
+<p>​    raw, without a file system, e.g. swap space</p>
+<p>​    formatted with a file system</p>
+<p>Volume: Entity containing file system</p>
+<p>Each volume containing file system also tracks that file system’s info in device directory or volume table of contents.</p>
+<p>Disks or partitions can be RAID protected against failure.</p>
+<p>directory可看作符号表，将 文件名 转换成 目录条目</p>
+<p>Both the directory structure and the files reside on disk.</p>
+<h3 id="Single-Level-Directory"><a href="#Single-Level-Directory" class="headerlink" title="Single-Level Directory"></a>Single-Level Directory</h3><p>所有文件包含在同一目录中</p>
+<p>必须有唯一名称</p>
+<p>naming problem , grouping problem</p>
+<h3 id="Two-Level-Directory"><a href="#Two-Level-Directory" class="headerlink" title="Two-Level Directory"></a>Two-Level Directory</h3><p>为每个用户创建独立目录</p>
+<p>A master file directory(主文件目录MFD) and one user file directory(用户文件目录UFD) for each user.</p>
+<p>UFD内文件名唯一即可</p>
+<p>No grouping capability </p>
+<p>File sharing怎么解决</p>
+<ul>
+<li>Path name. defined by a user name and a file name.</li>
+<li>Special user directory, containing system files.</li>
+<li>Search path, the sequence of directories searched.</li>
+</ul>
+<h3 id="Tree-Structured-Directories"><a href="#Tree-Structured-Directories" class="headerlink" title="Tree-Structured Directories"></a>Tree-Structured Directories</h3><p>树有根目录，系统内的每个文件都有唯一路径名</p>
+<p>One bit in each entry defines the entry as a file(0) or as a subdirectory(1).</p>
+<p>Grouping Capability</p>
+<p>每个进程有 Current directory (working directory) 当前目录 In accounting file, a pointer/the name of the user’s initial directory. Copied to a local variable for this user.</p>
+<p>Absolute path name: 从根开始</p>
+<p>relative path name: 从当前目录开始</p>
+<p>创建子目录/新文件在当前目录下完成</p>
+<p>Deleting a subdirectory</p>
+<p>​    deleting a empty directory. – MS-DOS 目录不为空不能删除</p>
+<p>​    deleting all files and subdirectories that it contains.– UNIX 所有该目录的文件和子目录可删除</p>
+<h3 id="Acyclic-Graph-Directories-无环图"><a href="#Acyclic-Graph-Directories-无环图" class="headerlink" title="Acyclic-Graph Directories 无环图"></a>Acyclic-Graph Directories 无环图</h3><p>树状结构禁止共享文件和目录</p>
+<p>注意这里是共享文件而不是文件复制，共享文件任何改变为其他用户可见</p>
+<p>Ways implementing shared files and subdirectories: </p>
+<p>​    Create a new directory entry, called a link. – UNIX  link, a pointer to another file or subdirectory. Resolve the link – follow pointer to locate the file.</p>
+<p>​    duplicate all information about shared files in all sharing directories. 问题：维护一致性</p>
+<p>当用户删除文件时就删除，会留下dangling pointer</p>
+<p>​    对于link: Deletion of a link need not affectt he original file. Deletion of the file entry, leaving the links dangling.</p>
+<p>​    对于duplication: File-reference list, Backpointers. 为每个文件保留一个引用列表或引用计数Backpointers, so we can delete all pointers.</p>
+<h3 id="General-Graph-Directory"><a href="#General-Graph-Directory" class="headerlink" title="General Graph Directory"></a>General Graph Directory</h3><p>允许环存在</p>
+<p>为避免无限循环：强制限制在搜索时所访问目录的次数</p>
+<p>何时可删除？因为有环，就算不存在引用，其引用计数也可能不为0，可能存在自我引用。解决办法：Garbage collection: The first pass, traversing the entire file system, marking everything that can be accessed.  The second pass, collects everything that is not marked onto a list of free space.</p>
+<p>How to avoid cycles? Allow only links to file not subdirectories. Every time a new link is added use a cycle detection algorithm. A simpler algorithm, bypass links during directory traversal.</p>
+<h2 id="file-system-mounting-文件系统安装"><a href="#file-system-mounting-文件系统安装" class="headerlink" title="file system mounting 文件系统安装"></a>file system mounting 文件系统安装</h2><ol>
+<li><p>OS需要知道 设备名称 和 安装点(mount point)</p>
+</li>
+<li><p>OS验证设备是否包含一个有效文件系统(通过device driver读入设备目录，验证目录是否具有期望格式)</p>
+</li>
+<li><p>OS在其目录结构记录下：一个文件系统已安装在给定安装点上</p>
+</li>
+</ol>
+<p>Systems impose semantics to clarify functionality.</p>
+<h2 id="file-sharing"><a href="#file-sharing" class="headerlink" title="file sharing"></a>file sharing</h2><p>多用户需要共享文件</p>
+<p>Sharing may be done through a protection scheme.</p>
+<p>More file and directory attributes are needed: File / directory owner; File / directory user, access rights; File / directory user groups, access rights</p>
+<p>User IDs identify users, allowing permissions and protections to be per-user. Group IDs allow users to be in groups, permitting group access rights.</p>
+<h3 id="remote-file-system-远程文件系统"><a href="#remote-file-system-远程文件系统" class="headerlink" title="remote file system 远程文件系统"></a>remote file system 远程文件系统</h3><ol>
+<li><p>通过程序(如ftp)在机器之间进行文件的人工传输</p>
+</li>
+<li><p>distributed file systems (DFS)</p>
+<p>远程目录可从本机上直接访问</p>
+<p>much tighter integration</p>
+</li>
+<li><p>via the World Wide Web(WWW)</p>
+<p>A browser is needed. uses anonymous file exchange.</p>
+</li>
+</ol>
+<h4 id="Client-server-model"><a href="#Client-server-model" class="headerlink" title="Client-server model"></a>Client-server model</h4><p>allows clients to mount remote file systems from servers.</p>
+<p>Client and user-on-client identification is insecure or complicated.</p>
+<p>​    client can be specified by a network name or other identifier, such as an IP address, Can be spoofed or imitated.</p>
+<p>​    Secure authentication via encrypted keys. Ensuring compatibility of the client and server.</p>
+<p>NFS: standard UNIX client-server file sharing protocol</p>
+<p>CIFS(Common Internet File System): standard Windows protocol, uses active directory</p>
+<p>Standard operating system file calls are translated into remote calls远程调用</p>
+<h4 id="Distributed-Information-Systems"><a href="#Distributed-Information-Systems" class="headerlink" title="Distributed Information Systems"></a>Distributed Information Systems</h4><p>Providing unified access to the information needed for remote computing.</p>
+<p>DNS (domain name system) provides host-name-to-network-address translations for entire internet.</p>
+<p>NIS (network information service), yellow pages黄页, centralizes storage of user names, host names, printer information, and the like.</p>
+<p>LDAP (lightweight directory-access protocol), used by industry as a secure distributed naming mechanism. secure single sign-on</p>
+<h4 id="Failure-Modes-故障模式"><a href="#Failure-Modes-故障模式" class="headerlink" title="Failure Modes 故障模式"></a>Failure Modes 故障模式</h4><p>Remote file systems add new failure modes, due to network failure, server failure.</p>
+<p>Recovery from failure can involve state information about status状态信息 of each remote request.</p>
+<p>Stateless protocols such as NFS V3 include all information in each request, allowing easy recovery but less security.</p>
+<p>In NFS V4, it is made stateful</p>
+<h3 id="Consistency-Semantics-一致性语义"><a href="#Consistency-Semantics-一致性语义" class="headerlink" title="Consistency Semantics 一致性语义"></a>Consistency Semantics 一致性语义</h3><p>描述多用户同时访问共享文件时的语义。规定了一个用户所修改的数据何时对另一用户可见。</p>
+<p>由于延迟，不适合类似进程同步那些复杂算法</p>
+<ul>
+<li><p>AFS (Andrew File System) implemented complex remote file sharing semantics</p>
+<p>server记录client的动作</p>
+<p>When a client changes a file, the server notifies other clients with a call back promise technique</p>
+<p>一个用户对打开文件的写不能立即被打开同一文件的其他用户看见。一旦文件关闭，其修改只能被以后打开的会话所见。</p>
+<p>多个用户允许对自己的映像进行并发(没有延迟)的读写操作</p>
+</li>
+<li><p>UFS (Unix file system) implements</p>
+<p>一个文件与单个物理映射相关联，该映射作为互斥资源访问。修改立即可见。竞争导致用户进程延迟。</p>
+</li>
+<li><p>Immutable shared files, declared by its creator. Read-only. 不可修改</p>
+</li>
+</ul>
+<h2 id="protection"><a href="#protection" class="headerlink" title="protection"></a>protection</h2><p>高层功能可以用系统程序调用低层系统调用实现。保护可以只在低层提供。</p>
+<p>Mode of access: read, write, execute</p>
+<p>为每个文件和目录增加一个访问控制列表ACL(Access-control list)，给定每个用户名及其允许访问的类型</p>
+<p>三种用户类型:</p>
+<ul>
+<li>owner</li>
+<li>group</li>
+<li>universe(public): all other users in the system</li>
+</ul>
+<p>每个域三个位:RWX. 需要9个位</p>
+]]></content>
+      <categories>
+        <category>所学</category>
+        <category>计算机基础</category>
+      </categories>
+      <tags>
+        <tag>操作系统</tag>
+        <tag>专业课笔记</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Anaconda一些命令</title>
+    <url>/2020/02/29/Anaconda%E4%B8%80%E4%BA%9B%E5%91%BD%E4%BB%A4/</url>
+    <content><![CDATA[<p>创建环境</p>
+<figure class="highlight sas"><table><tr><td class="code"><pre><span class="line">conda <span class="meta">create</span> -n envname python=<span class="meta">x</span>.<span class="meta">x</span></span><br></pre></td></tr></table></figure>
+
+<p>删除环境</p>
+<figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">conda <span class="built_in">remove</span> -n envname <span class="comment">--all</span></span><br></pre></td></tr></table></figure>
+
+<p>进入环境conda activate 退出环境conda deactivate</p>
+<p>列出安装的库</p>
+<figure class="highlight ebnf"><table><tr><td class="code"><pre><span class="line"><span class="attribute">conda list</span></span><br></pre></td></tr></table></figure>
+
+<p>升级所有库</p>
+<figure class="highlight livecodeserver"><table><tr><td class="code"><pre><span class="line">conda upgrade <span class="comment">--all</span></span><br></pre></td></tr></table></figure>
+
+<p>换源</p>
+<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">conda config --add channels https:<span class="regexp">//mi</span>rrors.tuna.tsinghua.edu.cn<span class="regexp">/anaconda/</span>pkgs<span class="regexp">/free/</span></span><br><span class="line"></span><br><span class="line">conda config --add channels https:<span class="regexp">//mi</span>rrors.tuna.tsinghua.edu.cn<span class="regexp">/anaconda/</span>pkgs<span class="regexp">/main/</span></span><br><span class="line"></span><br><span class="line">conda config --set show_channel_urls yes</span><br></pre></td></tr></table></figure>
+
+<p>pip install -i <a href="https://pypi.tuna.tsinghua.edu.cn/simple">https://pypi.tuna.tsinghua.edu.cn/simple</a> xxx</p>
+]]></content>
+      <categories>
+        <category>所学</category>
+        <category>折腾</category>
+      </categories>
   </entry>
   <entry>
     <title>操作系统笔记 CH11 File-System Implementation</title>
@@ -1843,12 +2048,16 @@
     <content><![CDATA[<h2 id="网络代理配置"><a href="#网络代理配置" class="headerlink" title="网络代理配置"></a>网络代理配置</h2><p>刚开始用 <code>apt-get</code> 就被卡到。</p>
 <p>WSL1 的时候，Linux 子系统和 Windows 主机是共享一个 localhost 的。WSL2 由于通过虚拟机实现，若要访问 Windows 主机的网络，需要使用主机的 IP 地址（IP 地址可以用 <code>ipconfig</code> 命令查看）。</p>
 <h3 id="WSL2-环境变量配置"><a href="#WSL2-环境变量配置" class="headerlink" title="WSL2 环境变量配置"></a>WSL2 环境变量配置</h3><p>V2ray 的话，默认 socks5 端口是 10808，默认 http 端口是 10809。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">export</span> http_proxy = <span class="string">&quot;socks5://&lt;windows_ip&gt;:10808&quot;</span></span><br><span class="line"><span class="built_in">export</span> https_proxy = <span class="string">&quot;socks5://&lt;windows_ip&gt;:10808&quot;</span></span><br></pre></td></tr></table></figure>
+<p>如果是 Clash for Windows 的话，默认 socks5 端口是 7891，默认 http 端口是 7890。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">export</span> http_proxy = <span class="string">&quot;socks5://&lt;windows_ip&gt;:&lt;socks5_port&gt;&quot;</span></span><br><span class="line"><span class="built_in">export</span> https_proxy = <span class="string">&quot;socks5://&lt;windows_ip&gt;:&lt;socks5_port&gt;&quot;</span></span><br></pre></td></tr></table></figure>
 
 <p>git 也可以设置使用代理。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git config --global http.proxy <span class="string">&quot;socks5://&lt;windows_ip&gt;:10808&quot;</span></span><br><span class="line">git config --global https.proxy <span class="string">&quot;socks5://&lt;windows_ip&gt;:10808&quot;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git config --global http.proxy <span class="string">&quot;socks5://&lt;windows_ip&gt;:&lt;socks5_port&gt;&quot;</span></span><br><span class="line">git config --global https.proxy <span class="string">&quot;socks5://&lt;windows_ip&gt;:&lt;socks5_port&gt;&quot;</span></span><br></pre></td></tr></table></figure>
 
 <p>当然，如果希望每次启动的时候代理配置都生效，可以写入 <code>~/.bashrc</code> 文件中。</p>
+<p>顺便一提查看 git 全局配置的命令是：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git config --global --list</span><br></pre></td></tr></table></figure>
+
 <h3 id="V2ray-配置"><a href="#V2ray-配置" class="headerlink" title="V2ray 配置"></a>V2ray 配置</h3><p>在设置中要勾选上「允许来自局域网的连接」。</p>
 <h2 id="默认-shell-设置"><a href="#默认-shell-设置" class="headerlink" title="默认 shell 设置"></a>默认 shell 设置</h2><p>执行 <code>chsh</code> 命令打开新的 WSL 窗口的时候，默认 shell 仍然没有变化。</p>
 <p>还是需要在 <code>~/.bashrc</code> 中加上一行：</p>
@@ -2181,6 +2390,45 @@
 <p>维度是知觉的函数</p>
 <hr>
 <p><code>基本你可以看出来，麦克尤恩字里行间有那种锋利精巧的聪明感。大一还是大二的时候正好麦克尤恩还来北京有个活动，当时还报名去了现场。之后写了一些记录，这里就略过了。赎罪的电影也不错，罗南、一美、本尼，以及凯拉奈特莉的那身绿裙子也非常经典。</code></p>
+]]></content>
+      <categories>
+        <category>所读</category>
+        <category>Kindle clippings</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>那不勒斯四部曲：新名字的故事 摘</title>
+    <url>/2020/02/28/%E9%82%A3%E4%B8%8D%E5%8B%92%E6%96%AF2/</url>
+    <content><![CDATA[<p>那个女性的身体因为仇恨而被消解，因为报仇雪恨，或者说因为正义，那个女性的身体失去了女性气质。</p>
+<hr>
+<p>拉法埃拉·赛鲁罗被销毁了，她已经失去了自己的形状，她已经融化在斯特凡诺的轮廓里，成为了他的附属品：卡拉奇太太。</p>
+<hr>
+<p>我们就这样走了一个小时，边走边聊。陌生人在我们周围熙熙攘攘，说的都是很粗鲁的方言，<u>我们觉得自己独一无二，只有我和他，用那种非常考究的意大利语，说着只有我们感兴趣、其他人不了解的话题</u>。我们在做什么呢？在进行一场讨论吗？在为我们的未来做准备吗？来面对那些和我们一样，学会了使用语言的人们吗？<u>我们在进行符号的交流，就是为了证实我们漫长的友谊是有基础的，而且会产生丰硕的结果吗</u>？是<u>对情欲的一种文雅的掩饰</u>？我不知道，我对于那些话题没有什么兴趣，对于他提出的那些真实的人和事件也没有激情。那不是因为教养，也不是因为习惯，我只是像往常一样，不想丢脸而已。</p>
+<p><code>莱农在第二部里很多这样的内心活动，太熟悉了。太真实了。我们的痛点。</code></p>
+<hr>
+<p>他迫切地需要表达自己，复述他读过的东西，表达自己观察到的事物。这是他整理自己的思想的方式——谈话，谈话，谈话，但我想这也是他寂寞的一种表现。我觉得自己和他很像，这让我觉得很自豪，我和他一样都想塑造自己作为读书人的形象，并且让别人承认这一点，就像在说：<u>这就是我所知道的事情，这就是我要成为的人。</u></p>
+<hr>
+<p>她几乎一直在用方言说话，就好像要表现出谦卑和虚心：我不矫饰，我用我的话来说。她非常诚恳地把那些散乱的事实列举出来，没有像往常一样用一条主线把它们联系起来。</p>
+<hr>
+<p>从那时开始，我为我们度过午后的方式感到懊悔，因为我们一直在紧张地聊天，他迫不及待地表达自己的想法，我也焦急地想说出一些概念，想得到他的认同，再也没有那种他拉着我的手的时刻，他也没有再邀请我坐到他的毛巾上。当我看到布鲁诺和皮诺奇娅为一些很简单的事情哈哈大笑，我很嫉妒他们。我多想和尼诺一起，像他们那样哈哈大笑，我什么也不想要，只希望我们能亲密一点，就像皮诺奇娅和布鲁诺那样就行，我并不奢求太多。</p>
+<hr>
+<p>尽管我一直推着自己向前走，实际上我一直随时准备后退？为什么当事情行不通时，我总是做出一副甜美的笑脸，发出幸福的笑声？为什么我迟早都要给那些让我遭受痛苦的人找到合理的理由？</p>
+<hr>
+<p>只有在这种不可实现的情况下，在大海中央，尼诺给莉拉的那个吻才说得过去。</p>
+<hr>
+<p>最让我感到震撼的是，他从来没有把自己的个人的问题，转化成一个普遍的问题，就像他通常会做的那样。他只谈论他和莉拉，莉拉和他，他没有谈论爱情。他没有说他为什么爱这个人，而不是另一个人。</p>
+<hr>
+<p>是的，莉拉说得对，事情的美丽都是一种假象，天空是让人恐惧的苍穹；我现在活着，距我十步之遥就是海水，这一点儿也不美，这是让人恐惧的情景；我是这个沙滩、这片海的一部分，我是熙熙攘攘的万物中的一员。这是一种宇宙性的恐怖；这时候，我是一个无穷小的分子，通过这个分子，我能觉察到对万物的恐惧；</p>
+<hr>
+<p>我会明白她遭遇了一种我可以了解的东西，那是我对于尼诺的感受，但实际上我并不了解那种感受，也许我永远也不会了解，我只能浮光掠影，有一点粗浅的感觉。我会明白她不是在玩一场夏天的轻浮游戏，而是内心感受到一种极端强烈的冲击，这种感觉从头到脚席卷了她。</p>
+<hr>
+<p>是的，是莉拉让我的讲述变得艰难。我的生活推动着我，我总是想象着假如她在我的位置上，假如她有这份幸运，她会怎么做。她的生活不停出现在我的对面，出现在我说的话里，出现在我的那些决绝的动作里。我的话里常常有她影响的痕迹，是她在暗地里左右着我，有时候多一点，有时候少一些。我还没有考虑过那些她从来没说过的话，那些我可以推测到的话，那些我不知道的事情，后来我在她的笔记里读到的事情，都是经过过滤的，有些是真的，有很多隐含的事情，还有的是谎言。所有的这些事情，都带着对逝去的时光的艰难衡量，而这一切都建立在不可靠的语言的基础之上。</p>
+<hr>
+<p>但莉拉并没有坐以待毙，对于她来说，世界就好像一盘棋，只要移开一道绘制的背景，移动一下棋子，就可以别开生面。</p>
+<hr>
+<p>在这对父女身上，我看到了我从来没有过的体验，我永远都不可能有的体验。这种体验是什么呢？我一时也无法具体地说出来，那也许是一种因训练而得来的能力，让世界上的事情成为自己私事的能力；</p>
+<hr>
+<p><code>毋庸置疑，第二部是观感最精彩的一部。尤其是先看了第一部的电视剧，再开始读第二部，整个画面感太融洽了，而且你本人也并不会很抗拒先入为主的印象抹杀了你想象力的可能性，因为贴合度太高。</code></p>
 ]]></content>
       <categories>
         <category>所读</category>
@@ -2656,250 +2904,6 @@
       </categories>
       <tags>
         <tag>日记</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>那不勒斯四部曲：新名字的故事 摘</title>
-    <url>/2020/02/28/%E9%82%A3%E4%B8%8D%E5%8B%92%E6%96%AF2/</url>
-    <content><![CDATA[<p>那个女性的身体因为仇恨而被消解，因为报仇雪恨，或者说因为正义，那个女性的身体失去了女性气质。</p>
-<hr>
-<p>拉法埃拉·赛鲁罗被销毁了，她已经失去了自己的形状，她已经融化在斯特凡诺的轮廓里，成为了他的附属品：卡拉奇太太。</p>
-<hr>
-<p>我们就这样走了一个小时，边走边聊。陌生人在我们周围熙熙攘攘，说的都是很粗鲁的方言，<u>我们觉得自己独一无二，只有我和他，用那种非常考究的意大利语，说着只有我们感兴趣、其他人不了解的话题</u>。我们在做什么呢？在进行一场讨论吗？在为我们的未来做准备吗？来面对那些和我们一样，学会了使用语言的人们吗？<u>我们在进行符号的交流，就是为了证实我们漫长的友谊是有基础的，而且会产生丰硕的结果吗</u>？是<u>对情欲的一种文雅的掩饰</u>？我不知道，我对于那些话题没有什么兴趣，对于他提出的那些真实的人和事件也没有激情。那不是因为教养，也不是因为习惯，我只是像往常一样，不想丢脸而已。</p>
-<p><code>莱农在第二部里很多这样的内心活动，太熟悉了。太真实了。我们的痛点。</code></p>
-<hr>
-<p>他迫切地需要表达自己，复述他读过的东西，表达自己观察到的事物。这是他整理自己的思想的方式——谈话，谈话，谈话，但我想这也是他寂寞的一种表现。我觉得自己和他很像，这让我觉得很自豪，我和他一样都想塑造自己作为读书人的形象，并且让别人承认这一点，就像在说：<u>这就是我所知道的事情，这就是我要成为的人。</u></p>
-<hr>
-<p>她几乎一直在用方言说话，就好像要表现出谦卑和虚心：我不矫饰，我用我的话来说。她非常诚恳地把那些散乱的事实列举出来，没有像往常一样用一条主线把它们联系起来。</p>
-<hr>
-<p>从那时开始，我为我们度过午后的方式感到懊悔，因为我们一直在紧张地聊天，他迫不及待地表达自己的想法，我也焦急地想说出一些概念，想得到他的认同，再也没有那种他拉着我的手的时刻，他也没有再邀请我坐到他的毛巾上。当我看到布鲁诺和皮诺奇娅为一些很简单的事情哈哈大笑，我很嫉妒他们。我多想和尼诺一起，像他们那样哈哈大笑，我什么也不想要，只希望我们能亲密一点，就像皮诺奇娅和布鲁诺那样就行，我并不奢求太多。</p>
-<hr>
-<p>尽管我一直推着自己向前走，实际上我一直随时准备后退？为什么当事情行不通时，我总是做出一副甜美的笑脸，发出幸福的笑声？为什么我迟早都要给那些让我遭受痛苦的人找到合理的理由？</p>
-<hr>
-<p>只有在这种不可实现的情况下，在大海中央，尼诺给莉拉的那个吻才说得过去。</p>
-<hr>
-<p>最让我感到震撼的是，他从来没有把自己的个人的问题，转化成一个普遍的问题，就像他通常会做的那样。他只谈论他和莉拉，莉拉和他，他没有谈论爱情。他没有说他为什么爱这个人，而不是另一个人。</p>
-<hr>
-<p>是的，莉拉说得对，事情的美丽都是一种假象，天空是让人恐惧的苍穹；我现在活着，距我十步之遥就是海水，这一点儿也不美，这是让人恐惧的情景；我是这个沙滩、这片海的一部分，我是熙熙攘攘的万物中的一员。这是一种宇宙性的恐怖；这时候，我是一个无穷小的分子，通过这个分子，我能觉察到对万物的恐惧；</p>
-<hr>
-<p>我会明白她遭遇了一种我可以了解的东西，那是我对于尼诺的感受，但实际上我并不了解那种感受，也许我永远也不会了解，我只能浮光掠影，有一点粗浅的感觉。我会明白她不是在玩一场夏天的轻浮游戏，而是内心感受到一种极端强烈的冲击，这种感觉从头到脚席卷了她。</p>
-<hr>
-<p>是的，是莉拉让我的讲述变得艰难。我的生活推动着我，我总是想象着假如她在我的位置上，假如她有这份幸运，她会怎么做。她的生活不停出现在我的对面，出现在我说的话里，出现在我的那些决绝的动作里。我的话里常常有她影响的痕迹，是她在暗地里左右着我，有时候多一点，有时候少一些。我还没有考虑过那些她从来没说过的话，那些我可以推测到的话，那些我不知道的事情，后来我在她的笔记里读到的事情，都是经过过滤的，有些是真的，有很多隐含的事情，还有的是谎言。所有的这些事情，都带着对逝去的时光的艰难衡量，而这一切都建立在不可靠的语言的基础之上。</p>
-<hr>
-<p>但莉拉并没有坐以待毙，对于她来说，世界就好像一盘棋，只要移开一道绘制的背景，移动一下棋子，就可以别开生面。</p>
-<hr>
-<p>在这对父女身上，我看到了我从来没有过的体验，我永远都不可能有的体验。这种体验是什么呢？我一时也无法具体地说出来，那也许是一种因训练而得来的能力，让世界上的事情成为自己私事的能力；</p>
-<hr>
-<p><code>毋庸置疑，第二部是观感最精彩的一部。尤其是先看了第一部的电视剧，再开始读第二部，整个画面感太融洽了，而且你本人也并不会很抗拒先入为主的印象抹杀了你想象力的可能性，因为贴合度太高。</code></p>
-]]></content>
-      <categories>
-        <category>所读</category>
-        <category>Kindle clippings</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>操作系统笔记 CH10 File-System Interface</title>
-    <url>/2020/02/28/OS10/</url>
-    <content><![CDATA[<h2 id="file-concept"><a href="#file-concept" class="headerlink" title="file concept"></a>file concept</h2><p>文件：记录在外存上的 相关信息的 具有名称的 集合，逻辑内存的最小分配单元</p>
-<p>通常，文件表示程序和数据</p>
-<p>free form or may be formatted rigidly</p>
-<h3 id="file-attributes"><a href="#file-attributes" class="headerlink" title="file attributes"></a>file attributes</h3><ul>
-<li>name: human-readable</li>
-<li>identifier: a unique number, non-human-readable name</li>
-<li>type</li>
-<li>location</li>
-<li>size</li>
-<li>protection</li>
-<li>time, date and user identification</li>
-</ul>
-<p>文件的信息存在directory中，directory也存在外存上</p>
-<p>A directory entry consists of the file’s name and its unique id. The id in turn locates the other file attributes.</p>
-<h3 id="file-operations"><a href="#file-operations" class="headerlink" title="file operations"></a>file operations</h3><p>6个基本文件操作：</p>
-<ul>
-<li><p>create</p>
-</li>
-<li><p>write</p>
-<p>write pointer</p>
-</li>
-<li><p>read</p>
-<p>read pointer</p>
-<p>A per-process current-file-position pointer</p>
-</li>
-<li><p>reposition</p>
-<p>file seek, not need I/O</p>
-</li>
-<li><p>delete</p>
-<p>release file space, erase directory entry</p>
-</li>
-<li><p>truncate</p>
-<p>reset length to 0, release file space</p>
-<p>只删除内容，保留属性</p>
-</li>
-</ul>
-<p>基本操作可以组合成其他操作</p>
-<p>Most file operations involve searching the directory for the entry associated with the named file</p>
-<p>首次使用文件时，使用系统调用open()</p>
-<p>OS维护一个包含所有打开文件的信息表(open-file table)。当需要一个文件操作时，通过该表的一个索引指定文件，无需搜索。文件不再使用时，进程可关闭它，OS从open-file table删除这一条目。系统调用create和delete操作的是关闭文件，而不是打开文件。</p>
-<p>系统调用open()返回一个指向open-file table中一个条目的指针。通过使用该指针，而不是真实文件名称，进行所有IO操作。also accept access mode information, such as create, read-only, read-write, append-only, etc.</p>
-<p>close(Fi), move the content of entry Fi in open-file table to directory structure on disk.</p>
-<p>多进程可能同时打开同一文件。OS采用两级内部表。</p>
-<ul>
-<li><p>Process open-file table, a per-process table</p>
-<p>该进程所使用的文件信息</p>
-<p>单个进程表的每个条目相应地指向整个系统的打开文件表</p>
-</li>
-<li><p>System open-file table, a system-wide table</p>
-<p>包含进程无关信息(如文件在磁盘上的位置，访问日期和文件大小)</p>
-<p>一旦一个进程打开文件，System open-file table会增加相应条目，当另一个进程执行调用open()，在其Process open-file table增加一个条目，并指向System open-file table相应条目</p>
-<p>每个文件有一个open count，记录多少进程打开了该文件。当open count=0，该文件条目可删除。</p>
-</li>
-</ul>
-<p>每个打开文件有如下信息：</p>
-<ul>
-<li><p>file pointer</p>
-<p>pointer to last read/write location</p>
-<p>对每个进程唯一</p>
-</li>
-<li><p>file-open count</p>
-</li>
-<li><p>disk location of file</p>
-</li>
-<li><p>access rights</p>
-<p>每个进程用一个访问模式打开文件</p>
-<p>保存在单个进程打开文件表中</p>
-</li>
-</ul>
-<h4 id="文件锁-file-locks"><a href="#文件锁-file-locks" class="headerlink" title="文件锁(file locks)"></a>文件锁(file locks)</h4><p>shared lock: 多个进程并发获取</p>
-<p>exclusive lock: 只有一个进程可以获取</p>
-<p>加锁机制：</p>
-<p>mandatory强制：一个进程获得锁，阻止其他进程访问已加锁的文件。access is denied depending on locks held and requested. – Windows OS. </p>
-<p>advisory建议：processes can find status of locks and decide what to do. – Unix OS.</p>
-<h3 id="file-types"><a href="#file-types" class="headerlink" title="file types"></a>file types</h3><p>实现文件类型的常用技术：在文件名称内包含类型。名称可分为两部分：name , extension</p>
-<p>Some OS, each file has a type, and a creator attribute containing the name of the program that created it.</p>
-<p>UNIX, a magic number stored at the beginning of some files to indicate roughly the type of the file.</p>
-<h2 id="access-methods"><a href="#access-methods" class="headerlink" title="access methods"></a>access methods</h2><p>Criteria for File Organization: Rapid access, Ease of update, Economy of storage, Simple maintenance, Reliability</p>
-<h3 id="sequential-access-顺序访问"><a href="#sequential-access-顺序访问" class="headerlink" title="sequential access 顺序访问"></a>sequential access 顺序访问</h3><p>基于文件的磁带模型。不仅适用于顺序访问设备，也适用于随机访问设备</p>
-<h3 id="direct-access-直接访问"><a href="#direct-access-直接访问" class="headerlink" title="direct access 直接访问"></a>direct access 直接访问</h3><p>文件由固定长度的逻辑记录组成。基于文件的磁盘模型。可立即访问大量信息。数据库常采用这种类型的文件。</p>
-<p>提供的是相对块号。</p>
-<p>对直接访问文件，可容易地模拟顺序访问。反过来很低效。</p>
-<h3 id="其他访问方式"><a href="#其他访问方式" class="headerlink" title="其他访问方式"></a>其他访问方式</h3><p>通常涉及创建索引</p>
-<h2 id="directory-structure"><a href="#directory-structure" class="headerlink" title="directory structure"></a>directory structure</h2><p>有时需要在一个磁盘上装多种文件系统</p>
-<p>Disk can be subdivided into partitions.</p>
-<p>Disk or partition can be used：</p>
-<p>​    raw, without a file system, e.g. swap space</p>
-<p>​    formatted with a file system</p>
-<p>Volume: Entity containing file system</p>
-<p>Each volume containing file system also tracks that file system’s info in device directory or volume table of contents.</p>
-<p>Disks or partitions can be RAID protected against failure.</p>
-<p>directory可看作符号表，将 文件名 转换成 目录条目</p>
-<p>Both the directory structure and the files reside on disk.</p>
-<h3 id="Single-Level-Directory"><a href="#Single-Level-Directory" class="headerlink" title="Single-Level Directory"></a>Single-Level Directory</h3><p>所有文件包含在同一目录中</p>
-<p>必须有唯一名称</p>
-<p>naming problem , grouping problem</p>
-<h3 id="Two-Level-Directory"><a href="#Two-Level-Directory" class="headerlink" title="Two-Level Directory"></a>Two-Level Directory</h3><p>为每个用户创建独立目录</p>
-<p>A master file directory(主文件目录MFD) and one user file directory(用户文件目录UFD) for each user.</p>
-<p>UFD内文件名唯一即可</p>
-<p>No grouping capability </p>
-<p>File sharing怎么解决</p>
-<ul>
-<li>Path name. defined by a user name and a file name.</li>
-<li>Special user directory, containing system files.</li>
-<li>Search path, the sequence of directories searched.</li>
-</ul>
-<h3 id="Tree-Structured-Directories"><a href="#Tree-Structured-Directories" class="headerlink" title="Tree-Structured Directories"></a>Tree-Structured Directories</h3><p>树有根目录，系统内的每个文件都有唯一路径名</p>
-<p>One bit in each entry defines the entry as a file(0) or as a subdirectory(1).</p>
-<p>Grouping Capability</p>
-<p>每个进程有 Current directory (working directory) 当前目录 In accounting file, a pointer/the name of the user’s initial directory. Copied to a local variable for this user.</p>
-<p>Absolute path name: 从根开始</p>
-<p>relative path name: 从当前目录开始</p>
-<p>创建子目录/新文件在当前目录下完成</p>
-<p>Deleting a subdirectory</p>
-<p>​    deleting a empty directory. – MS-DOS 目录不为空不能删除</p>
-<p>​    deleting all files and subdirectories that it contains.– UNIX 所有该目录的文件和子目录可删除</p>
-<h3 id="Acyclic-Graph-Directories-无环图"><a href="#Acyclic-Graph-Directories-无环图" class="headerlink" title="Acyclic-Graph Directories 无环图"></a>Acyclic-Graph Directories 无环图</h3><p>树状结构禁止共享文件和目录</p>
-<p>注意这里是共享文件而不是文件复制，共享文件任何改变为其他用户可见</p>
-<p>Ways implementing shared files and subdirectories: </p>
-<p>​    Create a new directory entry, called a link. – UNIX  link, a pointer to another file or subdirectory. Resolve the link – follow pointer to locate the file.</p>
-<p>​    duplicate all information about shared files in all sharing directories. 问题：维护一致性</p>
-<p>当用户删除文件时就删除，会留下dangling pointer</p>
-<p>​    对于link: Deletion of a link need not affectt he original file. Deletion of the file entry, leaving the links dangling.</p>
-<p>​    对于duplication: File-reference list, Backpointers. 为每个文件保留一个引用列表或引用计数Backpointers, so we can delete all pointers.</p>
-<h3 id="General-Graph-Directory"><a href="#General-Graph-Directory" class="headerlink" title="General Graph Directory"></a>General Graph Directory</h3><p>允许环存在</p>
-<p>为避免无限循环：强制限制在搜索时所访问目录的次数</p>
-<p>何时可删除？因为有环，就算不存在引用，其引用计数也可能不为0，可能存在自我引用。解决办法：Garbage collection: The first pass, traversing the entire file system, marking everything that can be accessed.  The second pass, collects everything that is not marked onto a list of free space.</p>
-<p>How to avoid cycles? Allow only links to file not subdirectories. Every time a new link is added use a cycle detection algorithm. A simpler algorithm, bypass links during directory traversal.</p>
-<h2 id="file-system-mounting-文件系统安装"><a href="#file-system-mounting-文件系统安装" class="headerlink" title="file system mounting 文件系统安装"></a>file system mounting 文件系统安装</h2><ol>
-<li><p>OS需要知道 设备名称 和 安装点(mount point)</p>
-</li>
-<li><p>OS验证设备是否包含一个有效文件系统(通过device driver读入设备目录，验证目录是否具有期望格式)</p>
-</li>
-<li><p>OS在其目录结构记录下：一个文件系统已安装在给定安装点上</p>
-</li>
-</ol>
-<p>Systems impose semantics to clarify functionality.</p>
-<h2 id="file-sharing"><a href="#file-sharing" class="headerlink" title="file sharing"></a>file sharing</h2><p>多用户需要共享文件</p>
-<p>Sharing may be done through a protection scheme.</p>
-<p>More file and directory attributes are needed: File / directory owner; File / directory user, access rights; File / directory user groups, access rights</p>
-<p>User IDs identify users, allowing permissions and protections to be per-user. Group IDs allow users to be in groups, permitting group access rights.</p>
-<h3 id="remote-file-system-远程文件系统"><a href="#remote-file-system-远程文件系统" class="headerlink" title="remote file system 远程文件系统"></a>remote file system 远程文件系统</h3><ol>
-<li><p>通过程序(如ftp)在机器之间进行文件的人工传输</p>
-</li>
-<li><p>distributed file systems (DFS)</p>
-<p>远程目录可从本机上直接访问</p>
-<p>much tighter integration</p>
-</li>
-<li><p>via the World Wide Web(WWW)</p>
-<p>A browser is needed. uses anonymous file exchange.</p>
-</li>
-</ol>
-<h4 id="Client-server-model"><a href="#Client-server-model" class="headerlink" title="Client-server model"></a>Client-server model</h4><p>allows clients to mount remote file systems from servers.</p>
-<p>Client and user-on-client identification is insecure or complicated.</p>
-<p>​    client can be specified by a network name or other identifier, such as an IP address, Can be spoofed or imitated.</p>
-<p>​    Secure authentication via encrypted keys. Ensuring compatibility of the client and server.</p>
-<p>NFS: standard UNIX client-server file sharing protocol</p>
-<p>CIFS(Common Internet File System): standard Windows protocol, uses active directory</p>
-<p>Standard operating system file calls are translated into remote calls远程调用</p>
-<h4 id="Distributed-Information-Systems"><a href="#Distributed-Information-Systems" class="headerlink" title="Distributed Information Systems"></a>Distributed Information Systems</h4><p>Providing unified access to the information needed for remote computing.</p>
-<p>DNS (domain name system) provides host-name-to-network-address translations for entire internet.</p>
-<p>NIS (network information service), yellow pages黄页, centralizes storage of user names, host names, printer information, and the like.</p>
-<p>LDAP (lightweight directory-access protocol), used by industry as a secure distributed naming mechanism. secure single sign-on</p>
-<h4 id="Failure-Modes-故障模式"><a href="#Failure-Modes-故障模式" class="headerlink" title="Failure Modes 故障模式"></a>Failure Modes 故障模式</h4><p>Remote file systems add new failure modes, due to network failure, server failure.</p>
-<p>Recovery from failure can involve state information about status状态信息 of each remote request.</p>
-<p>Stateless protocols such as NFS V3 include all information in each request, allowing easy recovery but less security.</p>
-<p>In NFS V4, it is made stateful</p>
-<h3 id="Consistency-Semantics-一致性语义"><a href="#Consistency-Semantics-一致性语义" class="headerlink" title="Consistency Semantics 一致性语义"></a>Consistency Semantics 一致性语义</h3><p>描述多用户同时访问共享文件时的语义。规定了一个用户所修改的数据何时对另一用户可见。</p>
-<p>由于延迟，不适合类似进程同步那些复杂算法</p>
-<ul>
-<li><p>AFS (Andrew File System) implemented complex remote file sharing semantics</p>
-<p>server记录client的动作</p>
-<p>When a client changes a file, the server notifies other clients with a call back promise technique</p>
-<p>一个用户对打开文件的写不能立即被打开同一文件的其他用户看见。一旦文件关闭，其修改只能被以后打开的会话所见。</p>
-<p>多个用户允许对自己的映像进行并发(没有延迟)的读写操作</p>
-</li>
-<li><p>UFS (Unix file system) implements</p>
-<p>一个文件与单个物理映射相关联，该映射作为互斥资源访问。修改立即可见。竞争导致用户进程延迟。</p>
-</li>
-<li><p>Immutable shared files, declared by its creator. Read-only. 不可修改</p>
-</li>
-</ul>
-<h2 id="protection"><a href="#protection" class="headerlink" title="protection"></a>protection</h2><p>高层功能可以用系统程序调用低层系统调用实现。保护可以只在低层提供。</p>
-<p>Mode of access: read, write, execute</p>
-<p>为每个文件和目录增加一个访问控制列表ACL(Access-control list)，给定每个用户名及其允许访问的类型</p>
-<p>三种用户类型:</p>
-<ul>
-<li>owner</li>
-<li>group</li>
-<li>universe(public): all other users in the system</li>
-</ul>
-<p>每个域三个位:RWX. 需要9个位</p>
-]]></content>
-      <categories>
-        <category>所学</category>
-        <category>计算机基础</category>
-      </categories>
-      <tags>
-        <tag>操作系统</tag>
-        <tag>专业课笔记</tag>
       </tags>
   </entry>
 </search>

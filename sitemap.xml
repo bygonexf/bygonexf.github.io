@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://bygonexf.github.io/2021/03/21/wsl/</loc>
+    
+    <lastmod>2021-03-30</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://bygonexf.github.io/2021/03/29/multimedia-basics/</loc>
     
     <lastmod>2021-03-29</lastmod>
@@ -152,13 +159,6 @@
     <loc>https://bygonexf.github.io/2020/02/29/Anaconda%E4%B8%80%E4%BA%9B%E5%91%BD%E4%BB%A4/</loc>
     
     <lastmod>2021-03-29</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://bygonexf.github.io/2021/03/21/wsl/</loc>
-    
-    <lastmod>2021-03-21</lastmod>
     
   </url>
   
@@ -328,14 +328,14 @@
   </url>
   
   <url>
-    <loc>https://bygonexf.github.io/categories/%E6%89%80%E5%AD%A6/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/</loc>
+    <loc>https://bygonexf.github.io/categories/%E6%89%80%E5%AD%A6/%E6%8A%98%E8%85%BE/</loc>
     <lastmod>2021-03-30</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://bygonexf.github.io/categories/%E6%89%80%E5%AD%A6/%E6%8A%98%E8%85%BE/</loc>
+    <loc>https://bygonexf.github.io/categories/%E6%89%80%E5%AD%A6/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/</loc>
     <lastmod>2021-03-30</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
