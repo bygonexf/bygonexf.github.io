@@ -1,32 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Anaconda一些命令</title>
-    <url>/2020/02/29/Anaconda%E4%B8%80%E4%BA%9B%E5%91%BD%E4%BB%A4/</url>
-    <content><![CDATA[<p>创建环境</p>
-<figure class="highlight sas"><table><tr><td class="code"><pre><span class="line">conda <span class="meta">create</span> -n envname python=<span class="meta">x</span>.<span class="meta">x</span></span><br></pre></td></tr></table></figure>
-
-<p>删除环境</p>
-<figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">conda <span class="built_in">remove</span> -n envname <span class="comment">--all</span></span><br></pre></td></tr></table></figure>
-
-<p>进入环境conda activate 退出环境conda deactivate</p>
-<p>列出安装的库</p>
-<figure class="highlight ebnf"><table><tr><td class="code"><pre><span class="line"><span class="attribute">conda list</span></span><br></pre></td></tr></table></figure>
-
-<p>升级所有库</p>
-<figure class="highlight livecodeserver"><table><tr><td class="code"><pre><span class="line">conda upgrade <span class="comment">--all</span></span><br></pre></td></tr></table></figure>
-
-<p>换源</p>
-<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">conda config --add channels https:<span class="regexp">//mi</span>rrors.tuna.tsinghua.edu.cn<span class="regexp">/anaconda/</span>pkgs<span class="regexp">/free/</span></span><br><span class="line"></span><br><span class="line">conda config --add channels https:<span class="regexp">//mi</span>rrors.tuna.tsinghua.edu.cn<span class="regexp">/anaconda/</span>pkgs<span class="regexp">/main/</span></span><br><span class="line"></span><br><span class="line">conda config --set show_channel_urls yes</span><br></pre></td></tr></table></figure>
-
-<p>pip install -i <a href="https://pypi.tuna.tsinghua.edu.cn/simple">https://pypi.tuna.tsinghua.edu.cn/simple</a> xxx</p>
-]]></content>
-      <categories>
-        <category>所学</category>
-        <category>折腾</category>
-      </categories>
-  </entry>
-  <entry>
     <title>Hexo NexT 主题优化</title>
     <url>/2020/02/10/Hexo%20Next%20%E4%B8%BB%E9%A2%98%E4%BC%98%E5%8C%96/</url>
     <content><![CDATA[<h2 id="已折腾的优化"><a href="#已折腾的优化" class="headerlink" title="已折腾的优化"></a>已折腾的优化</h2><ol>
@@ -524,6 +498,32 @@
         <tag>操作系统</tag>
         <tag>专业课笔记</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>Anaconda一些命令</title>
+    <url>/2020/02/29/Anaconda%E4%B8%80%E4%BA%9B%E5%91%BD%E4%BB%A4/</url>
+    <content><![CDATA[<p>创建环境</p>
+<figure class="highlight sas"><table><tr><td class="code"><pre><span class="line">conda <span class="meta">create</span> -n envname python=<span class="meta">x</span>.<span class="meta">x</span></span><br></pre></td></tr></table></figure>
+
+<p>删除环境</p>
+<figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">conda <span class="built_in">remove</span> -n envname <span class="comment">--all</span></span><br></pre></td></tr></table></figure>
+
+<p>进入环境conda activate 退出环境conda deactivate</p>
+<p>列出安装的库</p>
+<figure class="highlight ebnf"><table><tr><td class="code"><pre><span class="line"><span class="attribute">conda list</span></span><br></pre></td></tr></table></figure>
+
+<p>升级所有库</p>
+<figure class="highlight livecodeserver"><table><tr><td class="code"><pre><span class="line">conda upgrade <span class="comment">--all</span></span><br></pre></td></tr></table></figure>
+
+<p>换源</p>
+<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">conda config --add channels https:<span class="regexp">//mi</span>rrors.tuna.tsinghua.edu.cn<span class="regexp">/anaconda/</span>pkgs<span class="regexp">/free/</span></span><br><span class="line"></span><br><span class="line">conda config --add channels https:<span class="regexp">//mi</span>rrors.tuna.tsinghua.edu.cn<span class="regexp">/anaconda/</span>pkgs<span class="regexp">/main/</span></span><br><span class="line"></span><br><span class="line">conda config --set show_channel_urls yes</span><br></pre></td></tr></table></figure>
+
+<p>pip install -i <a href="https://pypi.tuna.tsinghua.edu.cn/simple">https://pypi.tuna.tsinghua.edu.cn/simple</a> xxx</p>
+]]></content>
+      <categories>
+        <category>所学</category>
+        <category>折腾</category>
+      </categories>
   </entry>
   <entry>
     <title>操作系统笔记 CH11 File-System Implementation</title>
@@ -1853,6 +1853,24 @@
       </tags>
   </entry>
   <entry>
+    <title>PAT刷题记录 1033 To Fill or Not to Fill</title>
+    <url>/2020/04/19/PAT-1033/</url>
+    <content><![CDATA[<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">double</span> cmax, davg, dall;</span><br><span class="line"><span class="keyword">int</span> n;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Node</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">	<span class="keyword">double</span> price;</span><br><span class="line">	<span class="keyword">double</span> dis;</span><br><span class="line">&#125;sta[<span class="number">505</span>];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">cmp1</span><span class="params">(Node a, Node b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> a.dis &lt; b.dis;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%lf%lf%lf%d&quot;</span>, &amp;cmax, &amp;dall, &amp;davg, &amp;n);</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; ++i)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">scanf</span>(<span class="string">&quot;%lf%lf&quot;</span>, &amp;sta[i].price, &amp;sta[i].dis);</span><br><span class="line">	&#125;</span><br><span class="line">	sort(sta, sta + n, cmp1);</span><br><span class="line">	<span class="keyword">bool</span> flag = <span class="literal">false</span>;</span><br><span class="line">	<span class="keyword">double</span> far = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">int</span> ns = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">int</span> i1 = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">double</span> min1 = <span class="number">9999999</span>;</span><br><span class="line">	<span class="keyword">double</span> cost = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">double</span> cnow = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">double</span> bestprice;</span><br><span class="line">	<span class="keyword">while</span> (sta[i1].dis == <span class="number">0</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (sta[i1].price &lt; min1)</span><br><span class="line">		&#123;</span><br><span class="line">			min1 = sta[i1].price;</span><br><span class="line">			ns = i1;</span><br><span class="line">			far = cmax * davg;</span><br><span class="line">			bestprice = sta[i1].price;</span><br><span class="line">		&#125;</span><br><span class="line">		i1++;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> (min1 == <span class="number">9999999</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;The maximum travel distance = 0.00&quot;</span>);</span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">while</span> (ns &lt; n)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">int</span> i;</span><br><span class="line">		<span class="keyword">int</span> u = <span class="number">-1</span>;</span><br><span class="line">		<span class="keyword">double</span> min = <span class="number">9999999</span>;</span><br><span class="line">		<span class="keyword">for</span> (i = ns + <span class="number">1</span>; sta[i].dis &lt;= far &amp;&amp; i &lt; n; ++i)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">if</span> (sta[i].price &lt; min)</span><br><span class="line">			&#123;</span><br><span class="line">				min = sta[i].price;</span><br><span class="line">				u = i;</span><br><span class="line">				<span class="keyword">if</span> (min &lt; sta[ns].price) <span class="comment">//这一步超级重要！！！第一个比当前小的，就可以停了！后面有更小的，用现在贵的油跑更多也是浪费！</span></span><br><span class="line">					<span class="keyword">break</span>;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span> (u &gt;= <span class="number">0</span> &amp;&amp; min &lt; sta[ns].price) <span class="comment">//如果下一个比当前便宜，只用加到够跑到下一站的油就够了</span></span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">if</span> (cnow &lt; ((sta[u].dis - sta[ns].dis) / davg)) <span class="comment">//因为之前会存在多加油的情况，要判断在那个基础上再加油，解释一下:cnow是当前油量(这里是在更新)</span></span><br><span class="line">			&#123;</span><br><span class="line">				cost += ((sta[u].dis - sta[ns].dis) / davg - cnow) * sta[ns].price;</span><br><span class="line">				cnow = <span class="number">0</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">else</span></span><br><span class="line">			&#123;</span><br><span class="line">				cnow -= (sta[u].dis - sta[ns].dis) / davg;</span><br><span class="line">			&#125;</span><br><span class="line">			far = sta[u].dis + cmax * davg;</span><br><span class="line">			ns = u;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span> <span class="keyword">if</span> (u &gt;= <span class="number">0</span> &amp;&amp; min &gt;= sta[ns].price) <span class="comment">//如果下一个反而贵，在当前就加满！</span></span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">if</span> (far &gt;= dall) <span class="comment">//事实证明这一步也很重要，结束的条件并不一定都是u==-1(也就是找不到下一个了)，现在就能去终点，且下一站的油费比现在贵，现在就应该停</span></span><br><span class="line">			&#123;</span><br><span class="line">				<span class="keyword">if</span> (cnow &lt; ((dall - sta[ns].dis) / davg))</span><br><span class="line">				&#123;</span><br><span class="line">					cost += ((dall - sta[ns].dis) / davg - cnow) * sta[ns].price;</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="built_in">printf</span>(<span class="string">&quot;%.2f&quot;</span>, cost);</span><br><span class="line">				<span class="keyword">break</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			cost += (cmax - cnow) * sta[ns].price;</span><br><span class="line">			cnow = cmax - (sta[u].dis - sta[ns].dis) / davg;</span><br><span class="line">			far = sta[u].dis + cmax * davg;</span><br><span class="line">			ns = u;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span> <span class="keyword">if</span> (u == <span class="number">-1</span> &amp;&amp; far &gt;= dall)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">if</span> (cnow &lt; ((dall - sta[ns].dis) / davg))</span><br><span class="line">			&#123;</span><br><span class="line">				cost += ((dall - sta[ns].dis) / davg - cnow) * sta[ns].price;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="built_in">printf</span>(<span class="string">&quot;%.2f&quot;</span>, cost);</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span> <span class="keyword">if</span> (u == <span class="number">-1</span> &amp;&amp; far &lt; dall)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="built_in">printf</span>(<span class="string">&quot;The maximum travel distance = %.2f&quot;</span>, far);</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>下一个加油站的选择，不是可到达范围里油费最便宜的，而是第一个比当前加油站油费便宜的！这一步自己刚开始一直是错的orz，典型的想当然</p>
+<p>如果不能找到更便宜的下一站，这一站要加满。</p>
+<p>还有一个点是判断结束的条件，现在可到达终点且之后的都贵，就可以停了。</p>]]></content>
+      <categories>
+        <category>所学</category>
+        <category>算法</category>
+      </categories>
+      <tags>
+        <tag>PAT</tag>
+        <tag>贪心</tag>
+        <tag>算法题解</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>PAT刷题记录 1038 Recover the Smallest Number</title>
     <url>/2020/04/19/PAT-1038/</url>
     <content><![CDATA[<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;map&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt; num;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">cmp1</span><span class="params">(<span class="built_in">string</span> a, <span class="built_in">string</span> b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> la = a.length(), lb = b.length();</span><br><span class="line">	<span class="built_in">string</span> temp;</span><br><span class="line">	<span class="keyword">if</span> (la == lb)</span><br><span class="line">		<span class="keyword">return</span> a &lt;= b;</span><br><span class="line">	<span class="keyword">else</span> <span class="keyword">if</span> (la &lt; lb) <span class="comment">//自己重新定义字符串比较的定义</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (a.compare(b.substr(<span class="number">0</span>, la)) == <span class="number">0</span>)</span><br><span class="line">		&#123;</span><br><span class="line">			temp = b.substr(la) + a;</span><br><span class="line">			<span class="keyword">if</span> (temp &lt;= b)</span><br><span class="line">				<span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">			<span class="keyword">else</span></span><br><span class="line">				<span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span></span><br><span class="line">			<span class="keyword">return</span> a &lt;= b;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span> <span class="keyword">if</span> (la &gt; lb)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (b.compare(a.substr(<span class="number">0</span>, lb)) == <span class="number">0</span>)</span><br><span class="line">		&#123;</span><br><span class="line">			temp = a.substr(lb) + b;</span><br><span class="line">			<span class="keyword">if</span> (temp &lt;= a)</span><br><span class="line">				<span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">			<span class="keyword">else</span></span><br><span class="line">				<span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span></span><br><span class="line">			<span class="keyword">return</span> a &lt;= b;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> n;</span><br><span class="line">	<span class="built_in">cin</span> &gt;&gt; n;</span><br><span class="line">	<span class="built_in">string</span> s;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; ++i)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">cin</span> &gt;&gt; s;</span><br><span class="line">		num.push_back(s);</span><br><span class="line">	&#125;</span><br><span class="line">	sort(num.begin(), num.end(), cmp1);</span><br><span class="line">	<span class="keyword">int</span> len = num.size();</span><br><span class="line">	<span class="built_in">string</span> ans = <span class="string">&quot;&quot;</span>;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; len; ++i)</span><br><span class="line">	&#123;</span><br><span class="line">		ans += num[i];</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">int</span> pos = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">bool</span> flag = <span class="literal">false</span>;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; ans.length(); ++i)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (ans[i] != <span class="string">&#x27;0&#x27;</span>)</span><br><span class="line">		&#123;</span><br><span class="line">			pos = i;</span><br><span class="line">			flag = <span class="literal">true</span>;</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> (flag == <span class="literal">false</span>) <span class="comment">//要注意全是0的情况！</span></span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;0&quot;</span>;</span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; ans.substr(pos);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -1879,24 +1897,6 @@
       </tags>
   </entry>
   <entry>
-    <title>PAT刷题记录 1033 To Fill or Not to Fill</title>
-    <url>/2020/04/19/PAT-1033/</url>
-    <content><![CDATA[<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">double</span> cmax, davg, dall;</span><br><span class="line"><span class="keyword">int</span> n;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Node</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">	<span class="keyword">double</span> price;</span><br><span class="line">	<span class="keyword">double</span> dis;</span><br><span class="line">&#125;sta[<span class="number">505</span>];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">cmp1</span><span class="params">(Node a, Node b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> a.dis &lt; b.dis;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="built_in">scanf</span>(<span class="string">&quot;%lf%lf%lf%d&quot;</span>, &amp;cmax, &amp;dall, &amp;davg, &amp;n);</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; ++i)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">scanf</span>(<span class="string">&quot;%lf%lf&quot;</span>, &amp;sta[i].price, &amp;sta[i].dis);</span><br><span class="line">	&#125;</span><br><span class="line">	sort(sta, sta + n, cmp1);</span><br><span class="line">	<span class="keyword">bool</span> flag = <span class="literal">false</span>;</span><br><span class="line">	<span class="keyword">double</span> far = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">int</span> ns = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">int</span> i1 = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">double</span> min1 = <span class="number">9999999</span>;</span><br><span class="line">	<span class="keyword">double</span> cost = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">double</span> cnow = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">double</span> bestprice;</span><br><span class="line">	<span class="keyword">while</span> (sta[i1].dis == <span class="number">0</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (sta[i1].price &lt; min1)</span><br><span class="line">		&#123;</span><br><span class="line">			min1 = sta[i1].price;</span><br><span class="line">			ns = i1;</span><br><span class="line">			far = cmax * davg;</span><br><span class="line">			bestprice = sta[i1].price;</span><br><span class="line">		&#125;</span><br><span class="line">		i1++;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> (min1 == <span class="number">9999999</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;The maximum travel distance = 0.00&quot;</span>);</span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">while</span> (ns &lt; n)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">int</span> i;</span><br><span class="line">		<span class="keyword">int</span> u = <span class="number">-1</span>;</span><br><span class="line">		<span class="keyword">double</span> min = <span class="number">9999999</span>;</span><br><span class="line">		<span class="keyword">for</span> (i = ns + <span class="number">1</span>; sta[i].dis &lt;= far &amp;&amp; i &lt; n; ++i)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">if</span> (sta[i].price &lt; min)</span><br><span class="line">			&#123;</span><br><span class="line">				min = sta[i].price;</span><br><span class="line">				u = i;</span><br><span class="line">				<span class="keyword">if</span> (min &lt; sta[ns].price) <span class="comment">//这一步超级重要！！！第一个比当前小的，就可以停了！后面有更小的，用现在贵的油跑更多也是浪费！</span></span><br><span class="line">					<span class="keyword">break</span>;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span> (u &gt;= <span class="number">0</span> &amp;&amp; min &lt; sta[ns].price) <span class="comment">//如果下一个比当前便宜，只用加到够跑到下一站的油就够了</span></span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">if</span> (cnow &lt; ((sta[u].dis - sta[ns].dis) / davg)) <span class="comment">//因为之前会存在多加油的情况，要判断在那个基础上再加油，解释一下:cnow是当前油量(这里是在更新)</span></span><br><span class="line">			&#123;</span><br><span class="line">				cost += ((sta[u].dis - sta[ns].dis) / davg - cnow) * sta[ns].price;</span><br><span class="line">				cnow = <span class="number">0</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">else</span></span><br><span class="line">			&#123;</span><br><span class="line">				cnow -= (sta[u].dis - sta[ns].dis) / davg;</span><br><span class="line">			&#125;</span><br><span class="line">			far = sta[u].dis + cmax * davg;</span><br><span class="line">			ns = u;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span> <span class="keyword">if</span> (u &gt;= <span class="number">0</span> &amp;&amp; min &gt;= sta[ns].price) <span class="comment">//如果下一个反而贵，在当前就加满！</span></span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">if</span> (far &gt;= dall) <span class="comment">//事实证明这一步也很重要，结束的条件并不一定都是u==-1(也就是找不到下一个了)，现在就能去终点，且下一站的油费比现在贵，现在就应该停</span></span><br><span class="line">			&#123;</span><br><span class="line">				<span class="keyword">if</span> (cnow &lt; ((dall - sta[ns].dis) / davg))</span><br><span class="line">				&#123;</span><br><span class="line">					cost += ((dall - sta[ns].dis) / davg - cnow) * sta[ns].price;</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="built_in">printf</span>(<span class="string">&quot;%.2f&quot;</span>, cost);</span><br><span class="line">				<span class="keyword">break</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			cost += (cmax - cnow) * sta[ns].price;</span><br><span class="line">			cnow = cmax - (sta[u].dis - sta[ns].dis) / davg;</span><br><span class="line">			far = sta[u].dis + cmax * davg;</span><br><span class="line">			ns = u;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span> <span class="keyword">if</span> (u == <span class="number">-1</span> &amp;&amp; far &gt;= dall)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">if</span> (cnow &lt; ((dall - sta[ns].dis) / davg))</span><br><span class="line">			&#123;</span><br><span class="line">				cost += ((dall - sta[ns].dis) / davg - cnow) * sta[ns].price;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="built_in">printf</span>(<span class="string">&quot;%.2f&quot;</span>, cost);</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span> <span class="keyword">if</span> (u == <span class="number">-1</span> &amp;&amp; far &lt; dall)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="built_in">printf</span>(<span class="string">&quot;The maximum travel distance = %.2f&quot;</span>, far);</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>下一个加油站的选择，不是可到达范围里油费最便宜的，而是第一个比当前加油站油费便宜的！这一步自己刚开始一直是错的orz，典型的想当然</p>
-<p>如果不能找到更便宜的下一站，这一站要加满。</p>
-<p>还有一个点是判断结束的条件，现在可到达终点且之后的都贵，就可以停了。</p>]]></content>
-      <categories>
-        <category>所学</category>
-        <category>算法</category>
-      </categories>
-      <tags>
-        <tag>PAT</tag>
-        <tag>算法题解</tag>
-        <tag>贪心</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>PAT刷题记录 1045 Favorite Color Stripe</title>
     <url>/2020/04/19/PAT-1045/</url>
     <content><![CDATA[<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> n, m, l;</span><br><span class="line"><span class="keyword">int</span> color[<span class="number">205</span>];</span><br><span class="line"><span class="keyword">int</span> s[<span class="number">10005</span>];</span><br><span class="line"><span class="keyword">int</span> dp[<span class="number">10005</span>];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="built_in">cin</span> &gt;&gt; n;</span><br><span class="line">	<span class="built_in">cin</span> &gt;&gt; m;</span><br><span class="line">	<span class="keyword">int</span> temp;</span><br><span class="line">	fill(color, color + <span class="number">205</span>, <span class="number">0</span>);</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= m; ++i)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">cin</span> &gt;&gt; temp;</span><br><span class="line">		color[temp] = i;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">cin</span> &gt;&gt; l;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= l; ++i)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">cin</span> &gt;&gt; temp;</span><br><span class="line">		<span class="keyword">if</span> (color[temp] &gt; <span class="number">0</span>) s[i] = color[temp];</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">int</span> max;</span><br><span class="line">	dp[<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= l; ++i)</span><br><span class="line">	&#123;</span><br><span class="line">		max = <span class="number">0</span>;</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt; i; ++j)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">if</span> (s[i] &gt;= s[j] &amp;&amp; dp[j] &gt; max &amp;&amp; s[j] &gt; <span class="number">0</span>) <span class="comment">//s[j]&gt;0确保j是喜欢的颜色</span></span><br><span class="line">			&#123;</span><br><span class="line">				max = dp[j];</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span> (s[i] &gt; <span class="number">0</span>) dp[i] = max + <span class="number">1</span>; <span class="comment">//这里也是为了确保i是喜欢的颜色</span></span><br><span class="line">		<span class="keyword">else</span> dp[i] = <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; dp[l];</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -1912,34 +1912,6 @@
         <tag>算法题解</tag>
         <tag>DP</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>P问题和NP问题</title>
-    <url>/2020/02/06/P%E9%97%AE%E9%A2%98%E5%92%8CNP%E9%97%AE%E9%A2%98/</url>
-    <content><![CDATA[<ul>
-<li><p>P问题</p>
-<p>可以在多项式时间内被解决的问题</p>
-</li>
-<li><p>NP问题</p>
-<p>可以在多项式时间内被验证的问题</p>
-<p>图着色，哈密顿回路，TSP…</p>
-</li>
-<li><p>NP-hard问题</p>
-<p>如果可以证明某问题有一个子问题是NP-Hard问题，那么该问题是一个NP-Hard问题。</p>
-<p>通俗的讲，已经有一个很难的问题L’,而L问题比L’更难解决，那么该问题就是NP-Hard问题。  </p>
-<p>NP-Hard问题不确定是否可以在多项式时间内被验证。 </p>
-<p>停机问题(给出一个程序和输入，判定它的运行是否会终止)是NP-hard但不是NP-complete</p>
-</li>
-<li><p>NPC问题(NP-complete)</p>
-<p>既是NP问题，也是NP-hard问题</p>
-</li>
-</ul>
-<p>NP问题是否是P问题？</p>
-<p> <img src="https://pic1.zhimg.com/80/674c06a71f0a34196da51fe8ce6501a6_hd.jpg" alt="img"> </p>]]></content>
-      <categories>
-        <category>所学</category>
-        <category>计算机基础</category>
-      </categories>
   </entry>
   <entry>
     <title>多媒体基础知识</title>
@@ -2043,6 +2015,45 @@
       </categories>
   </entry>
   <entry>
+    <title>也许是什么的开始...</title>
+    <url>/2019/09/07/%E4%B9%9F%E8%AE%B8%E6%98%AF%E4%BB%80%E4%B9%88%E7%9A%84%E5%BC%80%E5%A7%8B/</url>
+    <content><![CDATA[<p>感觉自己不学无术…</p>
+<p>夜里12点了，在宿舍床上的电脑桌上敲我的第一篇博客。</p>
+<p>如题，希望是什么的开始。</p>
+<p>TBC</p>]]></content>
+      <categories>
+        <category>所思</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>P问题和NP问题</title>
+    <url>/2020/02/06/P%E9%97%AE%E9%A2%98%E5%92%8CNP%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<ul>
+<li><p>P问题</p>
+<p>可以在多项式时间内被解决的问题</p>
+</li>
+<li><p>NP问题</p>
+<p>可以在多项式时间内被验证的问题</p>
+<p>图着色，哈密顿回路，TSP…</p>
+</li>
+<li><p>NP-hard问题</p>
+<p>如果可以证明某问题有一个子问题是NP-Hard问题，那么该问题是一个NP-Hard问题。</p>
+<p>通俗的讲，已经有一个很难的问题L’,而L问题比L’更难解决，那么该问题就是NP-Hard问题。  </p>
+<p>NP-Hard问题不确定是否可以在多项式时间内被验证。 </p>
+<p>停机问题(给出一个程序和输入，判定它的运行是否会终止)是NP-hard但不是NP-complete</p>
+</li>
+<li><p>NPC问题(NP-complete)</p>
+<p>既是NP问题，也是NP-hard问题</p>
+</li>
+</ul>
+<p>NP问题是否是P问题？</p>
+<p> <img src="https://pic1.zhimg.com/80/674c06a71f0a34196da51fe8ce6501a6_hd.jpg" alt="img"> </p>]]></content>
+      <categories>
+        <category>所学</category>
+        <category>计算机基础</category>
+      </categories>
+  </entry>
+  <entry>
     <title>Win10 下 Linux 子系统 (WSL) 配置小记</title>
     <url>/2021/03/21/wsl/</url>
     <content><![CDATA[<h2 id="网络代理配置"><a href="#网络代理配置" class="headerlink" title="网络代理配置"></a>网络代理配置</h2><p>刚开始用 <code>apt-get</code> 就被卡到。</p>
@@ -2073,17 +2084,6 @@
       <tags>
         <tag>WSL</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>也许是什么的开始...</title>
-    <url>/2019/09/07/%E4%B9%9F%E8%AE%B8%E6%98%AF%E4%BB%80%E4%B9%88%E7%9A%84%E5%BC%80%E5%A7%8B/</url>
-    <content><![CDATA[<p>感觉自己不学无术…</p>
-<p>夜里12点了，在宿舍床上的电脑桌上敲我的第一篇博客。</p>
-<p>如题，希望是什么的开始。</p>
-<p>TBC</p>]]></content>
-      <categories>
-        <category>所思</category>
-      </categories>
   </entry>
   <entry>
     <title>没有色彩的多崎作和他的巡礼之年 摘</title>
@@ -2591,7 +2591,7 @@
 <p>在弹幕里看见有人说春哥很像朱爷。确实，瓢哥也是原刑警。有点像哦。</p>
 <p>真的好喜欢call酱。好想被他夸。</p>
 <p>然后就是，自己越来越烂了。也不想也不知道怎么亲切地和朋友保持联系。果然，多于两个人的话，我就倾向于当透明人，只想听着，把自己封闭起来默认所有对话与我无关。觉得，别人很优秀啊很可爱啊人很好啊，所有东西他们都值得，都给他们好了，我没有什么非存在不可的理由。我明明最想要的是和自己类似的同伴，一个人就好，不说话也可以相互理解，长时间不交流依然对亲切感有信心，尽管每个人都在变世界也在变可对羁绊的信念始终有坚实的基础。</p>
-<p>可是纵观我从小到大的好朋友，大部分都是很开朗很能干在世俗上可以很得心应手的人，我被她们照顾，和她们一起出去，我似乎什么也不用主动，也不用去耗费精神力去和不熟的人打交道。时不时会想起高中同桌，那个时候很依赖那个人吧。明明很跳很人群中心的一个人，和当时自己都讨厌的自己也能玩得很好。</p>
+<p>可是纵观我从小到大的好朋友，大部分都是很开朗很能干在世俗上可以很得心应手的人，我被她们照顾，和她们一起出去，我似乎什么也不用主动，也不用去耗费精神力去和不熟的人打交道。</p>
 <h2 id="2020-1"><a href="#2020-1" class="headerlink" title="2020/1"></a>2020/1</h2><h3 id="1-26"><a href="#1-26" class="headerlink" title="1/26"></a>1/26</h3><p>最近的状态太差了。每天就刷微博。有点难过，气愤，也会无感。</p>
 <p>也不学习。看DRRR。</p>
 <p>不过今天开始变高兴起来。各种苏联笑话还有网友宅家里找乐子的法子。</p>
