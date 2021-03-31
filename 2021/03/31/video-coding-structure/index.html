@@ -1,0 +1,124 @@
+<!DOCTYPE html><html lang="zh-Hans"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="H.265/HEVC 编码结构 学习笔记"><meta name="keywords" content=""><meta name="author" content="Choco"><meta name="copyright" content="Choco"><title>H.265/HEVC 编码结构 学习笔记 | Choco Box</title><link rel="shortcut icon" href="/melody-favicon.ico"><link rel="stylesheet" href="/css/index.css?version=1.9.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.9.0"><meta name="format-detection" content="telephone=no"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容:${query}"}},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  hexoVersion: '5.4.0'
+} </script><meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="Choco Box" type="application/atom+xml">
+</head><body><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar" data-display="true"><div class="toggle-sidebar-info text-center"><span data-toggle="切换文章详情">切换站点概览</span><hr></div><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar"></div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%90%8D%E8%AF%8D%E4%B8%80%E8%A7%88"><span class="toc-number">1.</span> <span class="toc-text">名词一览</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BC%96%E7%A0%81%E7%BB%93%E6%9E%84%E6%A6%82%E8%BF%B0"><span class="toc-number">2.</span> <span class="toc-text">编码结构概述</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%96%E7%A0%81%E7%BB%93%E6%9E%84"><span class="toc-number">2.1.</span> <span class="toc-text">编码结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A0%81%E6%B5%81%E7%BB%93%E6%9E%84"><span class="toc-number">2.2.</span> <span class="toc-text">码流结构</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%89%87%E6%AE%B5%E5%B1%82"><span class="toc-number">3.</span> <span class="toc-text">片段层</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Tile-%E5%8D%95%E5%85%83"><span class="toc-number">4.</span> <span class="toc-text">Tile 单元</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Tile-%E5%8D%95%E5%85%83%E6%8F%8F%E8%BF%B0"><span class="toc-number">4.1.</span> <span class="toc-text">Tile 单元描述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Slice-%E5%92%8C-Tile"><span class="toc-number">4.2.</span> <span class="toc-text">Slice 和 Tile</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%91%E5%BD%A2%E7%BC%96%E7%A0%81%E5%9D%97"><span class="toc-number">5.</span> <span class="toc-text">树形编码块</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%96%E7%A0%81%E5%8D%95%E5%85%83"><span class="toc-number">5.1.</span> <span class="toc-text">编码单元</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A2%84%E6%B5%8B%E5%8D%95%E5%85%83"><span class="toc-number">5.2.</span> <span class="toc-text">预测单元</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%98%E6%8D%A2%E5%8D%95%E5%85%83"><span class="toc-number">5.3.</span> <span class="toc-text">变换单元</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A1%A3%E6%AC%A1%E3%80%81%E5%B1%82%E5%92%8C%E7%BA%A7%E5%88%AB"><span class="toc-number">6.</span> <span class="toc-text">档次、层和级别</span></a></li></ol></div></div><div class="author-info hide"><div class="author-info__avatar text-center"><img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/20210228223416.png"></div><div class="author-info__name text-center">Choco</div><div class="author-info__description text-center"></div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/archives"><span class="pull-left">文章</span><span class="pull-right">32</span></a><a class="author-info-articles__tags article-meta" href="/tags"><span class="pull-left">标签</span><span class="pull-right">9</span></a><a class="author-info-articles__categories article-meta" href="/categories"><span class="pull-left">分类</span><span class="pull-right">9</span></a></div></div></div><div id="content-outer"><div id="top-container" style="background-image: url(https://img.imgdb.cn/item/60588fa08322e6675ca04420.jpg)"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/">Choco Box</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus">   <a class="site-page" href="/">主页</a><a class="site-page" href="/archives">归档</a><a class="site-page" href="/tags">标签</a><a class="site-page" href="/categories">分类</a><a class="site-page" href="/about">关于我</a></span><span class="pull-right"><a class="site-page social-icon search"><i class="fa fa-search"></i><span> 搜索</span></a></span></div><div id="post-info"><div id="post-title">H.265/HEVC 编码结构 学习笔记</div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2021-03-31</time><span class="post-meta__separator">|</span><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/%E6%89%80%E5%AD%A6/">所学</a><i class="fa fa-angle-right" aria-hidden="true"></i><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/%E6%89%80%E5%AD%A6/%E8%A7%86%E9%A2%91%E7%BC%96%E7%A0%81/">视频编码</a><div class="post-meta-wordcount"><span>字数总计: </span><span class="word-count">1.9k</span><span class="post-meta__separator">|</span><span>阅读时长: 6 分钟</span></div></div></div></div><div class="layout" id="content-inner"><article id="post"><div class="article-container" id="post-content"><h2 id="名词一览"><a href="#名词一览" class="headerlink" title="名词一览"></a>名词一览</h2><ul>
+<li>GOP (Group of Pictures) - 图像组</li>
+<li>IDR (Instantaneous Decoding Refresh) - 即时解码刷新</li>
+<li>Slice - 片</li>
+<li>SS (Slice Segment) - 片段</li>
+<li>CTU (Coding Tree Unit) - 树形结构单元</li>
+<li>CTB (Coding Tree Block) - 树形编码块</li>
+<li>CU (Coding Unit) - 编码单元</li>
+<li>SPS (Sequence Parameter Set) - 序列参数集</li>
+<li>PPS (Picture Parameter Set) - 图像参数集</li>
+<li>CVS (Coded Video Sequence) - 一个 GOP 编码后生成的压缩数据</li>
+<li>VPS (Video Parameter Set) - 视频参数集</li>
+</ul>
+<h2 id="编码结构概述"><a href="#编码结构概述" class="headerlink" title="编码结构概述"></a>编码结构概述</h2><h3 id="编码结构"><a href="#编码结构" class="headerlink" title="编码结构"></a>编码结构</h3><p><strong>视频序列</strong>分隔为若干个图像组 (<strong>GOP</strong>)。</p>
+<p>存在两种 GOP 类型：</p>
+<ul>
+<li><p>封闭式 GOP </p>
+<p>每一个 GOP 以 IDR 图像开始，各个 GOP 之间独立编解码。</p>
+</li>
+<li><p>开放式 GOP</p>
+<p>第一个 GOP 中的第一个帧内编码图像为 IDR 图像，后续 GOP 中的第一个帧内编码图像为 non-IDR 图像。后面 GOP 中的帧间编码图像可以使用前一个 GOP 的已编码图像作为参考图像。</p>
+</li>
+</ul>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/20210331120920.png" style="zoom: 50%;" />
+
+<p>每个 GOP 又被分为多个片 (<strong>Slice</strong>)，片与片之间独立编解码。主要目的之一是在数据丢失的情况下进行重新同步。</p>
+<p>每个片由一个或多个片段 (<strong>SS</strong>, Slice Segment) 组成。</p>
+<p>树形结构单元 (CTU) 类似传统的宏块。每个 CTU 包括一个亮度 CTB 和两个色差 CTB。</p>
+<p>一个 SS 在编码时，先被分割为相同大小的 <strong>CTU</strong>，每一个 CTU 按照四叉树分割方式被划分为不同类型的 <strong>CU</strong>。</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/20210331120838.png" style="zoom: 50%;" />
+
+<p>以上即为编码时的分层处理架构。</p>
+<h3 id="码流结构"><a href="#码流结构" class="headerlink" title="码流结构"></a>码流结构</h3><p>码流结构上，H.265/HEVC 压缩数据采用了类似于 H.264/AVC 的分层结构。</p>
+<p>将属于 GOP 层、Slice 层中共用的大部分语法元素游离出来，组成 SPS 和 PPS。</p>
+<p><strong>SPS</strong> 中包含了一个 CVS 中所有图像共用的信息。SPS 中大致包括解码相关信息，如档次级别、分辨率、某档次中编码工具开关标识和涉及的参数、时域可分级信息等。</p>
+<p><strong>PPS</strong> 中包含一副图像所用的公共参数，大致包括初始图像控制信息，如初始量化参数、分块信息等。一副图像中所有 SS 引用同一个 PPS。</p>
+<p>此外，为了兼容在其他应用上的扩展，H.265/HEVC 的语法架构中增加了 <strong>VPS</strong>，其内容大致包括多个子层共享的语法元素，其他不属于 SPS 的特定信息等。</p>
+<p>对于一个 SS，通过引用它所使用的 PPS，该 PPS 又引用对应的 SPS，该 SPS 又引用对应的 VPS，最终得到 SS 的公用信息。</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/20210331120942.png" style="zoom:50%;" />
+
+<h2 id="片段层"><a href="#片段层" class="headerlink" title="片段层"></a>片段层</h2><p>一副图像可以被分割为一个或多个 Slice，每个 Slice 的压缩数据都是独立的，Slice 头信息无法通过前一个 Slice 的头信息推断得到。这就要求 Slice 不能跨过它的边界来进行帧内或帧间预测。</p>
+<p>根据编码类型不同，Slice 可分为以下几部分：</p>
+<ol>
+<li><p>I Slice</p>
+<p>该 Slice 中所有 CU 的编码过程都使用帧内预测</p>
+</li>
+<li><p>P Slice</p>
+<p>在 I Slice 的基础上，该 Slice 中的 CU 还可以使用帧间预测，每个 PB（预测块）使用至多一个运动补偿预测信息。P Slice 只使用图像参考列表 list 0。</p>
+</li>
+<li><p>B Slice</p>
+<p>在 P Slice 的基础上，该 Slice 中的 CU也可以使用帧间预测，每个 PB（预测块）可以使用至多两个运动补偿预测信息。B Slice 可以使用图像参考列表 list 0 和 list 1。</p>
+</li>
+</ol>
+<p>一个独立的 Slice 可以被进一步划分为若干个 SS，包括一个独立 SS 和若干个依赖 SS，并且以独立 SS 作为该 Slice 的开始。</p>
+<p>一个 SS 包含整数个 CTU（至少一个），并且这些 CTU 分布在同一个 NAL 单元中。SS 可以作为一个分组来传送视频编码数据。</p>
+<h2 id="Tile-单元"><a href="#Tile-单元" class="headerlink" title="Tile 单元"></a>Tile 单元</h2><h3 id="Tile-单元描述"><a href="#Tile-单元描述" class="headerlink" title="Tile 单元描述"></a>Tile 单元描述</h3><p>一副图像不仅可以划分为若干个 Slice，也可以划分为若干个 Tile。即从水平和垂直方向将一个图像分割为若干个矩形区域，一个矩形区域就是一个 Tile。每个 Tile 包含整数个 CTU。</p>
+<p>Tile 提供比 CTB 更大程度的并行，在使用时无须进行复杂的线程同步。</p>
+<p>在同一幅图像中，可以存在某些 Slice 中包含多个 Tile 和某些 Tile 包含多个 Slice 的情况。</p>
+<h3 id="Slice-和-Tile"><a href="#Slice-和-Tile" class="headerlink" title="Slice 和 Tile"></a>Slice 和 Tile</h3><p>Tile 形装基本上为矩形，Slice 为条带状。</p>
+<p>Slice 由一系列 SS 组成，一个 SS 由一系列 CTU 组成。Tile 则直接由一系列 CTU 组成。</p>
+<p>每个 Slice/SS 和 Tile 至少要满足以下两个条件之一：</p>
+<ol>
+<li>一个 Slice/SS 中的所有 CTU 属于同一个 Tile</li>
+<li>一个 Tile 中的所有 CTU 属于同一个 Slice/SS</li>
+</ol>
+<h2 id="树形编码块"><a href="#树形编码块" class="headerlink" title="树形编码块"></a>树形编码块</h2><p>传统的视频编码基于宏块实现。考虑到高清视频 / 超高清视频的自身特性，H.265/HEVC 标准中引入了树形编码单元 CTU，其尺寸由编码器指定，且可大于宏块尺寸。</p>
+<p>同一位置处的一个亮度 CTB 和两个色度 CTB，再加上相应的语法元素形成一个 CTU。在高分辨率视频的编码中，使用较大的 CTB 可以获得更好的压缩性能。</p>
+<p>H.265/HEVC 为图像划分定义了一套全新的语法单元，包括编码单元 (CU)、预测单元 (PU)、变换单元  (TU)。</p>
+<ul>
+<li>CU 是进行预测、变换、量化和熵处理等处理的基本单元</li>
+<li>PU 是进行帧内/帧间预测的基本单元</li>
+<li>TU 是进行变换和量化的基本单元</li>
+</ul>
+<h3 id="编码单元"><a href="#编码单元" class="headerlink" title="编码单元"></a>编码单元</h3><p>大尺寸图像的一个特点是平缓区域的面积更大，用较大的块编码能极大提升编码效率。在 H.264/AVC 中，编码块的大小是固定的。而在 H.265/HEVC 中，一个 CTB 可以直接作为一个 CB，也可以进一步以四叉树的形式划分为多个小的 CB。大的 CB 可以使得平缓区域的编码效率提高，小 CB 能很好地处理图像局部的细节。</p>
+<p>编码单元是否继续划分取决于分割标志位 Split Flag。</p>
+<h3 id="预测单元"><a href="#预测单元" class="headerlink" title="预测单元"></a>预测单元</h3><p>预测单元规定了编码单元的所有预测模式。帧内预测的方向、帧间预测的分割方式、运动矢量预测、帧间预测参考图像索引号都属于预测单元的范畴。</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/20210331153821.png" style="zoom:50%;" />
+
+<h3 id="变换单元"><a href="#变换单元" class="headerlink" title="变换单元"></a>变换单元</h3><p>TU 的大小依赖于 CU 模式，在一个 CU 内，允许 TU 跨越多个 PU，以四叉树的形式递归划分。对于一个 2N × 2N 的 CU，有一个标志位决定其是否划分为 4 个 N × N 的 TU，是否可以进一步划分由 SPS 中的 TU 最大划分深度决定。</p>
+<h2 id="档次、层和级别"><a href="#档次、层和级别" class="headerlink" title="档次、层和级别"></a>档次、层和级别</h2><p>在 H.264 中就有对档次 (Profile) 和级别 (Level) 的划分，它们规定了比特流必须遵守的一些限制要求。而 H.265/HEVC 中再次基础上又新定义了一个概念：层 (Tile)。</p>
+<ul>
+<li>Profile 主要规定编码器可采用哪些编码工具或算法</li>
+<li>Level 是指根据解码端的负载和存储空间情况对关键参数加以限制</li>
+<li>有些 Level 定义了两个 Tile: 主层 (Main Tile) 和高层 (High Tile)，主层用于大多数应用，高层用于那些最苛刻的应用</li>
+</ul>
+<p>满足某一 Level 和 Tile 的解码器应当可以解码当前以及比当前更低的 Level 和 Tile 的所有码流。</p>
+<p>满足某一 Profile 的解码器必须支持该 Profile 中的所有特性。编码器不必实现 Profile 中的所有特性，但生成的码流必须遵守标准规定。</p>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Choco</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://bygonexf.github.io/2021/03/31/video-coding-structure/">https://bygonexf.github.io/2021/03/31/video-coding-structure/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://bygonexf.github.io">Choco Box</a>！</span></div></div><div class="post-meta__tag-list"></div><nav id="pagination"><div class="next-post pull-right"><a href="/2021/03/29/multimedia-basics/"><span>多媒体基础知识</span><i class="fa fa-chevron-right"></i></a></div></nav><div id="vcomment"></div><script src="https://cdn1.lncld.net/static/js/3.0.4/av-min.js"></script><script src="https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js"></script><script>var notify = 'false' == 'true';
+var verify = 'false' == 'true';
+var record_ip = 'false' == 'true';
+var GUEST_INFO = ['nick','mail','link'];
+var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+  return GUEST_INFO.indexOf(item) > -1
+});
+guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+window.valine = new Valine({
+  el:'#vcomment',
+  notify:notify,
+  verify:verify,
+  recordIP:record_ip,
+  appId:'GyuhVvqtat4iqpvUjF5sUgBj-gzGzoHsz',
+  appKey:'sX5S1trE3LnnFCSpp7epq55p',
+  placeholder:'Feel free! ♪(´∇`*)',
+  avatar:'mm',
+  guest_info:guest_info,
+  pageSize:'10',
+  lang: 'zh-cn'
+})</script></div></div><footer class="footer-bg" style="background-image: url(https://img.imgdb.cn/item/60588fa08322e6675ca04420.jpg)"><div class="layout" id="footer"><div class="copyright">&copy;2019 - 2021 By Choco</div><div class="framework-info"><span>驱动 - </span><a target="_blank" rel="noopener" href="http://hexo.io"><span>Hexo</span></a><span class="footer-separator">|</span><span>主题 - </span><a target="_blank" rel="noopener" href="https://github.com/Molunerfinn/hexo-theme-melody"><span>Melody</span></a></div><div class="footer_custom_text">You are far more likely to be devoured than empowered by your sense of romance.</div><div class="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_page_pv"><i class="fa fa-file"></i><span id="busuanzi_value_page_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/js/utils.js?version=1.9.0"></script><script src="/js/fancybox.js?version=1.9.0"></script><script src="/js/sidebar.js?version=1.9.0"></script><script src="/js/copy.js?version=1.9.0"></script><script src="/js/fireworks.js?version=1.9.0"></script><script src="/js/transition.js?version=1.9.0"></script><script src="/js/scroll.js?version=1.9.0"></script><script src="/js/head.js?version=1.9.0"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css"><script src="/js/katex.js"></script><script src="/js/search/local-search.js"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
+  $('#nav').addClass('is-mobile')
+  $('footer').addClass('is-mobile')
+  $('#top-container').addClass('is-mobile')
+}</script><div class="search-dialog" id="local-search"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章"></div></div></div><hr><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>由</span> <a target="_blank" rel="noopener" href="https://github.com/wzpan/hexo-generator-search" style="color:#49B1F5;">hexo-generator-search</a>
+ <span>提供支持</span></div></div></div><span class="search-close-button"><i class="fa fa-times"></i></span></div><div class="search-mask"></div></body></html>
