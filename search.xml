@@ -1,32 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Anaconda一些命令</title>
-    <url>/2020/02/29/Anaconda%E4%B8%80%E4%BA%9B%E5%91%BD%E4%BB%A4/</url>
-    <content><![CDATA[<p>创建环境</p>
-<figure class="highlight sas"><table><tr><td class="code"><pre><span class="line">conda <span class="meta">create</span> -n envname python=<span class="meta">x</span>.<span class="meta">x</span></span><br></pre></td></tr></table></figure>
-
-<p>删除环境</p>
-<figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">conda <span class="built_in">remove</span> -n envname <span class="comment">--all</span></span><br></pre></td></tr></table></figure>
-
-<p>进入环境conda activate 退出环境conda deactivate</p>
-<p>列出安装的库</p>
-<figure class="highlight ebnf"><table><tr><td class="code"><pre><span class="line"><span class="attribute">conda list</span></span><br></pre></td></tr></table></figure>
-
-<p>升级所有库</p>
-<figure class="highlight livecodeserver"><table><tr><td class="code"><pre><span class="line">conda upgrade <span class="comment">--all</span></span><br></pre></td></tr></table></figure>
-
-<p>换源</p>
-<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">conda config --add channels https:<span class="regexp">//mi</span>rrors.tuna.tsinghua.edu.cn<span class="regexp">/anaconda/</span>pkgs<span class="regexp">/free/</span></span><br><span class="line"></span><br><span class="line">conda config --add channels https:<span class="regexp">//mi</span>rrors.tuna.tsinghua.edu.cn<span class="regexp">/anaconda/</span>pkgs<span class="regexp">/main/</span></span><br><span class="line"></span><br><span class="line">conda config --set show_channel_urls yes</span><br></pre></td></tr></table></figure>
-
-<p>pip install -i <a href="https://pypi.tuna.tsinghua.edu.cn/simple">https://pypi.tuna.tsinghua.edu.cn/simple</a> xxx</p>
-]]></content>
-      <categories>
-        <category>所学</category>
-        <category>折腾</category>
-      </categories>
-  </entry>
-  <entry>
     <title>Hexo NexT 主题优化</title>
     <url>/2020/02/10/Hexo%20Next%20%E4%B8%BB%E9%A2%98%E4%BC%98%E5%8C%96/</url>
     <content><![CDATA[<h2 id="已折腾的优化"><a href="#已折腾的优化" class="headerlink" title="已折腾的优化"></a>已折腾的优化</h2><ol>
@@ -92,6 +66,32 @@
 <li> <a href="https://uigradients.com/#SublimeLight">uiGradients - Beautiful colored gradients</a> </li>
 <li> <a href="https://www.emojicopy.com/">EmojiCopy | Simple emoji copy and paste by JoyPixels™</a> </li>
 </ul>
+]]></content>
+      <categories>
+        <category>所学</category>
+        <category>折腾</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>Anaconda一些命令</title>
+    <url>/2020/02/29/Anaconda%E4%B8%80%E4%BA%9B%E5%91%BD%E4%BB%A4/</url>
+    <content><![CDATA[<p>创建环境</p>
+<figure class="highlight sas"><table><tr><td class="code"><pre><span class="line">conda <span class="meta">create</span> -n envname python=<span class="meta">x</span>.<span class="meta">x</span></span><br></pre></td></tr></table></figure>
+
+<p>删除环境</p>
+<figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">conda <span class="built_in">remove</span> -n envname <span class="comment">--all</span></span><br></pre></td></tr></table></figure>
+
+<p>进入环境conda activate 退出环境conda deactivate</p>
+<p>列出安装的库</p>
+<figure class="highlight ebnf"><table><tr><td class="code"><pre><span class="line"><span class="attribute">conda list</span></span><br></pre></td></tr></table></figure>
+
+<p>升级所有库</p>
+<figure class="highlight livecodeserver"><table><tr><td class="code"><pre><span class="line">conda upgrade <span class="comment">--all</span></span><br></pre></td></tr></table></figure>
+
+<p>换源</p>
+<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">conda config --add channels https:<span class="regexp">//mi</span>rrors.tuna.tsinghua.edu.cn<span class="regexp">/anaconda/</span>pkgs<span class="regexp">/free/</span></span><br><span class="line"></span><br><span class="line">conda config --add channels https:<span class="regexp">//mi</span>rrors.tuna.tsinghua.edu.cn<span class="regexp">/anaconda/</span>pkgs<span class="regexp">/main/</span></span><br><span class="line"></span><br><span class="line">conda config --set show_channel_urls yes</span><br></pre></td></tr></table></figure>
+
+<p>pip install -i <a href="https://pypi.tuna.tsinghua.edu.cn/simple">https://pypi.tuna.tsinghua.edu.cn/simple</a> xxx</p>
 ]]></content>
       <categories>
         <category>所学</category>
@@ -1269,6 +1269,49 @@
       </tags>
   </entry>
   <entry>
+    <title>操作系统笔记 CH6 Process Synchronization</title>
+    <url>/2020/02/28/OS6/</url>
+    <content><![CDATA[<p>race condition: 多个进程并发访问和操作同一数据，结果与访问顺序有关</p>
+<h2 id="critical-section"><a href="#critical-section" class="headerlink" title="critical section"></a>critical section</h2><img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573274792092.png" style="zoom:50%;" />
+
+<p>critical section: 进程可能改变共同变量，更新表，写文件的代码段</p>
+<p>entry section: 实现请求进入其临界区的代码段</p>
+<p>临界区问题三要求：</p>
+<ul>
+<li>mutual exclusion 同一时间临界区存在一个进程</li>
+<li>progress 如果一个进程想进入临界区，它终将成功</li>
+<li>bounded waiting 从一个进程做出进入临界区的请求，到该请求被允许，其他进程允许进入临界区的次数有限</li>
+</ul>
+<p>kernel code可能会出现race condition</p>
+<p>两种方法: 1.preemptive kernel 2.non-preemptive kernel 抢占内核更适合real-time programming,且更responsive</p>
+<h2 id="Peterson’s-solution"><a href="#Peterson’s-solution" class="headerlink" title="Peterson’s solution"></a>Peterson’s solution</h2><p>software-based solution to the critical section problem 基于软件</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573283076982.png" style="zoom:50%;" />
+
+<h2 id="synchronization-hardware"><a href="#synchronization-hardware" class="headerlink" title="synchronization hardware"></a>synchronization hardware</h2><p>基于硬件</p>
+<p>特殊硬件指令 原子地(不可中断)检查、修改、交换字内容</p>
+<p>disable interrupt, a lock</p>
+<p>TestAndSet()</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573283946058.png" style="zoom:67%;" />
+
+<p>返回的是原来的值，进入过testandset，之后就变成true</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573284042418.png" style="zoom:67%;" />
+
+
+
+<p>实现有限等待互斥：</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573284642763.png" style="zoom:67%;" />
+
+]]></content>
+      <categories>
+        <category>所学</category>
+        <category>计算机基础</category>
+      </categories>
+      <tags>
+        <tag>操作系统</tag>
+        <tag>专业课笔记</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>操作系统笔记 CH5 CPU Scheduling</title>
     <url>/2020/02/28/OS5/</url>
     <content><![CDATA[<p>dispatcher: gives control of the CPU to the process selected by the short-term scheduler;</p>
@@ -1362,49 +1405,6 @@
 <img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573271651221.png" style="zoom:50%;" />
 
 <p>simulation模拟 trace tape</p>
-]]></content>
-      <categories>
-        <category>所学</category>
-        <category>计算机基础</category>
-      </categories>
-      <tags>
-        <tag>操作系统</tag>
-        <tag>专业课笔记</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>操作系统笔记 CH6 Process Synchronization</title>
-    <url>/2020/02/28/OS6/</url>
-    <content><![CDATA[<p>race condition: 多个进程并发访问和操作同一数据，结果与访问顺序有关</p>
-<h2 id="critical-section"><a href="#critical-section" class="headerlink" title="critical section"></a>critical section</h2><img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573274792092.png" style="zoom:50%;" />
-
-<p>critical section: 进程可能改变共同变量，更新表，写文件的代码段</p>
-<p>entry section: 实现请求进入其临界区的代码段</p>
-<p>临界区问题三要求：</p>
-<ul>
-<li>mutual exclusion 同一时间临界区存在一个进程</li>
-<li>progress 如果一个进程想进入临界区，它终将成功</li>
-<li>bounded waiting 从一个进程做出进入临界区的请求，到该请求被允许，其他进程允许进入临界区的次数有限</li>
-</ul>
-<p>kernel code可能会出现race condition</p>
-<p>两种方法: 1.preemptive kernel 2.non-preemptive kernel 抢占内核更适合real-time programming,且更responsive</p>
-<h2 id="Peterson’s-solution"><a href="#Peterson’s-solution" class="headerlink" title="Peterson’s solution"></a>Peterson’s solution</h2><p>software-based solution to the critical section problem 基于软件</p>
-<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573283076982.png" style="zoom:50%;" />
-
-<h2 id="synchronization-hardware"><a href="#synchronization-hardware" class="headerlink" title="synchronization hardware"></a>synchronization hardware</h2><p>基于硬件</p>
-<p>特殊硬件指令 原子地(不可中断)检查、修改、交换字内容</p>
-<p>disable interrupt, a lock</p>
-<p>TestAndSet()</p>
-<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573283946058.png" style="zoom:67%;" />
-
-<p>返回的是原来的值，进入过testandset，之后就变成true</p>
-<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573284042418.png" style="zoom:67%;" />
-
-
-
-<p>实现有限等待互斥：</p>
-<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573284642763.png" style="zoom:67%;" />
-
 ]]></content>
       <categories>
         <category>所学</category>
@@ -2078,12 +2078,14 @@
 <p>在 H.264/AVC 中，MV 时域预测主要针对 B Slice。主要有以下两种形式</p>
 <ul>
 <li><p>当 B 图像的两个 MV 都来自同一个方向时（都来自当前图像之前的参考图像或之后的），其中一个 MV 可用另一个 MV 来预测</p>
-<p>设两参考图像 $ref_0$ 和 $ref_1$ 与当前图像的距离分别为 $l_0$ 和 $l_1$，二者 MV 分别为 $MV_0$ 和 $MV_1$，则 $MV_1$ 可由下式预测：<br>$$<br>MVP_1 = \frac{l_1}{l_0} MV_0<br>\<br>MVD_1 = MV_1 - MVP_1<br>$$</p>
+<p>设两参考图像 $ref_0$ 和 $ref_1$ 与当前图像的距离分别为 $l_0$ 和 $l_1$，二者 MV 分别为 $MV_0$ 和 $MV_1$，则 $MV_1$ 可由下式预测：<br>$$<br>MVP_1 = \frac{l_1}{l_0} MV_0<br>$$</p>
+<p>$$<br>MVD_1 = MV_1 - MVP_1<br>$$</p>
 <p>编码器只需要传输 $MVD_1$，解码器可按相同规则产生 $MV_1$。</p>
 </li>
 <li><p>直接模式 MV 预测</p>
 <p>H.264/AVC 为 B Slice 提供一种 Direct Mode。在该模式下，MV 可直接预测的出，无需传送 MV 差值。预测方式有时域空域两种。时域预测介绍如下。</p>
-<p>设两参考图像 $ref_0$ 和 $ref_1$ 分别位于当前图像的前方和后方，与当前图像的距离分别为 $l_0$ 和 $l_1$，且 $ref_1$ 中与当前块对应位置块有一个指向 $ref_0$ 的 MV，则当前图像的两个 MV 可计算如下：<br>$$<br>MV_0 = \frac{l_0}{l_0 + l_1}MV<br>\<br>MV_1 = MV_0 - MV<br>$$<br>MV 时域预测主要运用了自然界物体匀速运动的思想。</p>
+<p>设两参考图像 $ref_0$ 和 $ref_1$ 分别位于当前图像的前方和后方，与当前图像的距离分别为 $l_0$ 和 $l_1$，且 $ref_1$ 中与当前块对应位置块有一个指向 $ref_0$ 的 MV，则当前图像的两个 MV 可计算如下：<br>$$<br>MV_0 = \frac{l_0}{l_0 + l_1}MV<br>$$<br>$$<br>MV_1 = MV_0 - MV<br>$$</p>
+<p>MV 时域预测主要运用了自然界物体匀速运动的思想。</p>
 <p>与 H.264 标准相比，H.265 剔除里 Merge 和 AMVP 两种先进的 MV 预测技术。</p>
 </li>
 </ul>
@@ -2143,6 +2145,38 @@
         <category>所学</category>
         <category>视频编码</category>
       </categories>
+  </entry>
+  <entry>
+    <title>Win10 下 Linux 子系统 (WSL) 配置小记</title>
+    <url>/2021/03/21/wsl/</url>
+    <content><![CDATA[<h2 id="网络代理配置"><a href="#网络代理配置" class="headerlink" title="网络代理配置"></a>网络代理配置</h2><p>刚开始用 <code>apt-get</code> 就被卡到。</p>
+<p>WSL1 的时候，Linux 子系统和 Windows 主机是共享一个 localhost 的。WSL2 由于通过虚拟机实现，若要访问 Windows 主机的网络，需要使用主机的 IP 地址（IP 地址可以用 <code>ipconfig</code> 命令查看）。</p>
+<h3 id="WSL2-环境变量配置"><a href="#WSL2-环境变量配置" class="headerlink" title="WSL2 环境变量配置"></a>WSL2 环境变量配置</h3><p>如果是 V2rayX 的话，默认 socks5 端口是 10808，默认 http 端口是 10809。</p>
+<p>如果是 Clash for Windows 的话，默认 socks5 端口是 7891，默认 http 端口是 7890。</p>
+<p>以个人经验教训来说，http 和 socks5 两种代理方式可以都尝试一下，我自己用 Clash 的时候 http 代理更可，用 V2RayX 的时候 socks5 代理更可。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">export</span> http_proxy = <span class="string">&quot;socks5://&lt;windows_ip&gt;:&lt;socks5_port&gt;&quot;</span></span><br><span class="line"><span class="built_in">export</span> https_proxy = <span class="string">&quot;socks5://&lt;windows_ip&gt;:&lt;socks5_port&gt;&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>git 也可以设置使用代理。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git config --global http.proxy <span class="string">&quot;socks5://&lt;windows_ip&gt;:&lt;socks5_port&gt;&quot;</span></span><br><span class="line">git config --global https.proxy <span class="string">&quot;socks5://&lt;windows_ip&gt;:&lt;socks5_port&gt;&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>当然，如果希望每次启动的时候代理配置都生效，可以写入 <code>~/.bashrc</code> 文件中。</p>
+<p>顺便一提查看 git 全局配置的命令是：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git config --global --list</span><br></pre></td></tr></table></figure>
+
+<h3 id="V2ray-配置"><a href="#V2ray-配置" class="headerlink" title="V2ray 配置"></a>V2ray 配置</h3><p>在设置中要勾选上「允许来自局域网的连接」。</p>
+<h2 id="默认-shell-设置"><a href="#默认-shell-设置" class="headerlink" title="默认 shell 设置"></a>默认 shell 设置</h2><p>执行 <code>chsh</code> 命令打开新的 WSL 窗口的时候，默认 shell 仍然没有变化。</p>
+<p>还是需要在 <code>~/.bashrc</code> 中加上一行：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">bash -c fish</span><br></pre></td></tr></table></figure>
+
+<p>当然如果是 zsh 还是 fish 就随意啦。</p>
+]]></content>
+      <categories>
+        <category>所学</category>
+        <category>折腾</category>
+      </categories>
+      <tags>
+        <tag>WSL</tag>
+      </tags>
   </entry>
   <entry>
     <title>H.265/HEVC 编码结构 笔记</title>
@@ -2239,38 +2273,6 @@
         <category>所学</category>
         <category>视频编码</category>
       </categories>
-  </entry>
-  <entry>
-    <title>Win10 下 Linux 子系统 (WSL) 配置小记</title>
-    <url>/2021/03/21/wsl/</url>
-    <content><![CDATA[<h2 id="网络代理配置"><a href="#网络代理配置" class="headerlink" title="网络代理配置"></a>网络代理配置</h2><p>刚开始用 <code>apt-get</code> 就被卡到。</p>
-<p>WSL1 的时候，Linux 子系统和 Windows 主机是共享一个 localhost 的。WSL2 由于通过虚拟机实现，若要访问 Windows 主机的网络，需要使用主机的 IP 地址（IP 地址可以用 <code>ipconfig</code> 命令查看）。</p>
-<h3 id="WSL2-环境变量配置"><a href="#WSL2-环境变量配置" class="headerlink" title="WSL2 环境变量配置"></a>WSL2 环境变量配置</h3><p>如果是 V2rayX 的话，默认 socks5 端口是 10808，默认 http 端口是 10809。</p>
-<p>如果是 Clash for Windows 的话，默认 socks5 端口是 7891，默认 http 端口是 7890。</p>
-<p>以个人经验教训来说，http 和 socks5 两种代理方式可以都尝试一下，我自己用 Clash 的时候 http 代理更可，用 V2RayX 的时候 socks5 代理更可。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">export</span> http_proxy = <span class="string">&quot;socks5://&lt;windows_ip&gt;:&lt;socks5_port&gt;&quot;</span></span><br><span class="line"><span class="built_in">export</span> https_proxy = <span class="string">&quot;socks5://&lt;windows_ip&gt;:&lt;socks5_port&gt;&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>git 也可以设置使用代理。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git config --global http.proxy <span class="string">&quot;socks5://&lt;windows_ip&gt;:&lt;socks5_port&gt;&quot;</span></span><br><span class="line">git config --global https.proxy <span class="string">&quot;socks5://&lt;windows_ip&gt;:&lt;socks5_port&gt;&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>当然，如果希望每次启动的时候代理配置都生效，可以写入 <code>~/.bashrc</code> 文件中。</p>
-<p>顺便一提查看 git 全局配置的命令是：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git config --global --list</span><br></pre></td></tr></table></figure>
-
-<h3 id="V2ray-配置"><a href="#V2ray-配置" class="headerlink" title="V2ray 配置"></a>V2ray 配置</h3><p>在设置中要勾选上「允许来自局域网的连接」。</p>
-<h2 id="默认-shell-设置"><a href="#默认-shell-设置" class="headerlink" title="默认 shell 设置"></a>默认 shell 设置</h2><p>执行 <code>chsh</code> 命令打开新的 WSL 窗口的时候，默认 shell 仍然没有变化。</p>
-<p>还是需要在 <code>~/.bashrc</code> 中加上一行：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">bash -c fish</span><br></pre></td></tr></table></figure>
-
-<p>当然如果是 zsh 还是 fish 就随意啦。</p>
-]]></content>
-      <categories>
-        <category>所学</category>
-        <category>折腾</category>
-      </categories>
-      <tags>
-        <tag>WSL</tag>
-      </tags>
   </entry>
   <entry>
     <title>也许是什么的开始...</title>
