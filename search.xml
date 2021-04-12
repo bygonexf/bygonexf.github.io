@@ -1,6 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Anaconda一些命令</title>
+    <url>/2020/02/29/Anaconda%E4%B8%80%E4%BA%9B%E5%91%BD%E4%BB%A4/</url>
+    <content><![CDATA[<p>创建环境</p>
+<figure class="highlight sas"><table><tr><td class="code"><pre><span class="line">conda <span class="meta">create</span> -n envname python=<span class="meta">x</span>.<span class="meta">x</span></span><br></pre></td></tr></table></figure>
+
+<p>删除环境</p>
+<figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">conda <span class="built_in">remove</span> -n envname <span class="comment">--all</span></span><br></pre></td></tr></table></figure>
+
+<p>进入环境conda activate 退出环境conda deactivate</p>
+<p>列出安装的库</p>
+<figure class="highlight ebnf"><table><tr><td class="code"><pre><span class="line"><span class="attribute">conda list</span></span><br></pre></td></tr></table></figure>
+
+<p>升级所有库</p>
+<figure class="highlight livecodeserver"><table><tr><td class="code"><pre><span class="line">conda upgrade <span class="comment">--all</span></span><br></pre></td></tr></table></figure>
+
+<p>换源</p>
+<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">conda config --add channels https:<span class="regexp">//mi</span>rrors.tuna.tsinghua.edu.cn<span class="regexp">/anaconda/</span>pkgs<span class="regexp">/free/</span></span><br><span class="line"></span><br><span class="line">conda config --add channels https:<span class="regexp">//mi</span>rrors.tuna.tsinghua.edu.cn<span class="regexp">/anaconda/</span>pkgs<span class="regexp">/main/</span></span><br><span class="line"></span><br><span class="line">conda config --set show_channel_urls yes</span><br></pre></td></tr></table></figure>
+
+<p>pip install -i <a href="https://pypi.tuna.tsinghua.edu.cn/simple">https://pypi.tuna.tsinghua.edu.cn/simple</a> xxx</p>
+]]></content>
+      <categories>
+        <category>所学</category>
+        <category>折腾</category>
+      </categories>
+  </entry>
+  <entry>
     <title>Hexo NexT 主题优化</title>
     <url>/2020/02/10/Hexo%20Next%20%E4%B8%BB%E9%A2%98%E4%BC%98%E5%8C%96/</url>
     <content><![CDATA[<h2 id="已折腾的优化"><a href="#已折腾的优化" class="headerlink" title="已折腾的优化"></a>已折腾的优化</h2><ol>
@@ -66,32 +92,6 @@
 <li> <a href="https://uigradients.com/#SublimeLight">uiGradients - Beautiful colored gradients</a> </li>
 <li> <a href="https://www.emojicopy.com/">EmojiCopy | Simple emoji copy and paste by JoyPixels™</a> </li>
 </ul>
-]]></content>
-      <categories>
-        <category>所学</category>
-        <category>折腾</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>Anaconda一些命令</title>
-    <url>/2020/02/29/Anaconda%E4%B8%80%E4%BA%9B%E5%91%BD%E4%BB%A4/</url>
-    <content><![CDATA[<p>创建环境</p>
-<figure class="highlight sas"><table><tr><td class="code"><pre><span class="line">conda <span class="meta">create</span> -n envname python=<span class="meta">x</span>.<span class="meta">x</span></span><br></pre></td></tr></table></figure>
-
-<p>删除环境</p>
-<figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">conda <span class="built_in">remove</span> -n envname <span class="comment">--all</span></span><br></pre></td></tr></table></figure>
-
-<p>进入环境conda activate 退出环境conda deactivate</p>
-<p>列出安装的库</p>
-<figure class="highlight ebnf"><table><tr><td class="code"><pre><span class="line"><span class="attribute">conda list</span></span><br></pre></td></tr></table></figure>
-
-<p>升级所有库</p>
-<figure class="highlight livecodeserver"><table><tr><td class="code"><pre><span class="line">conda upgrade <span class="comment">--all</span></span><br></pre></td></tr></table></figure>
-
-<p>换源</p>
-<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">conda config --add channels https:<span class="regexp">//mi</span>rrors.tuna.tsinghua.edu.cn<span class="regexp">/anaconda/</span>pkgs<span class="regexp">/free/</span></span><br><span class="line"></span><br><span class="line">conda config --add channels https:<span class="regexp">//mi</span>rrors.tuna.tsinghua.edu.cn<span class="regexp">/anaconda/</span>pkgs<span class="regexp">/main/</span></span><br><span class="line"></span><br><span class="line">conda config --set show_channel_urls yes</span><br></pre></td></tr></table></figure>
-
-<p>pip install -i <a href="https://pypi.tuna.tsinghua.edu.cn/simple">https://pypi.tuna.tsinghua.edu.cn/simple</a> xxx</p>
 ]]></content>
       <categories>
         <category>所学</category>
@@ -526,6 +526,103 @@
       </tags>
   </entry>
   <entry>
+    <title>操作系统笔记 CH12 Mass-Storage Structure</title>
+    <url>/2020/02/28/OS12/</url>
+    <content><![CDATA[<h3 id="磁盘"><a href="#磁盘" class="headerlink" title="磁盘"></a>磁盘</h3><p>扇区0是最外面柱面的第一个磁道的第一个扇区。映射先按磁道内扇区顺序，再按柱面内磁道顺序，最后按从外到内的柱面顺序来排序的。</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577512929633.png" style="zoom: 50%;" />
+
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577513031964.png" style="zoom:67%;" />
+
+<p>Head crash results from disk head making contact with the disk surface. Cannot be repaired, the entire disk must be replaced.</p>
+<p>Disks can be removable</p>
+<p>Host controller in computer uses bus to talk to disk controller built into drive or storage array.</p>
+<p>The disk controller operates the disk-drive hardware to carry out the command.</p>
+<p>Disk controllers have a built-in cache. Data transfer at the disk drive happens between the<br>cache and the disk surface. Data transfer to the host, at fast electronic speeds, occurs between the cache and the host controller.</p>
+<h3 id="磁带"><a href="#磁带" class="headerlink" title="磁带"></a>磁带</h3><p>长久，存储大量数据。慢</p>
+<h2 id="磁盘结构"><a href="#磁盘结构" class="headerlink" title="磁盘结构"></a>磁盘结构</h2><p>Disk drives are addressed as large 1-dimensional arrays of logical blocks, where the logical block is the smallest unit of transfer.</p>
+<p>Low-level formatting(低级格式化) creates logical blocks on physical media.</p>
+<ul>
+<li><p>Constant Linear Velocity ( 常数线性周转率)</p>
+<p>the density of bits per track is uniform</p>
+<p>CD-ROM, DVD-ROM</p>
+</li>
+<li><p>Constant Angular Velocity ( 常数角周转率)</p>
+<p>the density of bits decreases from inner tracks to outer tracks</p>
+<p>hard disk</p>
+</li>
+</ul>
+<h2 id="disk-attachment"><a href="#disk-attachment" class="headerlink" title="disk attachment"></a>disk attachment</h2><p>计算机访问磁盘存储两种方式</p>
+<ul>
+<li><p>通过IO端口(或主机附属存储)</p>
+<p>小系统采用这种方法</p>
+</li>
+<li><p>通过分布式文件系统DFS的远程主机，称为网络附属存储</p>
+</li>
+</ul>
+<h3 id="Host-attached-storage"><a href="#Host-attached-storage" class="headerlink" title="Host-attached storage"></a>Host-attached storage</h3><p>Is accessed through I/O ports talking to I/O busses</p>
+<p>I/O directed to bus ID, device ID, logical unit (LUN)</p>
+<h3 id="Network-Attached-Storage-NAS"><a href="#Network-Attached-Storage-NAS" class="headerlink" title="Network-Attached Storage (NAS)"></a>Network-Attached Storage (NAS)</h3><p>客户通过远程进程调用接口访问NAS</p>
+<p>UNIX中的NFS，windows中的CIFS(Common Internet File System)</p>
+<p>RPCs are carried via TCP or UDP on IP network.</p>
+<p>The NAS unit is usually implemented as a RAID array with software that implements the RPC interface.</p>
+<p>New iSCSI protocol uses IP network protocol to carry the SCSI protocol. Remotely attaching to devices (blocks)</p>
+<h3 id="Storage-Area-Network-SAN"><a href="#Storage-Area-Network-SAN" class="headerlink" title="Storage Area Network (SAN)"></a>Storage Area Network (SAN)</h3><p>服务器与存储单元之间的私有网络(采用存储协议而非网络协议)</p>
+<p>灵活</p>
+<p>Common in large storage environments.</p>
+<p>Multiple hosts attached to multiple storage arrays – flexible</p>
+<p>SAN is one or more storage arrays Connected to one or more Fiber Channel switches</p>
+<p>Hosts also attach to the switches.</p>
+<p>Storage made available via LUN Masking from specific arrays to specific servers.</p>
+<h2 id="disk-scheduling"><a href="#disk-scheduling" class="headerlink" title="disk scheduling"></a>disk scheduling</h2><p>Minimize seek time</p>
+<p>OS maintains queue of requests, per disk or device.</p>
+<p>controllers have small buffers and can manage a queue of I/O requests. </p>
+<h3 id="FSFC"><a href="#FSFC" class="headerlink" title="FSFC"></a>FSFC</h3><h3 id="SSTF-Shortest-Seek-Time-First"><a href="#SSTF-Shortest-Seek-Time-First" class="headerlink" title="SSTF Shortest Seek Time First"></a>SSTF Shortest Seek Time First</h3><p>starvation</p>
+<h3 id="SCAN-elevator"><a href="#SCAN-elevator" class="headerlink" title="SCAN / elevator"></a>SCAN / elevator</h3><p>到达另一端时，磁头改变方向</p>
+<h3 id="C-SCAN"><a href="#C-SCAN" class="headerlink" title="C-SCAN"></a>C-SCAN</h3><p>当磁头移到另一端时，会马上返回磁盘开始。将柱面当成环链</p>
+<h3 id="LOOK"><a href="#LOOK" class="headerlink" title="LOOK"></a>LOOK</h3><p>磁头只移动到一个方向上最远的请求为止</p>
+<h3 id="C-LOOK"><a href="#C-LOOK" class="headerlink" title="C-LOOK"></a>C-LOOK</h3><h3 id="磁盘调度算法的选择"><a href="#磁盘调度算法的选择" class="headerlink" title="磁盘调度算法的选择"></a>磁盘调度算法的选择</h3><p>SSTF is common and has a natural appeal</p>
+<p>SCAN and C-SCAN对磁盘负荷大的系统执行较好，不会有starvation</p>
+<p>Requests for disk service can be influenced by the file-allocation method.</p>
+<p>The disk-scheduling algorithm should be written as a separate module of the operating system, allowing it to be replaced with a different algorithm if necessary.</p>
+<p>Either SSTF or LOOK is a reasonable choice for the default algorithm.</p>
+<h2 id="磁盘管理"><a href="#磁盘管理" class="headerlink" title="磁盘管理"></a>磁盘管理</h2><h3 id="磁盘格式化-disk-formatting"><a href="#磁盘格式化-disk-formatting" class="headerlink" title="磁盘格式化 disk formatting"></a>磁盘格式化 disk formatting</h3><p>低级格式化/物理格式化：将磁盘分成扇区以便磁盘控制器能读能写。为每个扇区采用特殊的数据结构。The data structure typically consists of a header(sector #), a data area, and a trailer(ECC, error correction code) 扇区通常512B，但可选</p>
+<p>OS需要将自己的数据结构记录在磁盘上</p>
+<ol>
+<li><p>将磁盘分为由一个或多个柱面组成的分区。将每个分区作为一个逻辑磁盘。</p>
+</li>
+<li><p>Logical formatting逻辑格式化</p>
+<p>创建文件系统</p>
+</li>
+</ol>
+<p>为了提高效率，大多数OS将块集中到一大块，称作簇(cluster)。磁盘IO通过块完成，文件系统IO通过簇完成</p>
+<p>raw disk生磁盘：将磁盘分区作为一个逻辑块的大顺序数组，没有任何文件系统数据结构 </p>
+<p>raw disk可用作swap space</p>
+<p>对该数组的IO称作raw IO</p>
+<p>有些数据库系统比较喜欢raw IO</p>
+<h3 id="boot-block-引导块"><a href="#boot-block-引导块" class="headerlink" title="boot block 引导块"></a>boot block 引导块</h3><p>bootstrap程序应找到磁盘上的操作系统内核，装入内存，并转到起始地址，从而开始OS的执行</p>
+<p>bootstrap保存在ROM中。不过大多数OS只在ROM中保留bootstrap loader: 进一步从磁盘上调入更完整的bootstrap程序</p>
+<p>完整的bootstrap程序在磁盘的启动块(boot block)上，启动块位于磁盘的固定位置。</p>
+<p>拥有启动分区的磁盘称为boot disk或system disk</p>
+<p>启动扇区 MBR master boot record . Besides boot code, the MBR contains a partition table listing the partitions for the hard disk and a flag indicating which partition the system is to be booted from.</p>
+<p>启动ROM中的代码引导磁盘控制器将启动块读入到内存(此时尚未装入设备驱动程序)</p>
+<p>硬盘分为一个或多个分区，一个分区为boot partition，包含OS和设备驱动程序。该分区的第一个扇区既是boot sector</p>
+<h3 id="bad-blocks"><a href="#bad-blocks" class="headerlink" title="bad blocks"></a>bad blocks</h3><p>Controller calculates the ECC and finds the sector is bad. 控制器计算ECC</p>
+<p>An unrecoverable hard error results in lost data.</p>
+<p>对于简单磁盘：坏块可手工处理</p>
+<p>对于复杂磁盘：</p>
+<p>​    控制器维护一个磁盘坏块链表，控制器可用备用块来逻辑地替换坏块 sector sparing(forwarding)</p>
+<p>​    sector slipping</p>
+]]></content>
+      <categories>
+        <category>所学</category>
+        <category>计算机基础</category>
+      </categories>
+      <tags>
+        <tag>操作系统</tag>
+        <tag>专业课笔记</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>操作系统笔记 CH11 File-System Implementation</title>
     <url>/2020/02/28/OS11/</url>
     <content><![CDATA[<h2 id="文件系统结构"><a href="#文件系统结构" class="headerlink" title="文件系统结构"></a>文件系统结构</h2><p>磁盘特点：可以原地重写，可以直接访问任意一块。</p>
@@ -658,103 +755,6 @@
 
 <h4 id="counting"><a href="#counting" class="headerlink" title="counting"></a>counting</h4><p>记录第一块的地址和紧跟第一块的连续的空闲块的数量n</p>
 <p>can be stored in a balanced tree for efficiency</p>
-]]></content>
-      <categories>
-        <category>所学</category>
-        <category>计算机基础</category>
-      </categories>
-      <tags>
-        <tag>操作系统</tag>
-        <tag>专业课笔记</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>操作系统笔记 CH12 Mass-Storage Structure</title>
-    <url>/2020/02/28/OS12/</url>
-    <content><![CDATA[<h3 id="磁盘"><a href="#磁盘" class="headerlink" title="磁盘"></a>磁盘</h3><p>扇区0是最外面柱面的第一个磁道的第一个扇区。映射先按磁道内扇区顺序，再按柱面内磁道顺序，最后按从外到内的柱面顺序来排序的。</p>
-<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577512929633.png" style="zoom: 50%;" />
-
-<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577513031964.png" style="zoom:67%;" />
-
-<p>Head crash results from disk head making contact with the disk surface. Cannot be repaired, the entire disk must be replaced.</p>
-<p>Disks can be removable</p>
-<p>Host controller in computer uses bus to talk to disk controller built into drive or storage array.</p>
-<p>The disk controller operates the disk-drive hardware to carry out the command.</p>
-<p>Disk controllers have a built-in cache. Data transfer at the disk drive happens between the<br>cache and the disk surface. Data transfer to the host, at fast electronic speeds, occurs between the cache and the host controller.</p>
-<h3 id="磁带"><a href="#磁带" class="headerlink" title="磁带"></a>磁带</h3><p>长久，存储大量数据。慢</p>
-<h2 id="磁盘结构"><a href="#磁盘结构" class="headerlink" title="磁盘结构"></a>磁盘结构</h2><p>Disk drives are addressed as large 1-dimensional arrays of logical blocks, where the logical block is the smallest unit of transfer.</p>
-<p>Low-level formatting(低级格式化) creates logical blocks on physical media.</p>
-<ul>
-<li><p>Constant Linear Velocity ( 常数线性周转率)</p>
-<p>the density of bits per track is uniform</p>
-<p>CD-ROM, DVD-ROM</p>
-</li>
-<li><p>Constant Angular Velocity ( 常数角周转率)</p>
-<p>the density of bits decreases from inner tracks to outer tracks</p>
-<p>hard disk</p>
-</li>
-</ul>
-<h2 id="disk-attachment"><a href="#disk-attachment" class="headerlink" title="disk attachment"></a>disk attachment</h2><p>计算机访问磁盘存储两种方式</p>
-<ul>
-<li><p>通过IO端口(或主机附属存储)</p>
-<p>小系统采用这种方法</p>
-</li>
-<li><p>通过分布式文件系统DFS的远程主机，称为网络附属存储</p>
-</li>
-</ul>
-<h3 id="Host-attached-storage"><a href="#Host-attached-storage" class="headerlink" title="Host-attached storage"></a>Host-attached storage</h3><p>Is accessed through I/O ports talking to I/O busses</p>
-<p>I/O directed to bus ID, device ID, logical unit (LUN)</p>
-<h3 id="Network-Attached-Storage-NAS"><a href="#Network-Attached-Storage-NAS" class="headerlink" title="Network-Attached Storage (NAS)"></a>Network-Attached Storage (NAS)</h3><p>客户通过远程进程调用接口访问NAS</p>
-<p>UNIX中的NFS，windows中的CIFS(Common Internet File System)</p>
-<p>RPCs are carried via TCP or UDP on IP network.</p>
-<p>The NAS unit is usually implemented as a RAID array with software that implements the RPC interface.</p>
-<p>New iSCSI protocol uses IP network protocol to carry the SCSI protocol. Remotely attaching to devices (blocks)</p>
-<h3 id="Storage-Area-Network-SAN"><a href="#Storage-Area-Network-SAN" class="headerlink" title="Storage Area Network (SAN)"></a>Storage Area Network (SAN)</h3><p>服务器与存储单元之间的私有网络(采用存储协议而非网络协议)</p>
-<p>灵活</p>
-<p>Common in large storage environments.</p>
-<p>Multiple hosts attached to multiple storage arrays – flexible</p>
-<p>SAN is one or more storage arrays Connected to one or more Fiber Channel switches</p>
-<p>Hosts also attach to the switches.</p>
-<p>Storage made available via LUN Masking from specific arrays to specific servers.</p>
-<h2 id="disk-scheduling"><a href="#disk-scheduling" class="headerlink" title="disk scheduling"></a>disk scheduling</h2><p>Minimize seek time</p>
-<p>OS maintains queue of requests, per disk or device.</p>
-<p>controllers have small buffers and can manage a queue of I/O requests. </p>
-<h3 id="FSFC"><a href="#FSFC" class="headerlink" title="FSFC"></a>FSFC</h3><h3 id="SSTF-Shortest-Seek-Time-First"><a href="#SSTF-Shortest-Seek-Time-First" class="headerlink" title="SSTF Shortest Seek Time First"></a>SSTF Shortest Seek Time First</h3><p>starvation</p>
-<h3 id="SCAN-elevator"><a href="#SCAN-elevator" class="headerlink" title="SCAN / elevator"></a>SCAN / elevator</h3><p>到达另一端时，磁头改变方向</p>
-<h3 id="C-SCAN"><a href="#C-SCAN" class="headerlink" title="C-SCAN"></a>C-SCAN</h3><p>当磁头移到另一端时，会马上返回磁盘开始。将柱面当成环链</p>
-<h3 id="LOOK"><a href="#LOOK" class="headerlink" title="LOOK"></a>LOOK</h3><p>磁头只移动到一个方向上最远的请求为止</p>
-<h3 id="C-LOOK"><a href="#C-LOOK" class="headerlink" title="C-LOOK"></a>C-LOOK</h3><h3 id="磁盘调度算法的选择"><a href="#磁盘调度算法的选择" class="headerlink" title="磁盘调度算法的选择"></a>磁盘调度算法的选择</h3><p>SSTF is common and has a natural appeal</p>
-<p>SCAN and C-SCAN对磁盘负荷大的系统执行较好，不会有starvation</p>
-<p>Requests for disk service can be influenced by the file-allocation method.</p>
-<p>The disk-scheduling algorithm should be written as a separate module of the operating system, allowing it to be replaced with a different algorithm if necessary.</p>
-<p>Either SSTF or LOOK is a reasonable choice for the default algorithm.</p>
-<h2 id="磁盘管理"><a href="#磁盘管理" class="headerlink" title="磁盘管理"></a>磁盘管理</h2><h3 id="磁盘格式化-disk-formatting"><a href="#磁盘格式化-disk-formatting" class="headerlink" title="磁盘格式化 disk formatting"></a>磁盘格式化 disk formatting</h3><p>低级格式化/物理格式化：将磁盘分成扇区以便磁盘控制器能读能写。为每个扇区采用特殊的数据结构。The data structure typically consists of a header(sector #), a data area, and a trailer(ECC, error correction code) 扇区通常512B，但可选</p>
-<p>OS需要将自己的数据结构记录在磁盘上</p>
-<ol>
-<li><p>将磁盘分为由一个或多个柱面组成的分区。将每个分区作为一个逻辑磁盘。</p>
-</li>
-<li><p>Logical formatting逻辑格式化</p>
-<p>创建文件系统</p>
-</li>
-</ol>
-<p>为了提高效率，大多数OS将块集中到一大块，称作簇(cluster)。磁盘IO通过块完成，文件系统IO通过簇完成</p>
-<p>raw disk生磁盘：将磁盘分区作为一个逻辑块的大顺序数组，没有任何文件系统数据结构 </p>
-<p>raw disk可用作swap space</p>
-<p>对该数组的IO称作raw IO</p>
-<p>有些数据库系统比较喜欢raw IO</p>
-<h3 id="boot-block-引导块"><a href="#boot-block-引导块" class="headerlink" title="boot block 引导块"></a>boot block 引导块</h3><p>bootstrap程序应找到磁盘上的操作系统内核，装入内存，并转到起始地址，从而开始OS的执行</p>
-<p>bootstrap保存在ROM中。不过大多数OS只在ROM中保留bootstrap loader: 进一步从磁盘上调入更完整的bootstrap程序</p>
-<p>完整的bootstrap程序在磁盘的启动块(boot block)上，启动块位于磁盘的固定位置。</p>
-<p>拥有启动分区的磁盘称为boot disk或system disk</p>
-<p>启动扇区 MBR master boot record . Besides boot code, the MBR contains a partition table listing the partitions for the hard disk and a flag indicating which partition the system is to be booted from.</p>
-<p>启动ROM中的代码引导磁盘控制器将启动块读入到内存(此时尚未装入设备驱动程序)</p>
-<p>硬盘分为一个或多个分区，一个分区为boot partition，包含OS和设备驱动程序。该分区的第一个扇区既是boot sector</p>
-<h3 id="bad-blocks"><a href="#bad-blocks" class="headerlink" title="bad blocks"></a>bad blocks</h3><p>Controller calculates the ECC and finds the sector is bad. 控制器计算ECC</p>
-<p>An unrecoverable hard error results in lost data.</p>
-<p>对于简单磁盘：坏块可手工处理</p>
-<p>对于复杂磁盘：</p>
-<p>​    控制器维护一个磁盘坏块链表，控制器可用备用块来逻辑地替换坏块 sector sparing(forwarding)</p>
-<p>​    sector slipping</p>
 ]]></content>
       <categories>
         <category>所学</category>
@@ -1038,6 +1038,186 @@
       </tags>
   </entry>
   <entry>
+    <title>操作系统笔记 CH4 Threads</title>
+    <url>/2020/02/28/OS4/</url>
+    <content><![CDATA[<p>Dispatching is referred to as a thread. Resource of ownership is referred to as a process or<br>task.</p>
+<p>对进程的swapping和termination都牵扯它所有线程</p>
+<p>线程是CPU使用的基本单位。由thread ID, program counter, register set, stack组成</p>
+<h2 id="multithreading-models"><a href="#multithreading-models" class="headerlink" title="multithreading models"></a>multithreading models</h2><p>User threads, supported above the kernel and are managed without kernel support.</p>
+<p>Kernel threads, supported and managed directly by the operating system.</p>
+<ul>
+<li><p>many-to-one</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573189948482.png" style="zoom:50%;" /></li>
+<li><p>one-to-one</p>
+<p>一个线程阻塞，另一个还能运行</p>
+<p>并发。开销大。</p>
+<p>windows, linux, solaris 9 </p>
+</li>
+<li><p>many-to-many</p>
+<p>用户线程映射到数量相同或更少的内核线程</p>
+<p>When a thread performs a blocking system call, the kernel can schedule another thread for execution.</p>
+<p>two-level model:</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573562767512.png" style="zoom:50%;" /></li>
+</ul>
+<h2 id="thread-libraries"><a href="#thread-libraries" class="headerlink" title="thread libraries"></a>thread libraries</h2><p>两种方法实现：1 在用户空间提供一个没有内核支持的库 2 由OS直接支持的内核级的库</p>
+<ol>
+<li><p>POSIX Pthreads</p>
+<p>Portable Operating System Interface of UNIX</p>
+<p>Referred to user-level library</p>
+</li>
+<li><p>Win32 threads</p>
+<p>kernel-level threads library </p>
+</li>
+<li><p>Java threads</p>
+<p>provides support at the language level for the creation and management of threads.</p>
+<p>两种创建线程的方法</p>
+<ul>
+<li>extending thread class</li>
+<li>define a class that implements the Runnable interface</li>
+</ul>
+</li>
+</ol>
+<h2 id="thread-issues"><a href="#thread-issues" class="headerlink" title="thread issues"></a>thread issues</h2><h3 id="The-fork-and-exec-system-calls"><a href="#The-fork-and-exec-system-calls" class="headerlink" title="The fork() and exec() system calls"></a>The fork() and exec() system calls</h3><h3 id="thread-cancellation"><a href="#thread-cancellation" class="headerlink" title="thread cancellation"></a>thread cancellation</h3><p>Asynchronous cancellation 异步取消：立即取消</p>
+<p>Deferred cancellation 延迟取消：不断检查是否该终止</p>
+<h3 id="signal-handling"><a href="#signal-handling" class="headerlink" title="signal handling"></a>signal handling</h3><p>A signal is used in UNIX systems to notify a process that a particular event has occurred.</p>
+<p>Synchronous signal: illegal memory access, division by 0.</p>
+<p>Asynchronously signal: terminating a process with specific keystrokes, Ctrl+C ，由运行进程之外的事产生</p>
+<p>two possible handlers:</p>
+<ul>
+<li>a user-defined signal handler</li>
+<li>a default signal handler, which is run by the kernel</li>
+</ul>
+<p>同步信号送到需要发到产生它的线程</p>
+<h3 id="thread-pools"><a href="#thread-pools" class="headerlink" title="thread pools"></a>thread pools</h3><img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573563518826.png" style="zoom:50%;" />
+
+<p>优点：1 快 2 限制可用线程数量</p>
+<h3 id="thread-specific-data"><a href="#thread-specific-data" class="headerlink" title="thread-specific data"></a>thread-specific data</h3><p>Thread-specific data allows each thread to have its own copy of data (Thread-local storage (TLS) ).</p>
+<p> TLS visible across function invocations</p>
+<h3 id="scheduler-activation"><a href="#scheduler-activation" class="headerlink" title="scheduler activation"></a>scheduler activation</h3><img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573563717238.png" style="zoom:50%;" />
+
+<p>Scheduler activation – one scheme for communication between the user-thread library and the kernel.</p>
+<p>provides upcalls, the kernel inform an application about certain events.</p>
+<p>upcall handlers must run on a LWP.</p>
+<p>当一个应用线程要阻塞，内核向应用程序发upcall，分配一个新LWP给应用线程，应用线程在这个LWP上运行upcall handler</p>
+<p>当阻塞线程等待事件发生，内核向线程库发另一个upcall， kernel allocates a new LWP or preempt one of the user threads to run the upcall handler for this event.</p>
+<h2 id="OS-examples"><a href="#OS-examples" class="headerlink" title="OS examples"></a>OS examples</h2><h2 id="windows-XP-threads"><a href="#windows-XP-threads" class="headerlink" title="windows XP threads"></a>windows XP threads</h2><p>one-to-one</p>
+<p>ETHREAD (in kernel space), KTHREAD (in kernel space), TEB (in user space)</p>
+<h2 id="Linux-threads-tasks"><a href="#Linux-threads-tasks" class="headerlink" title="Linux threads - tasks"></a>Linux threads - tasks</h2><p>clone() system call</p>
+]]></content>
+      <categories>
+        <category>所学</category>
+        <category>计算机基础</category>
+      </categories>
+      <tags>
+        <tag>操作系统</tag>
+        <tag>专业课笔记</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>操作系统笔记 CH5 CPU Scheduling</title>
+    <url>/2020/02/28/OS5/</url>
+    <content><![CDATA[<p>dispatcher: gives control of the CPU to the process selected by the short-term scheduler;</p>
+<p>dispatch latency</p>
+<h2 id="scheduling-criteria"><a href="#scheduling-criteria" class="headerlink" title="scheduling criteria"></a>scheduling criteria</h2><ul>
+<li><p>CPU utilization,</p>
+</li>
+<li><p>throughput:</p>
+<p>单位时间完成进程数量</p>
+</li>
+<li><p>turnaround time:</p>
+<p>submission to completion</p>
+</li>
+<li><p>waiting time:</p>
+<p>sum of time spent in the ready queue就绪队列</p>
+</li>
+<li><p>response time: </p>
+<p>submission to first response(time it takes to start responding, not the time it takes to output the response)</p>
+</li>
+</ul>
+<h2 id="scheduling-algorithm"><a href="#scheduling-algorithm" class="headerlink" title="scheduling algorithm"></a>scheduling algorithm</h2><ul>
+<li><p>FCFS first-come, first-served</p>
+<p>non-preemptive</p>
+<p>等待时间较长</p>
+<p>convoy effect(短进程跟在长进程后面)</p>
+</li>
+<li><p>SJF shortest-job-first</p>
+<p>shortest next CPU burst</p>
+<p>常用于长期调度，短期调度可预测next CPU burst</p>
+<ul>
+<li><p>exponential average</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573266645043.png" style="zoom:50%;" />
+
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573266662578.png" style="zoom:50%;" /></li>
+</ul>
+<p>preemptive/non-preemptive</p>
+<p>preemptive SJF : shortest-remaining-time-first scheduling</p>
+</li>
+<li><p>priority scheduling algorithm</p>
+<p>SJF is a special case of it</p>
+<p>priority can be defined internally or externally</p>
+<p>preemptive/non-preemptive(非抢占优先级调度只是将优先级高的新进程加到ready queue的头部)</p>
+<p>主要问题是indefinite blocking/starvation</p>
+<p>低优先级无穷等待问题解决方法: aging(逐渐增加等待很久进程的优先级)</p>
+</li>
+<li><p>RR round-robin</p>
+<p>especially for time-sharing system</p>
+<p>时间片(time quantum/time slice)</p>
+<p>所需时间小，自动释放CPU，所需时间大，时间片到timer会产生中断</p>
+<p>平均等待时间较长</p>
+<p>preemptive</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573267188671.png" style="zoom:50%;" />
+
+<p>时间片很大：FCFS；时间片很小：<u>processor sharing</u>(仿佛都有自己的处理器，速度为1/n)</p>
+<p>时间片应比context-switch time大，也不应太大</p>
+</li>
+<li><p>multilevel queue scheduling algorithm</p>
+<p>foreground(interactive); background(batch) 前台进程更高优先级。前台可能RR，后台可能FCFS</p>
+<p>ready queue划分成多个队列，一个进程被永久分配到一个队列，每个队列有自己的调度算法</p>
+<p>队列间常采用fixed-priority preemptive scheduling, 或在队列间划分时间片，每个队列有一定CPU时间</p>
+</li>
+<li><p>multilevel feedback queue schedling algorithm</p>
+<p>允许进程在队列之间移动</p>
+<p>使用过多CPU时间，移到低优先级队列。所以<strong>IO bound</strong> &amp; <strong>interactive</strong> processes(使用CPU时间少)会被留在高优先级队列</p>
+<p>较低优先级队列等待时间过长的进程也会被转移到更高优先级队列，prevent starvation</p>
+<p><del>看例子P172</del></p>
+<p>最通用的CPU调度算法</p>
+</li>
+<li><p>HRRN highest response-ratio next 高响应比优先</p>
+<p>non-preemptive</p>
+<p>PPT  P51</p>
+</li>
+</ul>
+<h2 id="multi-processor-scheduling"><a href="#multi-processor-scheduling" class="headerlink" title="multi-processor scheduling"></a>multi-processor scheduling</h2><p>非对称多处理(asymmetric multiprocessing),一个处理器处理调度，IO，其他系统活动；其余处理器处理用户代码</p>
+<p>SMP symmetric multiprocessing 对称多处理：每个处理器自我调度，许多OS支持SMP</p>
+<p>processor affinity: 使缓存无效或重构的代价太高，所以尽量使一个进程在同一个处理器上允许。不能保证进程不移动:soft affinity，否则hard affinity</p>
+<p>load balancing: 将工作负载平均地分配到SMP所有处理器上。load balancing只对拥有自己私有可执行进程的处理器必要(大部分时候都有私有)</p>
+<p>​    push migration: a specific task周期检查每个处理器上的负载，如果不平衡，push processes from                                     overloaded to idle processor</p>
+<p>​    pull migration: an idle processor pulls a waiting task from a busy processor</p>
+<p>multicore processors: PPT P61</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573270374874.png" style="zoom:50%;" />
+
+<p>SMT: symmetric multithreading 提供多个逻辑处理器实现多线程并发 hyperthreading. 每个逻辑处理器负责自己的中断处理。</p>
+<h2 id="thread-scheduling"><a href="#thread-scheduling" class="headerlink" title="thread scheduling"></a>thread scheduling</h2><p>对在内核级支持线程的系统而言，系统调度的是内核线程而不是进程。用户线程由线程库管理。</p>
+<p>PCS: process-contention-scope 线程库调度用户级线程到一个有效的LWP上(CPU竞争发生在属于相同进程的线程之间) ,local scheduling</p>
+<p>SCS: system-contention-scope 调度哪个内核线程到CPU(CPU竞争发生在系统的所有线程中)。一对一模型只用使用SCS ,global scheduling</p>
+<p>实例 书P178</p>
+<h2 id="algorithm-evaluation"><a href="#algorithm-evaluation" class="headerlink" title="algorithm evaluation"></a>algorithm evaluation</h2><p>analytic evaluation: 产生一个公式或数字</p>
+<p>deterministic evaluation: 计算在给定负荷下算法的性能</p>
+<p>queueing-network-analysis:</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573271651221.png" style="zoom:50%;" />
+
+<p>simulation模拟 trace tape</p>
+]]></content>
+      <categories>
+        <category>所学</category>
+        <category>计算机基础</category>
+      </categories>
+      <tags>
+        <tag>操作系统</tag>
+        <tag>专业课笔记</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>操作系统笔记 CH3 Process</title>
     <url>/2020/02/28/OS3/</url>
     <content><![CDATA[<h2 id="process-concepts"><a href="#process-concepts" class="headerlink" title="process concepts"></a>process concepts</h2><p>batch system: job; time-sharing system: program/task</p>
@@ -1193,82 +1373,6 @@
       </tags>
   </entry>
   <entry>
-    <title>操作系统笔记 CH4 Threads</title>
-    <url>/2020/02/28/OS4/</url>
-    <content><![CDATA[<p>Dispatching is referred to as a thread. Resource of ownership is referred to as a process or<br>task.</p>
-<p>对进程的swapping和termination都牵扯它所有线程</p>
-<p>线程是CPU使用的基本单位。由thread ID, program counter, register set, stack组成</p>
-<h2 id="multithreading-models"><a href="#multithreading-models" class="headerlink" title="multithreading models"></a>multithreading models</h2><p>User threads, supported above the kernel and are managed without kernel support.</p>
-<p>Kernel threads, supported and managed directly by the operating system.</p>
-<ul>
-<li><p>many-to-one</p>
-<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573189948482.png" style="zoom:50%;" /></li>
-<li><p>one-to-one</p>
-<p>一个线程阻塞，另一个还能运行</p>
-<p>并发。开销大。</p>
-<p>windows, linux, solaris 9 </p>
-</li>
-<li><p>many-to-many</p>
-<p>用户线程映射到数量相同或更少的内核线程</p>
-<p>When a thread performs a blocking system call, the kernel can schedule another thread for execution.</p>
-<p>two-level model:</p>
-<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573562767512.png" style="zoom:50%;" /></li>
-</ul>
-<h2 id="thread-libraries"><a href="#thread-libraries" class="headerlink" title="thread libraries"></a>thread libraries</h2><p>两种方法实现：1 在用户空间提供一个没有内核支持的库 2 由OS直接支持的内核级的库</p>
-<ol>
-<li><p>POSIX Pthreads</p>
-<p>Portable Operating System Interface of UNIX</p>
-<p>Referred to user-level library</p>
-</li>
-<li><p>Win32 threads</p>
-<p>kernel-level threads library </p>
-</li>
-<li><p>Java threads</p>
-<p>provides support at the language level for the creation and management of threads.</p>
-<p>两种创建线程的方法</p>
-<ul>
-<li>extending thread class</li>
-<li>define a class that implements the Runnable interface</li>
-</ul>
-</li>
-</ol>
-<h2 id="thread-issues"><a href="#thread-issues" class="headerlink" title="thread issues"></a>thread issues</h2><h3 id="The-fork-and-exec-system-calls"><a href="#The-fork-and-exec-system-calls" class="headerlink" title="The fork() and exec() system calls"></a>The fork() and exec() system calls</h3><h3 id="thread-cancellation"><a href="#thread-cancellation" class="headerlink" title="thread cancellation"></a>thread cancellation</h3><p>Asynchronous cancellation 异步取消：立即取消</p>
-<p>Deferred cancellation 延迟取消：不断检查是否该终止</p>
-<h3 id="signal-handling"><a href="#signal-handling" class="headerlink" title="signal handling"></a>signal handling</h3><p>A signal is used in UNIX systems to notify a process that a particular event has occurred.</p>
-<p>Synchronous signal: illegal memory access, division by 0.</p>
-<p>Asynchronously signal: terminating a process with specific keystrokes, Ctrl+C ，由运行进程之外的事产生</p>
-<p>two possible handlers:</p>
-<ul>
-<li>a user-defined signal handler</li>
-<li>a default signal handler, which is run by the kernel</li>
-</ul>
-<p>同步信号送到需要发到产生它的线程</p>
-<h3 id="thread-pools"><a href="#thread-pools" class="headerlink" title="thread pools"></a>thread pools</h3><img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573563518826.png" style="zoom:50%;" />
-
-<p>优点：1 快 2 限制可用线程数量</p>
-<h3 id="thread-specific-data"><a href="#thread-specific-data" class="headerlink" title="thread-specific data"></a>thread-specific data</h3><p>Thread-specific data allows each thread to have its own copy of data (Thread-local storage (TLS) ).</p>
-<p> TLS visible across function invocations</p>
-<h3 id="scheduler-activation"><a href="#scheduler-activation" class="headerlink" title="scheduler activation"></a>scheduler activation</h3><img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573563717238.png" style="zoom:50%;" />
-
-<p>Scheduler activation – one scheme for communication between the user-thread library and the kernel.</p>
-<p>provides upcalls, the kernel inform an application about certain events.</p>
-<p>upcall handlers must run on a LWP.</p>
-<p>当一个应用线程要阻塞，内核向应用程序发upcall，分配一个新LWP给应用线程，应用线程在这个LWP上运行upcall handler</p>
-<p>当阻塞线程等待事件发生，内核向线程库发另一个upcall， kernel allocates a new LWP or preempt one of the user threads to run the upcall handler for this event.</p>
-<h2 id="OS-examples"><a href="#OS-examples" class="headerlink" title="OS examples"></a>OS examples</h2><h2 id="windows-XP-threads"><a href="#windows-XP-threads" class="headerlink" title="windows XP threads"></a>windows XP threads</h2><p>one-to-one</p>
-<p>ETHREAD (in kernel space), KTHREAD (in kernel space), TEB (in user space)</p>
-<h2 id="Linux-threads-tasks"><a href="#Linux-threads-tasks" class="headerlink" title="Linux threads - tasks"></a>Linux threads - tasks</h2><p>clone() system call</p>
-]]></content>
-      <categories>
-        <category>所学</category>
-        <category>计算机基础</category>
-      </categories>
-      <tags>
-        <tag>操作系统</tag>
-        <tag>专业课笔记</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>操作系统笔记 CH6 Process Synchronization</title>
     <url>/2020/02/28/OS6/</url>
     <content><![CDATA[<p>race condition: 多个进程并发访问和操作同一数据，结果与访问顺序有关</p>
@@ -1312,189 +1416,146 @@
       </tags>
   </entry>
   <entry>
-    <title>操作系统笔记 CH5 CPU Scheduling</title>
-    <url>/2020/02/28/OS5/</url>
-    <content><![CDATA[<p>dispatcher: gives control of the CPU to the process selected by the short-term scheduler;</p>
-<p>dispatch latency</p>
-<h2 id="scheduling-criteria"><a href="#scheduling-criteria" class="headerlink" title="scheduling criteria"></a>scheduling criteria</h2><ul>
-<li><p>CPU utilization,</p>
-</li>
-<li><p>throughput:</p>
-<p>单位时间完成进程数量</p>
-</li>
-<li><p>turnaround time:</p>
-<p>submission to completion</p>
-</li>
-<li><p>waiting time:</p>
-<p>sum of time spent in the ready queue就绪队列</p>
-</li>
-<li><p>response time: </p>
-<p>submission to first response(time it takes to start responding, not the time it takes to output the response)</p>
-</li>
-</ul>
-<h2 id="scheduling-algorithm"><a href="#scheduling-algorithm" class="headerlink" title="scheduling algorithm"></a>scheduling algorithm</h2><ul>
-<li><p>FCFS first-come, first-served</p>
-<p>non-preemptive</p>
-<p>等待时间较长</p>
-<p>convoy effect(短进程跟在长进程后面)</p>
-</li>
-<li><p>SJF shortest-job-first</p>
-<p>shortest next CPU burst</p>
-<p>常用于长期调度，短期调度可预测next CPU burst</p>
+    <title>操作系统笔记 CH9 Virtual Memory</title>
+    <url>/2020/02/28/OS9/</url>
+    <content><![CDATA[<h2 id="background"><a href="#background" class="headerlink" title="background"></a>background</h2><p>CH8的内存管理方案需要将整个进程放入内存，动态载入只能减轻这一限制</p>
+<p>Code needs to be in memory to execute, but entire program rarely used.</p>
+<p>execute partially-loaded program</p>
 <ul>
-<li><p>exponential average</p>
-<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573266645043.png" style="zoom:50%;" />
-
-<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573266662578.png" style="zoom:50%;" /></li>
+<li>程序不受现有物理内存大小限制，可以为virtual address space编写程序</li>
+<li>更多程序可以同时执行，CPU利用率增加，而响应时间、周转时间不增加</li>
+<li>载入或交换程序所需IO变少，用户程序运行更快</li>
 </ul>
-<p>preemptive/non-preemptive</p>
-<p>preemptive SJF : shortest-remaining-time-first scheduling</p>
-</li>
-<li><p>priority scheduling algorithm</p>
-<p>SJF is a special case of it</p>
-<p>priority can be defined internally or externally</p>
-<p>preemptive/non-preemptive(非抢占优先级调度只是将优先级高的新进程加到ready queue的头部)</p>
-<p>主要问题是indefinite blocking/starvation</p>
-<p>低优先级无穷等待问题解决方法: aging(逐渐增加等待很久进程的优先级)</p>
-</li>
-<li><p>RR round-robin</p>
-<p>especially for time-sharing system</p>
-<p>时间片(time quantum/time slice)</p>
-<p>所需时间小，自动释放CPU，所需时间大，时间片到timer会产生中断</p>
-<p>平均等待时间较长</p>
-<p>preemptive</p>
-<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573267188671.png" style="zoom:50%;" />
+<p>Virtual memory – separation of user logical memory from physical memory.</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577436249080.png" style="zoom:50%;" />
 
-<p>时间片很大：FCFS；时间片很小：<u>processor sharing</u>(仿佛都有自己的处理器，速度为1/n)</p>
-<p>时间片应比context-switch time大，也不应太大</p>
-</li>
-<li><p>multilevel queue scheduling algorithm</p>
-<p>foreground(interactive); background(batch) 前台进程更高优先级。前台可能RR，后台可能FCFS</p>
-<p>ready queue划分成多个队列，一个进程被永久分配到一个队列，每个队列有自己的调度算法</p>
-<p>队列间常采用fixed-priority preemptive scheduling, 或在队列间划分时间片，每个队列有一定CPU时间</p>
-</li>
-<li><p>multilevel feedback queue schedling algorithm</p>
-<p>允许进程在队列之间移动</p>
-<p>使用过多CPU时间，移到低优先级队列。所以<strong>IO bound</strong> &amp; <strong>interactive</strong> processes(使用CPU时间少)会被留在高优先级队列</p>
-<p>较低优先级队列等待时间过长的进程也会被转移到更高优先级队列，prevent starvation</p>
-<p><del>看例子P172</del></p>
-<p>最通用的CPU调度算法</p>
-</li>
-<li><p>HRRN highest response-ratio next 高响应比优先</p>
-<p>non-preemptive</p>
-<p>PPT  P51</p>
-</li>
-</ul>
-<h2 id="multi-processor-scheduling"><a href="#multi-processor-scheduling" class="headerlink" title="multi-processor scheduling"></a>multi-processor scheduling</h2><p>非对称多处理(asymmetric multiprocessing),一个处理器处理调度，IO，其他系统活动；其余处理器处理用户代码</p>
-<p>SMP symmetric multiprocessing 对称多处理：每个处理器自我调度，许多OS支持SMP</p>
-<p>processor affinity: 使缓存无效或重构的代价太高，所以尽量使一个进程在同一个处理器上允许。不能保证进程不移动:soft affinity，否则hard affinity</p>
-<p>load balancing: 将工作负载平均地分配到SMP所有处理器上。load balancing只对拥有自己私有可执行进程的处理器必要(大部分时候都有私有)</p>
-<p>​    push migration: a specific task周期检查每个处理器上的负载，如果不平衡，push processes from                                     overloaded to idle processor</p>
-<p>​    pull migration: an idle processor pulls a waiting task from a busy processor</p>
-<p>multicore processors: PPT P61</p>
-<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573270374874.png" style="zoom:50%;" />
-
-<p>SMT: symmetric multithreading 提供多个逻辑处理器实现多线程并发 hyperthreading. 每个逻辑处理器负责自己的中断处理。</p>
-<h2 id="thread-scheduling"><a href="#thread-scheduling" class="headerlink" title="thread scheduling"></a>thread scheduling</h2><p>对在内核级支持线程的系统而言，系统调度的是内核线程而不是进程。用户线程由线程库管理。</p>
-<p>PCS: process-contention-scope 线程库调度用户级线程到一个有效的LWP上(CPU竞争发生在属于相同进程的线程之间) ,local scheduling</p>
-<p>SCS: system-contention-scope 调度哪个内核线程到CPU(CPU竞争发生在系统的所有线程中)。一对一模型只用使用SCS ,global scheduling</p>
-<p>实例 书P178</p>
-<h2 id="algorithm-evaluation"><a href="#algorithm-evaluation" class="headerlink" title="algorithm evaluation"></a>algorithm evaluation</h2><p>analytic evaluation: 产生一个公式或数字</p>
-<p>deterministic evaluation: 计算在给定负荷下算法的性能</p>
-<p>queueing-network-analysis:</p>
-<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573271651221.png" style="zoom:50%;" />
-
-<p>simulation模拟 trace tape</p>
-]]></content>
-      <categories>
-        <category>所学</category>
-        <category>计算机基础</category>
-      </categories>
-      <tags>
-        <tag>操作系统</tag>
-        <tag>专业课笔记</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>操作系统笔记 CH7 Deadlocks</title>
-    <url>/2020/02/28/OS7/</url>
-    <content><![CDATA[<h2 id="deadlock-characteristics"><a href="#deadlock-characteristics" class="headerlink" title="deadlock characteristics"></a>deadlock characteristics</h2><h3 id="necessary-conditions"><a href="#necessary-conditions" class="headerlink" title="necessary conditions"></a>necessary conditions</h3><p>4个条件同时满足，引起死锁：</p>
+<p>动态内存分配，堆向上增长；子程序调用，栈向下增长。包括洞的虚拟地址空间是稀地址空间。</p>
+<p>Enables sparse address spaces with holes left for growth, dynamically linked libraries, etc.</p>
+<p>Virtual memory allows files and memory to be shared by two or more processes through page sharing.</p>
+<p>虚拟内存实现：</p>
 <ul>
-<li><p>mutual exclusion</p>
-<p>至少有一个资源处于非共享模式，一次只能有一个进程使用</p>
-</li>
-<li><p>hold and wait</p>
-<p>占有至少一个资源，等待另一为其他进程所占资源</p>
-</li>
-<li><p>no preemption</p>
-<p>资源不能被抢占</p>
-</li>
-<li><p>circular wait</p>
-</li>
+<li>demand paging</li>
+<li>demand segmentation</li>
 </ul>
-<h3 id="resource-allocation-graph"><a href="#resource-allocation-graph" class="headerlink" title="resource-allocation graph"></a>resource-allocation graph</h3><p>request edge : Pi-&gt;Rj</p>
-<p>assignment edge : Rj-&gt;Pi</p>
-<p>申请边只用指向矩形，但分配边必须从某个原点开始</p>
-<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573293211940.png" style="zoom:67%;" />
+<h2 id="demand-paging-按需调页"><a href="#demand-paging-按需调页" class="headerlink" title="demand paging 按需调页"></a>demand paging 按需调页</h2><p>Lazy swapper: never swaps a page into memory unless that page will be needed.</p>
+<p>swapper对整个进程进行操作，pager只对进程的单个页进行操作</p>
+<p>页表条目，valid-invalid bit: valid-合法也在内存 invalid-无效(不在逻辑地址空间) 或 有效但在磁盘</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577443877399.png" style="zoom:50%;" />
 
-<p>资源分配图有环是死锁的必要条件。若每类资源只有一个实例，含环是充分必要条件。若同类资源数&gt;1,不一定有死锁。</p>
-<h2 id="methods-for-handling-deadlocks"><a href="#methods-for-handling-deadlocks" class="headerlink" title="methods for handling deadlocks"></a>methods for handling deadlocks</h2><p>1.预防或避免死锁</p>
-<p>2.允许进入死锁，检测并恢复</p>
-<p>3.忽视这个问题(为多数OS所用)</p>
-<p>deadlock prevention: 确保至少一个必要条件不成立，通过限制如何申请资源</p>
-<p>deadlock avoidance: 事先得到进程申请和使用资源的额外信息，系统可确定对于一个申请，进程是否等待(申请允许还是延迟)，考虑可用、已分配、进程将来申请和释放的资源</p>
-<h2 id="deadlock-prevention"><a href="#deadlock-prevention" class="headerlink" title="deadlock prevention"></a>deadlock prevention</h2><p>确保4个必要条件至少1个不成立</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577444151280.png" style="zoom:50%;" />
+
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577444186893.png" style="zoom:50%;" />
+
+<p>pure demand paging: 只有在需要时才将页调入内存</p>
+<p>单个指令可能访问多个页的内存(一页指令，其他页数据)，一个指令可能产生多个page fault. 不过由于locality of reference, 按需调页的性能还算合理。</p>
+<p>按需调页的硬件支持：</p>
 <ul>
-<li><p>mutual exclusion</p>
-<p>通常不通过这个条件…</p>
-</li>
-<li><p>hold and wait</p>
+<li>Page table with valid-Invalid bit</li>
+<li>Secondary memory (swap device with swap space)</li>
+</ul>
+<p>请求调页的关键要求是能够在页错误后instruction restart</p>
+<p>如果页错误在获取操作数时，再次获取指令，再次译码指令，再次获取操作数。</p>
+<p>一个指令可能改变多个不同位置。若源和目的块有重叠，源块可能已修改，不能简单地再次执行。(微码计算试图访问两块的两端；临时寄存器保存覆盖位置的值)</p>
+<p>EAT = (1– p) * memory access time + p * page fault service time</p>
+<p>page fault service time = page fault overhead+[ swap page out ]+swap page in+restart overhead</p>
+<p>处理页错误中断和重新启动进程可以通过仔细编码降低开销</p>
+<p>EAT与页错误率直接相关</p>
+<p>与文件无关的页需要使用交换空间</p>
+<h2 id="Copy-on-Write-写时复制"><a href="#Copy-on-Write-写时复制" class="headerlink" title="Copy-on-Write 写时复制"></a>Copy-on-Write 写时复制</h2><p>fork()使用写时复制技术</p>
+<p>父子进程开始时共享同一页面。这些页面标记为写时复制页(只有可能修改的页需要标记)。如果任一进程对页进行写，创建一个共享页的副本。</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577445363016.png" style="zoom:50%;" />
+
+<p>COW allows more efficient process creation as only modified pages are copied.</p>
+<p>free pages are allocated from a pool of free pages. 采用按需填零(zero-fill-on-demand)技术分配这些页，需要分配前先填零，因此清除了以前的内容。</p>
+<p>vfork()，不采用copy-on-write，vfork()将父进程挂起，子进程使用父进程的地址空间。如果子进程修改父进程地址空间的任何页， 父进程重启时可见。主要用于子进程被创建后立即调用exec()的情况。比较高效。用于实现UNIX命令行shell的接口。</p>
+<h2 id="page-replacement"><a href="#page-replacement" class="headerlink" title="page replacement"></a>page replacement</h2><p>Use modify bit (dirty bit) to reduce overhead of page transfers. 不修改的话不需要写回磁盘</p>
+<p>Page replacement completes separation between logical memory and physical memory.</p>
+<p>frame-allocation algorithm</p>
+<p>page replacement algorithm</p>
+<p>reference string: 内存的引用序列</p>
+<h3 id="FIFO"><a href="#FIFO" class="headerlink" title="FIFO"></a>FIFO</h3><p>Belady’s anomaly: 页错误率可能会随着所分配的帧数的增加而增加</p>
+<h3 id="OPT-MIN"><a href="#OPT-MIN" class="headerlink" title="OPT/MIN"></a>OPT/MIN</h3><p>置换最长时间不会使用的页</p>
+<p>未来知识</p>
+<h3 id="LRU"><a href="#LRU" class="headerlink" title="LRU"></a>LRU</h3><p>最长时间没有使用的页</p>
+<p>By the principle of locality, this should be the page least likely to be referenced in the near future.</p>
+<p>Associates with each page the time of that page’s last use.</p>
+<p>两种可行实现：</p>
 <ul>
-<li><p>每个进程在执行前申请并获得所有资源</p>
+<li><p>counter</p>
+<p>每个页表项关联一个使用时间域。对每次引用，计数器增加。置换具有最小时间的页。</p>
 </li>
-<li><p>进程在没有资源时才可申请资源(申请更多资源前，先释放已分配的资源)</p>
-</li>
-</ul>
-<p>缺点:1.资源利用率低 2.starvation</p>
-</li>
-<li><p>no preemption</p>
-<p>如果一个进程占有资源并申请另一个不能立即分配的资源，其现在已分配的资源都可被抢占(被隐式释放)。</p>
-<p>进程申请资源时，不可用也不被其他等待进程占有时，等待</p>
-<p>常应用于状态可以保存恢复的资源，如CPU寄存器和内存，不适用于打印机和磁带驱动器等。</p>
-</li>
-<li><p>circular wait</p>
-<p>对所有资源类型进行完全排序。每个进程只按递增顺序申请资源。(只能申请编号比它大的)</p>
+<li><p>stack</p>
+<p>没引用一个页，页就从栈中删除并放在顶部</p>
+<p>No search for replacement, LRU page is at the bottom.</p>
 </li>
 </ul>
-<h2 id="deadlock-avoidance"><a href="#deadlock-avoidance" class="headerlink" title="deadlock avoidance"></a>deadlock avoidance</h2><p>死锁避免比死锁预防要求低</p>
-<p>deadlock prevention 低设备使用率和吞吐率</p>
-<p>a system is in a safe state only if there exists a safe sequence</p>
-<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573295674796.png" style="zoom:50%;" />
-
-<h3 id="resource-allocation-graph-algorithm"><a href="#resource-allocation-graph-algorithm" class="headerlink" title="resource-allocation-graph algorithm"></a>resource-allocation-graph algorithm</h3><p>增加claim edge(需求边)，虚线</p>
-<p>当进程Pi开始执行时，所有需求边必须先处于资源分配图。(可放宽为只要与Pi有关的需求边)</p>
-<p>只有在申请边Pi-&gt;Rj变成分配边Rj-&gt;Pi，而不会出现环时，才允许申请。环存在是unsafe state</p>
-<p>cycle-detection algorithm</p>
-<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573296280721.png" style="zoom:50%;" />
-
-<h3 id="banker’s-algorithm"><a href="#banker’s-algorithm" class="headerlink" title="banker’s algorithm"></a>banker’s algorithm</h3><p>自己看书做题去 P247</p>
-<h2 id="deadlock-detection"><a href="#deadlock-detection" class="headerlink" title="deadlock detection"></a>deadlock detection</h2><p>不采用prevention和avoidance，应提供检查是否出现死锁&amp;恢复算法。</p>
-<h3 id="每种资源类型单个实例"><a href="#每种资源类型单个实例" class="headerlink" title="每种资源类型单个实例"></a>每种资源类型单个实例</h3><p>wait-for graph: Pi等待Pj释放一个Pi需要的资源</p>
-<p>Pi-&gt;Pj iff 资源分配图中 Pi-&gt;Rq, Rq-&gt;Pj</p>
-<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573296978952.png" style="zoom:33%;" />
-
-<p>图中有环 &lt;-&gt; 死锁</p>
-<h3 id="每种资源类型多个实例"><a href="#每种资源类型多个实例" class="headerlink" title="每种资源类型多个实例"></a>每种资源类型多个实例</h3><p>detection algorithm</p>
-<p><img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573297606742.png"></p>
-<h3 id="资源图消边法"><a href="#资源图消边法" class="headerlink" title="资源图消边法"></a>资源图消边法</h3><p>PPT P45 + 看橘</p>
-<h2 id="recovery-from-deadlock"><a href="#recovery-from-deadlock" class="headerlink" title="recovery from deadlock"></a>recovery from deadlock</h2><h3 id="process-termination"><a href="#process-termination" class="headerlink" title="process termination"></a>process termination</h3><p>不管哪种进程终止方法，系统都会收回分配给终止进程的所有资源</p>
+<h3 id="LRU-Approximation-Algorithms"><a href="#LRU-Approximation-Algorithms" class="headerlink" title="LRU Approximation Algorithms"></a>LRU Approximation Algorithms</h3><p>LRU needs special hardware and still slow.所以用近似算法</p>
+<p>页表每项都关联一个reference bit, 每引用一个页(读or写)，引用位被硬件置1</p>
+<h4 id="Reference-bit-algorithm"><a href="#Reference-bit-algorithm" class="headerlink" title="Reference bit algorithm"></a>Reference bit algorithm</h4><p>When page is referenced, the bit is set to 1 by the hardware.</p>
+<p>Replace the one which is 0 (if one exists).</p>
+<p>Problem ：We do not know the order.</p>
+<h4 id="Additional-reference-bits-algorithm"><a href="#Additional-reference-bits-algorithm" class="headerlink" title="Additional-reference-bits algorithm"></a>Additional-reference-bits algorithm</h4><p>Keep an 8-bit byte for each page in a table in memory.</p>
+<p>规定时间间隔里记录引用位</p>
+<p>At regular intervals, a timer interrupts, OS shifts the reference bit for each page into the high-order bit of its 8- bit byte, shifting the other bits right by 1 bit and discarding the low-order bit.</p>
+<p>将这8位看作无符号整数，置换具有最小值的页</p>
+<h4 id="Second-chance-Clock"><a href="#Second-chance-Clock" class="headerlink" title="Second chance / Clock"></a>Second chance / Clock</h4><p>Basic algorithm: FIFO</p>
+<p>循环队列，指针向前移动直到找到一个引用位为0的页，在向前移动时，清除引用位。</p>
+<p>如果所有位均已设置，会遍历整个队列。成了FIFO</p>
+<h4 id="Enhanced-Second-Chance-Algorithm"><a href="#Enhanced-Second-Chance-Algorithm" class="headerlink" title="Enhanced Second-Chance Algorithm"></a>Enhanced Second-Chance Algorithm</h4><p>(reference bit, modify bit)</p>
+<p>(0,0)最好 (0,1) (1,0) (1,1)</p>
+<p>降低IO</p>
+<h3 id="Counting-based-page-replacement"><a href="#Counting-based-page-replacement" class="headerlink" title="Counting-based page replacement"></a>Counting-based page replacement</h3><p>每个页保留一个用于记录引用次数的计数器。</p>
+<p>LFU: replaces page with the smallest count</p>
+<p>MFU: page with the smallest count was probably just brought in and has yet to be used.</p>
+<h2 id="page-allocation-帧分配"><a href="#page-allocation-帧分配" class="headerlink" title="page allocation 帧分配"></a>page allocation 帧分配</h2><p>分配至少最少数量的帧。必须有足够的帧容纳所有单个指令所引用的页。</p>
+<p>每个进程的帧的最少数量由体系结构决定，最大数量由可用物理内存的数量决定。</p>
 <ul>
-<li>终止所有死锁进程</li>
-<li>一次终止一个，调用死锁检测，直到取消死锁循环</li>
+<li><p>fixed allocation</p>
+<p>高低优先级一样处理</p>
+<p>when a page fault occurs, one of the pages of that process must be replaced. – Local replacement</p>
+<p>固定分配必须局部置换(置换自己进程里的页)</p>
+<ul>
+<li><p>equal allocation</p>
+<p>n个进程之间分配m个帧，每个m/n帧</p>
+</li>
+<li><p>proportional allocation</p>
+<p>根据进程大小比例地分配内存</p>
+<p>进程pi的虚拟内存大小si</p>
+<p>a i = s i /S * m</p>
+</li>
 </ul>
-<h3 id="resource-preemption"><a href="#resource-preemption" class="headerlink" title="resource preemption"></a>resource preemption</h3><p>select a victim: which resources and which processes are to be preempted 代价因素 cost factors</p>
-<p>rollback: 抢占资源后对进程做什么安排 roll back to some safe state. simplest: total rollback</p>
-<p>starvation: 如何保证资源总是从一个进程抢占 在代价因素中加上回滚次数</p>
+</li>
+<li><p>priority allocation</p>
+<p>Use a proportional allocation scheme using priorities rather than size, or on a combination of size and priority.</p>
+</li>
+</ul>
+<p>Local replacement:  select for replacement one of its frames</p>
+<p>​    分配每个进程的帧的数量不变</p>
+<p>Global replacement:  select for replacement a frame from a process with lower priority number</p>
+<p>​    易于实现。更好的系统吞吐量，常用。</p>
+<p>​    OS keeps list of free frames.</p>
+<p>​    进程不能控制其页错误率(受其他进程调页行为影响)</p>
+<h2 id="thrashing-系统颠簸"><a href="#thrashing-系统颠簸" class="headerlink" title="thrashing 系统颠簸"></a>thrashing 系统颠簸</h2><p>thrashing: 频繁的页调度行为</p>
+<p>如果一个进程在换页上用的时间多于执行时间，这个进程就在颠簸</p>
+<p>CPU调度程序发现CPU使用率降低，增加多道程序程度…更多页错误，CPU使用率更低</p>
+<p>颠簸时，为了增加CPU使用率和降低系统颠簸，必须降低多道程序的程度</p>
+<p>采用局部置换，一个进程颠簸不会使其他进程颠簸</p>
+<p>Why does thrashing occur? Σ locality size &gt; total memory size</p>
+<p>using a local (or priority) replacement algorithm, Can limit the effect of thrashing.</p>
+<p>为了防止颠簸，必须提供进程所需的足够多的帧。</p>
+<p>Locality: a set of pages that are actively used together. Process migrates from one locality to another. Localities may overlap.</p>
+<h3 id="Working-Set-Model-工作集合模型"><a href="#Working-Set-Model-工作集合模型" class="headerlink" title="Working-Set Model 工作集合模型"></a>Working-Set Model 工作集合模型</h3><p>基于局部性假设</p>
+<p>参数Δ定义working-set window：a fixed number of page references</p>
+<p>Working Set: the set of pages in the most recent Δ page references.</p>
+<p>WSS i (working set size of Process P i ) : (varies in time) the number of pages in Working Set of process P i .</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577453374315.png" style="zoom:50%;" />
+
+<p>工作集合的精度与Δ的选择有关，太小不能包含整个局部，太大包含多个局部</p>
+<p>总的帧需求量 D =Σ WSS i  总的需求大于帧的数量，会出现颠簸</p>
+<p>OS跟踪每个进程的工作集合，如果D &gt; m，暂停一个进程，该进程的页被写出，且其帧可分配给其他进程</p>
+<p>通过固定定时中断(interval timer)和引用位(reference bit)可以近似模拟工作集合模型</p>
+<h3 id="Page-Fault-Frequency-Scheme-PPF-页错误频率"><a href="#Page-Fault-Frequency-Scheme-PPF-页错误频率" class="headerlink" title="Page-Fault Frequency Scheme(PPF) 页错误频率"></a>Page-Fault Frequency Scheme(PPF) 页错误频率</h3><p>为所期望的页错误率设置上限和下限。超过上限，为进程分配更多的帧；低于下限，从该进程中移走帧。</p>
+<p>如果页错误率增加且没有可用帧，必须选择一个进程暂停，可将释放的帧分配给具有高页错误率的进程</p>
 ]]></content>
       <categories>
         <category>所学</category>
@@ -1702,146 +1763,85 @@
       </tags>
   </entry>
   <entry>
-    <title>操作系统笔记 CH9 Virtual Memory</title>
-    <url>/2020/02/28/OS9/</url>
-    <content><![CDATA[<h2 id="background"><a href="#background" class="headerlink" title="background"></a>background</h2><p>CH8的内存管理方案需要将整个进程放入内存，动态载入只能减轻这一限制</p>
-<p>Code needs to be in memory to execute, but entire program rarely used.</p>
-<p>execute partially-loaded program</p>
+    <title>操作系统笔记 CH7 Deadlocks</title>
+    <url>/2020/02/28/OS7/</url>
+    <content><![CDATA[<h2 id="deadlock-characteristics"><a href="#deadlock-characteristics" class="headerlink" title="deadlock characteristics"></a>deadlock characteristics</h2><h3 id="necessary-conditions"><a href="#necessary-conditions" class="headerlink" title="necessary conditions"></a>necessary conditions</h3><p>4个条件同时满足，引起死锁：</p>
 <ul>
-<li>程序不受现有物理内存大小限制，可以为virtual address space编写程序</li>
-<li>更多程序可以同时执行，CPU利用率增加，而响应时间、周转时间不增加</li>
-<li>载入或交换程序所需IO变少，用户程序运行更快</li>
-</ul>
-<p>Virtual memory – separation of user logical memory from physical memory.</p>
-<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577436249080.png" style="zoom:50%;" />
-
-<p>动态内存分配，堆向上增长；子程序调用，栈向下增长。包括洞的虚拟地址空间是稀地址空间。</p>
-<p>Enables sparse address spaces with holes left for growth, dynamically linked libraries, etc.</p>
-<p>Virtual memory allows files and memory to be shared by two or more processes through page sharing.</p>
-<p>虚拟内存实现：</p>
-<ul>
-<li>demand paging</li>
-<li>demand segmentation</li>
-</ul>
-<h2 id="demand-paging-按需调页"><a href="#demand-paging-按需调页" class="headerlink" title="demand paging 按需调页"></a>demand paging 按需调页</h2><p>Lazy swapper: never swaps a page into memory unless that page will be needed.</p>
-<p>swapper对整个进程进行操作，pager只对进程的单个页进行操作</p>
-<p>页表条目，valid-invalid bit: valid-合法也在内存 invalid-无效(不在逻辑地址空间) 或 有效但在磁盘</p>
-<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577443877399.png" style="zoom:50%;" />
-
-<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577444151280.png" style="zoom:50%;" />
-
-<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577444186893.png" style="zoom:50%;" />
-
-<p>pure demand paging: 只有在需要时才将页调入内存</p>
-<p>单个指令可能访问多个页的内存(一页指令，其他页数据)，一个指令可能产生多个page fault. 不过由于locality of reference, 按需调页的性能还算合理。</p>
-<p>按需调页的硬件支持：</p>
-<ul>
-<li>Page table with valid-Invalid bit</li>
-<li>Secondary memory (swap device with swap space)</li>
-</ul>
-<p>请求调页的关键要求是能够在页错误后instruction restart</p>
-<p>如果页错误在获取操作数时，再次获取指令，再次译码指令，再次获取操作数。</p>
-<p>一个指令可能改变多个不同位置。若源和目的块有重叠，源块可能已修改，不能简单地再次执行。(微码计算试图访问两块的两端；临时寄存器保存覆盖位置的值)</p>
-<p>EAT = (1– p) * memory access time + p * page fault service time</p>
-<p>page fault service time = page fault overhead+[ swap page out ]+swap page in+restart overhead</p>
-<p>处理页错误中断和重新启动进程可以通过仔细编码降低开销</p>
-<p>EAT与页错误率直接相关</p>
-<p>与文件无关的页需要使用交换空间</p>
-<h2 id="Copy-on-Write-写时复制"><a href="#Copy-on-Write-写时复制" class="headerlink" title="Copy-on-Write 写时复制"></a>Copy-on-Write 写时复制</h2><p>fork()使用写时复制技术</p>
-<p>父子进程开始时共享同一页面。这些页面标记为写时复制页(只有可能修改的页需要标记)。如果任一进程对页进行写，创建一个共享页的副本。</p>
-<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577445363016.png" style="zoom:50%;" />
-
-<p>COW allows more efficient process creation as only modified pages are copied.</p>
-<p>free pages are allocated from a pool of free pages. 采用按需填零(zero-fill-on-demand)技术分配这些页，需要分配前先填零，因此清除了以前的内容。</p>
-<p>vfork()，不采用copy-on-write，vfork()将父进程挂起，子进程使用父进程的地址空间。如果子进程修改父进程地址空间的任何页， 父进程重启时可见。主要用于子进程被创建后立即调用exec()的情况。比较高效。用于实现UNIX命令行shell的接口。</p>
-<h2 id="page-replacement"><a href="#page-replacement" class="headerlink" title="page replacement"></a>page replacement</h2><p>Use modify bit (dirty bit) to reduce overhead of page transfers. 不修改的话不需要写回磁盘</p>
-<p>Page replacement completes separation between logical memory and physical memory.</p>
-<p>frame-allocation algorithm</p>
-<p>page replacement algorithm</p>
-<p>reference string: 内存的引用序列</p>
-<h3 id="FIFO"><a href="#FIFO" class="headerlink" title="FIFO"></a>FIFO</h3><p>Belady’s anomaly: 页错误率可能会随着所分配的帧数的增加而增加</p>
-<h3 id="OPT-MIN"><a href="#OPT-MIN" class="headerlink" title="OPT/MIN"></a>OPT/MIN</h3><p>置换最长时间不会使用的页</p>
-<p>未来知识</p>
-<h3 id="LRU"><a href="#LRU" class="headerlink" title="LRU"></a>LRU</h3><p>最长时间没有使用的页</p>
-<p>By the principle of locality, this should be the page least likely to be referenced in the near future.</p>
-<p>Associates with each page the time of that page’s last use.</p>
-<p>两种可行实现：</p>
-<ul>
-<li><p>counter</p>
-<p>每个页表项关联一个使用时间域。对每次引用，计数器增加。置换具有最小时间的页。</p>
+<li><p>mutual exclusion</p>
+<p>至少有一个资源处于非共享模式，一次只能有一个进程使用</p>
 </li>
-<li><p>stack</p>
-<p>没引用一个页，页就从栈中删除并放在顶部</p>
-<p>No search for replacement, LRU page is at the bottom.</p>
+<li><p>hold and wait</p>
+<p>占有至少一个资源，等待另一为其他进程所占资源</p>
+</li>
+<li><p>no preemption</p>
+<p>资源不能被抢占</p>
+</li>
+<li><p>circular wait</p>
 </li>
 </ul>
-<h3 id="LRU-Approximation-Algorithms"><a href="#LRU-Approximation-Algorithms" class="headerlink" title="LRU Approximation Algorithms"></a>LRU Approximation Algorithms</h3><p>LRU needs special hardware and still slow.所以用近似算法</p>
-<p>页表每项都关联一个reference bit, 每引用一个页(读or写)，引用位被硬件置1</p>
-<h4 id="Reference-bit-algorithm"><a href="#Reference-bit-algorithm" class="headerlink" title="Reference bit algorithm"></a>Reference bit algorithm</h4><p>When page is referenced, the bit is set to 1 by the hardware.</p>
-<p>Replace the one which is 0 (if one exists).</p>
-<p>Problem ：We do not know the order.</p>
-<h4 id="Additional-reference-bits-algorithm"><a href="#Additional-reference-bits-algorithm" class="headerlink" title="Additional-reference-bits algorithm"></a>Additional-reference-bits algorithm</h4><p>Keep an 8-bit byte for each page in a table in memory.</p>
-<p>规定时间间隔里记录引用位</p>
-<p>At regular intervals, a timer interrupts, OS shifts the reference bit for each page into the high-order bit of its 8- bit byte, shifting the other bits right by 1 bit and discarding the low-order bit.</p>
-<p>将这8位看作无符号整数，置换具有最小值的页</p>
-<h4 id="Second-chance-Clock"><a href="#Second-chance-Clock" class="headerlink" title="Second chance / Clock"></a>Second chance / Clock</h4><p>Basic algorithm: FIFO</p>
-<p>循环队列，指针向前移动直到找到一个引用位为0的页，在向前移动时，清除引用位。</p>
-<p>如果所有位均已设置，会遍历整个队列。成了FIFO</p>
-<h4 id="Enhanced-Second-Chance-Algorithm"><a href="#Enhanced-Second-Chance-Algorithm" class="headerlink" title="Enhanced Second-Chance Algorithm"></a>Enhanced Second-Chance Algorithm</h4><p>(reference bit, modify bit)</p>
-<p>(0,0)最好 (0,1) (1,0) (1,1)</p>
-<p>降低IO</p>
-<h3 id="Counting-based-page-replacement"><a href="#Counting-based-page-replacement" class="headerlink" title="Counting-based page replacement"></a>Counting-based page replacement</h3><p>每个页保留一个用于记录引用次数的计数器。</p>
-<p>LFU: replaces page with the smallest count</p>
-<p>MFU: page with the smallest count was probably just brought in and has yet to be used.</p>
-<h2 id="page-allocation-帧分配"><a href="#page-allocation-帧分配" class="headerlink" title="page allocation 帧分配"></a>page allocation 帧分配</h2><p>分配至少最少数量的帧。必须有足够的帧容纳所有单个指令所引用的页。</p>
-<p>每个进程的帧的最少数量由体系结构决定，最大数量由可用物理内存的数量决定。</p>
-<ul>
-<li><p>fixed allocation</p>
-<p>高低优先级一样处理</p>
-<p>when a page fault occurs, one of the pages of that process must be replaced. – Local replacement</p>
-<p>固定分配必须局部置换(置换自己进程里的页)</p>
-<ul>
-<li><p>equal allocation</p>
-<p>n个进程之间分配m个帧，每个m/n帧</p>
-</li>
-<li><p>proportional allocation</p>
-<p>根据进程大小比例地分配内存</p>
-<p>进程pi的虚拟内存大小si</p>
-<p>a i = s i /S * m</p>
-</li>
-</ul>
-</li>
-<li><p>priority allocation</p>
-<p>Use a proportional allocation scheme using priorities rather than size, or on a combination of size and priority.</p>
-</li>
-</ul>
-<p>Local replacement:  select for replacement one of its frames</p>
-<p>​    分配每个进程的帧的数量不变</p>
-<p>Global replacement:  select for replacement a frame from a process with lower priority number</p>
-<p>​    易于实现。更好的系统吞吐量，常用。</p>
-<p>​    OS keeps list of free frames.</p>
-<p>​    进程不能控制其页错误率(受其他进程调页行为影响)</p>
-<h2 id="thrashing-系统颠簸"><a href="#thrashing-系统颠簸" class="headerlink" title="thrashing 系统颠簸"></a>thrashing 系统颠簸</h2><p>thrashing: 频繁的页调度行为</p>
-<p>如果一个进程在换页上用的时间多于执行时间，这个进程就在颠簸</p>
-<p>CPU调度程序发现CPU使用率降低，增加多道程序程度…更多页错误，CPU使用率更低</p>
-<p>颠簸时，为了增加CPU使用率和降低系统颠簸，必须降低多道程序的程度</p>
-<p>采用局部置换，一个进程颠簸不会使其他进程颠簸</p>
-<p>Why does thrashing occur? Σ locality size &gt; total memory size</p>
-<p>using a local (or priority) replacement algorithm, Can limit the effect of thrashing.</p>
-<p>为了防止颠簸，必须提供进程所需的足够多的帧。</p>
-<p>Locality: a set of pages that are actively used together. Process migrates from one locality to another. Localities may overlap.</p>
-<h3 id="Working-Set-Model-工作集合模型"><a href="#Working-Set-Model-工作集合模型" class="headerlink" title="Working-Set Model 工作集合模型"></a>Working-Set Model 工作集合模型</h3><p>基于局部性假设</p>
-<p>参数Δ定义working-set window：a fixed number of page references</p>
-<p>Working Set: the set of pages in the most recent Δ page references.</p>
-<p>WSS i (working set size of Process P i ) : (varies in time) the number of pages in Working Set of process P i .</p>
-<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577453374315.png" style="zoom:50%;" />
+<h3 id="resource-allocation-graph"><a href="#resource-allocation-graph" class="headerlink" title="resource-allocation graph"></a>resource-allocation graph</h3><p>request edge : Pi-&gt;Rj</p>
+<p>assignment edge : Rj-&gt;Pi</p>
+<p>申请边只用指向矩形，但分配边必须从某个原点开始</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573293211940.png" style="zoom:67%;" />
 
-<p>工作集合的精度与Δ的选择有关，太小不能包含整个局部，太大包含多个局部</p>
-<p>总的帧需求量 D =Σ WSS i  总的需求大于帧的数量，会出现颠簸</p>
-<p>OS跟踪每个进程的工作集合，如果D &gt; m，暂停一个进程，该进程的页被写出，且其帧可分配给其他进程</p>
-<p>通过固定定时中断(interval timer)和引用位(reference bit)可以近似模拟工作集合模型</p>
-<h3 id="Page-Fault-Frequency-Scheme-PPF-页错误频率"><a href="#Page-Fault-Frequency-Scheme-PPF-页错误频率" class="headerlink" title="Page-Fault Frequency Scheme(PPF) 页错误频率"></a>Page-Fault Frequency Scheme(PPF) 页错误频率</h3><p>为所期望的页错误率设置上限和下限。超过上限，为进程分配更多的帧；低于下限，从该进程中移走帧。</p>
-<p>如果页错误率增加且没有可用帧，必须选择一个进程暂停，可将释放的帧分配给具有高页错误率的进程</p>
+<p>资源分配图有环是死锁的必要条件。若每类资源只有一个实例，含环是充分必要条件。若同类资源数&gt;1,不一定有死锁。</p>
+<h2 id="methods-for-handling-deadlocks"><a href="#methods-for-handling-deadlocks" class="headerlink" title="methods for handling deadlocks"></a>methods for handling deadlocks</h2><p>1.预防或避免死锁</p>
+<p>2.允许进入死锁，检测并恢复</p>
+<p>3.忽视这个问题(为多数OS所用)</p>
+<p>deadlock prevention: 确保至少一个必要条件不成立，通过限制如何申请资源</p>
+<p>deadlock avoidance: 事先得到进程申请和使用资源的额外信息，系统可确定对于一个申请，进程是否等待(申请允许还是延迟)，考虑可用、已分配、进程将来申请和释放的资源</p>
+<h2 id="deadlock-prevention"><a href="#deadlock-prevention" class="headerlink" title="deadlock prevention"></a>deadlock prevention</h2><p>确保4个必要条件至少1个不成立</p>
+<ul>
+<li><p>mutual exclusion</p>
+<p>通常不通过这个条件…</p>
+</li>
+<li><p>hold and wait</p>
+<ul>
+<li><p>每个进程在执行前申请并获得所有资源</p>
+</li>
+<li><p>进程在没有资源时才可申请资源(申请更多资源前，先释放已分配的资源)</p>
+</li>
+</ul>
+<p>缺点:1.资源利用率低 2.starvation</p>
+</li>
+<li><p>no preemption</p>
+<p>如果一个进程占有资源并申请另一个不能立即分配的资源，其现在已分配的资源都可被抢占(被隐式释放)。</p>
+<p>进程申请资源时，不可用也不被其他等待进程占有时，等待</p>
+<p>常应用于状态可以保存恢复的资源，如CPU寄存器和内存，不适用于打印机和磁带驱动器等。</p>
+</li>
+<li><p>circular wait</p>
+<p>对所有资源类型进行完全排序。每个进程只按递增顺序申请资源。(只能申请编号比它大的)</p>
+</li>
+</ul>
+<h2 id="deadlock-avoidance"><a href="#deadlock-avoidance" class="headerlink" title="deadlock avoidance"></a>deadlock avoidance</h2><p>死锁避免比死锁预防要求低</p>
+<p>deadlock prevention 低设备使用率和吞吐率</p>
+<p>a system is in a safe state only if there exists a safe sequence</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573295674796.png" style="zoom:50%;" />
+
+<h3 id="resource-allocation-graph-algorithm"><a href="#resource-allocation-graph-algorithm" class="headerlink" title="resource-allocation-graph algorithm"></a>resource-allocation-graph algorithm</h3><p>增加claim edge(需求边)，虚线</p>
+<p>当进程Pi开始执行时，所有需求边必须先处于资源分配图。(可放宽为只要与Pi有关的需求边)</p>
+<p>只有在申请边Pi-&gt;Rj变成分配边Rj-&gt;Pi，而不会出现环时，才允许申请。环存在是unsafe state</p>
+<p>cycle-detection algorithm</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573296280721.png" style="zoom:50%;" />
+
+<h3 id="banker’s-algorithm"><a href="#banker’s-algorithm" class="headerlink" title="banker’s algorithm"></a>banker’s algorithm</h3><p>自己看书做题去 P247</p>
+<h2 id="deadlock-detection"><a href="#deadlock-detection" class="headerlink" title="deadlock detection"></a>deadlock detection</h2><p>不采用prevention和avoidance，应提供检查是否出现死锁&amp;恢复算法。</p>
+<h3 id="每种资源类型单个实例"><a href="#每种资源类型单个实例" class="headerlink" title="每种资源类型单个实例"></a>每种资源类型单个实例</h3><p>wait-for graph: Pi等待Pj释放一个Pi需要的资源</p>
+<p>Pi-&gt;Pj iff 资源分配图中 Pi-&gt;Rq, Rq-&gt;Pj</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573296978952.png" style="zoom:33%;" />
+
+<p>图中有环 &lt;-&gt; 死锁</p>
+<h3 id="每种资源类型多个实例"><a href="#每种资源类型多个实例" class="headerlink" title="每种资源类型多个实例"></a>每种资源类型多个实例</h3><p>detection algorithm</p>
+<p><img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573297606742.png"></p>
+<h3 id="资源图消边法"><a href="#资源图消边法" class="headerlink" title="资源图消边法"></a>资源图消边法</h3><p>PPT P45 + 看橘</p>
+<h2 id="recovery-from-deadlock"><a href="#recovery-from-deadlock" class="headerlink" title="recovery from deadlock"></a>recovery from deadlock</h2><h3 id="process-termination"><a href="#process-termination" class="headerlink" title="process termination"></a>process termination</h3><p>不管哪种进程终止方法，系统都会收回分配给终止进程的所有资源</p>
+<ul>
+<li>终止所有死锁进程</li>
+<li>一次终止一个，调用死锁检测，直到取消死锁循环</li>
+</ul>
+<h3 id="resource-preemption"><a href="#resource-preemption" class="headerlink" title="resource preemption"></a>resource preemption</h3><p>select a victim: which resources and which processes are to be preempted 代价因素 cost factors</p>
+<p>rollback: 抢占资源后对进程做什么安排 roll back to some safe state. simplest: total rollback</p>
+<p>starvation: 如何保证资源总是从一个进程抢占 在代价因素中加上回滚次数</p>
 ]]></content>
       <categories>
         <category>所学</category>
@@ -1871,6 +1871,61 @@
       </tags>
   </entry>
   <entry>
+    <title>AVS3 编码位流</title>
+    <url>/2021/04/01/avs3-bitstream/</url>
+    <content><![CDATA[<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p><strong>视频序列</strong>是位流的最高层语法结构。</p>
+<p><strong>帧</strong>由一个亮度样本矩阵和两个色度样本矩阵构成。<strong>场</strong>由构成帧的三个样本矩阵中相间的行构成。奇数行构成顶场，偶数行构成底场。</p>
+<p>视频序列头由视频序列起码码开始，后面跟着一串编码图像数据。序列头可在位流中重复出现，称为重复序列头。使用重复序列头的主要目的是支持对视频序列的随机访问。</p>
+<p>一副图像可以是一帧或一场，其编码数据由图像起始码开始，到序列起始码、序列结束码或下一个图像起始码结束。</p>
+<p><strong>片</strong>是图像中的矩形区域，包含若干最大编码单元在图像内的部分，片之间不应重叠。</p>
+<p>图像划分为<strong>最大编码单元</strong>，最大编码单元之间不应重叠，最大编码单元左上角的样本不应超出图像边界，最大编码单元右下角的样本可超出图像边界。</p>
+<p>最大编码单元划分为一个或多个<strong>编码单元</strong>，由编码树决定。编码单元划分为一个或多个<strong>变换块</strong>。</p>
+<h2 id="码流结构及语义描述"><a href="#码流结构及语义描述" class="headerlink" title="码流结构及语义描述"></a>码流结构及语义描述</h2><h3 id="视频序列"><a href="#视频序列" class="headerlink" title="视频序列"></a>视频序列</h3><img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/20210403170108.png" style="zoom:80%;" />
+
+<ul>
+<li><p>序列头 sequence_header</p>
+<p>视频序列起始码、档次标号、级别标号、知识位流标志、知识图像允许标志、知识位流重复序列头标志、逐行序列标志、场图像序列标志、水平尺寸、垂直尺寸、色度格式、样本精度、编码样本精度、宽高比、帧率代码、比特率低位、比特率高位、低延迟、时间层标识允许标志、位流缓冲区尺寸、最大解码图像缓冲区大小、参考图像队列 1 索引存在标志、参考图像队列相同标志、参考图像队列配置集数、默认活跃参考图像数、最大编码单元尺寸、最小编码单元尺寸、划分单元最大比例、编码树最大划分次数、最小四叉树尺寸、最大二叉树尺寸、最大扩展四叉树尺寸、加权量化允许标志、加权量化矩阵加载标志、二次变换允许标志、样值偏倚补偿允许标志、自适应修正滤波允许标志、仿射运动补偿允许标志、对称运动矢量差模式允许标志、脉冲编码调制模式允许标志、自适应运动矢量精度允许标志、候选历史运动信息数、帧内预测滤波允许标志、高级运动矢量表达模式允许标志、运动矢量精度扩展模式允许标志、色度两步预测模式允许标志、帧内衍生模式允许标志、衍生模式划分边长最大尺寸、基于位置的变换允许标志、图像重排序延迟、跨片环路滤波允许标志、片划分一致性标志、参考同位置片标志、统一片大小标志、片宽度、片高度</p>
+</li>
+<li><p>视频编辑码和视频序列结束码</p>
+<ul>
+<li><p>视频编辑码 video_edit_code</p>
+<p>紧跟其后的第一幅 I 图像后续的 B 图像可能因缺少参考图像而不能正确解码</p>
+</li>
+<li><p>视频序列结束码 video_sequence_end_code</p>
+<p>标识视频序列的结束。如果 POI（显示顺序索引），如果 POI 的值大于 $(2^{32}-1)$，位流中应插入一个视频序列结束码。</p>
+</li>
+</ul>
+</li>
+<li><p>参考图像队列配置集</p>
+<p>参考知识图像标志、知识图像索引标志、被参考的知识图像索引、参考图像数、参考图像 DOI 差值绝对值、参考图像 DOI 差值符号</p>
+</li>
+<li><p>自定义加权量化矩阵</p>
+<p>加权量化矩阵系数</p>
+</li>
+</ul>
+<h3 id="图像"><a href="#图像" class="headerlink" title="图像"></a>图像</h3><ul>
+<li><p>帧内预测图像头</p>
+<p>帧内预测图像起始码、BBV 延时、时间编码标志、时间编码、解码顺序索引、知识图像索引、时间层标识、图像输出延迟、引用参考图像队列配置集标志、引用参考图像队列配置集索引、BBV 检测次数、逐行帧标志、图像编码结构标志、顶场在先、重复首场、顶场场图像标志、固定图像量化因子、去块滤波禁用标志、去块滤波参数标志、$\alpha$ 和 C 索引的偏移、$\beta$ 索引的偏移、色度量化参数禁用标志、色度量化参数增量 Cb、色度量化参数增量 Cr、图像加权量化允许标志、图像加权量化数据加载索引、加权量化参数索引、加权量化矩阵模型、加权量化参数增量 1、加权量化参数增量 2、图像自适应修正滤波允许标志</p>
+</li>
+<li><p>帧间预测图像头</p>
+<p>帧间预测图像起始码、随机访问正确解码标志、图像编码方式、活跃参考图像数重载标志、活跃参考图像数、仿射预测子块尺寸标志</p>
+</li>
+<li><p>片</p>
+<p>片起始码、固定片量化银子标志、片量化因子、片样值偏移补偿允许标志、高级熵编码字节对齐填充位、最大编码单元量化参数增量、样值偏移补偿合并方式索引、样值偏移补偿模式、样值偏移补偿区间模式偏移绝对值、样值偏移补偿区间模式偏移值符号值、样值偏移补偿区间模式起始偏移子区间位置、样值偏移补偿区间模式起始偏移子区间位置差、样值偏移补偿模式偏移值、样值偏移补偿边缘模式类型、最大编码单元自适应修正滤波允许标志、熵编码最大编码单元填充位、片结束码</p>
+</li>
+</ul>
+<h2 id="编码树"><a href="#编码树" class="headerlink" title="编码树"></a>编码树</h2><p>四叉树划分标志、编码单元预测模式、二叉树扩展四叉树划分标志、二叉树扩展四叉树划分类型标志、二叉树扩展四叉树划分方向标志</p>
+<h2 id="编码单元"><a href="#编码单元" class="headerlink" title="编码单元"></a>编码单元</h2><p>跳过模式标志、高级运动矢量表达模式标志、仿射模式标志、直接模式标志、帧内编码单元标志、基础运动矢量索引、运动矢量偏移量索引、运动矢量方向索引、仿射运动矢量索引、衍生模式划分标志、衍生模式划分方向、水平四叉衍生模式划分标志、垂直四叉衍生模式划分标志、水平非对称衍生模式标志、仿射自适应运动矢量精度索引、自适应运动矢量精度索引、编码单元子类型索引、预测参考模式、对称运动矢量差标志、运动矢量精度扩展模式标识、帧内亮度预测模式、帧内色度预测模式、帧内预测滤波标志、L0 预测单元参考索引、L0 运动矢量水平分量差绝对值、L0 运动矢量垂直分量差绝对值、L0 运动矢量水平分量差符号值、L0 运动矢量垂直分量差符号值、仿射帧间模式L0 运动矢量水平分量差绝对值、仿射帧间模式 L0 运动矢量垂直分量差绝对值、仿射帧间模式 L0 运动矢量水平分量差符号值、仿射帧间模式 L0 运动矢量垂直分量差符号值、L1…、变换块系数标志、基于位置的变换块标志、Cb 变换块编码模板、Cr 变换块编码模板、亮度变换块编码模板</p>
+]]></content>
+      <categories>
+        <category>所学</category>
+        <category>视频编码</category>
+      </categories>
+      <tags>
+        <tag>AVS3</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>PAT刷题记录 1038 Recover the Smallest Number</title>
     <url>/2020/04/19/PAT-1038/</url>
     <content><![CDATA[<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;map&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt; num;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">cmp1</span><span class="params">(<span class="built_in">string</span> a, <span class="built_in">string</span> b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> la = a.length(), lb = b.length();</span><br><span class="line">	<span class="built_in">string</span> temp;</span><br><span class="line">	<span class="keyword">if</span> (la == lb)</span><br><span class="line">		<span class="keyword">return</span> a &lt;= b;</span><br><span class="line">	<span class="keyword">else</span> <span class="keyword">if</span> (la &lt; lb) <span class="comment">//自己重新定义字符串比较的定义</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (a.compare(b.substr(<span class="number">0</span>, la)) == <span class="number">0</span>)</span><br><span class="line">		&#123;</span><br><span class="line">			temp = b.substr(la) + a;</span><br><span class="line">			<span class="keyword">if</span> (temp &lt;= b)</span><br><span class="line">				<span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">			<span class="keyword">else</span></span><br><span class="line">				<span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span></span><br><span class="line">			<span class="keyword">return</span> a &lt;= b;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span> <span class="keyword">if</span> (la &gt; lb)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (b.compare(a.substr(<span class="number">0</span>, lb)) == <span class="number">0</span>)</span><br><span class="line">		&#123;</span><br><span class="line">			temp = a.substr(lb) + b;</span><br><span class="line">			<span class="keyword">if</span> (temp &lt;= a)</span><br><span class="line">				<span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">			<span class="keyword">else</span></span><br><span class="line">				<span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span></span><br><span class="line">			<span class="keyword">return</span> a &lt;= b;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> n;</span><br><span class="line">	<span class="built_in">cin</span> &gt;&gt; n;</span><br><span class="line">	<span class="built_in">string</span> s;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; ++i)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">cin</span> &gt;&gt; s;</span><br><span class="line">		num.push_back(s);</span><br><span class="line">	&#125;</span><br><span class="line">	sort(num.begin(), num.end(), cmp1);</span><br><span class="line">	<span class="keyword">int</span> len = num.size();</span><br><span class="line">	<span class="built_in">string</span> ans = <span class="string">&quot;&quot;</span>;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; len; ++i)</span><br><span class="line">	&#123;</span><br><span class="line">		ans += num[i];</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">int</span> pos = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">bool</span> flag = <span class="literal">false</span>;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; ans.length(); ++i)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (ans[i] != <span class="string">&#x27;0&#x27;</span>)</span><br><span class="line">		&#123;</span><br><span class="line">			pos = i;</span><br><span class="line">			flag = <span class="literal">true</span>;</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> (flag == <span class="literal">false</span>) <span class="comment">//要注意全是0的情况！</span></span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;0&quot;</span>;</span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; ans.substr(pos);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -1894,23 +1949,6 @@
       <tags>
         <tag>PAT</tag>
         <tag>算法题解</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>PAT刷题记录 1045 Favorite Color Stripe</title>
-    <url>/2020/04/19/PAT-1045/</url>
-    <content><![CDATA[<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> n, m, l;</span><br><span class="line"><span class="keyword">int</span> color[<span class="number">205</span>];</span><br><span class="line"><span class="keyword">int</span> s[<span class="number">10005</span>];</span><br><span class="line"><span class="keyword">int</span> dp[<span class="number">10005</span>];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="built_in">cin</span> &gt;&gt; n;</span><br><span class="line">	<span class="built_in">cin</span> &gt;&gt; m;</span><br><span class="line">	<span class="keyword">int</span> temp;</span><br><span class="line">	fill(color, color + <span class="number">205</span>, <span class="number">0</span>);</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= m; ++i)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">cin</span> &gt;&gt; temp;</span><br><span class="line">		color[temp] = i;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">cin</span> &gt;&gt; l;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= l; ++i)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">cin</span> &gt;&gt; temp;</span><br><span class="line">		<span class="keyword">if</span> (color[temp] &gt; <span class="number">0</span>) s[i] = color[temp];</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">int</span> max;</span><br><span class="line">	dp[<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= l; ++i)</span><br><span class="line">	&#123;</span><br><span class="line">		max = <span class="number">0</span>;</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt; i; ++j)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">if</span> (s[i] &gt;= s[j] &amp;&amp; dp[j] &gt; max &amp;&amp; s[j] &gt; <span class="number">0</span>) <span class="comment">//s[j]&gt;0确保j是喜欢的颜色</span></span><br><span class="line">			&#123;</span><br><span class="line">				max = dp[j];</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span> (s[i] &gt; <span class="number">0</span>) dp[i] = max + <span class="number">1</span>; <span class="comment">//这里也是为了确保i是喜欢的颜色</span></span><br><span class="line">		<span class="keyword">else</span> dp[i] = <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; dp[l];</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>按照顺序的色带最长，不就是把颜色对应成顺序，用DP求最长递增子序列吗哈哈哈</p>
-<p>不过这里要注意的是，必须得这个颜色在喜欢的颜色里，才能算为1个，不然得略过</p>]]></content>
-      <categories>
-        <category>所学</category>
-        <category>算法</category>
-      </categories>
-      <tags>
-        <tag>PAT</tag>
-        <tag>算法题解</tag>
-        <tag>DP</tag>
       </tags>
   </entry>
   <entry>
@@ -1940,6 +1978,62 @@
         <category>所学</category>
         <category>计算机基础</category>
       </categories>
+  </entry>
+  <entry>
+    <title>PAT刷题记录 1045 Favorite Color Stripe</title>
+    <url>/2020/04/19/PAT-1045/</url>
+    <content><![CDATA[<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> n, m, l;</span><br><span class="line"><span class="keyword">int</span> color[<span class="number">205</span>];</span><br><span class="line"><span class="keyword">int</span> s[<span class="number">10005</span>];</span><br><span class="line"><span class="keyword">int</span> dp[<span class="number">10005</span>];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="built_in">cin</span> &gt;&gt; n;</span><br><span class="line">	<span class="built_in">cin</span> &gt;&gt; m;</span><br><span class="line">	<span class="keyword">int</span> temp;</span><br><span class="line">	fill(color, color + <span class="number">205</span>, <span class="number">0</span>);</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= m; ++i)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">cin</span> &gt;&gt; temp;</span><br><span class="line">		color[temp] = i;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">cin</span> &gt;&gt; l;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= l; ++i)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">cin</span> &gt;&gt; temp;</span><br><span class="line">		<span class="keyword">if</span> (color[temp] &gt; <span class="number">0</span>) s[i] = color[temp];</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">int</span> max;</span><br><span class="line">	dp[<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= l; ++i)</span><br><span class="line">	&#123;</span><br><span class="line">		max = <span class="number">0</span>;</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt; i; ++j)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">if</span> (s[i] &gt;= s[j] &amp;&amp; dp[j] &gt; max &amp;&amp; s[j] &gt; <span class="number">0</span>) <span class="comment">//s[j]&gt;0确保j是喜欢的颜色</span></span><br><span class="line">			&#123;</span><br><span class="line">				max = dp[j];</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span> (s[i] &gt; <span class="number">0</span>) dp[i] = max + <span class="number">1</span>; <span class="comment">//这里也是为了确保i是喜欢的颜色</span></span><br><span class="line">		<span class="keyword">else</span> dp[i] = <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; dp[l];</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>按照顺序的色带最长，不就是把颜色对应成顺序，用DP求最长递增子序列吗哈哈哈</p>
+<p>不过这里要注意的是，必须得这个颜色在喜欢的颜色里，才能算为1个，不然得略过</p>]]></content>
+      <categories>
+        <category>所学</category>
+        <category>算法</category>
+      </categories>
+      <tags>
+        <tag>PAT</tag>
+        <tag>算法题解</tag>
+        <tag>DP</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Linux Screen 常用命令</title>
+    <url>/2021/04/12/screen/</url>
+    <content><![CDATA[<h2 id="创建会话"><a href="#创建会话" class="headerlink" title="创建会话"></a>创建会话</h2><p>创建会话名为 somename 的窗口</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">screen -S somename</span><br></pre></td></tr></table></figure>
+
+<h2 id="查看所有会话"><a href="#查看所有会话" class="headerlink" title="查看所有会话"></a>查看所有会话</h2><figure class="highlight ebnf"><table><tr><td class="code"><pre><span class="line"><span class="attribute">screen -ls</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="记录-log"><a href="#记录-log" class="headerlink" title="记录 log"></a>记录 log</h2><p>创建会话时添加选项 <code>-L</code>，会在当前目录下生成 <code>screenlog.0</code> 文件（注意多个会话会共享一个 log 文件）。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">screen -L -S somename</span><br></pre></td></tr></table></figure>
+
+<p>如果希望每个会话有单独的 log，可以在配置文件 <code>/etc/screenrc</code> 最后添加：</p>
+<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">logfile <span class="regexp">/tmp/</span>screenlog_%t.log</span><br></pre></td></tr></table></figure>
+
+<p><code>%t</code> 对应 <code>-t</code> 参数。启动窗口时命令如下：</p>
+<figure class="highlight ebnf"><table><tr><td class="code"><pre><span class="line"><span class="attribute">screen -L -t faye -S faye</span></span><br></pre></td></tr></table></figure>
+
+<p>log 保存在 <code>/tmp/screenlog_faye.log</code> 中。</p>
+<h2 id="detach-会话"><a href="#detach-会话" class="headerlink" title="detach 会话"></a>detach 会话</h2><p>需要暂时离开会话时（窗口中程序会继续运行），可远程执行分离命令：</p>
+<figure class="highlight ebnf"><table><tr><td class="code"><pre><span class="line"><span class="attribute">screen -d somename</span></span><br></pre></td></tr></table></figure>
+
+<p>也可以用快捷键 ctrl + a 再按 d</p>
+<h2 id="恢复会话"><a href="#恢复会话" class="headerlink" title="恢复会话"></a>恢复会话</h2><figure class="highlight ebnf"><table><tr><td class="code"><pre><span class="line"><span class="attribute">screen -r somename</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="kill-会话"><a href="#kill-会话" class="headerlink" title="kill 会话"></a>kill 会话</h2><p>快捷键 ctrl + a 再按 k</p>
+<p>或者</p>
+<p>窗口中输入 <code>exit</code></p>
+<p>或者</p>
+<figure class="highlight maxima"><table><tr><td class="code"><pre><span class="line">screen -S somename -X <span class="built_in">quit</span></span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>所学</category>
+        <category>折腾</category>
+      </categories>
+      <tags>
+        <tag>-linux</tag>
+      </tags>
   </entry>
   <entry>
     <title>多媒体基础知识</title>
@@ -2145,6 +2239,9 @@
         <category>所学</category>
         <category>视频编码</category>
       </categories>
+      <tags>
+        <tag>H.265/HEVC</tag>
+      </tags>
   </entry>
   <entry>
     <title>Win10 下 Linux 子系统 (WSL) 配置小记</title>
@@ -2273,6 +2370,9 @@
         <category>所学</category>
         <category>视频编码</category>
       </categories>
+      <tags>
+        <tag>H.265/HEvc</tag>
+      </tags>
   </entry>
   <entry>
     <title>也许是什么的开始...</title>
@@ -2501,6 +2601,54 @@
       </categories>
   </entry>
   <entry>
+    <title>赎罪 摘</title>
+    <url>/2020/02/28/%E8%B5%8E%E7%BD%AAmnotes/</url>
+    <content><![CDATA[<p>但这第一次笨拙的尝试就让她明白，想象力本身就是秘密的一大源泉：她一旦开始写故事，就谁也不能透露。用文字假托思想，这太没把握，太不堪一击，太令人难堪了，所以绝对不能让任何人知道。</p>
+<hr>
+<p>把一个广阔的世界压缩成口头的语言，这本身就是一种整理，而经过整理的世界几乎颜色尽失，因此，为了弥补这一点，每一个句子都极富感情，</p>
+<hr>
+<p>她知道以复数形式指代自己戏剧是错误的，她知道她的讥讽违背了诚实思考的孩童天性，她知道她小说中所回忆的并不是那个久远的早晨，而是事后自己主观的解释。也许，对弯手指的沉思，对存在其他思维的不可忍受的想法，以及对故事优于戏剧的领悟——也许这些思绪是她在另外的日子中涌起的。</p>
+<hr>
+<p>他有自己的一套自我保护的策略和基于科学的阶级理论，他有被逼出来的自信。我就是我。她就像是一个妹妹，几乎隐而不见。</p>
+<hr>
+<p>“你知道我在说什么。告诉我你知道我在说什么。”她害怕他不理解她，害怕她所有的想法都是错的，害怕她说了这些话只是更加孤立她自己，害怕他会把她当成一个傻瓜。</p>
+<hr>
+<p>他们互相看着如此熟悉的一张脸还依然觉得有点荒谬可笑。他们似乎觉得童年的自己正凝视着他们。</p>
+<hr>
+<p>最终他说出了这三个简单的词——再多蹩脚的艺术或者肮脏的誓言也不能使之贬值。她重复着，用同样的声调强调着第二个字，好像她才是第一个说这三个字的人。</p>
+<hr>
+<p>这些虫子误以为灯的后面更暗，正是这种视觉印象才指引着它们朝灯扑去。尽管它们也许会被吞噬，但它们不得不听命于本能的驱使，在光亮的另一头寻找最为黑暗的地方。飞蛾寻找的是一种幻觉</p>
+<hr>
+<p>这个问题已经没有意义了。每个人都是有罪的，每个人又都是无罪的。没有人会因一次证词的改变而得到拯救，因为，没有足够的人，没有足够的笔和纸，没有足够的和平和耐心来记录下所有证人的供述，来收集事实真相。</p>
+<hr>
+<p>想当初，塞西莉娅一路奔跑，穿过沙砾，来到打开的警车车门旁，对他说：噢，我与你相爱时，/我清白又勇敢</p>
+<hr>
+<p>在剑桥，没有人教授好的行进秩序所带来的种种益处，剑桥人崇拜的是自由奔放、独立不羁的人——诗人。但是，诗人知道什么叫死里逃生吗？他们知道大部队士兵是如何逃生的吗？没有人冲出队伍，没有人抢着上船，没有先到了就先招待的规矩，也没有人不为己天诛地灭的信条。</p>
+<hr>
+<p>这般触摸和听闻到的明晰感，倒不是因为初夏清新的开端和葱郁而起；这是一种炽热的觉悟，认识到了一个渐进的结局，万物汇集的终点。她想，这便是最后的时光了，只会在回忆中烁烁闪耀。这一澄莹明朗，这一漫长的灿烂岁月，正是另一段绵长时间开始前历史的最后纵情舞蹈。</p>
+<hr>
+<p><strong>从这开始是《最初的爱情，最后的仪式》</strong></p>
+<hr>
+<p>我曾经用一种医学的标准来衡量一个作家是否杰出：那就是在阅读了这个作家的作品之后，是否留下了阅读后遗症？</p>
+<hr>
+<p>这就是伊恩・麦克尤恩，他的叙述似乎永远行走在边界上，那些分隔了希望和失望、恐怖和安慰、寒冷和温暖、荒诞和逼真、暴力和柔弱、理智和情感等等的边界上，然后他的叙述两者皆有。就像国王拥有幅员辽阔的疆土一样，麦克尤恩的边界叙述让他拥有了广袤的生活感受，</p>
+<hr>
+<p>各民族的精神历史和现实生活存在着太多的相似性，而文学所要表达的就是这样的相似性。如同殊途同归，伟大的作家都以自己独特的姿态走上了自己独特的文学道路，然后汇集到了爱与恨、生与死、战争与和平等等这些人类共同的主题之上。所以文学的存在不是为了让人们彼此陌生，而是为了让人们相互熟悉。</p>
+<hr>
+<p>你要知道，你的头脑，你的内心，不是酒店的厨房，可以把里面的东西像旧罐头一样扔掉。它更像是一条河流，每时每刻都在流动和变化。你无法矫直一条河流</p>
+<hr>
+<p>你成事不足。过去是个乖孩子，老天没赐给你一个不幸的童年。你那慈悲的佛经、过气的玄学、焚香疗法、普罗星相，没有一样是你自己的，你不过是在无病呻吟。你沉湎其中，沉湎于超然直觉力的泥潭里。除了你自己的失落，你根本不具备去直觉其它事物的敏感和激情。</p>
+<hr>
+<p>维度是知觉的函数</p>
+<hr>
+<p><code>基本你可以看出来，麦克尤恩字里行间有那种锋利精巧的聪明感。大一还是大二的时候正好麦克尤恩还来北京有个活动，当时还报名去了现场。之后写了一些记录，这里就略过了。赎罪的电影也不错，罗南、一美、本尼，以及凯拉奈特莉的那身绿裙子也非常经典。</code></p>
+]]></content>
+      <categories>
+        <category>所读</category>
+        <category>Kindle clippings</category>
+      </categories>
+  </entry>
+  <entry>
     <title>语言学概论 笔记</title>
     <url>/2020/04/05/%E8%AF%AD%E8%A8%80%E5%AD%A6%E6%A6%82%E7%8E%87-%E7%AC%94%E8%AE%B0/</url>
     <content><![CDATA[<h1 id="CH1-语言能力与语言系统"><a href="#CH1-语言能力与语言系统" class="headerlink" title="CH1 语言能力与语言系统"></a>CH1 语言能力与语言系统</h1><h2 id="易境性"><a href="#易境性" class="headerlink" title="易境性"></a>易境性</h2><p>动物交流的特点：在场。在场与直接经验。人类不必在场传递经验，关键在语言。通过语言传递知识与经验，不必在场。</p>
@@ -2548,54 +2696,6 @@
       <tags>
         <tag>语言学</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>赎罪 摘</title>
-    <url>/2020/02/28/%E8%B5%8E%E7%BD%AAmnotes/</url>
-    <content><![CDATA[<p>但这第一次笨拙的尝试就让她明白，想象力本身就是秘密的一大源泉：她一旦开始写故事，就谁也不能透露。用文字假托思想，这太没把握，太不堪一击，太令人难堪了，所以绝对不能让任何人知道。</p>
-<hr>
-<p>把一个广阔的世界压缩成口头的语言，这本身就是一种整理，而经过整理的世界几乎颜色尽失，因此，为了弥补这一点，每一个句子都极富感情，</p>
-<hr>
-<p>她知道以复数形式指代自己戏剧是错误的，她知道她的讥讽违背了诚实思考的孩童天性，她知道她小说中所回忆的并不是那个久远的早晨，而是事后自己主观的解释。也许，对弯手指的沉思，对存在其他思维的不可忍受的想法，以及对故事优于戏剧的领悟——也许这些思绪是她在另外的日子中涌起的。</p>
-<hr>
-<p>他有自己的一套自我保护的策略和基于科学的阶级理论，他有被逼出来的自信。我就是我。她就像是一个妹妹，几乎隐而不见。</p>
-<hr>
-<p>“你知道我在说什么。告诉我你知道我在说什么。”她害怕他不理解她，害怕她所有的想法都是错的，害怕她说了这些话只是更加孤立她自己，害怕他会把她当成一个傻瓜。</p>
-<hr>
-<p>他们互相看着如此熟悉的一张脸还依然觉得有点荒谬可笑。他们似乎觉得童年的自己正凝视着他们。</p>
-<hr>
-<p>最终他说出了这三个简单的词——再多蹩脚的艺术或者肮脏的誓言也不能使之贬值。她重复着，用同样的声调强调着第二个字，好像她才是第一个说这三个字的人。</p>
-<hr>
-<p>这些虫子误以为灯的后面更暗，正是这种视觉印象才指引着它们朝灯扑去。尽管它们也许会被吞噬，但它们不得不听命于本能的驱使，在光亮的另一头寻找最为黑暗的地方。飞蛾寻找的是一种幻觉</p>
-<hr>
-<p>这个问题已经没有意义了。每个人都是有罪的，每个人又都是无罪的。没有人会因一次证词的改变而得到拯救，因为，没有足够的人，没有足够的笔和纸，没有足够的和平和耐心来记录下所有证人的供述，来收集事实真相。</p>
-<hr>
-<p>想当初，塞西莉娅一路奔跑，穿过沙砾，来到打开的警车车门旁，对他说：噢，我与你相爱时，/我清白又勇敢</p>
-<hr>
-<p>在剑桥，没有人教授好的行进秩序所带来的种种益处，剑桥人崇拜的是自由奔放、独立不羁的人——诗人。但是，诗人知道什么叫死里逃生吗？他们知道大部队士兵是如何逃生的吗？没有人冲出队伍，没有人抢着上船，没有先到了就先招待的规矩，也没有人不为己天诛地灭的信条。</p>
-<hr>
-<p>这般触摸和听闻到的明晰感，倒不是因为初夏清新的开端和葱郁而起；这是一种炽热的觉悟，认识到了一个渐进的结局，万物汇集的终点。她想，这便是最后的时光了，只会在回忆中烁烁闪耀。这一澄莹明朗，这一漫长的灿烂岁月，正是另一段绵长时间开始前历史的最后纵情舞蹈。</p>
-<hr>
-<p><strong>从这开始是《最初的爱情，最后的仪式》</strong></p>
-<hr>
-<p>我曾经用一种医学的标准来衡量一个作家是否杰出：那就是在阅读了这个作家的作品之后，是否留下了阅读后遗症？</p>
-<hr>
-<p>这就是伊恩・麦克尤恩，他的叙述似乎永远行走在边界上，那些分隔了希望和失望、恐怖和安慰、寒冷和温暖、荒诞和逼真、暴力和柔弱、理智和情感等等的边界上，然后他的叙述两者皆有。就像国王拥有幅员辽阔的疆土一样，麦克尤恩的边界叙述让他拥有了广袤的生活感受，</p>
-<hr>
-<p>各民族的精神历史和现实生活存在着太多的相似性，而文学所要表达的就是这样的相似性。如同殊途同归，伟大的作家都以自己独特的姿态走上了自己独特的文学道路，然后汇集到了爱与恨、生与死、战争与和平等等这些人类共同的主题之上。所以文学的存在不是为了让人们彼此陌生，而是为了让人们相互熟悉。</p>
-<hr>
-<p>你要知道，你的头脑，你的内心，不是酒店的厨房，可以把里面的东西像旧罐头一样扔掉。它更像是一条河流，每时每刻都在流动和变化。你无法矫直一条河流</p>
-<hr>
-<p>你成事不足。过去是个乖孩子，老天没赐给你一个不幸的童年。你那慈悲的佛经、过气的玄学、焚香疗法、普罗星相，没有一样是你自己的，你不过是在无病呻吟。你沉湎其中，沉湎于超然直觉力的泥潭里。除了你自己的失落，你根本不具备去直觉其它事物的敏感和激情。</p>
-<hr>
-<p>维度是知觉的函数</p>
-<hr>
-<p><code>基本你可以看出来，麦克尤恩字里行间有那种锋利精巧的聪明感。大一还是大二的时候正好麦克尤恩还来北京有个活动，当时还报名去了现场。之后写了一些记录，这里就略过了。赎罪的电影也不错，罗南、一美、本尼，以及凯拉奈特莉的那身绿裙子也非常经典。</code></p>
-]]></content>
-      <categories>
-        <category>所读</category>
-        <category>Kindle clippings</category>
-      </categories>
   </entry>
   <entry>
     <title>那不勒斯四部曲：新名字的故事 摘</title>

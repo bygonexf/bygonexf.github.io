@@ -1,0 +1,102 @@
+<!DOCTYPE html><html lang="zh-Hans"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="AVS3 编码位流"><meta name="keywords" content="AVS3"><meta name="author" content="Choco"><meta name="copyright" content="Choco"><title>AVS3 编码位流 | Choco Box</title><link rel="shortcut icon" href="/melody-favicon.ico"><link rel="stylesheet" href="/css/index.css?version=1.9.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.9.0"><meta name="format-detection" content="telephone=no"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容:${query}"}},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  hexoVersion: '5.4.0'
+} </script><meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="Choco Box" type="application/atom+xml">
+</head><body><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar" data-display="true"><div class="toggle-sidebar-info text-center"><span data-toggle="切换文章详情">切换站点概览</span><hr></div><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar"></div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A6%82%E8%BF%B0"><span class="toc-number">1.</span> <span class="toc-text">概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A0%81%E6%B5%81%E7%BB%93%E6%9E%84%E5%8F%8A%E8%AF%AD%E4%B9%89%E6%8F%8F%E8%BF%B0"><span class="toc-number">2.</span> <span class="toc-text">码流结构及语义描述</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%86%E9%A2%91%E5%BA%8F%E5%88%97"><span class="toc-number">2.1.</span> <span class="toc-text">视频序列</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%BE%E5%83%8F"><span class="toc-number">2.2.</span> <span class="toc-text">图像</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BC%96%E7%A0%81%E6%A0%91"><span class="toc-number">3.</span> <span class="toc-text">编码树</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BC%96%E7%A0%81%E5%8D%95%E5%85%83"><span class="toc-number">4.</span> <span class="toc-text">编码单元</span></a></li></ol></div></div><div class="author-info hide"><div class="author-info__avatar text-center"><img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/20210228223416.png"></div><div class="author-info__name text-center">Choco</div><div class="author-info__description text-center"></div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/archives"><span class="pull-left">文章</span><span class="pull-right">35</span></a><a class="author-info-articles__tags article-meta" href="/tags"><span class="pull-left">标签</span><span class="pull-right">13</span></a><a class="author-info-articles__categories article-meta" href="/categories"><span class="pull-left">分类</span><span class="pull-right">9</span></a></div></div></div><div id="content-outer"><div id="top-container" style="background-image: url(https://img.imgdb.cn/item/60588fa08322e6675ca04420.jpg)"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/">Choco Box</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus">   <a class="site-page" href="/">主页</a><a class="site-page" href="/archives">归档</a><a class="site-page" href="/tags">标签</a><a class="site-page" href="/categories">分类</a><a class="site-page" href="/about">关于我</a></span><span class="pull-right"><a class="site-page social-icon search"><i class="fa fa-search"></i><span> 搜索</span></a></span></div><div id="post-info"><div id="post-title">AVS3 编码位流</div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2021-04-01</time><span class="post-meta__separator">|</span><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/%E6%89%80%E5%AD%A6/">所学</a><i class="fa fa-angle-right" aria-hidden="true"></i><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/%E6%89%80%E5%AD%A6/%E8%A7%86%E9%A2%91%E7%BC%96%E7%A0%81/">视频编码</a><div class="post-meta-wordcount"><span>字数总计: </span><span class="word-count">1.9k</span><span class="post-meta__separator">|</span><span>阅读时长: 5 分钟</span></div></div></div></div><div class="layout" id="content-inner"><article id="post"><div class="article-container" id="post-content"><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p><strong>视频序列</strong>是位流的最高层语法结构。</p>
+<p><strong>帧</strong>由一个亮度样本矩阵和两个色度样本矩阵构成。<strong>场</strong>由构成帧的三个样本矩阵中相间的行构成。奇数行构成顶场，偶数行构成底场。</p>
+<p>视频序列头由视频序列起码码开始，后面跟着一串编码图像数据。序列头可在位流中重复出现，称为重复序列头。使用重复序列头的主要目的是支持对视频序列的随机访问。</p>
+<p>一副图像可以是一帧或一场，其编码数据由图像起始码开始，到序列起始码、序列结束码或下一个图像起始码结束。</p>
+<p><strong>片</strong>是图像中的矩形区域，包含若干最大编码单元在图像内的部分，片之间不应重叠。</p>
+<p>图像划分为<strong>最大编码单元</strong>，最大编码单元之间不应重叠，最大编码单元左上角的样本不应超出图像边界，最大编码单元右下角的样本可超出图像边界。</p>
+<p>最大编码单元划分为一个或多个<strong>编码单元</strong>，由编码树决定。编码单元划分为一个或多个<strong>变换块</strong>。</p>
+<h2 id="码流结构及语义描述"><a href="#码流结构及语义描述" class="headerlink" title="码流结构及语义描述"></a>码流结构及语义描述</h2><h3 id="视频序列"><a href="#视频序列" class="headerlink" title="视频序列"></a>视频序列</h3><img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/20210403170108.png" style="zoom:80%;" />
+
+<ul>
+<li><p>序列头 sequence_header</p>
+<p>视频序列起始码、档次标号、级别标号、知识位流标志、知识图像允许标志、知识位流重复序列头标志、逐行序列标志、场图像序列标志、水平尺寸、垂直尺寸、色度格式、样本精度、编码样本精度、宽高比、帧率代码、比特率低位、比特率高位、低延迟、时间层标识允许标志、位流缓冲区尺寸、最大解码图像缓冲区大小、参考图像队列 1 索引存在标志、参考图像队列相同标志、参考图像队列配置集数、默认活跃参考图像数、最大编码单元尺寸、最小编码单元尺寸、划分单元最大比例、编码树最大划分次数、最小四叉树尺寸、最大二叉树尺寸、最大扩展四叉树尺寸、加权量化允许标志、加权量化矩阵加载标志、二次变换允许标志、样值偏倚补偿允许标志、自适应修正滤波允许标志、仿射运动补偿允许标志、对称运动矢量差模式允许标志、脉冲编码调制模式允许标志、自适应运动矢量精度允许标志、候选历史运动信息数、帧内预测滤波允许标志、高级运动矢量表达模式允许标志、运动矢量精度扩展模式允许标志、色度两步预测模式允许标志、帧内衍生模式允许标志、衍生模式划分边长最大尺寸、基于位置的变换允许标志、图像重排序延迟、跨片环路滤波允许标志、片划分一致性标志、参考同位置片标志、统一片大小标志、片宽度、片高度</p>
+</li>
+<li><p>视频编辑码和视频序列结束码</p>
+<ul>
+<li><p>视频编辑码 video_edit_code</p>
+<p>紧跟其后的第一幅 I 图像后续的 B 图像可能因缺少参考图像而不能正确解码</p>
+</li>
+<li><p>视频序列结束码 video_sequence_end_code</p>
+<p>标识视频序列的结束。如果 POI（显示顺序索引），如果 POI 的值大于 $(2^{32}-1)$，位流中应插入一个视频序列结束码。</p>
+</li>
+</ul>
+</li>
+<li><p>参考图像队列配置集</p>
+<p>参考知识图像标志、知识图像索引标志、被参考的知识图像索引、参考图像数、参考图像 DOI 差值绝对值、参考图像 DOI 差值符号</p>
+</li>
+<li><p>自定义加权量化矩阵</p>
+<p>加权量化矩阵系数</p>
+</li>
+</ul>
+<h3 id="图像"><a href="#图像" class="headerlink" title="图像"></a>图像</h3><ul>
+<li><p>帧内预测图像头</p>
+<p>帧内预测图像起始码、BBV 延时、时间编码标志、时间编码、解码顺序索引、知识图像索引、时间层标识、图像输出延迟、引用参考图像队列配置集标志、引用参考图像队列配置集索引、BBV 检测次数、逐行帧标志、图像编码结构标志、顶场在先、重复首场、顶场场图像标志、固定图像量化因子、去块滤波禁用标志、去块滤波参数标志、$\alpha$ 和 C 索引的偏移、$\beta$ 索引的偏移、色度量化参数禁用标志、色度量化参数增量 Cb、色度量化参数增量 Cr、图像加权量化允许标志、图像加权量化数据加载索引、加权量化参数索引、加权量化矩阵模型、加权量化参数增量 1、加权量化参数增量 2、图像自适应修正滤波允许标志</p>
+</li>
+<li><p>帧间预测图像头</p>
+<p>帧间预测图像起始码、随机访问正确解码标志、图像编码方式、活跃参考图像数重载标志、活跃参考图像数、仿射预测子块尺寸标志</p>
+</li>
+<li><p>片</p>
+<p>片起始码、固定片量化银子标志、片量化因子、片样值偏移补偿允许标志、高级熵编码字节对齐填充位、最大编码单元量化参数增量、样值偏移补偿合并方式索引、样值偏移补偿模式、样值偏移补偿区间模式偏移绝对值、样值偏移补偿区间模式偏移值符号值、样值偏移补偿区间模式起始偏移子区间位置、样值偏移补偿区间模式起始偏移子区间位置差、样值偏移补偿模式偏移值、样值偏移补偿边缘模式类型、最大编码单元自适应修正滤波允许标志、熵编码最大编码单元填充位、片结束码</p>
+</li>
+</ul>
+<h2 id="编码树"><a href="#编码树" class="headerlink" title="编码树"></a>编码树</h2><p>四叉树划分标志、编码单元预测模式、二叉树扩展四叉树划分标志、二叉树扩展四叉树划分类型标志、二叉树扩展四叉树划分方向标志</p>
+<h2 id="编码单元"><a href="#编码单元" class="headerlink" title="编码单元"></a>编码单元</h2><p>跳过模式标志、高级运动矢量表达模式标志、仿射模式标志、直接模式标志、帧内编码单元标志、基础运动矢量索引、运动矢量偏移量索引、运动矢量方向索引、仿射运动矢量索引、衍生模式划分标志、衍生模式划分方向、水平四叉衍生模式划分标志、垂直四叉衍生模式划分标志、水平非对称衍生模式标志、仿射自适应运动矢量精度索引、自适应运动矢量精度索引、编码单元子类型索引、预测参考模式、对称运动矢量差标志、运动矢量精度扩展模式标识、帧内亮度预测模式、帧内色度预测模式、帧内预测滤波标志、L0 预测单元参考索引、L0 运动矢量水平分量差绝对值、L0 运动矢量垂直分量差绝对值、L0 运动矢量水平分量差符号值、L0 运动矢量垂直分量差符号值、仿射帧间模式L0 运动矢量水平分量差绝对值、仿射帧间模式 L0 运动矢量垂直分量差绝对值、仿射帧间模式 L0 运动矢量水平分量差符号值、仿射帧间模式 L0 运动矢量垂直分量差符号值、L1…、变换块系数标志、基于位置的变换块标志、Cb 变换块编码模板、Cr 变换块编码模板、亮度变换块编码模板</p>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Choco</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://bygonexf.github.io/2021/04/01/avs3-bitstream/">https://bygonexf.github.io/2021/04/01/avs3-bitstream/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://bygonexf.github.io">Choco Box</a>！</span></div></div><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/AVS3/">AVS3</a></div><nav id="pagination"><div class="prev-post pull-left"><a href="/2021/04/12/screen/"><i class="fa fa-chevron-left">  </i><span>Linux Screen 常用命令</span></a></div><div class="next-post pull-right"><a href="/2021/03/31/prediction-coding/"><span>H.265/HEVC 预测编码 笔记</span><i class="fa fa-chevron-right"></i></a></div></nav><div id="vcomment"></div><script src="https://cdn1.lncld.net/static/js/3.0.4/av-min.js"></script><script src="https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js"></script><script>var notify = 'false' == 'true';
+var verify = 'false' == 'true';
+var record_ip = 'false' == 'true';
+var GUEST_INFO = ['nick','mail','link'];
+var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+  return GUEST_INFO.indexOf(item) > -1
+});
+guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+window.valine = new Valine({
+  el:'#vcomment',
+  notify:notify,
+  verify:verify,
+  recordIP:record_ip,
+  appId:'GyuhVvqtat4iqpvUjF5sUgBj-gzGzoHsz',
+  appKey:'sX5S1trE3LnnFCSpp7epq55p',
+  placeholder:'Feel free! ♪(´∇`*)',
+  avatar:'mm',
+  guest_info:guest_info,
+  pageSize:'10',
+  lang: 'zh-cn'
+})</script></div></div><footer class="footer-bg" style="background-image: url(https://img.imgdb.cn/item/60588fa08322e6675ca04420.jpg)"><div class="layout" id="footer"><div class="copyright">&copy;2019 - 2021 By Choco</div><div class="framework-info"><span>驱动 - </span><a target="_blank" rel="noopener" href="http://hexo.io"><span>Hexo</span></a><span class="footer-separator">|</span><span>主题 - </span><a target="_blank" rel="noopener" href="https://github.com/Molunerfinn/hexo-theme-melody"><span>Melody</span></a></div><div class="footer_custom_text">You are far more likely to be devoured than empowered by your sense of romance.</div><div class="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_page_pv"><i class="fa fa-file"></i><span id="busuanzi_value_page_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/js/utils.js?version=1.9.0"></script><script src="/js/fancybox.js?version=1.9.0"></script><script src="/js/sidebar.js?version=1.9.0"></script><script src="/js/copy.js?version=1.9.0"></script><script src="/js/fireworks.js?version=1.9.0"></script><script src="/js/transition.js?version=1.9.0"></script><script src="/js/scroll.js?version=1.9.0"></script><script src="/js/head.js?version=1.9.0"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+    processEscapes: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+  },
+  CommonHTML: {
+    linebreaks: { automatic: true, width: "90% container" }
+  },
+  "HTML-CSS": { 
+    linebreaks: { automatic: true, width: "90% container" }
+  },
+  "SVG": { 
+    linebreaks: { automatic: true, width: "90% container" }
+  }
+});
+</script><script type="text/x-mathjax-config">MathJax.Hub.Queue(function() {
+  var all = MathJax.Hub.getAllJax(), i;
+  for (i=0; i < all.length; i += 1) {
+    all[i].SourceElement().parentNode.className += ' has-jax';
+  }
+});
+</script><script src="https://cdn.jsdelivr.net/npm/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css"><script src="/js/katex.js"></script><script src="/js/search/local-search.js"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
+  $('#nav').addClass('is-mobile')
+  $('footer').addClass('is-mobile')
+  $('#top-container').addClass('is-mobile')
+}</script><div class="search-dialog" id="local-search"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章"></div></div></div><hr><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>由</span> <a target="_blank" rel="noopener" href="https://github.com/wzpan/hexo-generator-search" style="color:#49B1F5;">hexo-generator-search</a>
+ <span>提供支持</span></div></div></div><span class="search-close-button"><i class="fa fa-times"></i></span></div><div class="search-mask"></div></body></html>
