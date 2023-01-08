@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="cn">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	
+	<title>风巷  | 操作系统笔记 CH12 Mass-Storage Structure</title>
+	<meta name="viewport" content="width=device-width,minimum-scale=1">
+	<meta name="generator" content="Hugo 0.105.0">
+	
+	
+	<META NAME="ROBOTS" CONTENT="INDEX, FOLLOW">
+	
+
+	
+	
+	<link href="/dist/app.css" rel="stylesheet">
+	
+
+	
+
+	
+	
+<link rel="shortcut icon" href="img/wind.png" type="image/png" />
+
+	
+
+	
+	
+	
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-FAKE', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+	
+	
+	
+
+
+
+<link rel="stylesheet" href='https://imfaye.me/lib/katex.min.css' crossorigin="anonymous">
+
+
+<script defer src='https://imfaye.me/lib/katex.min.js' crossorigin="anonymous"></script>
+
+
+<script defer src='https://imfaye.me/lib/contrib/auto-render.min.js'
+crossorigin="anonymous"
+onload='renderMathInElement(document.body);'></script>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement(document.body, {
+            delimiters: [
+                {left: "$$", right: "$$", display: true},
+                {left: "$", right: "$", display: false}
+            ]
+        });
+    });
+</script>
+
+	
+	
+	
+	<script>
+		(function (u, c) {
+			var d = document,
+				t = 'script',
+				o = d.createElement(t),
+				s = d.getElementsByTagName(t)[0];
+			o.src = u;
+			if (c) {
+				o.addEventListener('load', function (e) {
+					c(e);
+				});
+			}
+			s.parentNode.insertBefore(o, s);
+		})('https:\/\/imfaye.me\/lib\/pangu.min.js', function () {
+			pangu.spacingPage();
+		});
+	</script>
+	
+	
+	
+	<style type="text/css" media="screen, print">
+		@font-face {
+			font-family: "FancyTitleFont";
+			font-style: normal;
+			font-display: swap;
+			src: url('https://imfaye.me/fonts/exampleFont.woff2') format('woff2'),
+				url('https://imfaye.me/fonts/exampleFont.woff') format('woff');
+		}
+		 
+		  
+		 
+		@font-face {
+			font-family: 'Noto Serif CJK SC';
+			font-style: normal;
+			font-weight: 300;
+			font-display: swap;
+			src: local('Noto Serif CJK SC Light'), local('NotoSerifCJK-Light'),
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-300.woff2') format('woff2'),
+				 
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-300.woff') format('woff');
+			 
+		}
+
+		 
+		@font-face {
+			font-family: 'Noto Serif CJK SC';
+			font-style: normal;
+			font-weight: 400;
+			font-display: swap;
+			src: local('Noto Serif CJK SC'), local('NotoSerifCJK-Regular'),
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-regular.woff2') format('woff2'),
+				 
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-regular.woff') format('woff');
+			 
+		}
+
+		 
+		@font-face {
+			font-family: 'Noto Serif CJK SC';
+			font-style: normal;
+			font-weight: 500;
+			font-display: swap;
+			src: local('Noto Serif CJK SC Medium'), local('NotoSerifCJK-Medium'),
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-500.woff2') format('woff2'),
+				 
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-500.woff') format('woff');
+			 
+		}
+	</style>
+	
+</head>
+
+<body class="bg-gray-100 text-gray-700 font-sans">
+	<div class="p-6 sm:p-10 md:p-16 flex flex-wrap">
+		<header class="w-full md:w-2/5 xl:w-1/2 md:pr-12 lg:pr-20 xl:pr-24 order-1 md:order-1 max-w-2xl">
+			<div
+				class="z-50 bg-gray-100 bg-opacity-75 bg-opacity-custom lg:min-w-0.7 max-w-xl md:float-right md:text-right leading-loose tracking-tight md:sticky md:top-0 pt-2">
+				
+<div>
+	<h2>
+		<a href="https://imfaye.me/" title="风巷" class="heading font-cursive icon">风巷</a>
+	</h2>
+</div>
+<h1 class="pt-2">操作系统笔记 CH12 Mass-Storage Structure</h1>
+
+<div class="flex flex-wrap justify-end pt-2 "><div class="md:flex-grow-0 font-light">
+	
+	
+	
+	
+	<a class="post-taxonomy-category text-medium-red-violet-600 hover:text-medium-red-violet-400"
+		href='/categories/%E6%97%A0%E6%83%85%E7%AC%94%E8%AE%B0'>无情笔记</a>
+	
+	
+	
+
+	
+	&nbsp;&nbsp;
+	
+
+	
+	
+	
+	
+	<a class="post-taxonomy-tag text-eucalyptus-500"
+		href='/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F'>操作系统</a>&nbsp;&#47;
+	
+	<a class="post-taxonomy-tag text-eucalyptus-500"
+		href='/tags/%E5%A4%A7%E6%98%8E%E6%B9%96%E7%95%94%E7%9A%84%E4%B8%93%E4%B8%9A%E8%AF%BE'>大明湖畔的专业课</a>
+	
+	
+	
+</div><time class="text-eucalyptus-500 md:text-right md:flex-grow font-light pl-4"
+		datetime="2020-02-28T13:12:24Z">2020-2-28</time>
+</div>
+
+<details class="toc" open>
+<summary>
+    <hr />
+</summary>
+<div class="inline toc-content">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#磁盘">磁盘</a></li>
+        <li><a href="#磁带">磁带</a></li>
+      </ul>
+    </li>
+    <li><a href="#磁盘结构">磁盘结构</a></li>
+    <li><a href="#disk-attachment">disk attachment</a>
+      <ul>
+        <li><a href="#host-attached-storage">Host-attached storage</a></li>
+        <li><a href="#network-attached-storage-nas">Network-Attached Storage (NAS)</a></li>
+        <li><a href="#storage-area-network-san">Storage Area Network (SAN)</a></li>
+      </ul>
+    </li>
+    <li><a href="#disk-scheduling">disk scheduling</a>
+      <ul>
+        <li><a href="#fsfc">FSFC</a></li>
+        <li><a href="#sstf-shortest-seek-time-first">SSTF Shortest Seek Time First</a></li>
+        <li><a href="#scan--elevator">SCAN / elevator</a></li>
+        <li><a href="#c-scan">C-SCAN</a></li>
+        <li><a href="#look">LOOK</a></li>
+        <li><a href="#c-look">C-LOOK</a></li>
+        <li><a href="#磁盘调度算法的选择">磁盘调度算法的选择</a></li>
+      </ul>
+    </li>
+    <li><a href="#磁盘管理">磁盘管理</a>
+      <ul>
+        <li><a href="#磁盘格式化-disk-formatting">磁盘格式化 disk formatting</a></li>
+        <li><a href="#boot-block-引导块">boot block 引导块</a></li>
+        <li><a href="#bad-blocks">bad blocks</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+</div>
+</details>
+
+<hr />
+
+
+			</div>
+		</header>
+		<main role="main" class="w-full md:w-3/5 xl:w-1/2 max-w-3xl order-2 md:order-2 min-h-70vh pt-2 pb-4">
+			
+
+<article>
+	<section class="mx-auto content">
+		<div class="c-rich-text"><h3 id="磁盘">磁盘</h3>
+<p>扇区0是最外面柱面的第一个磁道的第一个扇区。映射先按磁道内扇区顺序，再按柱面内磁道顺序，最后按从外到内的柱面顺序来排序的。</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577512929633.png" style="zoom: 50%;" />
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577513031964.png" style="zoom:67%;" />
+<p>Head crash results from disk head making contact with the disk surface. Cannot be repaired, the entire disk must be replaced.</p>
+<p>Disks can be removable</p>
+<p>Host controller in computer uses bus to talk to disk controller built into drive or storage array.</p>
+<p>The disk controller operates the disk-drive hardware to carry out the command.</p>
+<p>Disk controllers have a built-in cache. Data transfer at the disk drive happens between the
+cache and the disk surface. Data transfer to the host, at fast electronic speeds, occurs between the cache and the host controller.</p>
+<h3 id="磁带">磁带</h3>
+<p>长久，存储大量数据。慢</p>
+<h2 id="磁盘结构">磁盘结构</h2>
+<p>Disk drives are addressed as large 1-dimensional arrays of logical blocks, where the logical block is the smallest unit of transfer.</p>
+<p>Low-level formatting(低级格式化) creates logical blocks on physical media.</p>
+<ul>
+<li>
+<p>Constant Linear Velocity ( 常数线性周转率)</p>
+<p>the density of bits per track is uniform</p>
+<p>CD-ROM, DVD-ROM</p>
+</li>
+<li>
+<p>Constant Angular Velocity ( 常数角周转率)</p>
+<p>the density of bits decreases from inner tracks to outer tracks</p>
+<p>hard disk</p>
+</li>
+</ul>
+<h2 id="disk-attachment">disk attachment</h2>
+<p>计算机访问磁盘存储两种方式</p>
+<ul>
+<li>
+<p>通过IO端口(或主机附属存储)</p>
+<p>小系统采用这种方法</p>
+</li>
+<li>
+<p>通过分布式文件系统DFS的远程主机，称为网络附属存储</p>
+</li>
+</ul>
+<h3 id="host-attached-storage">Host-attached storage</h3>
+<p>Is accessed through I/O ports talking to I/O busses</p>
+<p>I/O directed to bus ID, device ID, logical unit (LUN)</p>
+<h3 id="network-attached-storage-nas">Network-Attached Storage (NAS)</h3>
+<p>客户通过远程进程调用接口访问NAS</p>
+<p>UNIX中的NFS，windows中的CIFS(Common Internet File System)</p>
+<p>RPCs are carried via TCP or UDP on IP network.</p>
+<p>The NAS unit is usually implemented as a RAID array with software that implements the RPC interface.</p>
+<p>New iSCSI protocol uses IP network protocol to carry the SCSI protocol. Remotely attaching to devices (blocks)</p>
+<h3 id="storage-area-network-san">Storage Area Network (SAN)</h3>
+<p>服务器与存储单元之间的私有网络(采用存储协议而非网络协议)</p>
+<p>灵活</p>
+<p>Common in large storage environments.</p>
+<p>Multiple hosts attached to multiple storage arrays – flexible</p>
+<p>SAN is one or more storage arrays Connected to one or more Fiber Channel switches</p>
+<p>Hosts also attach to the switches.</p>
+<p>Storage made available via LUN Masking from specific arrays to specific servers.</p>
+<h2 id="disk-scheduling">disk scheduling</h2>
+<p>Minimize seek time</p>
+<p>OS maintains queue of requests, per disk or device.</p>
+<p>controllers have small buffers and can manage a queue of I/O requests.</p>
+<h3 id="fsfc">FSFC</h3>
+<h3 id="sstf-shortest-seek-time-first">SSTF Shortest Seek Time First</h3>
+<p>starvation</p>
+<h3 id="scan--elevator">SCAN / elevator</h3>
+<p>到达另一端时，磁头改变方向</p>
+<h3 id="c-scan">C-SCAN</h3>
+<p>当磁头移到另一端时，会马上返回磁盘开始。将柱面当成环链</p>
+<h3 id="look">LOOK</h3>
+<p>磁头只移动到一个方向上最远的请求为止</p>
+<h3 id="c-look">C-LOOK</h3>
+<h3 id="磁盘调度算法的选择">磁盘调度算法的选择</h3>
+<p>SSTF is common and has a natural appeal</p>
+<p>SCAN and C-SCAN对磁盘负荷大的系统执行较好，不会有starvation</p>
+<p>Requests for disk service can be influenced by the file-allocation method.</p>
+<p>The disk-scheduling algorithm should be written as a separate module of the operating system, allowing it to be replaced with a different algorithm if necessary.</p>
+<p>Either SSTF or LOOK is a reasonable choice for the default algorithm.</p>
+<h2 id="磁盘管理">磁盘管理</h2>
+<h3 id="磁盘格式化-disk-formatting">磁盘格式化 disk formatting</h3>
+<p>低级格式化/物理格式化：将磁盘分成扇区以便磁盘控制器能读能写。为每个扇区采用特殊的数据结构。The data structure typically consists of a header(sector #), a data area, and a trailer(ECC, error correction code) 扇区通常512B，但可选</p>
+<p>OS需要将自己的数据结构记录在磁盘上</p>
+<ol>
+<li>
+<p>将磁盘分为由一个或多个柱面组成的分区。将每个分区作为一个逻辑磁盘。</p>
+</li>
+<li>
+<p>Logical formatting逻辑格式化</p>
+<p>创建文件系统</p>
+</li>
+</ol>
+<p>为了提高效率，大多数OS将块集中到一大块，称作簇(cluster)。磁盘IO通过块完成，文件系统IO通过簇完成</p>
+<p>raw disk生磁盘：将磁盘分区作为一个逻辑块的大顺序数组，没有任何文件系统数据结构</p>
+<p>raw disk可用作swap space</p>
+<p>对该数组的IO称作raw IO</p>
+<p>有些数据库系统比较喜欢raw IO</p>
+<h3 id="boot-block-引导块">boot block 引导块</h3>
+<p>bootstrap程序应找到磁盘上的操作系统内核，装入内存，并转到起始地址，从而开始OS的执行</p>
+<p>bootstrap保存在ROM中。不过大多数OS只在ROM中保留bootstrap loader: 进一步从磁盘上调入更完整的bootstrap程序</p>
+<p>完整的bootstrap程序在磁盘的启动块(boot block)上，启动块位于磁盘的固定位置。</p>
+<p>拥有启动分区的磁盘称为boot disk或system disk</p>
+<p>启动扇区 MBR master boot record . Besides boot code, the MBR contains a partition table listing the partitions for the hard disk and a flag indicating which partition the system is to be booted from.</p>
+<p>启动ROM中的代码引导磁盘控制器将启动块读入到内存(此时尚未装入设备驱动程序)</p>
+<p>硬盘分为一个或多个分区，一个分区为boot partition，包含OS和设备驱动程序。该分区的第一个扇区既是boot sector</p>
+<h3 id="bad-blocks">bad blocks</h3>
+<p>Controller calculates the ECC and finds the sector is bad. 控制器计算ECC</p>
+<p>An unrecoverable hard error results in lost data.</p>
+<p>对于简单磁盘：坏块可手工处理</p>
+<p>对于复杂磁盘：</p>
+<p>​	控制器维护一个磁盘坏块链表，控制器可用备用块来逻辑地替换坏块 sector sparing(forwarding)</p>
+<p>​	sector slipping</p>
+</div>
+	</section>
+
+
+</article>
+
+		</main>
+		<div class="w-full h-0 flex-none order-3"></div>
+		<aside role="contentinfo"
+			class="w-full md:w-2/5 xl:w-1/2 md:pr-12 lg:pr-20 xl:pr-24 order-4 md:order-3 md:sticky md:bottom-0 self-end max-w-2xl">
+			<div class="md:float-right md:text-right leading-loose tracking-tight md:mb-2">
+				
+	<div class="md:max-w-xs  flex flex-col md:items-end">
+	<ul class="font-serif flex-grow-0 flex justify-between flex-wrap md:flex-col">
+	
+	
+	<li class="px-1 md:px-0">
+		<a href="/post/" title="归档 page" 
+			class="font-medium text-medium-red-violet-600 hover:text-medium-red-violet-400" >
+			归档
+		</a>
+	</li>
+	
+	<li class="px-1 md:px-0">
+		<a href="/categories/" title="分类 page" >
+			分类
+		</a>
+	</li>
+	
+	<li class="px-1 md:px-0">
+		<a href="/tags/" title="标签 page" >
+			标签
+		</a>
+	</li>
+	
+	<li class="px-1 md:px-0">
+		<a href="/about/" title="关于 page" >
+			关于
+		</a>
+	</li>
+	
+	
+	
+	
+	<div id="fastSearch" class="m-0">
+		<input id="searchInput" type="text" size=10 
+			class="bg-gray-100 focus:outline-none border-b border-gray-100 focus:border-eucalyptus-300 md:text-right
+			placeholder-java-500 min-w-0 max-w-xxxs"
+			placeholder="search" />
+		<ul id="searchResults" class="bg-gray-200 px-2 divide-y divide-gray-400">
+		</ul>
+	</div>
+	
+</ul>
+	
+
+<div class="flex flex-wrap-reverse md:justify-end content-end md:content-start justify-start items-start   max-h-16">
+	
+</div>
+	<div class="text-sm text-gray-500 leading-tight a-gray">
+		© Faye
+		<br />
+		Built with Hugo and theme <a href="https://github.com/heyeshuang/hugo-theme-tokiwa">Tokiwa</a>. 1435 words in this page.
+	</div>
+</div>
+
+			</div>
+		</aside>
+		<footer class="w-full md:w-3/5 xl:w-1/2 order-3 max-w-3xl md:order-4 pt-2">
+			
+<hr class="double-line" />
+<div class="flex flex-wrap justify-between pb-2 leading-loose font-serif">
+    
+    <a class="flex-grow-0" href="/post/os11/">
+        <svg class="fill-current inline-block h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24"
+            height="24">
+            <path fill="none" d="M0 0h24v24H0z" />
+            <path d="M7.828 11H20v2H7.828l5.364 5.364-1.414 1.414L4 12l7.778-7.778 1.414 1.414z" /></svg>
+        操作系统笔记 CH11 File-System Implementation
+    </a>
+    
+    
+    <a class="flex-grow-0" href="/post/os13/">
+        操作系统笔记 CH13 I/O Systems
+        <svg class="fill-current inline-block h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24"
+            height="24">
+            <path fill="none" d="M0 0h24v24H0z" />
+            <path d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z" /></svg></a>
+    
+</div>
+<div >
+
+
+
+<div class="font-serif pb-2 flex align-start leading-loose">
+	<span class="heading pr-6 leading-loose">Related</span>
+	<span >
+		
+			<a href="/post/os11/">操作系统笔记 CH11 File-System Implementation</a>&nbsp;&nbsp;&#47;&nbsp;
+		
+			<a href="/post/os10/">操作系统笔记 CH10 File-System Interface</a>&nbsp;&nbsp;&#47;&nbsp;
+		
+			<a href="/post/os9/">操作系统笔记 CH9 Virtual Memory</a>&nbsp;&nbsp;&#47;&nbsp;
+		
+			<a href="/post/os8/">操作系统笔记 CH8 Main Memory</a>&nbsp;&nbsp;&#47;&nbsp;
+		
+			<a href="/post/os7/">操作系统笔记 CH7 Deadlocks</a>&nbsp;&nbsp;&#47;&nbsp;
+		
+			<a href="/post/os6/">操作系统笔记 CH6 Process Synchronization</a>&nbsp;&nbsp;&#47;&nbsp;
+		
+			<a href="/post/os5/">操作系统笔记 CH5 CPU Scheduling</a>&nbsp;&nbsp;&#47;&nbsp;
+		
+			<a href="/post/os4/">操作系统笔记 CH4 Threads</a>&nbsp;&nbsp;&#47;&nbsp;
+		
+			<a href="/post/os3/">操作系统笔记 CH3 Process</a>&nbsp;&nbsp;&#47;&nbsp;
+		
+			<a href="/post/os2/">操作系统笔记 CH2 OS structures</a>&nbsp;&nbsp;&#47;&nbsp;
+		
+			<a href="/post/os1/">操作系统笔记 CH1 Intro</a>
+		
+</span>
+</div>
+
+</div>
+<hr />
+<div class="pb-2">
+    <div id="disqus_thread"></div>
+<script type="application/javascript">
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "faye" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+<hr />
+
+		</footer>
+		
+
+<script src="/dist/app.js"></script>
+
+
+<script src="/lib/fuse.min.js"></script> 
+<script src="/lib/fastsearch.js"></script>
+
+	</div>
+</body>
+
+</html>

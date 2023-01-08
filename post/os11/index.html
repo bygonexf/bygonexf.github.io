@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="cn">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	
+	<title>风巷  | 操作系统笔记 CH11 File-System Implementation</title>
+	<meta name="viewport" content="width=device-width,minimum-scale=1">
+	<meta name="generator" content="Hugo 0.105.0">
+	
+	
+	<META NAME="ROBOTS" CONTENT="INDEX, FOLLOW">
+	
+
+	
+	
+	<link href="/dist/app.css" rel="stylesheet">
+	
+
+	
+
+	
+	
+<link rel="shortcut icon" href="img/wind.png" type="image/png" />
+
+	
+
+	
+	
+	
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-FAKE', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+	
+	
+	
+
+
+
+<link rel="stylesheet" href='https://imfaye.me/lib/katex.min.css' crossorigin="anonymous">
+
+
+<script defer src='https://imfaye.me/lib/katex.min.js' crossorigin="anonymous"></script>
+
+
+<script defer src='https://imfaye.me/lib/contrib/auto-render.min.js'
+crossorigin="anonymous"
+onload='renderMathInElement(document.body);'></script>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement(document.body, {
+            delimiters: [
+                {left: "$$", right: "$$", display: true},
+                {left: "$", right: "$", display: false}
+            ]
+        });
+    });
+</script>
+
+	
+	
+	
+	<script>
+		(function (u, c) {
+			var d = document,
+				t = 'script',
+				o = d.createElement(t),
+				s = d.getElementsByTagName(t)[0];
+			o.src = u;
+			if (c) {
+				o.addEventListener('load', function (e) {
+					c(e);
+				});
+			}
+			s.parentNode.insertBefore(o, s);
+		})('https:\/\/imfaye.me\/lib\/pangu.min.js', function () {
+			pangu.spacingPage();
+		});
+	</script>
+	
+	
+	
+	<style type="text/css" media="screen, print">
+		@font-face {
+			font-family: "FancyTitleFont";
+			font-style: normal;
+			font-display: swap;
+			src: url('https://imfaye.me/fonts/exampleFont.woff2') format('woff2'),
+				url('https://imfaye.me/fonts/exampleFont.woff') format('woff');
+		}
+		 
+		  
+		 
+		@font-face {
+			font-family: 'Noto Serif CJK SC';
+			font-style: normal;
+			font-weight: 300;
+			font-display: swap;
+			src: local('Noto Serif CJK SC Light'), local('NotoSerifCJK-Light'),
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-300.woff2') format('woff2'),
+				 
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-300.woff') format('woff');
+			 
+		}
+
+		 
+		@font-face {
+			font-family: 'Noto Serif CJK SC';
+			font-style: normal;
+			font-weight: 400;
+			font-display: swap;
+			src: local('Noto Serif CJK SC'), local('NotoSerifCJK-Regular'),
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-regular.woff2') format('woff2'),
+				 
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-regular.woff') format('woff');
+			 
+		}
+
+		 
+		@font-face {
+			font-family: 'Noto Serif CJK SC';
+			font-style: normal;
+			font-weight: 500;
+			font-display: swap;
+			src: local('Noto Serif CJK SC Medium'), local('NotoSerifCJK-Medium'),
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-500.woff2') format('woff2'),
+				 
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-500.woff') format('woff');
+			 
+		}
+	</style>
+	
+</head>
+
+<body class="bg-gray-100 text-gray-700 font-sans">
+	<div class="p-6 sm:p-10 md:p-16 flex flex-wrap">
+		<header class="w-full md:w-2/5 xl:w-1/2 md:pr-12 lg:pr-20 xl:pr-24 order-1 md:order-1 max-w-2xl">
+			<div
+				class="z-50 bg-gray-100 bg-opacity-75 bg-opacity-custom lg:min-w-0.7 max-w-xl md:float-right md:text-right leading-loose tracking-tight md:sticky md:top-0 pt-2">
+				
+<div>
+	<h2>
+		<a href="https://imfaye.me/" title="风巷" class="heading font-cursive icon">风巷</a>
+	</h2>
+</div>
+<h1 class="pt-2">操作系统笔记 CH11 File-System Implementation</h1>
+
+<div class="flex flex-wrap justify-end pt-2 "><div class="md:flex-grow-0 font-light">
+	
+	
+	
+	
+	<a class="post-taxonomy-category text-medium-red-violet-600 hover:text-medium-red-violet-400"
+		href='/categories/%E6%97%A0%E6%83%85%E7%AC%94%E8%AE%B0'>无情笔记</a>
+	
+	
+	
+
+	
+	&nbsp;&nbsp;
+	
+
+	
+	
+	
+	
+	<a class="post-taxonomy-tag text-eucalyptus-500"
+		href='/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F'>操作系统</a>&nbsp;&#47;
+	
+	<a class="post-taxonomy-tag text-eucalyptus-500"
+		href='/tags/%E5%A4%A7%E6%98%8E%E6%B9%96%E7%95%94%E7%9A%84%E4%B8%93%E4%B8%9A%E8%AF%BE'>大明湖畔的专业课</a>
+	
+	
+	
+</div><time class="text-eucalyptus-500 md:text-right md:flex-grow font-light pl-4"
+		datetime="2020-02-28T13:11:24Z">2020-2-28</time>
+</div>
+
+<details class="toc" open>
+<summary>
+    <hr />
+</summary>
+<div class="inline toc-content">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#文件系统结构">文件系统结构</a></li>
+    <li><a href="#文件系统实现">文件系统实现</a>
+      <ul>
+        <li><a href="#in-memory-file-system-structures">In-Memory File System Structures</a></li>
+        <li><a href="#partitions-and-mounting-分区和安装">partitions and mounting 分区和安装</a></li>
+        <li><a href="#virtual-file-system-vfs">virtual file system (VFS)</a></li>
+      </ul>
+    </li>
+    <li><a href="#目录实现">目录实现</a>
+      <ul>
+        <li><a href="#linear-list-线性列表">linear list 线性列表</a></li>
+        <li><a href="#hash-table">hash table</a></li>
+      </ul>
+    </li>
+    <li><a href="#分配方法">分配方法</a>
+      <ul>
+        <li><a href="#contiguous-allocation-连续分配">Contiguous Allocation 连续分配</a></li>
+        <li><a href="#linked-allocation-链接分配">Linked Allocation 链接分配</a></li>
+        <li><a href="#indexed-allocation-索引分配">Indexed Allocation 索引分配</a></li>
+        <li><a href="#性能">性能</a></li>
+        <li><a href="#free-space-management">free-space management</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+</div>
+</details>
+
+<hr />
+
+
+			</div>
+		</header>
+		<main role="main" class="w-full md:w-3/5 xl:w-1/2 max-w-3xl order-2 md:order-2 min-h-70vh pt-2 pb-4">
+			
+
+<article>
+	<section class="mx-auto content">
+		<div class="c-rich-text"><h2 id="文件系统结构">文件系统结构</h2>
+<p>磁盘特点：可以原地重写，可以直接访问任意一块。</p>
+<p>内存和磁盘之间的IO以块为单位。每块为一个或多个扇区。扇区通常为512B</p>
+<p>File system resides on secondary storage (disks) OS通过文件系统存储、定位、提取数据</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577502786991.png" style="zoom: 50%;" />
+<ul>
+<li>
+<p>IO control 最底层</p>
+<p>由device driver 和 Interrupt handlers组成</p>
+<p>实现内存和磁盘之间的信息传输。</p>
+<p>device driver可作为翻译器。输入是高层命令，输出是底层的、硬件特定的命令。命令用于控制hardware controller</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577503036078.png" style="zoom:50%;" />
+<p>device driver控制一类设备</p>
+</li>
+<li>
+<p>basic file system</p>
+<p>Issue generic commands to the appropriate device driver to read and write physical blocks on the disk.</p>
+</li>
+<li>
+<p>file-organization module</p>
+<p>将逻辑块地址 转换成 物理块地址</p>
+<p>也包括空闲空间管理器</p>
+</li>
+<li>
+<p>logical file system</p>
+<p>管理metadata，元数据包括文件系统所有结构数据，而不包括实际数据</p>
+<p>管理目录结构</p>
+<p>通过FCB((inodes in UNIX))维护文件结构</p>
+<p>负责保护和安全</p>
+</li>
+</ul>
+<p>Layering useful for reducing complexity and redundancy, but adds overhead and can decrease performance.</p>
+<p>绝大多数OS支持多个文件系统</p>
+<p>UNIX使用UFS</p>
+<p>标准的Linux文件系统是extende file system</p>
+<h2 id="文件系统实现">文件系统实现</h2>
+<p>每个卷的boot control block：从该卷引导OS需要的信息。如果没有OS，该块为空，通常为卷的第一块。UFS称之为boot block，NTFS称之为partition boot sector</p>
+<p>每个卷的volume control blcok：包括卷(或分区)的详细信息，如分区的块数，块的大小&hellip;UFS称之为superblock，NTFS中它存在master file table中</p>
+<p>每个文件系统的目录结构用来组织文件。UFS中包含文件名和相关的inode号，NTFS中它存储在master file table中</p>
+<p>每个文件的FCB。UFS中是inode，NTFS存在master file table中，每个文件占一行</p>
+<h3 id="in-memory-file-system-structures">In-Memory File System Structures</h3>
+<p>一个内存中的mount table(partition table)</p>
+<p>一个内存中的director structure cache</p>
+<p>system-wide open-file table: 包括每个打开文件的FCB副本</p>
+<p>per-process open-file table: Contains a pointer to the appropriate entry in the system-wide open-file table.</p>
+<p>buffers hold data blocks from secondary storage.</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577507477227.png" style="zoom:50%;" />
+<p>对于访问打开文件表的索引：UNIX称之为file descriptor，Windows称之为file handle. 只要文件没有关闭，所有文件操作都是通过打开文件表来进行的</p>
+<h3 id="partitions-and-mounting-分区和安装">partitions and mounting 分区和安装</h3>
+<p>一个disk可以分为多个partition，一个partition可以横跨多个disk(作为RAID的一种形式比较合适)</p>
+<p>分区可以是</p>
+<ul>
+<li>raw 没有文件系统</li>
+<li>cooked 含有文件系统</li>
+</ul>
+<p>引导信息能保存在多个分区中，通常为一组有序块，并作为镜像文件读入内存</p>
+<p>boot loader知道位于引导区的多个文件系统和多个操作系统，一旦装入，它可以引导位于磁盘上的一个操作系统。磁盘可以有多个分区，每个分区包含不同类型的文件系统和不同的操作系统。</p>
+<p>root partiton包括操作系统内核或其他系统文件，在引导时装入内存。</p>
+<p>内存中有Mount table – containing information about file systems that has been mounted.</p>
+<h3 id="virtual-file-system-vfs">virtual file system (VFS)</h3>
+<p>Virtual file system (VFS) on most OSes, including Unix, use object-oriented techniques to implement the file system. 用户甚至可以访问位于网络上的操作系统</p>
+<p>VFS allows the same system call interface (the API) to be used for different types of file systems.</p>
+<p>Implements vnodes which hold inodes or network file details.</p>
+<p>The API is to the VFS interface, rather than any specific type of file system.</p>
+<p>多个VFS接口的实现可以共存在同一台机器上</p>
+<p>vnode表示位于整个网络范围内唯一的文件</p>
+<p>Linux has four object types: inode, file, superblock, dentry</p>
+<p>VFS defines a set of operations on the objects that must be implemented.</p>
+<h2 id="目录实现">目录实现</h2>
+<h3 id="linear-list-线性列表">linear list 线性列表</h3>
+<p>linear search time费时</p>
+<p>sorted list允许binary search</p>
+<p>a balanced tree</p>
+<h3 id="hash-table">hash table</h3>
+<p>decreases directory search time</p>
+<p>需要处理collision(两个文件名哈希到相同的位置)：chained-overflow</p>
+<p>Difficulties: fixed size, hash function</p>
+<h2 id="分配方法">分配方法</h2>
+<p>how disk blocks are allocated for files</p>
+<h3 id="contiguous-allocation-连续分配">Contiguous Allocation 连续分配</h3>
+<p>每个文件在磁盘上占有一组连续的块</p>
+<p>访问连续分配文件所需寻道数最少</p>
+<p>用第一块的磁盘地址和连续块的数量来定义</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577509061560.png" style="zoom:50%;" />
+<p>sequential and direct access</p>
+<p>Best performance in most cases</p>
+<p>问题</p>
+<ul>
+<li>Difficult to find space for a new file: First-fit, best-fit</li>
+<li>External fragmentation</li>
+<li>compaction off-line (downtime) or on-line</li>
+</ul>
+<p>Extent-Based Systems, a modified contiguous allocation scheme 当空间不够时，另一块被称为扩展的连续空间会添加到原来的文件分配中</p>
+<h3 id="linked-allocation-链接分配">Linked Allocation 链接分配</h3>
+<p>每个文件是磁盘块的链表</p>
+<p>目录包括文件第一块的指针和最后一块的指针。每一块都有下一块的指针。</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577509383605.png" style="zoom:50%;" />
+<p>没有外部碎片</p>
+<p>只要有空闲块，文件就可以增大</p>
+<p>Disadvantages: 不能随机访问，指针需要空间，不可靠</p>
+<p>对于指针需要空间，解决办法是将多个块组成簇(cluster)，代价是增加了内部碎片</p>
+<h4 id="fatfile-allocation-table文件分配表">FAT(file-allocation table)文件分配表</h4>
+<p>used by MS-DOS and OS/2</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577510977781.png" style="zoom:50%;" />
+<p>对FAT采用缓存</p>
+<p>支持直接访问</p>
+<h3 id="indexed-allocation-索引分配">Indexed Allocation 索引分配</h3>
+<p>每个文件都有索引块，是一个磁盘块地址的数组</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577511076567.png" style="zoom:50%;" />
+<p>目录条目包括索引块的地址</p>
+<p>支持直接访问</p>
+<p>没有外部碎片</p>
+<p>索引块应该多大</p>
+<ul>
+<li>
+<p>linked scheme</p>
+<p>将多个索引块链接起来</p>
+</li>
+<li>
+<p>two-level index</p>
+</li>
+<li>
+<p>combined scheme</p>
+<p>UNIX采用</p>
+</li>
+</ul>
+<h3 id="性能">性能</h3>
+<p>contiguous great for sequential and random</p>
+<p>linked good for sequential, not random</p>
+<p>combine contiguous allocation with indexed allocation by using contiguous allocation for small files (up to three or four blocks), automatically switching to an indexed allocation if the file grows large.</p>
+<h3 id="free-space-management">free-space management</h3>
+<p>文件系统需要维护free-space list记录空闲磁盘空间(不一定是链表)</p>
+<h4 id="bit-map--bit-vector">bit map / bit vector</h4>
+<p>每块用一位表示。空闲-1，已分配-0</p>
+<p>查找第一个和n个连续空闲块简单高效</p>
+<p>Bit map requires extra space.</p>
+<p>Easy to get contiguous files space.</p>
+<h4 id="linked-list-链表">linked list 链表</h4>
+<p>将所有空闲块用链表链接</p>
+<p>将指向第一空闲块的指针缓存在内存</p>
+<p>Cannot get contiguous space easily.</p>
+<h4 id="grouping">grouping</h4>
+<p>将n个空闲块的地址存在第一个空闲块里。(前n-1确实为空，最后一块包含另外n个空闲块的地址)</p>
+<p>可以找到大量空闲块</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577512314875.png" style="zoom:33%;" />
+<h4 id="counting">counting</h4>
+<p>记录第一块的地址和紧跟第一块的连续的空闲块的数量n</p>
+<p>can be stored in a balanced tree for efficiency</p>
+</div>
+	</section>
+
+
+</article>
+
+		</main>
+		<div class="w-full h-0 flex-none order-3"></div>
+		<aside role="contentinfo"
+			class="w-full md:w-2/5 xl:w-1/2 md:pr-12 lg:pr-20 xl:pr-24 order-4 md:order-3 md:sticky md:bottom-0 self-end max-w-2xl">
+			<div class="md:float-right md:text-right leading-loose tracking-tight md:mb-2">
+				
+	<div class="md:max-w-xs  flex flex-col md:items-end">
+	<ul class="font-serif flex-grow-0 flex justify-between flex-wrap md:flex-col">
+	
+	
+	<li class="px-1 md:px-0">
+		<a href="/post/" title="归档 page" 
+			class="font-medium text-medium-red-violet-600 hover:text-medium-red-violet-400" >
+			归档
+		</a>
+	</li>
+	
+	<li class="px-1 md:px-0">
+		<a href="/categories/" title="分类 page" >
+			分类
+		</a>
+	</li>
+	
+	<li class="px-1 md:px-0">
+		<a href="/tags/" title="标签 page" >
+			标签
+		</a>
+	</li>
+	
+	<li class="px-1 md:px-0">
+		<a href="/about/" title="关于 page" >
+			关于
+		</a>
+	</li>
+	
+	
+	
+	
+	<div id="fastSearch" class="m-0">
+		<input id="searchInput" type="text" size=10 
+			class="bg-gray-100 focus:outline-none border-b border-gray-100 focus:border-eucalyptus-300 md:text-right
+			placeholder-java-500 min-w-0 max-w-xxxs"
+			placeholder="search" />
+		<ul id="searchResults" class="bg-gray-200 px-2 divide-y divide-gray-400">
+		</ul>
+	</div>
+	
+</ul>
+	
+
+<div class="flex flex-wrap-reverse md:justify-end content-end md:content-start justify-start items-start   max-h-16">
+	
+</div>
+	<div class="text-sm text-gray-500 leading-tight a-gray">
+		© Faye
+		<br />
+		Built with Hugo and theme <a href="https://github.com/heyeshuang/hugo-theme-tokiwa">Tokiwa</a>. 1944 words in this page.
+	</div>
+</div>
+
+			</div>
+		</aside>
+		<footer class="w-full md:w-3/5 xl:w-1/2 order-3 max-w-3xl md:order-4 pt-2">
+			
+<hr class="double-line" />
+<div class="flex flex-wrap justify-between pb-2 leading-loose font-serif">
+    
+    <a class="flex-grow-0" href="/post/os10/">
+        <svg class="fill-current inline-block h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24"
+            height="24">
+            <path fill="none" d="M0 0h24v24H0z" />
+            <path d="M7.828 11H20v2H7.828l5.364 5.364-1.414 1.414L4 12l7.778-7.778 1.414 1.414z" /></svg>
+        操作系统笔记 CH10 File-System Interface
+    </a>
+    
+    
+    <a class="flex-grow-0" href="/post/os12/">
+        操作系统笔记 CH12 Mass-Storage Structure
+        <svg class="fill-current inline-block h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24"
+            height="24">
+            <path fill="none" d="M0 0h24v24H0z" />
+            <path d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z" /></svg></a>
+    
+</div>
+<div >
+
+
+
+<div class="font-serif pb-2 flex align-start leading-loose">
+	<span class="heading pr-6 leading-loose">Related</span>
+	<span >
+		
+			<a href="/post/os10/">操作系统笔记 CH10 File-System Interface</a>&nbsp;&nbsp;&#47;&nbsp;
+		
+			<a href="/post/os9/">操作系统笔记 CH9 Virtual Memory</a>&nbsp;&nbsp;&#47;&nbsp;
+		
+			<a href="/post/os8/">操作系统笔记 CH8 Main Memory</a>&nbsp;&nbsp;&#47;&nbsp;
+		
+			<a href="/post/os7/">操作系统笔记 CH7 Deadlocks</a>&nbsp;&nbsp;&#47;&nbsp;
+		
+			<a href="/post/os6/">操作系统笔记 CH6 Process Synchronization</a>&nbsp;&nbsp;&#47;&nbsp;
+		
+			<a href="/post/os5/">操作系统笔记 CH5 CPU Scheduling</a>&nbsp;&nbsp;&#47;&nbsp;
+		
+			<a href="/post/os4/">操作系统笔记 CH4 Threads</a>&nbsp;&nbsp;&#47;&nbsp;
+		
+			<a href="/post/os3/">操作系统笔记 CH3 Process</a>&nbsp;&nbsp;&#47;&nbsp;
+		
+			<a href="/post/os2/">操作系统笔记 CH2 OS structures</a>&nbsp;&nbsp;&#47;&nbsp;
+		
+			<a href="/post/os1/">操作系统笔记 CH1 Intro</a>
+		
+</span>
+</div>
+
+</div>
+<hr />
+<div class="pb-2">
+    <div id="disqus_thread"></div>
+<script type="application/javascript">
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "faye" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+<hr />
+
+		</footer>
+		
+
+<script src="/dist/app.js"></script>
+
+
+<script src="/lib/fuse.min.js"></script> 
+<script src="/lib/fastsearch.js"></script>
+
+	</div>
+</body>
+
+</html>

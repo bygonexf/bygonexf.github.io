@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="cn">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	
+	<title>风巷  | 操作系统笔记 CH3 Process</title>
+	<meta name="viewport" content="width=device-width,minimum-scale=1">
+	<meta name="generator" content="Hugo 0.105.0">
+	
+	
+	<META NAME="ROBOTS" CONTENT="INDEX, FOLLOW">
+	
+
+	
+	
+	<link href="/dist/app.css" rel="stylesheet">
+	
+
+	
+
+	
+	
+<link rel="shortcut icon" href="img/wind.png" type="image/png" />
+
+	
+
+	
+	
+	
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-FAKE', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+	
+	
+	
+
+
+
+<link rel="stylesheet" href='https://imfaye.me/lib/katex.min.css' crossorigin="anonymous">
+
+
+<script defer src='https://imfaye.me/lib/katex.min.js' crossorigin="anonymous"></script>
+
+
+<script defer src='https://imfaye.me/lib/contrib/auto-render.min.js'
+crossorigin="anonymous"
+onload='renderMathInElement(document.body);'></script>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement(document.body, {
+            delimiters: [
+                {left: "$$", right: "$$", display: true},
+                {left: "$", right: "$", display: false}
+            ]
+        });
+    });
+</script>
+
+	
+	
+	
+	<script>
+		(function (u, c) {
+			var d = document,
+				t = 'script',
+				o = d.createElement(t),
+				s = d.getElementsByTagName(t)[0];
+			o.src = u;
+			if (c) {
+				o.addEventListener('load', function (e) {
+					c(e);
+				});
+			}
+			s.parentNode.insertBefore(o, s);
+		})('https:\/\/imfaye.me\/lib\/pangu.min.js', function () {
+			pangu.spacingPage();
+		});
+	</script>
+	
+	
+	
+	<style type="text/css" media="screen, print">
+		@font-face {
+			font-family: "FancyTitleFont";
+			font-style: normal;
+			font-display: swap;
+			src: url('https://imfaye.me/fonts/exampleFont.woff2') format('woff2'),
+				url('https://imfaye.me/fonts/exampleFont.woff') format('woff');
+		}
+		 
+		  
+		 
+		@font-face {
+			font-family: 'Noto Serif CJK SC';
+			font-style: normal;
+			font-weight: 300;
+			font-display: swap;
+			src: local('Noto Serif CJK SC Light'), local('NotoSerifCJK-Light'),
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-300.woff2') format('woff2'),
+				 
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-300.woff') format('woff');
+			 
+		}
+
+		 
+		@font-face {
+			font-family: 'Noto Serif CJK SC';
+			font-style: normal;
+			font-weight: 400;
+			font-display: swap;
+			src: local('Noto Serif CJK SC'), local('NotoSerifCJK-Regular'),
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-regular.woff2') format('woff2'),
+				 
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-regular.woff') format('woff');
+			 
+		}
+
+		 
+		@font-face {
+			font-family: 'Noto Serif CJK SC';
+			font-style: normal;
+			font-weight: 500;
+			font-display: swap;
+			src: local('Noto Serif CJK SC Medium'), local('NotoSerifCJK-Medium'),
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-500.woff2') format('woff2'),
+				 
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-500.woff') format('woff');
+			 
+		}
+	</style>
+	
+</head>
+
+<body class="bg-gray-100 text-gray-700 font-sans">
+	<div class="p-6 sm:p-10 md:p-16 flex flex-wrap">
+		<header class="w-full md:w-2/5 xl:w-1/2 md:pr-12 lg:pr-20 xl:pr-24 order-1 md:order-1 max-w-2xl">
+			<div
+				class="z-50 bg-gray-100 bg-opacity-75 bg-opacity-custom lg:min-w-0.7 max-w-xl md:float-right md:text-right leading-loose tracking-tight md:sticky md:top-0 pt-2">
+				
+<div>
+	<h2>
+		<a href="https://imfaye.me/" title="风巷" class="heading font-cursive icon">风巷</a>
+	</h2>
+</div>
+<h1 class="pt-2">操作系统笔记 CH3 Process</h1>
+
+<div class="flex flex-wrap justify-end pt-2 "><div class="md:flex-grow-0 font-light">
+	
+	
+	
+	
+	<a class="post-taxonomy-category text-medium-red-violet-600 hover:text-medium-red-violet-400"
+		href='/categories/%E6%97%A0%E6%83%85%E7%AC%94%E8%AE%B0'>无情笔记</a>
+	
+	
+	
+
+	
+	&nbsp;&nbsp;
+	
+
+	
+	
+	
+	
+	<a class="post-taxonomy-tag text-eucalyptus-500"
+		href='/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F'>操作系统</a>&nbsp;&#47;
+	
+	<a class="post-taxonomy-tag text-eucalyptus-500"
+		href='/tags/%E5%A4%A7%E6%98%8E%E6%B9%96%E7%95%94%E7%9A%84%E4%B8%93%E4%B8%9A%E8%AF%BE'>大明湖畔的专业课</a>
+	
+	
+	
+</div><time class="text-eucalyptus-500 md:text-right md:flex-grow font-light pl-4"
+		datetime="2020-02-28T13:03:24Z">2020-2-28</time>
+</div>
+
+<details class="toc" open>
+<summary>
+    <hr />
+</summary>
+<div class="inline toc-content">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#process-concepts">process concepts</a></li>
+    <li><a href="#process-scheduling">process scheduling</a>
+      <ul>
+        <li><a href="#scheduling-queues">scheduling queues</a></li>
+        <li><a href="#schedulers">schedulers</a></li>
+        <li><a href="#context-switch">context switch</a></li>
+      </ul>
+    </li>
+    <li><a href="#operations-on-process">operations on process</a>
+      <ul>
+        <li><a href="#process-creation">process creation:</a></li>
+        <li><a href="#process-termination">process termination</a></li>
+      </ul>
+    </li>
+    <li><a href="#interprocess-communicationipc">interprocess communication(IPC)</a></li>
+    <li><a href="#examples-of-ipc">examples of IPC</a></li>
+    <li><a href="#communication-in-client-server-systems">communication in client-server systems</a></li>
+  </ul>
+</nav>
+</div>
+</details>
+
+<hr />
+
+
+			</div>
+		</header>
+		<main role="main" class="w-full md:w-3/5 xl:w-1/2 max-w-3xl order-2 md:order-2 min-h-70vh pt-2 pb-4">
+			
+
+<article>
+	<section class="mx-auto content">
+		<div class="c-rich-text"><h2 id="process-concepts">process concepts</h2>
+<p>batch system: job; time-sharing system: program/task</p>
+<p>Program is passive entity stored on disk (executable file), process is active.</p>
+<p>a process includes</p>
+<ul>
+<li>text section(program code)</li>
+<li>data section(global variables)</li>
+<li>heap(动态分配的内存)</li>
+<li>process stack(临时数据)
+<ul>
+<li>function parameters, return value</li>
+<li>return addresses</li>
+<li>local variables</li>
+</ul>
+</li>
+<li>current activity(represented by program counter and registers)</li>
+</ul>
+<p>process state</p>
+<ul>
+<li>new: being created</li>
+<li>running: instructions are being executed</li>
+<li>waiting/limiting: waiting for some event</li>
+<li>ready: waiting to be assigned to a processor</li>
+<li>terminated/halted: finished execution</li>
+</ul>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573013564594.png" style="zoom: 67%;" />
+<p>一次只有一个进程可以在一个处理器上运行，但多个进程可处于就绪或等待状态。</p>
+<p>**PCB(**process control block): process state &amp; program counter &amp; CPU registers(中断时要保存程序计数器和CPU寄存器) &amp; CPU-scheduling information &amp; memory-management information &amp; accounting information &amp; I/O status information</p>
+<p>栈是运行时的单位，而堆是存储时的单位。  堆中存的是对象。栈中存的是基本数据类型和堆中对象的引用。</p>
+<p>a program becomes a process when an executable file is loaded into memory</p>
+<p>两个进程可以和同一个程序相关，虽然text section一样，但data,heap,stack sections不同。</p>
+<h2 id="process-scheduling">process scheduling</h2>
+<p>process scheduler selects an available process for program execution on CPU</p>
+<h3 id="scheduling-queues">scheduling queues</h3>
+<p>job queue作业队列：进程进入系统时，被加入作业队列，该队列包括系统中的所有进程</p>
+<p>ready queue就绪队列：驻留在内存的ready或waiting进程</p>
+<p>device queue设备队列：等待特点I/O设备的进程列表。每个设备都有自己的设备队列</p>
+<p>queueing diagram</p>
+<h3 id="schedulers">schedulers</h3>
+<p>long-term / job scheduler: select processes from the pool and load them into memory</p>
+<p>short-term / CPU scheduler: select processes that are ready and allocates CPU to one of them</p>
+<p>短期调度频繁，长期调度（和新进程创建时间间隔有关）控制degree of multiprogramming(内存中的进程数量)</p>
+<p>长期调度需仔细选择，一个包含I/O bound process和CPU bound process的组合。全是IO bound, 就绪队列几乎为空，短期调度无事可做；全是CPU bound，IO等待队列几乎为空。</p>
+<p>有些系统可能没有长期调度。有些OS如分时系统，引入medium-term scheduler, 将进程从内存（CPU竞争）中移出，降低multiprogramming设计难度。 swapping . The process is swapped out, and is later swapped in, by the medium-term scheduler.</p>
+<p>swapped/suspended processes；2 new states: swapped waiting, swapped ready</p>
+<h3 id="context-switch">context switch</h3>
+<p>context is represented in PCB</p>
+<p>context switch(上下文切换): performing a state save of the current process and a state restore of a different process</p>
+<p>发生中断时，系统需要保存当前运行在CPU中进程的上下文，上下文通过PCB表示。state save; state restore</p>
+<p>Context-switch time is pure overhead</p>
+<p>Context-switch times dependent on hardware support</p>
+<h2 id="operations-on-process">operations on process</h2>
+<h3 id="process-creation">process creation:</h3>
+<p>reasons: Submission of a batch job, User logs on, provide a service, Process creates another process assign a PID, allocate space, initialize PCB, resource sharing.</p>
+<p>When a process is created, it obtains initialization data that may be passed along from the parent process to the child process.</p>
+<p>UNIX examples</p>
+<p>​	system call fork creates new process</p>
+<p>​	system call exec used after a fork to replace the child process’ memory space with a new program.</p>
+<p>create-process system call</p>
+<p>process identifier PID</p>
+<p>创建子进程时，可能从操作系统直接获得资源，也可能只从其父进程那获得资源</p>
+<h3 id="process-termination">process termination</h3>
+<p>Process executes last statement and asks the operating system to delete it (via exit).</p>
+<p>Parent may terminate execution of its children processes (via abort). cascading termination</p>
+<h2 id="interprocess-communicationipc">interprocess communication(IPC)</h2>
+<p>independent / cooperating processes</p>
+<ul>
+<li>
+<p>shared memory</p>
+<p>速度快 memory speed</p>
+<p>unbounded/bounded buffer</p>
+</li>
+<li>
+<p>message passing</p>
+<p>交换少量数据， 不必避免冲突，易于实现。通常通过system call实现，内核介入的时间消耗。</p>
+<p>分布式环境中有用</p>
+<p>communication link</p>
+<p>直接通信(direct communication-naming): 每个进程必须明确地命名通信的接收者或发送者。每对进程之间只有一个线路，一个线路只与两个进程有关。symmetry/asymmetry in addressing</p>
+<p>间接通信(indirect): 通过mailbox或port。两个进程共享一个邮箱时，建立通信线路。一个线路可以与多个进程关联。每个线路对应一个邮箱。进程/OS可以拥有邮箱。拥有邮箱的进程只能收。</p>
+<p>blocking or unblocking(synchronous or asynchronous)</p>
+<p>当send和receive都阻塞时，发送者和接收者之间有一个集合点(rendezvous)</p>
+<p>buffering: zero/bounded/unbounded capacity</p>
+<p>message system with no/automatic buffering</p>
+</li>
+</ul>
+<h2 id="examples-of-ipc">examples of IPC</h2>
+<p>实例</p>
+<ul>
+<li>
+<p>POSIX</p>
+<p>shmget,shmat,shmdt,</p>
+</li>
+<li>
+<p>Mach</p>
+<p>Microkernel OS</p>
+<p>Mach communication is message based</p>
+<p>mailbox , called port in Mach</p>
+<p>Each task gets two mailboxes at creation&ndash; Kernel and Notify</p>
+<p>Kernel uses the kernel mailbox to communicate with task, and sends notification of event occurrences to the Notify port.</p>
+<p>kernel mailbox, notify mailbox</p>
+<p>msg_send, msg_receive, msg_rpc(remote procedure call远程过程调用)</p>
+<p>为分布式系统设计</p>
+</li>
+<li>
+<p>LPC(local procedure call) in windows</p>
+<p>位于同一机器的两进程通信</p>
+<p>port object</p>
+<p>2 types of ports</p>
+<ul>
+<li>
+<p>connection ports</p>
+<p>为所有进程可见</p>
+</li>
+<li>
+<p>communication ports</p>
+</li>
+</ul>
+<p>两种端口消息传递技术</p>
+<ul>
+<li>
+<p>小消息：</p>
+<p>端口队列(message queue)作为中间存储，将消息从一个进程复制到另一个进程</p>
+</li>
+<li>
+<p>大消息：</p>
+<p>section object</p>
+<p>不能马上响应: callback mechanism 允许异步消息传递</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="communication-in-client-server-systems">communication in client-server systems</h2>
+<ul>
+<li>
+<p>socket</p>
+<p>A socket is defined as an endpoint for communication.</p>
+<p>All ports below 1024 are considered well known;When a client process initiates a request for a
+connection, it is assigned a port (greater than 1024) by its host computer.</p>
+<p>一对通信进程需使用一对socket，一个进程一个</p>
+<p>socket由IP+端口号组成</p>
+<p>所有连接必须唯一</p>
+</li>
+<li>
+<p>远程过程调用RPC remote procedure call</p>
+<p>用于通过网络连接系统</p>
+<p>Each message is addressed to an RPC daemon listening to a port on the remote system.</p>
+<p>Stubs – client-side proxy for the actual procedure on the server.</p>
+<p>The client-side stub locates port on the server and marshals the parameters, transmits a message to the server.</p>
+<p>The server-side stub receives this message, unpacks the marshaled parameters, and performs the procedure on the server. Return values are passed back to the client.</p>
+<p>machine-independent representation of data, external data representation (XDR).</p>
+<p>客户端提供存根(stub)，对每个独立的远程过程都有一个stub。存根位于服务器的端口，编组(marshal)参数。XDR</p>
+</li>
+<li>
+<p>远程方法调用RMI remote method invocation</p>
+<p>RPC的java版</p>
+<p>RMI allows a Java program on one machine to invoke a method on a remote object.</p>
+<p>对象位于不同JVM上，就认为是远程的</p>
+<p>存根(stub)和骨干(skeleton).存根为远程对象的代理，驻留在客户机上，存根将包发给服务器，远程对象的骨干会接受它</p>
+<p>参数传递规则：</p>
+<ul>
+<li>编排参数是本地对象：对象串行化(object serialization) 复制传递；</li>
+<li>编排参数是远程对象：引用传递 reference</li>
+<li>本地对象作为参数传给远程对象：实现接口 java.io.Serialization</li>
+</ul>
+</li>
+</ul>
+</div>
+	</section>
+
+
+</article>
+
+		</main>
+		<div class="w-full h-0 flex-none order-3"></div>
+		<aside role="contentinfo"
+			class="w-full md:w-2/5 xl:w-1/2 md:pr-12 lg:pr-20 xl:pr-24 order-4 md:order-3 md:sticky md:bottom-0 self-end max-w-2xl">
+			<div class="md:float-right md:text-right leading-loose tracking-tight md:mb-2">
+				
+	<div class="md:max-w-xs  flex flex-col md:items-end">
+	<ul class="font-serif flex-grow-0 flex justify-between flex-wrap md:flex-col">
+	
+	
+	<li class="px-1 md:px-0">
+		<a href="/post/" title="归档 page" 
+			class="font-medium text-medium-red-violet-600 hover:text-medium-red-violet-400" >
+			归档
+		</a>
+	</li>
+	
+	<li class="px-1 md:px-0">
+		<a href="/categories/" title="分类 page" >
+			分类
+		</a>
+	</li>
+	
+	<li class="px-1 md:px-0">
+		<a href="/tags/" title="标签 page" >
+			标签
+		</a>
+	</li>
+	
+	<li class="px-1 md:px-0">
+		<a href="/about/" title="关于 page" >
+			关于
+		</a>
+	</li>
+	
+	
+	
+	
+	<div id="fastSearch" class="m-0">
+		<input id="searchInput" type="text" size=10 
+			class="bg-gray-100 focus:outline-none border-b border-gray-100 focus:border-eucalyptus-300 md:text-right
+			placeholder-java-500 min-w-0 max-w-xxxs"
+			placeholder="search" />
+		<ul id="searchResults" class="bg-gray-200 px-2 divide-y divide-gray-400">
+		</ul>
+	</div>
+	
+</ul>
+	
+
+<div class="flex flex-wrap-reverse md:justify-end content-end md:content-start justify-start items-start   max-h-16">
+	
+</div>
+	<div class="text-sm text-gray-500 leading-tight a-gray">
+		© Faye
+		<br />
+		Built with Hugo and theme <a href="https://github.com/heyeshuang/hugo-theme-tokiwa">Tokiwa</a>. 1904 words in this page.
+	</div>
+</div>
+
+			</div>
+		</aside>
+		<footer class="w-full md:w-3/5 xl:w-1/2 order-3 max-w-3xl md:order-4 pt-2">
+			
+<hr class="double-line" />
+<div class="flex flex-wrap justify-between pb-2 leading-loose font-serif">
+    
+    <a class="flex-grow-0" href="/post/os2/">
+        <svg class="fill-current inline-block h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24"
+            height="24">
+            <path fill="none" d="M0 0h24v24H0z" />
+            <path d="M7.828 11H20v2H7.828l5.364 5.364-1.414 1.414L4 12l7.778-7.778 1.414 1.414z" /></svg>
+        操作系统笔记 CH2 OS structures
+    </a>
+    
+    
+    <a class="flex-grow-0" href="/post/os4/">
+        操作系统笔记 CH4 Threads
+        <svg class="fill-current inline-block h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24"
+            height="24">
+            <path fill="none" d="M0 0h24v24H0z" />
+            <path d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z" /></svg></a>
+    
+</div>
+<div >
+
+
+
+<div class="font-serif pb-2 flex align-start leading-loose">
+	<span class="heading pr-6 leading-loose">Related</span>
+	<span >
+		
+			<a href="/post/os2/">操作系统笔记 CH2 OS structures</a>&nbsp;&nbsp;&#47;&nbsp;
+		
+			<a href="/post/os1/">操作系统笔记 CH1 Intro</a>
+		
+</span>
+</div>
+
+</div>
+<hr />
+<div class="pb-2">
+    <div id="disqus_thread"></div>
+<script type="application/javascript">
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "faye" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+<hr />
+
+		</footer>
+		
+
+<script src="/dist/app.js"></script>
+
+
+<script src="/lib/fuse.min.js"></script> 
+<script src="/lib/fastsearch.js"></script>
+
+	</div>
+</body>
+
+</html>

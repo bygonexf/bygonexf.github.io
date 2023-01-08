@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="cn">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	
+	<title>风巷  | AVS3 编码位流</title>
+	<meta name="viewport" content="width=device-width,minimum-scale=1">
+	<meta name="generator" content="Hugo 0.105.0">
+	
+	
+	<META NAME="ROBOTS" CONTENT="INDEX, FOLLOW">
+	
+
+	
+	
+	<link href="/dist/app.css" rel="stylesheet">
+	
+
+	
+
+	
+	
+<link rel="shortcut icon" href="img/wind.png" type="image/png" />
+
+	
+
+	
+	
+	
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-FAKE', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+	
+	
+	
+
+
+
+<link rel="stylesheet" href='https://imfaye.me/lib/katex.min.css' crossorigin="anonymous">
+
+
+<script defer src='https://imfaye.me/lib/katex.min.js' crossorigin="anonymous"></script>
+
+
+<script defer src='https://imfaye.me/lib/contrib/auto-render.min.js'
+crossorigin="anonymous"
+onload='renderMathInElement(document.body);'></script>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement(document.body, {
+            delimiters: [
+                {left: "$$", right: "$$", display: true},
+                {left: "$", right: "$", display: false}
+            ]
+        });
+    });
+</script>
+
+	
+	
+	
+	<script>
+		(function (u, c) {
+			var d = document,
+				t = 'script',
+				o = d.createElement(t),
+				s = d.getElementsByTagName(t)[0];
+			o.src = u;
+			if (c) {
+				o.addEventListener('load', function (e) {
+					c(e);
+				});
+			}
+			s.parentNode.insertBefore(o, s);
+		})('https:\/\/imfaye.me\/lib\/pangu.min.js', function () {
+			pangu.spacingPage();
+		});
+	</script>
+	
+	
+	
+	<style type="text/css" media="screen, print">
+		@font-face {
+			font-family: "FancyTitleFont";
+			font-style: normal;
+			font-display: swap;
+			src: url('https://imfaye.me/fonts/exampleFont.woff2') format('woff2'),
+				url('https://imfaye.me/fonts/exampleFont.woff') format('woff');
+		}
+		 
+		  
+		 
+		@font-face {
+			font-family: 'Noto Serif CJK SC';
+			font-style: normal;
+			font-weight: 300;
+			font-display: swap;
+			src: local('Noto Serif CJK SC Light'), local('NotoSerifCJK-Light'),
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-300.woff2') format('woff2'),
+				 
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-300.woff') format('woff');
+			 
+		}
+
+		 
+		@font-face {
+			font-family: 'Noto Serif CJK SC';
+			font-style: normal;
+			font-weight: 400;
+			font-display: swap;
+			src: local('Noto Serif CJK SC'), local('NotoSerifCJK-Regular'),
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-regular.woff2') format('woff2'),
+				 
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-regular.woff') format('woff');
+			 
+		}
+
+		 
+		@font-face {
+			font-family: 'Noto Serif CJK SC';
+			font-style: normal;
+			font-weight: 500;
+			font-display: swap;
+			src: local('Noto Serif CJK SC Medium'), local('NotoSerifCJK-Medium'),
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-500.woff2') format('woff2'),
+				 
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-500.woff') format('woff');
+			 
+		}
+	</style>
+	
+</head>
+
+<body class="bg-gray-100 text-gray-700 font-sans">
+	<div class="p-6 sm:p-10 md:p-16 flex flex-wrap">
+		<header class="w-full md:w-2/5 xl:w-1/2 md:pr-12 lg:pr-20 xl:pr-24 order-1 md:order-1 max-w-2xl">
+			<div
+				class="z-50 bg-gray-100 bg-opacity-75 bg-opacity-custom lg:min-w-0.7 max-w-xl md:float-right md:text-right leading-loose tracking-tight md:sticky md:top-0 pt-2">
+				
+<div>
+	<h2>
+		<a href="https://imfaye.me/" title="风巷" class="heading font-cursive icon">风巷</a>
+	</h2>
+</div>
+<h1 class="pt-2">AVS3 编码位流</h1>
+
+<div class="flex flex-wrap justify-end pt-2 "><div class="md:flex-grow-0 font-light">
+	
+	
+	
+	
+	<a class="post-taxonomy-category text-medium-red-violet-600 hover:text-medium-red-violet-400"
+		href='/categories/%E6%97%A0%E6%83%85%E7%AC%94%E8%AE%B0'>无情笔记</a>
+	
+	
+	
+
+	
+	&nbsp;&nbsp;
+	
+
+	
+	
+	
+	
+	<a class="post-taxonomy-tag text-eucalyptus-500"
+		href='/tags/avs3'>AVS3</a>&nbsp;&#47;
+	
+	<a class="post-taxonomy-tag text-eucalyptus-500"
+		href='/tags/%E8%A7%86%E9%A2%91%E7%BC%96%E7%A0%81'>视频编码</a>
+	
+	
+	
+</div><time class="text-eucalyptus-500 md:text-right md:flex-grow font-light pl-4"
+		datetime="2021-04-01T17:28:29Z">2021-4-1</time>
+</div>
+
+<details class="toc" open>
+<summary>
+    <hr />
+</summary>
+<div class="inline toc-content">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#概述">概述</a></li>
+    <li><a href="#码流结构及语义描述">码流结构及语义描述</a>
+      <ul>
+        <li><a href="#视频序列">视频序列</a></li>
+        <li><a href="#图像">图像</a></li>
+        <li><a href="#编码树">编码树</a></li>
+        <li><a href="#编码单元">编码单元</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+</div>
+</details>
+
+<hr />
+
+
+			</div>
+		</header>
+		<main role="main" class="w-full md:w-3/5 xl:w-1/2 max-w-3xl order-2 md:order-2 min-h-70vh pt-2 pb-4">
+			
+
+<article>
+	<section class="mx-auto content">
+		<div class="c-rich-text"><h2 id="概述">概述</h2>
+<p><strong>视频序列</strong>是位流的最高层语法结构。</p>
+<p><strong>帧</strong>由一个亮度样本矩阵和两个色度样本矩阵构成。<strong>场</strong>由构成帧的三个样本矩阵中相间的行构成。奇数行构成顶场，偶数行构成底场。</p>
+<p>视频序列头由视频序列起码码开始，后面跟着一串编码图像数据。序列头可在位流中重复出现，称为重复序列头。使用重复序列头的主要目的是支持对视频序列的随机访问。</p>
+<p>一副图像可以是一帧或一场，其编码数据由图像起始码开始，到序列起始码、序列结束码或下一个图像起始码结束。</p>
+<p><strong>片</strong>是图像中的矩形区域，包含若干最大编码单元在图像内的部分，片之间不应重叠。</p>
+<p>图像划分为<strong>最大编码单元</strong>，最大编码单元之间不应重叠，最大编码单元左上角的样本不应超出图像边界，最大编码单元右下角的样本可超出图像边界。</p>
+<p>最大编码单元划分为一个或多个<strong>编码单元</strong>，由编码树决定。编码单元划分为一个或多个<strong>变换块</strong>。</p>
+<h2 id="码流结构及语义描述">码流结构及语义描述</h2>
+<h3 id="视频序列">视频序列</h3>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/20210403170108.png" style="zoom:80%;" />
+<ul>
+<li>
+<p>序列头 sequence_header</p>
+<p>视频序列起始码、档次标号、级别标号、知识位流标志、知识图像允许标志、知识位流重复序列头标志、逐行序列标志、场图像序列标志、水平尺寸、垂直尺寸、色度格式、样本精度、编码样本精度、宽高比、帧率代码、比特率低位、比特率高位、低延迟、时间层标识允许标志、位流缓冲区尺寸、最大解码图像缓冲区大小、参考图像队列 1 索引存在标志、参考图像队列相同标志、参考图像队列配置集数、默认活跃参考图像数、最大编码单元尺寸、最小编码单元尺寸、划分单元最大比例、编码树最大划分次数、最小四叉树尺寸、最大二叉树尺寸、最大扩展四叉树尺寸、加权量化允许标志、加权量化矩阵加载标志、二次变换允许标志、样值偏倚补偿允许标志、自适应修正滤波允许标志、仿射运动补偿允许标志、对称运动矢量差模式允许标志、脉冲编码调制模式允许标志、自适应运动矢量精度允许标志、候选历史运动信息数、帧内预测滤波允许标志、高级运动矢量表达模式允许标志、运动矢量精度扩展模式允许标志、色度两步预测模式允许标志、帧内衍生模式允许标志、衍生模式划分边长最大尺寸、基于位置的变换允许标志、图像重排序延迟、跨片环路滤波允许标志、片划分一致性标志、参考同位置片标志、统一片大小标志、片宽度、片高度</p>
+</li>
+<li>
+<p>视频编辑码和视频序列结束码</p>
+<ul>
+<li>
+<p>视频编辑码 video_edit_code</p>
+<p>紧跟其后的第一幅 I 图像后续的 B 图像可能因缺少参考图像而不能正确解码</p>
+</li>
+<li>
+<p>视频序列结束码 video_sequence_end_code</p>
+<p>标识视频序列的结束。如果 POI（显示顺序索引），如果 POI 的值大于 $(2^{32}-1)$，位流中应插入一个视频序列结束码。</p>
+</li>
+</ul>
+</li>
+<li>
+<p>参考图像队列配置集</p>
+<p>参考知识图像标志、知识图像索引标志、被参考的知识图像索引、参考图像数、参考图像 DOI 差值绝对值、参考图像 DOI 差值符号</p>
+</li>
+<li>
+<p>自定义加权量化矩阵</p>
+<p>加权量化矩阵系数</p>
+</li>
+</ul>
+<h3 id="图像">图像</h3>
+<ul>
+<li>
+<p>帧内预测图像头</p>
+<p>帧内预测图像起始码、BBV 延时、时间编码标志、时间编码、解码顺序索引、知识图像索引、时间层标识、图像输出延迟、引用参考图像队列配置集标志、引用参考图像队列配置集索引、BBV 检测次数、逐行帧标志、图像编码结构标志、顶场在先、重复首场、顶场场图像标志、固定图像量化因子、去块滤波禁用标志、去块滤波参数标志、$\alpha$ 和 C 索引的偏移、$\beta$ 索引的偏移、色度量化参数禁用标志、色度量化参数增量 Cb、色度量化参数增量 Cr、图像加权量化允许标志、图像加权量化数据加载索引、加权量化参数索引、加权量化矩阵模型、加权量化参数增量 1、加权量化参数增量 2、图像自适应修正滤波允许标志</p>
+</li>
+<li>
+<p>帧间预测图像头</p>
+<p>帧间预测图像起始码、随机访问正确解码标志、图像编码方式、活跃参考图像数重载标志、活跃参考图像数、仿射预测子块尺寸标志</p>
+</li>
+<li>
+<p>片</p>
+<p>片起始码、固定片量化银子标志、片量化因子、片样值偏移补偿允许标志、高级熵编码字节对齐填充位、最大编码单元量化参数增量、样值偏移补偿合并方式索引、样值偏移补偿模式、样值偏移补偿区间模式偏移绝对值、样值偏移补偿区间模式偏移值符号值、样值偏移补偿区间模式起始偏移子区间位置、样值偏移补偿区间模式起始偏移子区间位置差、样值偏移补偿模式偏移值、样值偏移补偿边缘模式类型、最大编码单元自适应修正滤波允许标志、熵编码最大编码单元填充位、片结束码</p>
+</li>
+</ul>
+<h3 id="编码树">编码树</h3>
+<p>四叉树划分标志、编码单元预测模式、二叉树扩展四叉树划分标志、二叉树扩展四叉树划分类型标志、二叉树扩展四叉树划分方向标志</p>
+<h3 id="编码单元">编码单元</h3>
+<p>跳过模式标志、高级运动矢量表达模式标志、仿射模式标志、直接模式标志、帧内编码单元标志、基础运动矢量索引、运动矢量偏移量索引、运动矢量方向索引、仿射运动矢量索引、衍生模式划分标志、衍生模式划分方向、水平四叉衍生模式划分标志、垂直四叉衍生模式划分标志、水平非对称衍生模式标志、仿射自适应运动矢量精度索引、自适应运动矢量精度索引、编码单元子类型索引、预测参考模式、对称运动矢量差标志、运动矢量精度扩展模式标识、帧内亮度预测模式、帧内色度预测模式、帧内预测滤波标志、L0 预测单元参考索引、L0 运动矢量水平分量差绝对值、L0 运动矢量垂直分量差绝对值、L0 运动矢量水平分量差符号值、L0 运动矢量垂直分量差符号值、仿射帧间模式L0 运动矢量水平分量差绝对值、仿射帧间模式 L0 运动矢量垂直分量差绝对值、仿射帧间模式 L0 运动矢量水平分量差符号值、仿射帧间模式 L0 运动矢量垂直分量差符号值、L1&hellip;、变换块系数标志、基于位置的变换块标志、Cb 变换块编码模板、Cr 变换块编码模板、亮度变换块编码模板</p>
+</div>
+	</section>
+
+
+</article>
+
+		</main>
+		<div class="w-full h-0 flex-none order-3"></div>
+		<aside role="contentinfo"
+			class="w-full md:w-2/5 xl:w-1/2 md:pr-12 lg:pr-20 xl:pr-24 order-4 md:order-3 md:sticky md:bottom-0 self-end max-w-2xl">
+			<div class="md:float-right md:text-right leading-loose tracking-tight md:mb-2">
+				
+	<div class="md:max-w-xs  flex flex-col md:items-end">
+	<ul class="font-serif flex-grow-0 flex justify-between flex-wrap md:flex-col">
+	
+	
+	<li class="px-1 md:px-0">
+		<a href="/post/" title="归档 page" 
+			class="font-medium text-medium-red-violet-600 hover:text-medium-red-violet-400" >
+			归档
+		</a>
+	</li>
+	
+	<li class="px-1 md:px-0">
+		<a href="/categories/" title="分类 page" >
+			分类
+		</a>
+	</li>
+	
+	<li class="px-1 md:px-0">
+		<a href="/tags/" title="标签 page" >
+			标签
+		</a>
+	</li>
+	
+	<li class="px-1 md:px-0">
+		<a href="/about/" title="关于 page" >
+			关于
+		</a>
+	</li>
+	
+	
+	
+	
+	<div id="fastSearch" class="m-0">
+		<input id="searchInput" type="text" size=10 
+			class="bg-gray-100 focus:outline-none border-b border-gray-100 focus:border-eucalyptus-300 md:text-right
+			placeholder-java-500 min-w-0 max-w-xxxs"
+			placeholder="search" />
+		<ul id="searchResults" class="bg-gray-200 px-2 divide-y divide-gray-400">
+		</ul>
+	</div>
+	
+</ul>
+	
+
+<div class="flex flex-wrap-reverse md:justify-end content-end md:content-start justify-start items-start   max-h-16">
+	
+</div>
+	<div class="text-sm text-gray-500 leading-tight a-gray">
+		© Faye
+		<br />
+		Built with Hugo and theme <a href="https://github.com/heyeshuang/hugo-theme-tokiwa">Tokiwa</a>. 2158 words in this page.
+	</div>
+</div>
+
+			</div>
+		</aside>
+		<footer class="w-full md:w-3/5 xl:w-1/2 order-3 max-w-3xl md:order-4 pt-2">
+			
+<hr class="double-line" />
+<div class="flex flex-wrap justify-between pb-2 leading-loose font-serif">
+    
+    <a class="flex-grow-0" href="/post/prediction-coding/">
+        <svg class="fill-current inline-block h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24"
+            height="24">
+            <path fill="none" d="M0 0h24v24H0z" />
+            <path d="M7.828 11H20v2H7.828l5.364 5.364-1.414 1.414L4 12l7.778-7.778 1.414 1.414z" /></svg>
+        H.265/HEVC 预测编码 笔记
+    </a>
+    
+    
+    <a class="flex-grow-0" href="/post/image-quality-evaluation-metrics/">
+        图像质量评价指标(MSE, PSNR, MS-SSIM)
+        <svg class="fill-current inline-block h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24"
+            height="24">
+            <path fill="none" d="M0 0h24v24H0z" />
+            <path d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z" /></svg></a>
+    
+</div>
+<div >
+
+
+
+<div class="font-serif pb-2 flex align-start leading-loose">
+	<span class="heading pr-6 leading-loose">Related</span>
+	<span >
+		
+			<a href="/post/prediction-coding/">H.265/HEVC 预测编码 笔记</a>&nbsp;&nbsp;&#47;&nbsp;
+		
+			<a href="/post/video-coding-structure/">H.265/HEVC 编码结构 笔记</a>&nbsp;&nbsp;&#47;&nbsp;
+		
+			<a href="/post/multimedia-basics/">多媒体基础知识</a>
+		
+</span>
+</div>
+
+</div>
+<hr />
+<div class="pb-2">
+    <div id="disqus_thread"></div>
+<script type="application/javascript">
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "faye" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+<hr />
+
+		</footer>
+		
+
+<script src="/dist/app.js"></script>
+
+
+<script src="/lib/fuse.min.js"></script> 
+<script src="/lib/fastsearch.js"></script>
+
+	</div>
+</body>
+
+</html>

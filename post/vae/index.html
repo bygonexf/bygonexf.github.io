@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="cn">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	
+	<title>风巷  | 耶，VAE</title>
+	<meta name="viewport" content="width=device-width,minimum-scale=1">
+	<meta name="generator" content="Hugo 0.105.0">
+	
+	
+	<META NAME="ROBOTS" CONTENT="INDEX, FOLLOW">
+	
+
+	
+	
+	<link href="/dist/app.css" rel="stylesheet">
+	
+
+	
+
+	
+	
+<link rel="shortcut icon" href="img/wind.png" type="image/png" />
+
+	
+
+	
+	
+	
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-FAKE', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+	
+	
+	
+
+
+
+<link rel="stylesheet" href='https://imfaye.me/lib/katex.min.css' crossorigin="anonymous">
+
+
+<script defer src='https://imfaye.me/lib/katex.min.js' crossorigin="anonymous"></script>
+
+
+<script defer src='https://imfaye.me/lib/contrib/auto-render.min.js'
+crossorigin="anonymous"
+onload='renderMathInElement(document.body);'></script>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement(document.body, {
+            delimiters: [
+                {left: "$$", right: "$$", display: true},
+                {left: "$", right: "$", display: false}
+            ]
+        });
+    });
+</script>
+
+	
+	
+	
+	<script>
+		(function (u, c) {
+			var d = document,
+				t = 'script',
+				o = d.createElement(t),
+				s = d.getElementsByTagName(t)[0];
+			o.src = u;
+			if (c) {
+				o.addEventListener('load', function (e) {
+					c(e);
+				});
+			}
+			s.parentNode.insertBefore(o, s);
+		})('https:\/\/imfaye.me\/lib\/pangu.min.js', function () {
+			pangu.spacingPage();
+		});
+	</script>
+	
+	
+	
+	<style type="text/css" media="screen, print">
+		@font-face {
+			font-family: "FancyTitleFont";
+			font-style: normal;
+			font-display: swap;
+			src: url('https://imfaye.me/fonts/exampleFont.woff2') format('woff2'),
+				url('https://imfaye.me/fonts/exampleFont.woff') format('woff');
+		}
+		 
+		  
+		 
+		@font-face {
+			font-family: 'Noto Serif CJK SC';
+			font-style: normal;
+			font-weight: 300;
+			font-display: swap;
+			src: local('Noto Serif CJK SC Light'), local('NotoSerifCJK-Light'),
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-300.woff2') format('woff2'),
+				 
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-300.woff') format('woff');
+			 
+		}
+
+		 
+		@font-face {
+			font-family: 'Noto Serif CJK SC';
+			font-style: normal;
+			font-weight: 400;
+			font-display: swap;
+			src: local('Noto Serif CJK SC'), local('NotoSerifCJK-Regular'),
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-regular.woff2') format('woff2'),
+				 
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-regular.woff') format('woff');
+			 
+		}
+
+		 
+		@font-face {
+			font-family: 'Noto Serif CJK SC';
+			font-style: normal;
+			font-weight: 500;
+			font-display: swap;
+			src: local('Noto Serif CJK SC Medium'), local('NotoSerifCJK-Medium'),
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-500.woff2') format('woff2'),
+				 
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-500.woff') format('woff');
+			 
+		}
+	</style>
+	
+</head>
+
+<body class="bg-gray-100 text-gray-700 font-sans">
+	<div class="p-6 sm:p-10 md:p-16 flex flex-wrap">
+		<header class="w-full md:w-2/5 xl:w-1/2 md:pr-12 lg:pr-20 xl:pr-24 order-1 md:order-1 max-w-2xl">
+			<div
+				class="z-50 bg-gray-100 bg-opacity-75 bg-opacity-custom lg:min-w-0.7 max-w-xl md:float-right md:text-right leading-loose tracking-tight md:sticky md:top-0 pt-2">
+				
+<div>
+	<h2>
+		<a href="https://imfaye.me/" title="风巷" class="heading font-cursive icon">风巷</a>
+	</h2>
+</div>
+<h1 class="pt-2">耶，VAE</h1>
+
+<h3 class="text-java-700 font-normal leading-relaxed pt-2">理顺变分自编码器</h3>
+
+<div class="flex flex-wrap justify-end pt-2 "><div class="md:flex-grow-0 font-light">
+	
+	
+	
+	
+	<a class="post-taxonomy-category text-medium-red-violet-600 hover:text-medium-red-violet-400"
+		href='/categories/%E6%9C%89%E6%83%85%E7%AC%94%E8%AE%B0'>有情笔记</a>
+	
+	
+	
+
+	
+
+	
+</div><time class="text-eucalyptus-500 md:text-right md:flex-grow font-light pl-4"
+		datetime="2022-02-10T23:43:59Z">2022-2-10</time>
+</div>
+
+<details class="toc" open>
+<summary>
+    <hr />
+</summary>
+<div class="inline toc-content">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#生成模型">生成模型</a></li>
+    <li><a href="#自编码器-ae">自编码器 AE</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#p_thetax-推导">$p_\theta(X)$ 推导</a></li>
+    <li><a href="#variational-lower-bound-的直观解释">Variational Lower Bound 的直观解释</a></li>
+    <li><a href="#vae-架构">VAE 架构</a></li>
+    <li><a href="#stochastic-gradient-optimization-of-vlb">Stochastic Gradient Optimization of VLB</a></li>
+  </ul>
+</nav>
+</div>
+</details>
+
+<hr />
+
+
+			</div>
+		</header>
+		<main role="main" class="w-full md:w-3/5 xl:w-1/2 max-w-3xl order-2 md:order-2 min-h-70vh pt-2 pb-4">
+			
+
+<article>
+	<section class="mx-auto content">
+		<div class="c-rich-text"><h1 id="引子">引子</h1>
+<h2 id="生成模型">生成模型</h2>
+<p>能从可学习的概率分布中采样得到样本的模型。</p>
+<p>在一些生成模型中，样本通过将随机的隐层变量送入网络生成得到。</p>
+<p><img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/image-20220727234631635.png" alt=""></p>
+<h2 id="自编码器-ae">自编码器 AE</h2>
+<p>自编码器通过学习从输入到隐层和从隐层到输出的映射来重建信号/图像。</p>
+<p>目标：$X&rsquo; = D_\theta(E_\phi(X)) \approx X$</p>
+<p>$\mathop{min}\limits_{\theta, \phi} \sum\limits_{i=1}^n||D_\theta(E_\phi(X_i))-X_i||^2$，其中 ${{X_i}}_{i=1\cdots n}$ 为数据集。</p>
+<p>自编码器并不是一种生成模型，因为它并没有定义一个概率分布，无法采样。</p>
+<p><strong>自编码器 → 生成模型？</strong></p>
+<p>我们会有一个很自然的做生成模型的想法，那就是训练一个从低维隐层变量生成观测样本的生成模型，最大化观测数据似然。</p>
+<p>假设这个生成模型为 $G_{\theta}:\mathbb{R}^k \rightarrow \mathbb{R}^d$，其中 $k &lt; d$，将隐层变量 $Z$ 映射为样本 $X$，那么其实在样本空间里几乎大部分区域 $p(X)=0$。</p>
+<p><img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/image-20220727234646078.png" alt=""></p>
+<p>如果我们从样本空间看，在这个高维空间只会有非常小的一个低维空间子集 $p(X)$ 是有值的，并且我们在训练的时候其实是不知道这个子集的分布的，而其余大部分区域 $p(X)=0$，也就意味着我们很难直接优化似然。</p>
+<p>但是有一种方法可以让我们在每一处都得到非零值，那就是在已有先验 $p(Z)$ 的条件下，定义一个有噪声的观测模型 $p_\theta(X|Z)=\mathcal{N}(X;G_\theta(Z), \eta I)$ (其中 $\eta$ 是可调整的参数，$I$ 是单位矩阵)。</p>
+<p>所以 $p(X) = \int p(Z)p(X|Z)\mathrm{d}Z$，这个值也很难去计算，所以我们不是去优化 $p(X)$ 而是去优化 $p(X)$ 的下限（变分推断里的证据下限 ELBO，后面会证明）。</p>
+<p>那么这其实就是 VAE 的雏形了。</p>
+<h1 id="变分自编码器-vae">变分自编码器 VAE</h1>
+<p><img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/image-20220727234659598.png" alt=""></p>
+<p>上面的图是 VAE 的整体思路，生成的部分也是也就是 decoder 的部分，我们会假设 $Z$ 服从一个简单的先验分布 $p(Z)$，这个分布可以是一个标准正态分布。通过 decoder 会得到高维图像空间的<strong>一个概率分布</strong>。</p>
+<p>而 encoder 端，注意 VAE 有一个很重要的想法是，我们不去直接计算难以计算的 $p_\theta(Z|X)$，而是用另外单独学习的网络去模拟一个 $q_\phi(Z|X)$，它其实是 $p_\theta(Z|X)$ 的一个近似。</p>
+<h2 id="p_thetax-推导">$p_\theta(X)$ 推导</h2>
+<p><img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/image-20220727234713512.png" alt=""></p>
+<p>再看一下 $p_\theta(X)$  下界的推导过程。①：因为 $p_\theta(X)$ 是独立于 $Z$ 的，所以我们可以去计算它在 $Z$ 上的期望；②：条件概率公式；③：上下约一个 $q_\phi(Z|X)$；④：右边的项其实就是 $q_\phi(Z|X)$ 和 $p_\theta(Z|X)$ 的 KL 散度，KL 散度衡量的是两个概率分布之间的相似性，两者差异越小，KL 散度越小，两分布完全一致时 KL 散度才为 0，所以因为右项恒大于等于 0，我们可以把左项视为 $log\space p_\theta(X)$ 的下界。之后就不直接优化 $log\space p_\theta(X)$，而是优化这个下界。</p>
+<h2 id="variational-lower-bound-的直观解释">Variational Lower Bound 的直观解释</h2>
+<p><img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/image-20220727234726362.png" alt=""></p>
+<p>再来看一下怎么理解这个变分下界，注意我们的目标是最大化这个下界。首先用条件概率公式替换一下，之后把式子拆成两部分，下面来解释一下为什么第一项是重建误差，第二项是正则项。</p>
+<p><img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/image-20220727234737121.png" alt=""></p>
+<p>之前说了我们建立了一个有噪声的观测模型 $p_\theta(X|Z)=\mathcal{N}(X;G_\theta(Z), \eta I)$ (就是 $Z$ 通过 decoder 后得到的那个高维图像空间的分布)，正态分布的公式不用说了吧，代入一下就会发现第一项是一个 L2 距离，最大化这个负的 L2 距离就是在减小重建误差，encourage $q_\phi$ to be point mass，这句话我是这么理解的，point mass 其实是离散的概率分布，减小重建误差就是在消除我们加的这个高斯噪声，让它成为类似于我们最先讲的那个被舍弃的点到点的离散概率模型（但注意它又是连续概率，所以就是接近奇异分布？）。</p>
+<p><img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/image-20220727234745973.png" alt=""></p>
+<p>再看第二项，这一项可以写成一个 KL 散度，我们最大化负的这个 KL 散度就是在让 $q_\phi(Z|X)$ 和 $p(Z)$ 两个概率分布尽可能接近。上一项重建损失是鼓励 $q_\phi$ 去成为 point mass，这里则是平滑 $q_\phi$ 去使它尽可能接近标准正态分布。</p>
+<p>可以看到两项之间存在相驳的张力，前一项试图让 $q_\phi$ 成为奇异分布，后一项则试图让 $q_\phi$ 不要成为奇异分布。可以理解为前者鼓励它准，后者鼓励它具有更强的生成性。</p>
+<h2 id="vae-架构">VAE 架构</h2>
+<p><img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/image-20220727234755246.png" alt=""></p>
+<p>再来看一下 VAE 的实际架构。主要有两点值得细说。</p>
+<p>第一点是，如果我们对每个 $X_i$ 找最最佳的 $q_\phi(Z|X_i)$，然后优化 $\phi$，这样的更新代价会很大。所以我们不这么做，而是去学习一个 inference 网络预测这个 $q_\phi(Z|X_i)$ 的均值和方差（实际上预测的是  $\mu$ 和 $log \space \sigma$），这样 inference 阶段的模型参数对于所有的数据参数是共享的，就可以分摊学习和更新的成本。</p>
+<p>第二点是，采样的操作本身是不能反向传播的，所以采样这里用到了重参数化的技巧，也就是从 $\mathcal{N}(0,1)$ 中采样一个 $\varepsilon$，然后让 $Z=\mu + \varepsilon \times \sigma$，这样采样的操作就可以独立于网络之外，其他所有环节都能进行反向传播。</p>
+<h2 id="stochastic-gradient-optimization-of-vlb">Stochastic Gradient Optimization of VLB</h2>
+<p>Todo…</p>
+<h1 id="参考">参考</h1>
+<p><a href="https://khoury.northeastern.edu/home/hand/teaching/cs7150-summer-2020/Variational_Autoencoders.pdf">https://khoury.northeastern.edu/home/hand/teaching/cs7150-summer-2020/Variational_Autoencoders.pdf</a></p>
+<p><a href="https://www.youtube.com/watch?v=c27SHdQr4lw">https://www.youtube.com/watch?v=c27SHdQr4lw</a> （力荐 👍）</p>
+</div>
+	</section>
+
+
+</article>
+
+		</main>
+		<div class="w-full h-0 flex-none order-3"></div>
+		<aside role="contentinfo"
+			class="w-full md:w-2/5 xl:w-1/2 md:pr-12 lg:pr-20 xl:pr-24 order-4 md:order-3 md:sticky md:bottom-0 self-end max-w-2xl">
+			<div class="md:float-right md:text-right leading-loose tracking-tight md:mb-2">
+				
+	<div class="md:max-w-xs  flex flex-col md:items-end">
+	<ul class="font-serif flex-grow-0 flex justify-between flex-wrap md:flex-col">
+	
+	
+	<li class="px-1 md:px-0">
+		<a href="/post/" title="归档 page" 
+			class="font-medium text-medium-red-violet-600 hover:text-medium-red-violet-400" >
+			归档
+		</a>
+	</li>
+	
+	<li class="px-1 md:px-0">
+		<a href="/categories/" title="分类 page" >
+			分类
+		</a>
+	</li>
+	
+	<li class="px-1 md:px-0">
+		<a href="/tags/" title="标签 page" >
+			标签
+		</a>
+	</li>
+	
+	<li class="px-1 md:px-0">
+		<a href="/about/" title="关于 page" >
+			关于
+		</a>
+	</li>
+	
+	
+	
+	
+	<div id="fastSearch" class="m-0">
+		<input id="searchInput" type="text" size=10 
+			class="bg-gray-100 focus:outline-none border-b border-gray-100 focus:border-eucalyptus-300 md:text-right
+			placeholder-java-500 min-w-0 max-w-xxxs"
+			placeholder="search" />
+		<ul id="searchResults" class="bg-gray-200 px-2 divide-y divide-gray-400">
+		</ul>
+	</div>
+	
+</ul>
+	
+
+<div class="flex flex-wrap-reverse md:justify-end content-end md:content-start justify-start items-start   max-h-16">
+	
+</div>
+	<div class="text-sm text-gray-500 leading-tight a-gray">
+		© Faye
+		<br />
+		Built with Hugo and theme <a href="https://github.com/heyeshuang/hugo-theme-tokiwa">Tokiwa</a>. 1770 words in this page.
+	</div>
+</div>
+
+			</div>
+		</aside>
+		<footer class="w-full md:w-3/5 xl:w-1/2 order-3 max-w-3xl md:order-4 pt-2">
+			
+<hr class="double-line" />
+<div class="flex flex-wrap justify-between pb-2 leading-loose font-serif">
+    
+    <a class="flex-grow-0" href="/post/entropy-coding/">
+        <svg class="fill-current inline-block h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24"
+            height="24">
+            <path fill="none" d="M0 0h24v24H0z" />
+            <path d="M7.828 11H20v2H7.828l5.364 5.364-1.414 1.414L4 12l7.778-7.778 1.414 1.414z" /></svg>
+        关于熵编码
+    </a>
+    
+    
+    <a class="flex-grow-0" href="/about/">
+        关于我
+        <svg class="fill-current inline-block h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24"
+            height="24">
+            <path fill="none" d="M0 0h24v24H0z" />
+            <path d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z" /></svg></a>
+    
+</div>
+<div >
+
+
+
+</div>
+<hr />
+<div class="pb-2">
+    <div id="disqus_thread"></div>
+<script type="application/javascript">
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "faye" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+<hr />
+
+		</footer>
+		
+
+<script src="/dist/app.js"></script>
+
+
+<script src="/lib/fuse.min.js"></script> 
+<script src="/lib/fastsearch.js"></script>
+
+	</div>
+</body>
+
+</html>

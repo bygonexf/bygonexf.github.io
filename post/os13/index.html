@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="cn">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	
+	<title>风巷  | 操作系统笔记 CH13 I/O Systems</title>
+	<meta name="viewport" content="width=device-width,minimum-scale=1">
+	<meta name="generator" content="Hugo 0.105.0">
+	
+	
+	<META NAME="ROBOTS" CONTENT="INDEX, FOLLOW">
+	
+
+	
+	
+	<link href="/dist/app.css" rel="stylesheet">
+	
+
+	
+
+	
+	
+<link rel="shortcut icon" href="img/wind.png" type="image/png" />
+
+	
+
+	
+	
+	
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-FAKE', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+	
+	
+	
+
+
+
+<link rel="stylesheet" href='https://imfaye.me/lib/katex.min.css' crossorigin="anonymous">
+
+
+<script defer src='https://imfaye.me/lib/katex.min.js' crossorigin="anonymous"></script>
+
+
+<script defer src='https://imfaye.me/lib/contrib/auto-render.min.js'
+crossorigin="anonymous"
+onload='renderMathInElement(document.body);'></script>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement(document.body, {
+            delimiters: [
+                {left: "$$", right: "$$", display: true},
+                {left: "$", right: "$", display: false}
+            ]
+        });
+    });
+</script>
+
+	
+	
+	
+	<script>
+		(function (u, c) {
+			var d = document,
+				t = 'script',
+				o = d.createElement(t),
+				s = d.getElementsByTagName(t)[0];
+			o.src = u;
+			if (c) {
+				o.addEventListener('load', function (e) {
+					c(e);
+				});
+			}
+			s.parentNode.insertBefore(o, s);
+		})('https:\/\/imfaye.me\/lib\/pangu.min.js', function () {
+			pangu.spacingPage();
+		});
+	</script>
+	
+	
+	
+	<style type="text/css" media="screen, print">
+		@font-face {
+			font-family: "FancyTitleFont";
+			font-style: normal;
+			font-display: swap;
+			src: url('https://imfaye.me/fonts/exampleFont.woff2') format('woff2'),
+				url('https://imfaye.me/fonts/exampleFont.woff') format('woff');
+		}
+		 
+		  
+		 
+		@font-face {
+			font-family: 'Noto Serif CJK SC';
+			font-style: normal;
+			font-weight: 300;
+			font-display: swap;
+			src: local('Noto Serif CJK SC Light'), local('NotoSerifCJK-Light'),
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-300.woff2') format('woff2'),
+				 
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-300.woff') format('woff');
+			 
+		}
+
+		 
+		@font-face {
+			font-family: 'Noto Serif CJK SC';
+			font-style: normal;
+			font-weight: 400;
+			font-display: swap;
+			src: local('Noto Serif CJK SC'), local('NotoSerifCJK-Regular'),
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-regular.woff2') format('woff2'),
+				 
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-regular.woff') format('woff');
+			 
+		}
+
+		 
+		@font-face {
+			font-family: 'Noto Serif CJK SC';
+			font-style: normal;
+			font-weight: 500;
+			font-display: swap;
+			src: local('Noto Serif CJK SC Medium'), local('NotoSerifCJK-Medium'),
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-500.woff2') format('woff2'),
+				 
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-500.woff') format('woff');
+			 
+		}
+	</style>
+	
+</head>
+
+<body class="bg-gray-100 text-gray-700 font-sans">
+	<div class="p-6 sm:p-10 md:p-16 flex flex-wrap">
+		<header class="w-full md:w-2/5 xl:w-1/2 md:pr-12 lg:pr-20 xl:pr-24 order-1 md:order-1 max-w-2xl">
+			<div
+				class="z-50 bg-gray-100 bg-opacity-75 bg-opacity-custom lg:min-w-0.7 max-w-xl md:float-right md:text-right leading-loose tracking-tight md:sticky md:top-0 pt-2">
+				
+<div>
+	<h2>
+		<a href="https://imfaye.me/" title="风巷" class="heading font-cursive icon">风巷</a>
+	</h2>
+</div>
+<h1 class="pt-2">操作系统笔记 CH13 I/O Systems</h1>
+
+<div class="flex flex-wrap justify-end pt-2 "><div class="md:flex-grow-0 font-light">
+	
+	
+	
+	
+	<a class="post-taxonomy-category text-medium-red-violet-600 hover:text-medium-red-violet-400"
+		href='/categories/%E6%97%A0%E6%83%85%E7%AC%94%E8%AE%B0'>无情笔记</a>
+	
+	
+	
+
+	
+	&nbsp;&nbsp;
+	
+
+	
+	
+	
+	
+	<a class="post-taxonomy-tag text-eucalyptus-500"
+		href='/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F'>操作系统</a>&nbsp;&#47;
+	
+	<a class="post-taxonomy-tag text-eucalyptus-500"
+		href='/tags/%E5%A4%A7%E6%98%8E%E6%B9%96%E7%95%94%E7%9A%84%E4%B8%93%E4%B8%9A%E8%AF%BE'>大明湖畔的专业课</a>
+	
+	
+	
+</div><time class="text-eucalyptus-500 md:text-right md:flex-grow font-light pl-4"
+		datetime="2020-02-28T13:13:24Z">2020-2-28</time>
+</div>
+
+<details class="toc" open>
+<summary>
+    <hr />
+</summary>
+<div class="inline toc-content">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#io-硬件">IO 硬件</a>
+      <ul>
+        <li><a href="#polling-轮询">polling 轮询</a></li>
+        <li><a href="#interrupts">interrupts</a></li>
+        <li><a href="#dma">DMA</a></li>
+      </ul>
+    </li>
+    <li><a href="#io应用接口">IO应用接口</a>
+      <ul>
+        <li><a href="#块与字符设备">块与字符设备</a></li>
+        <li><a href="#网络设备">网络设备</a></li>
+        <li><a href="#clocks-and-timers">clocks and timers</a></li>
+        <li><a href="#blocking-io-and-nonblocking-io">Blocking I/O and Nonblocking I/O</a></li>
+      </ul>
+    </li>
+    <li><a href="#kernel-io-subsystem">Kernel I/O Subsystem</a>
+      <ul>
+        <li><a href="#io-scheduling">IO scheduling</a></li>
+        <li><a href="#buffering">buffering</a></li>
+        <li><a href="#caching">caching</a></li>
+        <li><a href="#spooling假脱机--device-reservation">Spooling假脱机 &amp; Device reservation</a></li>
+        <li><a href="#error-handling">error handling</a></li>
+        <li><a href="#io-protection">IO protection</a></li>
+        <li><a href="#内核数据结构">内核数据结构</a></li>
+      </ul>
+    </li>
+    <li><a href="#把io操作转换成硬件操作">把IO操作转换成硬件操作</a></li>
+  </ul>
+</nav>
+</div>
+</details>
+
+<hr />
+
+
+			</div>
+		</header>
+		<main role="main" class="w-full md:w-3/5 xl:w-1/2 max-w-3xl order-2 md:order-2 min-h-70vh pt-2 pb-4">
+			
+
+<article>
+	<section class="mx-auto content">
+		<div class="c-rich-text"><p>the kernel is structured to use device-driver modules.</p>
+<p>device driver为IO子系统提供了统一设备访问接口</p>
+<p>两个趋势：接口日益标准化，设备多样性</p>
+<h2 id="io-硬件">IO 硬件</h2>
+<p>port</p>
+<p>bus</p>
+<p>controller</p>
+<p>Controller usually have registers, where device driver places commands, addresses, and data to write, or read data from registers after command execution. Data-in register, data-out register, status register, control register</p>
+<p>设备有地址</p>
+<ul>
+<li>
+<p>Direct I/O instructions</p>
+</li>
+<li>
+<p>Memory-mapped I/O 内存映射IO</p>
+<p>设备控制寄存器 被映射到 处理器的地址空间</p>
+<p>Especially for large address spaces (graphics)</p>
+</li>
+</ul>
+<p>IO端口有4种寄存器：</p>
+<ul>
+<li>status</li>
+<li>control</li>
+<li>data-in</li>
+<li>data-out</li>
+</ul>
+<p>Techniques for Performing I/O</p>
+<ul>
+<li>Programmed I/O</li>
+<li>Interrupt-driven I/O</li>
+<li>Direct Memory Access (DMA)</li>
+</ul>
+<h3 id="polling-轮询">polling 轮询</h3>
+<p>控制器通过状态寄存器的busy bit显示其状态</p>
+<p>主机通过命令寄存器中的command-ready bit表示其意愿</p>
+<p>busy-waiting / polling 主机不断读状态寄存器直到忙位被清除</p>
+<p>Polling can happen in 3 instruction cycles, Read status, logical-and to extract status bit, branch if not zero</p>
+<h3 id="interrupts">interrupts</h3>
+<p>Interrupt-request line</p>
+<p>Interrupt handler receives interrupts. Maskable to ignore or delay some interrupts</p>
+<p>Interrupt vector to dispatch interrupt to correct handler</p>
+<p>中断向量：中断处理程序的内存地址</p>
+<p>计算机设备比向量内地址多。interrupt chaining 中断向量内的每个元素都指向中断处理程序列表的头</p>
+<p>实现了中断优先级</p>
+<p>Interrupt mechanism also used for exceptions</p>
+<p>Good uses: system calls, page fault</p>
+<p>Used for time-sensitive processing, frequent, must be fast.</p>
+<h3 id="dma">DMA</h3>
+<p>Requires DMA controller, a special-purpose processor.</p>
+<p>Bypasses CPU to transfer data directly between I/O device and memory.</p>
+<p>Host writes a DMA command block into memory.</p>
+<p>CPU writes the address of this command block to the DMA controller.</p>
+<p>DMA controller operates the memory bus directly, placing address on the bus to perform transfers.</p>
+<p>When the entire transfer is finished, the DMA controller interrupts the CPU.</p>
+<p>Handshaking between the DMA controller and the device controller:</p>
+<p>​	performed via a pair of wires called DMA-request and DMA-acknowledge.</p>
+<p>DMA控制器抓住内存总线时，CPU暂时不能访问主存，但可以访问一级或二级高速缓存中的数据项。</p>
+<p>周期挪用cycle stealing可能放慢CPU计算，但数据传输工作交给DMA控制器改善整体性能</p>
+<p>DVMA (direct virtual memory access) can perform a transfer between two memory-mapped devices
+without the intervention of the CPU or the use of main memory. 直接实现两个内存映射设备之间的传输，无需CPU的干涉或使用主存</p>
+<h2 id="io应用接口">IO应用接口</h2>
+<p>设备驱动程序层device-driver layer为内核IO子系统隐藏设备控制器之间的差异</p>
+<p>Broadly I/O devices can be grouped by the OS into</p>
+<ul>
+<li>block IO</li>
+<li>character-stream IO</li>
+<li>memory-mapped file access</li>
+<li>network sockets</li>
+</ul>
+<p>OS存在后门(escape / back door)，允许应用程序将任何命令透明地传输到设备控制器</p>
+<p>Unix ioctl()</p>
+<h3 id="块与字符设备">块与字符设备</h3>
+<h4 id="block-devices">Block devices</h4>
+<p>include disk drives</p>
+<p>Commands include read(), write(), seek()</p>
+<p>Raw I/O, direct I/O, or file-system access</p>
+<p>Memory-mapped file access possible</p>
+<p>DMA</p>
+<h4 id="character-devices">Character devices</h4>
+<p>include keyboards, mice, serial ports</p>
+<p>Commands include get(), put()</p>
+<h3 id="网络设备">网络设备</h3>
+<p>The socket interface, Linux, Unix and Windows</p>
+<p>Includes select functionality: manages a set of sockets</p>
+<h3 id="clocks-and-timers">clocks and timers</h3>
+<p>Provide current time, elapsed time, timer</p>
+<p>Programmable interval timer used for timings, periodic interrupts.</p>
+<h3 id="blocking-io-and-nonblocking-io">Blocking I/O and Nonblocking I/O</h3>
+<p>Blocking - process suspended until I/O completed</p>
+<p>Nonblocking - I/O call returns as much as available</p>
+<p>Asynchronous - process runs while I/O executes 不必等待IO完成就可立即返回</p>
+<h2 id="kernel-io-subsystem">Kernel I/O Subsystem</h2>
+<h3 id="io-scheduling">IO scheduling</h3>
+<p>为每个设备维护一个请求队列</p>
+<h3 id="buffering">buffering</h3>
+<p>保存两个设备之间 或 设备和应用程序之间 所传输数据的内存区域</p>
+<h3 id="caching">caching</h3>
+<p>高速缓存是可以保留数据副本的高速存储器</p>
+<p>buffer可能是数据的唯一副本，而cache只是提供了一个 驻留在其他地方的数据 在高速存储上的一个副本</p>
+<p>有时同一内存区域可同时用作cache和buffer</p>
+<h3 id="spooling假脱机--device-reservation">Spooling假脱机 &amp; Device reservation</h3>
+<p>Spooling - hold output for a device</p>
+<p>Device reservation( 预约) - provides exclusive access to a device</p>
+<h3 id="error-handling">error handling</h3>
+<p>Most return an error number or code when I/O request fails.</p>
+<p>System error logs hold problem reports</p>
+<h3 id="io-protection">IO protection</h3>
+<p>所有IO指令为特权指令</p>
+<p>IO必须通过system call执行</p>
+<h3 id="内核数据结构">内核数据结构</h3>
+<p>Kernel keeps state information for I/O components, including open file tables, network connections, character device state.</p>
+<p>Many complex data structures to track buffers, memory allocation, “dirty” blocks.</p>
+<p>Some use object-oriented methods and message passing to implement I/O.</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577522127902.png" style="zoom:50%;" />
+<h2 id="把io操作转换成硬件操作">把IO操作转换成硬件操作</h2>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577522223439.png" style="zoom:50%;" /></div>
+	</section>
+
+
+</article>
+
+		</main>
+		<div class="w-full h-0 flex-none order-3"></div>
+		<aside role="contentinfo"
+			class="w-full md:w-2/5 xl:w-1/2 md:pr-12 lg:pr-20 xl:pr-24 order-4 md:order-3 md:sticky md:bottom-0 self-end max-w-2xl">
+			<div class="md:float-right md:text-right leading-loose tracking-tight md:mb-2">
+				
+	<div class="md:max-w-xs  flex flex-col md:items-end">
+	<ul class="font-serif flex-grow-0 flex justify-between flex-wrap md:flex-col">
+	
+	
+	<li class="px-1 md:px-0">
+		<a href="/post/" title="归档 page" 
+			class="font-medium text-medium-red-violet-600 hover:text-medium-red-violet-400" >
+			归档
+		</a>
+	</li>
+	
+	<li class="px-1 md:px-0">
+		<a href="/categories/" title="分类 page" >
+			分类
+		</a>
+	</li>
+	
+	<li class="px-1 md:px-0">
+		<a href="/tags/" title="标签 page" >
+			标签
+		</a>
+	</li>
+	
+	<li class="px-1 md:px-0">
+		<a href="/about/" title="关于 page" >
+			关于
+		</a>
+	</li>
+	
+	
+	
+	
+	<div id="fastSearch" class="m-0">
+		<input id="searchInput" type="text" size=10 
+			class="bg-gray-100 focus:outline-none border-b border-gray-100 focus:border-eucalyptus-300 md:text-right
+			placeholder-java-500 min-w-0 max-w-xxxs"
+			placeholder="search" />
+		<ul id="searchResults" class="bg-gray-200 px-2 divide-y divide-gray-400">
+		</ul>
+	</div>
+	
+</ul>
+	
+
+<div class="flex flex-wrap-reverse md:justify-end content-end md:content-start justify-start items-start   max-h-16">
+	
+</div>
+	<div class="text-sm text-gray-500 leading-tight a-gray">
+		© Faye
+		<br />
+		Built with Hugo and theme <a href="https://github.com/heyeshuang/hugo-theme-tokiwa">Tokiwa</a>. 1116 words in this page.
+	</div>
+</div>
+
+			</div>
+		</aside>
+		<footer class="w-full md:w-3/5 xl:w-1/2 order-3 max-w-3xl md:order-4 pt-2">
+			
+<hr class="double-line" />
+<div class="flex flex-wrap justify-between pb-2 leading-loose font-serif">
+    
+    <a class="flex-grow-0" href="/post/os12/">
+        <svg class="fill-current inline-block h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24"
+            height="24">
+            <path fill="none" d="M0 0h24v24H0z" />
+            <path d="M7.828 11H20v2H7.828l5.364 5.364-1.414 1.414L4 12l7.778-7.778 1.414 1.414z" /></svg>
+        操作系统笔记 CH12 Mass-Storage Structure
+    </a>
+    
+    
+    <a class="flex-grow-0" href="/post/linguistics/">
+        语言学概论 笔记
+        <svg class="fill-current inline-block h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24"
+            height="24">
+            <path fill="none" d="M0 0h24v24H0z" />
+            <path d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z" /></svg></a>
+    
+</div>
+<div >
+
+
+
+<div class="font-serif pb-2 flex align-start leading-loose">
+	<span class="heading pr-6 leading-loose">Related</span>
+	<span >
+		
+			<a href="/post/os12/">操作系统笔记 CH12 Mass-Storage Structure</a>&nbsp;&nbsp;&#47;&nbsp;
+		
+			<a href="/post/os11/">操作系统笔记 CH11 File-System Implementation</a>&nbsp;&nbsp;&#47;&nbsp;
+		
+			<a href="/post/os10/">操作系统笔记 CH10 File-System Interface</a>&nbsp;&nbsp;&#47;&nbsp;
+		
+			<a href="/post/os9/">操作系统笔记 CH9 Virtual Memory</a>&nbsp;&nbsp;&#47;&nbsp;
+		
+			<a href="/post/os8/">操作系统笔记 CH8 Main Memory</a>&nbsp;&nbsp;&#47;&nbsp;
+		
+			<a href="/post/os7/">操作系统笔记 CH7 Deadlocks</a>&nbsp;&nbsp;&#47;&nbsp;
+		
+			<a href="/post/os6/">操作系统笔记 CH6 Process Synchronization</a>&nbsp;&nbsp;&#47;&nbsp;
+		
+			<a href="/post/os5/">操作系统笔记 CH5 CPU Scheduling</a>&nbsp;&nbsp;&#47;&nbsp;
+		
+			<a href="/post/os4/">操作系统笔记 CH4 Threads</a>&nbsp;&nbsp;&#47;&nbsp;
+		
+			<a href="/post/os3/">操作系统笔记 CH3 Process</a>&nbsp;&nbsp;&#47;&nbsp;
+		
+			<a href="/post/os2/">操作系统笔记 CH2 OS structures</a>&nbsp;&nbsp;&#47;&nbsp;
+		
+			<a href="/post/os1/">操作系统笔记 CH1 Intro</a>
+		
+</span>
+</div>
+
+</div>
+<hr />
+<div class="pb-2">
+    <div id="disqus_thread"></div>
+<script type="application/javascript">
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "faye" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+<hr />
+
+		</footer>
+		
+
+<script src="/dist/app.js"></script>
+
+
+<script src="/lib/fuse.min.js"></script> 
+<script src="/lib/fastsearch.js"></script>
+
+	</div>
+</body>
+
+</html>

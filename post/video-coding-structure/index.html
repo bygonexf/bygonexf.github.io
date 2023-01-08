@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="cn">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	
+	<title>风巷  | H.265/HEVC 编码结构 笔记</title>
+	<meta name="viewport" content="width=device-width,minimum-scale=1">
+	<meta name="generator" content="Hugo 0.105.0">
+	
+	
+	<META NAME="ROBOTS" CONTENT="INDEX, FOLLOW">
+	
+
+	
+	
+	<link href="/dist/app.css" rel="stylesheet">
+	
+
+	
+
+	
+	
+<link rel="shortcut icon" href="img/wind.png" type="image/png" />
+
+	
+
+	
+	
+	
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-FAKE', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+	
+	
+	
+
+
+
+<link rel="stylesheet" href='https://imfaye.me/lib/katex.min.css' crossorigin="anonymous">
+
+
+<script defer src='https://imfaye.me/lib/katex.min.js' crossorigin="anonymous"></script>
+
+
+<script defer src='https://imfaye.me/lib/contrib/auto-render.min.js'
+crossorigin="anonymous"
+onload='renderMathInElement(document.body);'></script>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement(document.body, {
+            delimiters: [
+                {left: "$$", right: "$$", display: true},
+                {left: "$", right: "$", display: false}
+            ]
+        });
+    });
+</script>
+
+	
+	
+	
+	<script>
+		(function (u, c) {
+			var d = document,
+				t = 'script',
+				o = d.createElement(t),
+				s = d.getElementsByTagName(t)[0];
+			o.src = u;
+			if (c) {
+				o.addEventListener('load', function (e) {
+					c(e);
+				});
+			}
+			s.parentNode.insertBefore(o, s);
+		})('https:\/\/imfaye.me\/lib\/pangu.min.js', function () {
+			pangu.spacingPage();
+		});
+	</script>
+	
+	
+	
+	<style type="text/css" media="screen, print">
+		@font-face {
+			font-family: "FancyTitleFont";
+			font-style: normal;
+			font-display: swap;
+			src: url('https://imfaye.me/fonts/exampleFont.woff2') format('woff2'),
+				url('https://imfaye.me/fonts/exampleFont.woff') format('woff');
+		}
+		 
+		  
+		 
+		@font-face {
+			font-family: 'Noto Serif CJK SC';
+			font-style: normal;
+			font-weight: 300;
+			font-display: swap;
+			src: local('Noto Serif CJK SC Light'), local('NotoSerifCJK-Light'),
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-300.woff2') format('woff2'),
+				 
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-300.woff') format('woff');
+			 
+		}
+
+		 
+		@font-face {
+			font-family: 'Noto Serif CJK SC';
+			font-style: normal;
+			font-weight: 400;
+			font-display: swap;
+			src: local('Noto Serif CJK SC'), local('NotoSerifCJK-Regular'),
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-regular.woff2') format('woff2'),
+				 
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-regular.woff') format('woff');
+			 
+		}
+
+		 
+		@font-face {
+			font-family: 'Noto Serif CJK SC';
+			font-style: normal;
+			font-weight: 500;
+			font-display: swap;
+			src: local('Noto Serif CJK SC Medium'), local('NotoSerifCJK-Medium'),
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-500.woff2') format('woff2'),
+				 
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-500.woff') format('woff');
+			 
+		}
+	</style>
+	
+</head>
+
+<body class="bg-gray-100 text-gray-700 font-sans">
+	<div class="p-6 sm:p-10 md:p-16 flex flex-wrap">
+		<header class="w-full md:w-2/5 xl:w-1/2 md:pr-12 lg:pr-20 xl:pr-24 order-1 md:order-1 max-w-2xl">
+			<div
+				class="z-50 bg-gray-100 bg-opacity-75 bg-opacity-custom lg:min-w-0.7 max-w-xl md:float-right md:text-right leading-loose tracking-tight md:sticky md:top-0 pt-2">
+				
+<div>
+	<h2>
+		<a href="https://imfaye.me/" title="风巷" class="heading font-cursive icon">风巷</a>
+	</h2>
+</div>
+<h1 class="pt-2">H.265/HEVC 编码结构 笔记</h1>
+
+<div class="flex flex-wrap justify-end pt-2 "><div class="md:flex-grow-0 font-light">
+	
+	
+	
+	
+	<a class="post-taxonomy-category text-medium-red-violet-600 hover:text-medium-red-violet-400"
+		href='/categories/%E6%97%A0%E6%83%85%E7%AC%94%E8%AE%B0'>无情笔记</a>
+	
+	
+	
+
+	
+	&nbsp;&nbsp;
+	
+
+	
+	
+	
+	
+	<a class="post-taxonomy-tag text-eucalyptus-500"
+		href='/tags/hevc'>HEVC</a>&nbsp;&#47;
+	
+	<a class="post-taxonomy-tag text-eucalyptus-500"
+		href='/tags/%E8%A7%86%E9%A2%91%E7%BC%96%E7%A0%81'>视频编码</a>
+	
+	
+	
+</div><time class="text-eucalyptus-500 md:text-right md:flex-grow font-light pl-4"
+		datetime="2021-03-31T11:34:13Z">2021-3-31</time>
+</div>
+
+<details class="toc" open>
+<summary>
+    <hr />
+</summary>
+<div class="inline toc-content">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#名词一览">名词一览</a></li>
+    <li><a href="#编码结构概述">编码结构概述</a>
+      <ul>
+        <li><a href="#编码结构">编码结构</a></li>
+        <li><a href="#码流结构">码流结构</a></li>
+      </ul>
+    </li>
+    <li><a href="#片段层">片段层</a></li>
+    <li><a href="#tile-单元">Tile 单元</a>
+      <ul>
+        <li><a href="#tile-单元描述">Tile 单元描述</a></li>
+        <li><a href="#slice-和-tile">Slice 和 Tile</a></li>
+      </ul>
+    </li>
+    <li><a href="#树形编码块">树形编码块</a>
+      <ul>
+        <li><a href="#编码单元">编码单元</a></li>
+        <li><a href="#预测单元">预测单元</a></li>
+        <li><a href="#变换单元">变换单元</a></li>
+      </ul>
+    </li>
+    <li><a href="#档次层和级别">档次、层和级别</a></li>
+  </ul>
+</nav>
+</div>
+</details>
+
+<hr />
+
+
+			</div>
+		</header>
+		<main role="main" class="w-full md:w-3/5 xl:w-1/2 max-w-3xl order-2 md:order-2 min-h-70vh pt-2 pb-4">
+			
+
+<article>
+	<section class="mx-auto content">
+		<div class="c-rich-text"><h2 id="名词一览">名词一览</h2>
+<ul>
+<li>GOP (Group of Pictures) - 图像组</li>
+<li>IDR (Instantaneous Decoding Refresh) - 即时解码刷新</li>
+<li>Slice - 片</li>
+<li>SS (Slice Segment) - 片段</li>
+<li>CTU (Coding Tree Unit) - 树形结构单元</li>
+<li>CTB (Coding Tree Block) - 树形编码块</li>
+<li>CU (Coding Unit) - 编码单元</li>
+<li>SPS (Sequence Parameter Set) - 序列参数集</li>
+<li>PPS (Picture Parameter Set) - 图像参数集</li>
+<li>CVS (Coded Video Sequence) - 一个 GOP 编码后生成的压缩数据</li>
+<li>VPS (Video Parameter Set) - 视频参数集</li>
+</ul>
+<h2 id="编码结构概述">编码结构概述</h2>
+<h3 id="编码结构">编码结构</h3>
+<p><strong>视频序列</strong>分隔为若干个图像组 (<strong>GOP</strong>)。</p>
+<p>存在两种 GOP 类型：</p>
+<ul>
+<li>
+<p>封闭式 GOP</p>
+<p>每一个 GOP 以 IDR 图像开始，各个 GOP 之间独立编解码。</p>
+</li>
+<li>
+<p>开放式 GOP</p>
+<p>第一个 GOP 中的第一个帧内编码图像为 IDR 图像，后续 GOP 中的第一个帧内编码图像为 non-IDR 图像。后面 GOP 中的帧间编码图像可以使用前一个 GOP 的已编码图像作为参考图像。</p>
+</li>
+</ul>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/20210331120920.png" style="zoom: 50%;" />
+<p>每个 GOP 又被分为多个片 (<strong>Slice</strong>)，片与片之间独立编解码。主要目的之一是在数据丢失的情况下进行重新同步。</p>
+<p>每个片由一个或多个片段 (<strong>SS</strong>, Slice Segment) 组成。</p>
+<p>树形结构单元 (CTU) 类似传统的宏块。每个 CTU 包括一个亮度 CTB 和两个色差 CTB。</p>
+<p>一个 SS 在编码时，先被分割为相同大小的 <strong>CTU</strong>，每一个 CTU 按照四叉树分割方式被划分为不同类型的 <strong>CU</strong>。</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/20210331120838.png" style="zoom: 50%;" />
+<p>以上即为编码时的分层处理架构。</p>
+<h3 id="码流结构">码流结构</h3>
+<p>码流结构上，H.265/HEVC 压缩数据采用了类似于 H.264/AVC 的分层结构。</p>
+<p>将属于 GOP 层、Slice 层中共用的大部分语法元素游离出来，组成 SPS 和 PPS。</p>
+<p><strong>SPS</strong> 中包含了一个 CVS 中所有图像共用的信息。SPS 中大致包括解码相关信息，如档次级别、分辨率、某档次中编码工具开关标识和涉及的参数、时域可分级信息等。</p>
+<p><strong>PPS</strong> 中包含一副图像所用的公共参数，大致包括初始图像控制信息，如初始量化参数、分块信息等。一副图像中所有 SS 引用同一个 PPS。</p>
+<p>此外，为了兼容在其他应用上的扩展，H.265/HEVC 的语法架构中增加了 <strong>VPS</strong>，其内容大致包括多个子层共享的语法元素，其他不属于 SPS 的特定信息等。</p>
+<p>对于一个 SS，通过引用它所使用的 PPS，该 PPS 又引用对应的 SPS，该 SPS 又引用对应的 VPS，最终得到 SS 的公用信息。</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/20210331120942.png" style="zoom:50%;" />
+<h2 id="片段层">片段层</h2>
+<p>一副图像可以被分割为一个或多个 Slice，每个 Slice 的压缩数据都是独立的，Slice 头信息无法通过前一个 Slice 的头信息推断得到。这就要求 Slice 不能跨过它的边界来进行帧内或帧间预测。</p>
+<p>根据编码类型不同，Slice 可分为以下几部分：</p>
+<ol>
+<li>
+<p>I Slice</p>
+<p>该 Slice 中所有 CU 的编码过程都使用帧内预测</p>
+</li>
+<li>
+<p>P Slice</p>
+<p>在 I Slice 的基础上，该 Slice 中的 CU 还可以使用帧间预测，每个 PB（预测块）使用至多一个运动补偿预测信息。P Slice 只使用图像参考列表 list 0。</p>
+</li>
+<li>
+<p>B Slice</p>
+<p>在 P Slice 的基础上，该 Slice 中的 CU也可以使用帧间预测，每个 PB（预测块）可以使用至多两个运动补偿预测信息。B Slice 可以使用图像参考列表 list 0 和 list 1。</p>
+</li>
+</ol>
+<p>一个独立的 Slice 可以被进一步划分为若干个 SS，包括一个独立 SS 和若干个依赖 SS，并且以独立 SS 作为该 Slice 的开始。</p>
+<p>一个 SS 包含整数个 CTU（至少一个），并且这些 CTU 分布在同一个 NAL 单元中。SS 可以作为一个分组来传送视频编码数据。</p>
+<h2 id="tile-单元">Tile 单元</h2>
+<h3 id="tile-单元描述">Tile 单元描述</h3>
+<p>一副图像不仅可以划分为若干个 Slice，也可以划分为若干个 Tile。即从水平和垂直方向将一个图像分割为若干个矩形区域，一个矩形区域就是一个 Tile。每个 Tile 包含整数个 CTU。</p>
+<p>Tile 提供比 CTB 更大程度的并行，在使用时无须进行复杂的线程同步。</p>
+<p>在同一幅图像中，可以存在某些 Slice 中包含多个 Tile 和某些 Tile 包含多个 Slice 的情况。</p>
+<h3 id="slice-和-tile">Slice 和 Tile</h3>
+<p>Tile 形装基本上为矩形，Slice 为条带状。</p>
+<p>Slice 由一系列 SS 组成，一个 SS 由一系列 CTU 组成。Tile 则直接由一系列 CTU 组成。</p>
+<p>每个 Slice/SS 和 Tile 至少要满足以下两个条件之一：</p>
+<ol>
+<li>一个 Slice/SS 中的所有 CTU 属于同一个 Tile</li>
+<li>一个 Tile 中的所有 CTU 属于同一个 Slice/SS</li>
+</ol>
+<h2 id="树形编码块">树形编码块</h2>
+<p>传统的视频编码基于宏块实现。考虑到高清视频 / 超高清视频的自身特性，H.265/HEVC 标准中引入了树形编码单元 CTU，其尺寸由编码器指定，且可大于宏块尺寸。</p>
+<p>同一位置处的一个亮度 CTB 和两个色度 CTB，再加上相应的语法元素形成一个 CTU。在高分辨率视频的编码中，使用较大的 CTB 可以获得更好的压缩性能。</p>
+<p>H.265/HEVC 为图像划分定义了一套全新的语法单元，包括编码单元 (CU)、预测单元 (PU)、变换单元  (TU)。</p>
+<ul>
+<li>CU 是进行预测、变换、量化和熵处理等处理的基本单元</li>
+<li>PU 是进行帧内/帧间预测的基本单元</li>
+<li>TU 是进行变换和量化的基本单元</li>
+</ul>
+<h3 id="编码单元">编码单元</h3>
+<p>大尺寸图像的一个特点是平缓区域的面积更大，用较大的块编码能极大提升编码效率。在 H.264/AVC 中，编码块的大小是固定的。而在 H.265/HEVC 中，一个 CTB 可以直接作为一个 CB，也可以进一步以四叉树的形式划分为多个小的 CB。大的 CB 可以使得平缓区域的编码效率提高，小 CB 能很好地处理图像局部的细节。</p>
+<p>编码单元是否继续划分取决于分割标志位 Split Flag。</p>
+<h3 id="预测单元">预测单元</h3>
+<p>预测单元规定了编码单元的所有预测模式。帧内预测的方向、帧间预测的分割方式、运动矢量预测、帧间预测参考图像索引号都属于预测单元的范畴。</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/20210331153821.png" style="zoom:50%;" />
+<h3 id="变换单元">变换单元</h3>
+<p>TU 的大小依赖于 CU 模式，在一个 CU 内，允许 TU 跨越多个 PU，以四叉树的形式递归划分。对于一个 2N × 2N 的 CU，有一个标志位决定其是否划分为 4 个 N × N 的 TU，是否可以进一步划分由 SPS 中的 TU 最大划分深度决定。</p>
+<h2 id="档次层和级别">档次、层和级别</h2>
+<p>在 H.264 中就有对档次 (Profile) 和级别 (Level) 的划分，它们规定了比特流必须遵守的一些限制要求。而 H.265/HEVC 中在此基础上又新定义了一个概念：层 (Tile)。</p>
+<ul>
+<li>Profile 主要规定编码器可采用哪些编码工具或算法</li>
+<li>Level 是指根据解码端的负载和存储空间情况对关键参数加以限制</li>
+<li>有些 Level 定义了两个 Tile: 主层 (Main Tile) 和高层 (High Tile)，主层用于大多数应用，高层用于那些最苛刻的应用</li>
+</ul>
+<p>满足某一 Level 和 Tile 的解码器应当可以解码当前以及比当前更低的 Level 和 Tile 的所有码流。</p>
+<p>满足某一 Profile 的解码器必须支持该 Profile 中的所有特性。编码器不必实现 Profile 中的所有特性，但生成的码流必须遵守标准规定。</p>
+</div>
+	</section>
+
+
+</article>
+
+		</main>
+		<div class="w-full h-0 flex-none order-3"></div>
+		<aside role="contentinfo"
+			class="w-full md:w-2/5 xl:w-1/2 md:pr-12 lg:pr-20 xl:pr-24 order-4 md:order-3 md:sticky md:bottom-0 self-end max-w-2xl">
+			<div class="md:float-right md:text-right leading-loose tracking-tight md:mb-2">
+				
+	<div class="md:max-w-xs  flex flex-col md:items-end">
+	<ul class="font-serif flex-grow-0 flex justify-between flex-wrap md:flex-col">
+	
+	
+	<li class="px-1 md:px-0">
+		<a href="/post/" title="归档 page" 
+			class="font-medium text-medium-red-violet-600 hover:text-medium-red-violet-400" >
+			归档
+		</a>
+	</li>
+	
+	<li class="px-1 md:px-0">
+		<a href="/categories/" title="分类 page" >
+			分类
+		</a>
+	</li>
+	
+	<li class="px-1 md:px-0">
+		<a href="/tags/" title="标签 page" >
+			标签
+		</a>
+	</li>
+	
+	<li class="px-1 md:px-0">
+		<a href="/about/" title="关于 page" >
+			关于
+		</a>
+	</li>
+	
+	
+	
+	
+	<div id="fastSearch" class="m-0">
+		<input id="searchInput" type="text" size=10 
+			class="bg-gray-100 focus:outline-none border-b border-gray-100 focus:border-eucalyptus-300 md:text-right
+			placeholder-java-500 min-w-0 max-w-xxxs"
+			placeholder="search" />
+		<ul id="searchResults" class="bg-gray-200 px-2 divide-y divide-gray-400">
+		</ul>
+	</div>
+	
+</ul>
+	
+
+<div class="flex flex-wrap-reverse md:justify-end content-end md:content-start justify-start items-start   max-h-16">
+	
+</div>
+	<div class="text-sm text-gray-500 leading-tight a-gray">
+		© Faye
+		<br />
+		Built with Hugo and theme <a href="https://github.com/heyeshuang/hugo-theme-tokiwa">Tokiwa</a>. 2205 words in this page.
+	</div>
+</div>
+
+			</div>
+		</aside>
+		<footer class="w-full md:w-3/5 xl:w-1/2 order-3 max-w-3xl md:order-4 pt-2">
+			
+<hr class="double-line" />
+<div class="flex flex-wrap justify-between pb-2 leading-loose font-serif">
+    
+    <a class="flex-grow-0" href="/post/multimedia-basics/">
+        <svg class="fill-current inline-block h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24"
+            height="24">
+            <path fill="none" d="M0 0h24v24H0z" />
+            <path d="M7.828 11H20v2H7.828l5.364 5.364-1.414 1.414L4 12l7.778-7.778 1.414 1.414z" /></svg>
+        多媒体基础知识
+    </a>
+    
+    
+    <a class="flex-grow-0" href="/post/prediction-coding/">
+        H.265/HEVC 预测编码 笔记
+        <svg class="fill-current inline-block h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24"
+            height="24">
+            <path fill="none" d="M0 0h24v24H0z" />
+            <path d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z" /></svg></a>
+    
+</div>
+<div >
+
+
+
+<div class="font-serif pb-2 flex align-start leading-loose">
+	<span class="heading pr-6 leading-loose">Related</span>
+	<span >
+		
+			<a href="/post/multimedia-basics/">多媒体基础知识</a>
+		
+</span>
+</div>
+
+</div>
+<hr />
+<div class="pb-2">
+    <div id="disqus_thread"></div>
+<script type="application/javascript">
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "faye" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+<hr />
+
+		</footer>
+		
+
+<script src="/dist/app.js"></script>
+
+
+<script src="/lib/fuse.min.js"></script> 
+<script src="/lib/fastsearch.js"></script>
+
+	</div>
+</body>
+
+</html>

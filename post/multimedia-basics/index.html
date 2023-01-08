@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="cn">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	
+	<title>风巷  | 多媒体基础知识</title>
+	<meta name="viewport" content="width=device-width,minimum-scale=1">
+	<meta name="generator" content="Hugo 0.105.0">
+	
+	
+	<META NAME="ROBOTS" CONTENT="INDEX, FOLLOW">
+	
+
+	
+	
+	<link href="/dist/app.css" rel="stylesheet">
+	
+
+	
+
+	
+	
+<link rel="shortcut icon" href="img/wind.png" type="image/png" />
+
+	
+
+	
+	
+	
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-FAKE', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+	
+	
+	
+
+
+
+<link rel="stylesheet" href='https://imfaye.me/lib/katex.min.css' crossorigin="anonymous">
+
+
+<script defer src='https://imfaye.me/lib/katex.min.js' crossorigin="anonymous"></script>
+
+
+<script defer src='https://imfaye.me/lib/contrib/auto-render.min.js'
+crossorigin="anonymous"
+onload='renderMathInElement(document.body);'></script>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement(document.body, {
+            delimiters: [
+                {left: "$$", right: "$$", display: true},
+                {left: "$", right: "$", display: false}
+            ]
+        });
+    });
+</script>
+
+	
+	
+	
+	<script>
+		(function (u, c) {
+			var d = document,
+				t = 'script',
+				o = d.createElement(t),
+				s = d.getElementsByTagName(t)[0];
+			o.src = u;
+			if (c) {
+				o.addEventListener('load', function (e) {
+					c(e);
+				});
+			}
+			s.parentNode.insertBefore(o, s);
+		})('https:\/\/imfaye.me\/lib\/pangu.min.js', function () {
+			pangu.spacingPage();
+		});
+	</script>
+	
+	
+	
+	<style type="text/css" media="screen, print">
+		@font-face {
+			font-family: "FancyTitleFont";
+			font-style: normal;
+			font-display: swap;
+			src: url('https://imfaye.me/fonts/exampleFont.woff2') format('woff2'),
+				url('https://imfaye.me/fonts/exampleFont.woff') format('woff');
+		}
+		 
+		  
+		 
+		@font-face {
+			font-family: 'Noto Serif CJK SC';
+			font-style: normal;
+			font-weight: 300;
+			font-display: swap;
+			src: local('Noto Serif CJK SC Light'), local('NotoSerifCJK-Light'),
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-300.woff2') format('woff2'),
+				 
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-300.woff') format('woff');
+			 
+		}
+
+		 
+		@font-face {
+			font-family: 'Noto Serif CJK SC';
+			font-style: normal;
+			font-weight: 400;
+			font-display: swap;
+			src: local('Noto Serif CJK SC'), local('NotoSerifCJK-Regular'),
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-regular.woff2') format('woff2'),
+				 
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-regular.woff') format('woff');
+			 
+		}
+
+		 
+		@font-face {
+			font-family: 'Noto Serif CJK SC';
+			font-style: normal;
+			font-weight: 500;
+			font-display: swap;
+			src: local('Noto Serif CJK SC Medium'), local('NotoSerifCJK-Medium'),
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-500.woff2') format('woff2'),
+				 
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-500.woff') format('woff');
+			 
+		}
+	</style>
+	
+</head>
+
+<body class="bg-gray-100 text-gray-700 font-sans">
+	<div class="p-6 sm:p-10 md:p-16 flex flex-wrap">
+		<header class="w-full md:w-2/5 xl:w-1/2 md:pr-12 lg:pr-20 xl:pr-24 order-1 md:order-1 max-w-2xl">
+			<div
+				class="z-50 bg-gray-100 bg-opacity-75 bg-opacity-custom lg:min-w-0.7 max-w-xl md:float-right md:text-right leading-loose tracking-tight md:sticky md:top-0 pt-2">
+				
+<div>
+	<h2>
+		<a href="https://imfaye.me/" title="风巷" class="heading font-cursive icon">风巷</a>
+	</h2>
+</div>
+<h1 class="pt-2">多媒体基础知识</h1>
+
+<div class="flex flex-wrap justify-end pt-2 "><div class="md:flex-grow-0 font-light">
+	
+	
+	
+	
+	<a class="post-taxonomy-category text-medium-red-violet-600 hover:text-medium-red-violet-400"
+		href='/categories/%E6%97%A0%E6%83%85%E7%AC%94%E8%AE%B0'>无情笔记</a>
+	
+	
+	
+
+	
+	&nbsp;&nbsp;
+	
+
+	
+	
+	
+	
+	<a class="post-taxonomy-tag text-eucalyptus-500"
+		href='/tags/%E5%A4%9A%E5%AA%92%E4%BD%93'>多媒体</a>&nbsp;&#47;
+	
+	<a class="post-taxonomy-tag text-eucalyptus-500"
+		href='/tags/%E8%A7%86%E9%A2%91%E7%BC%96%E7%A0%81'>视频编码</a>
+	
+	
+	
+</div><time class="text-eucalyptus-500 md:text-right md:flex-grow font-light pl-4"
+		datetime="2021-03-29T15:10:25Z">2021-3-29</time>
+</div>
+
+<details class="toc" open>
+<summary>
+    <hr />
+</summary>
+<div class="inline toc-content">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#图像数值表示">图像数值表示</a>
+      <ul>
+        <li><a href="#分辨率">分辨率</a></li>
+        <li><a href="#像素排列方式">像素排列方式</a></li>
+        <li><a href="#yuv-表示方式">YUV 表示方式</a></li>
+      </ul>
+    </li>
+    <li><a href="#ibp-帧">IBP 帧</a></li>
+    <li><a href="#gop">GOP</a></li>
+    <li><a href="#码率和帧率">码率和帧率</a>
+      <ul>
+        <li><a href="#帧率-frame-rate">帧率 (Frame Rate)</a></li>
+        <li><a href="#码率比特率">码率（比特率）</a></li>
+      </ul>
+    </li>
+    <li><a href="#参考">参考</a></li>
+  </ul>
+</nav>
+</div>
+</details>
+
+<hr />
+
+
+			</div>
+		</header>
+		<main role="main" class="w-full md:w-3/5 xl:w-1/2 max-w-3xl order-2 md:order-2 min-h-70vh pt-2 pb-4">
+			
+
+<article>
+	<section class="mx-auto content">
+		<div class="c-rich-text"><h2 id="图像数值表示">图像数值表示</h2>
+<h3 id="分辨率">分辨率</h3>
+<p>分辨率的基础单位是像素。1280 * 720 P 的分辨率代表共有 1280 * 720 个像素点。</p>
+<p>一台物理设备出厂时就已经定下了它所能拥有的最大像素点是多少。电脑显示屏调整分辨率是系统通过运算来给出模拟色彩块填充适配的。</p>
+<p>下述像素排列方式内容为 expansion pack，可略过。</p>
+<h3 id="像素排列方式">像素排列方式</h3>
+<h4 id="标准-rgb-排列">标准 RGB 排列</h4>
+<p>LCD 屏幕上常采用标准 RGB 排列，会将一个像素分为 3 个子像素并排排列，通过红、绿、蓝滤色片将 LCD 背光模组的白光过滤后形成相应的 RGB 子像素排列。当需要显示不同颜色的时候，3 个子像素以不同的亮度发光，在视觉上会混合成所需要的颜色。</p>
+<h4 id="pentile-排列">PenTile 排列</h4>
+<p>PenTile 排列多见于 OLED 屏幕上，因子像素呈现钻石排列而得名。PenTile 排列的每个像素由红、绿和蓝、绿子像素组合而成，绿色像素是完整的，而红蓝像素相比传统 RGB 排列各减少二分之一，子像素总数减少了约三分之一。</p>
+<p>不像标准 RGB 排列每个像素更加独立，PenTile 排列在显示许多内容时需要借用相邻像素，显示精细内容时同分辨率下相较标准 RGB 排列的屏幕细腻度不足。</p>
+<p>蓝色 OLED 的发光效率要比红色和绿色低，达到相同的发光强度必须使用更高的通过电流，因而蓝色像素衰减速度更快，也就会加速“烧屏”现象的产生。</p>
+<h3 id="yuv-表示方式">YUV 表示方式</h3>
+<p>对于视频裸数据而言，更多使用 YUV 数据格式显示。</p>
+<ul>
+<li>Y 表示明亮度 (Luminance / Luma)，即灰阶值</li>
+<li>U、V 表示色度 (Chrominance / Chroma)，描述色调饱和度</li>
+</ul>
+<p>亮度通过 RGB 输入信号来建立，方法是将 RGB 信号的特定部分叠加到一起。色度定义了颜色的色彩和饱和度，分别用 Cr 和 Cb 表示。Cr 表示 RGB 输入信号红色部分与 RGB 亮度值之间的差异，Cb 表示 RGB 输入信号蓝色部分与 RGB 信号亮度值之间的差异。</p>
+<h4 id="yuv-优点">YUV 优点</h4>
+<ol>
+<li>
+<p>与黑白电视机也能兼容</p>
+<p>Y 和 UV 分量分离，只有 Y 分量就是黑白图像。</p>
+</li>
+<li>
+<p>相较于 RGB，YUV 数据格式占用空间小</p>
+<p>人眼对色度的敏感程度低于对亮度的敏感程度（因为识别亮度的视网膜杆细胞比识别色度的视网膜锥细胞多）。将色的信息减少，人眼也无法察觉。且并不是每个像素点都需要包含 YUV 三个分量，根据不同的采用格式，每个 Y 分量可以对应自己的 UV 分量。</p>
+</li>
+</ol>
+<h4 id="yuv-采样格式">YUV 采样格式</h4>
+<h5 id="yuv-444-采样">YUV 4:4:4 采样</h5>
+<p>每个像素三个分量信息完整。</p>
+<p>举个例子，一张 1 * 4 的图片：</p>
+<blockquote>
+<p>图像像素为：[Y0 U0 V0]、[Y1 U1 V1]、[Y2 U2 V2]、[Y3 U3 V3]</p>
+<p>采样码流为：Y0 U0 V0 Y1 U1 V1 Y2 U2 V2 Y3 U3 V3</p>
+<p>最后映射出的像素点依旧为 [Y0 U0 V0]、[Y1 U1 V1]、[Y2 U2 V2]、[Y3 U3 V3]</p>
+</blockquote>
+<p>一张 1280 * 720P 的图片使用 YUV 4:4:4 采样，大小为：</p>
+<pre tabindex="0"><code>1280 * 720 * 3 / 1024 / 1024 = 2.636 MB
+</code></pre><h5 id="yuv-422-采样">YUV 4:2:2 采样</h5>
+<p>Y 分量和 UV 分量按 2:1 的比例采样。</p>
+<p>举个例子，一张 1 * 4 的图片：</p>
+<blockquote>
+<p>图像像素为：[Y0 U0 V0]、[Y1 U1 V1]、[Y2 U2 V2]、[Y3 U3 V3]</p>
+<p>采样码流为：Y0 U0 Y1 V1 Y2 U2 Y3 V3</p>
+<p>最后映射出的像素点依旧为 [Y0 U0 V1]、[Y1 U0 V1]、[Y2 U2 V3]、[Y3 U2 V3]</p>
+</blockquote>
+<p>一张 1280 * 720 P 的图片使用 YUV 4:2:2 采样，大小为：</p>
+<pre tabindex="0"><code>(1280 * 720 + 1280 * 720 * 0.5 * 2) / 1024 / 1024 = 1.759 MB
+</code></pre><h5 id="yuv-420-采样">YUV 4:2:0 采样</h5>
+<p>不是指没有 Cb，而是意味着第一行 Y 分量和 U 分量按 2:1 的比例采样，第二行 Y 分量和 V 分量按 2:1 的比例采样。Y 分量和 UV 分量按 4:1 的比例采样。</p>
+<p>举个例子，一张 2* 4 的图片：</p>
+<blockquote>
+<p>图像像素为：[Y0 U0 V0]、[Y1 U1 V1]、[Y2 U2 V2]、[Y3 U3 V3]、[Y4 U4 V4]、[Y5 U5 V5]、[Y6 U6 V6]、[Y7 U7 V7]</p>
+<p>采样码流为：Y0 U0 Y1 Y2 U2 Y3 Y4 V4 Y5 Y6 V6 Y7</p>
+<p>最后映射出的像素点依旧为 [Y0 U0 V4]、[Y1 U0 V4]、[Y2 U2 V6]、[Y3 U2 V6]、[Y4 U0 V4]、[Y5 U0 V4]、[Y6 U2 V6]、[Y7 U2 V6]</p>
+</blockquote>
+<p>一张 1280 * 720 P 的图片使用 YUV 4:2:0 采样，大小为：</p>
+<pre tabindex="0"><code>(1280 * 720 + 1280 * 720 * 0.25 * 2) / 1024 / 1024 = 1.318 MB
+</code></pre><h4 id="yuv-存储格式">YUV 存储格式</h4>
+<ul>
+<li>
+<p>planar 平面格式</p>
+<p>先连续存储所有像素点的 Y 分量，然后存储 UV 分量。</p>
+</li>
+<li>
+<p>packed 打包模式</p>
+<p>每个像素点的 YUV 分量连续交替存储。</p>
+</li>
+</ul>
+<h4 id="rgb-和-yuv-转化">RGB 和 YUV 转化</h4>
+<p>对于图像显示器来说，它是通过 RGB 模型显示图像的，而在传输图像数据时又是使用 YUV 模型的。因此两种模型需要互相转化。</p>
+<p>有如下公式：</p>
+<pre tabindex="0"><code>Y = 0.299 * R + 0.587 * G + 0.114 * B
+U = - 0.147 * R - 0.289 * G + 0.436 * B
+V = 0.615 * R - 0.515 * G - 0.100 * B
+</code></pre><pre tabindex="0"><code>R = Y + 1.14 * V
+G = Y - 0.39 * U - 0.58 * V
+B = Y + 2.03 * U
+</code></pre><h2 id="ibp-帧">IBP 帧</h2>
+<ul>
+<li>
+<p>I 帧 (intra picture)</p>
+<p>内部编码帧（也称为关键帧），通常是每个 GOP 片段的第一帧，经过适度压缩，作为随机访问的参考点，可以当作静态图像。I 帧压缩可去掉视频的空间冗余信息。</p>
+</li>
+<li>
+<p>P 帧 (predictive-frame)</p>
+<p>前向预测编码帧（也称为预测帧），通过将图像序列中前面已编码帧的时间冗余信息去充分去除压缩传输数据量的编码图像，需要参考前面的一个 I 帧或者 P 帧才能解码成一张完整的图像。P 帧可以简单理解为当前帧画面与前一帧的差别。</p>
+</li>
+<li>
+<p>B 帧 (bi-directional interpolated prediction frame)</p>
+<p>双向预测内插编码帧（也称双向预测帧），需要参考前面的一个 I 帧或者 P 帧以及后面的一个 P 帧才能编码成一张完整的图像。</p>
+</li>
+</ul>
+<p>简单来说，I 帧是一个完整的画面，而 P 帧和 B 帧记录的是相对于 I 帧的变化。如果没有 I 帧，P 帧和 B 帧就无法解码。压缩比 I 帧 &lt; P 帧 &lt; B 帧。</p>
+<h2 id="gop">GOP</h2>
+<p><img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/20210329171222.png" alt=""></p>
+<p>编码器将多张图像进行编码后生产成一段一段的 GOP (Group of Pictures)，解码器在播放时则是读取一段一段的 GOP 进行编码后读取画面再渲染显示。GOP 是一组连续的画面，由一张 I 帧和数张 B / P 帧组成，是视频图像编码器和解码器存取的基本单位。gop_size 描述的是两个 I 帧之间的帧数目。</p>
+<h2 id="码率和帧率">码率和帧率</h2>
+<h3 id="帧率-frame-rate">帧率 (Frame Rate)</h3>
+<p>表示每秒实践显示的帧数（Frames per Second，简称 FPS）。</p>
+<p>对于人眼来说，如果所看画面的帧率高于 24，就会认为是连贯的，此现象称为视觉暂留。</p>
+<h3 id="码率比特率">码率（比特率）</h3>
+<p>码率指每秒传输的比特数，单位为 bps (Bits Per Second)，通俗一点讲就是取样率，单位时间内取样率越大，精度就越高，处理出的文件就越接近原始文件。</p>
+<p>文件体积与取样率成正比，所有的编码格式都很重视如何用最低的码率达到最少的失真。</p>
+<p>码率简单来说是指再压缩视频时给这个视频指定一个参数，用以告诉压缩软件<strong>期望的压缩后视频的大小</strong>。</p>
+<h2 id="参考">参考</h2>
+<ul>
+<li>
+<p>视频基础知识扫盲</p>
+</li>
+<li>
+<p><a href="https://glumes.com/post/ffmpeg/understand-yuv-format/">一文读懂 YUV 的采样与格式</a></p>
+</li>
+<li>
+<p><a href="https://www.yuque.com/webmedia/handbook/ibp">IBP帧</a></p>
+</li>
+</ul>
+</div>
+	</section>
+
+
+</article>
+
+		</main>
+		<div class="w-full h-0 flex-none order-3"></div>
+		<aside role="contentinfo"
+			class="w-full md:w-2/5 xl:w-1/2 md:pr-12 lg:pr-20 xl:pr-24 order-4 md:order-3 md:sticky md:bottom-0 self-end max-w-2xl">
+			<div class="md:float-right md:text-right leading-loose tracking-tight md:mb-2">
+				
+	<div class="md:max-w-xs  flex flex-col md:items-end">
+	<ul class="font-serif flex-grow-0 flex justify-between flex-wrap md:flex-col">
+	
+	
+	<li class="px-1 md:px-0">
+		<a href="/post/" title="归档 page" 
+			class="font-medium text-medium-red-violet-600 hover:text-medium-red-violet-400" >
+			归档
+		</a>
+	</li>
+	
+	<li class="px-1 md:px-0">
+		<a href="/categories/" title="分类 page" >
+			分类
+		</a>
+	</li>
+	
+	<li class="px-1 md:px-0">
+		<a href="/tags/" title="标签 page" >
+			标签
+		</a>
+	</li>
+	
+	<li class="px-1 md:px-0">
+		<a href="/about/" title="关于 page" >
+			关于
+		</a>
+	</li>
+	
+	
+	
+	
+	<div id="fastSearch" class="m-0">
+		<input id="searchInput" type="text" size=10 
+			class="bg-gray-100 focus:outline-none border-b border-gray-100 focus:border-eucalyptus-300 md:text-right
+			placeholder-java-500 min-w-0 max-w-xxxs"
+			placeholder="search" />
+		<ul id="searchResults" class="bg-gray-200 px-2 divide-y divide-gray-400">
+		</ul>
+	</div>
+	
+</ul>
+	
+
+<div class="flex flex-wrap-reverse md:justify-end content-end md:content-start justify-start items-start   max-h-16">
+	
+</div>
+	<div class="text-sm text-gray-500 leading-tight a-gray">
+		© Faye
+		<br />
+		Built with Hugo and theme <a href="https://github.com/heyeshuang/hugo-theme-tokiwa">Tokiwa</a>. 2315 words in this page.
+	</div>
+</div>
+
+			</div>
+		</aside>
+		<footer class="w-full md:w-3/5 xl:w-1/2 order-3 max-w-3xl md:order-4 pt-2">
+			
+<hr class="double-line" />
+<div class="flex flex-wrap justify-between pb-2 leading-loose font-serif">
+    
+    <a class="flex-grow-0" href="/post/wsl/">
+        <svg class="fill-current inline-block h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24"
+            height="24">
+            <path fill="none" d="M0 0h24v24H0z" />
+            <path d="M7.828 11H20v2H7.828l5.364 5.364-1.414 1.414L4 12l7.778-7.778 1.414 1.414z" /></svg>
+        Win10 下 Linux 子系统 (WSL) 配置小记
+    </a>
+    
+    
+    <a class="flex-grow-0" href="/post/video-coding-structure/">
+        H.265/HEVC 编码结构 笔记
+        <svg class="fill-current inline-block h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24"
+            height="24">
+            <path fill="none" d="M0 0h24v24H0z" />
+            <path d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z" /></svg></a>
+    
+</div>
+<div >
+
+
+
+</div>
+<hr />
+<div class="pb-2">
+    <div id="disqus_thread"></div>
+<script type="application/javascript">
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "faye" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+<hr />
+
+		</footer>
+		
+
+<script src="/dist/app.js"></script>
+
+
+<script src="/lib/fuse.min.js"></script> 
+<script src="/lib/fastsearch.js"></script>
+
+	</div>
+</body>
+
+</html>

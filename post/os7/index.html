@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="cn">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	
+	<title>风巷  | 操作系统笔记 CH7 Deadlocks</title>
+	<meta name="viewport" content="width=device-width,minimum-scale=1">
+	<meta name="generator" content="Hugo 0.105.0">
+	
+	
+	<META NAME="ROBOTS" CONTENT="INDEX, FOLLOW">
+	
+
+	
+	
+	<link href="/dist/app.css" rel="stylesheet">
+	
+
+	
+
+	
+	
+<link rel="shortcut icon" href="img/wind.png" type="image/png" />
+
+	
+
+	
+	
+	
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-FAKE', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+	
+	
+	
+
+
+
+<link rel="stylesheet" href='https://imfaye.me/lib/katex.min.css' crossorigin="anonymous">
+
+
+<script defer src='https://imfaye.me/lib/katex.min.js' crossorigin="anonymous"></script>
+
+
+<script defer src='https://imfaye.me/lib/contrib/auto-render.min.js'
+crossorigin="anonymous"
+onload='renderMathInElement(document.body);'></script>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement(document.body, {
+            delimiters: [
+                {left: "$$", right: "$$", display: true},
+                {left: "$", right: "$", display: false}
+            ]
+        });
+    });
+</script>
+
+	
+	
+	
+	<script>
+		(function (u, c) {
+			var d = document,
+				t = 'script',
+				o = d.createElement(t),
+				s = d.getElementsByTagName(t)[0];
+			o.src = u;
+			if (c) {
+				o.addEventListener('load', function (e) {
+					c(e);
+				});
+			}
+			s.parentNode.insertBefore(o, s);
+		})('https:\/\/imfaye.me\/lib\/pangu.min.js', function () {
+			pangu.spacingPage();
+		});
+	</script>
+	
+	
+	
+	<style type="text/css" media="screen, print">
+		@font-face {
+			font-family: "FancyTitleFont";
+			font-style: normal;
+			font-display: swap;
+			src: url('https://imfaye.me/fonts/exampleFont.woff2') format('woff2'),
+				url('https://imfaye.me/fonts/exampleFont.woff') format('woff');
+		}
+		 
+		  
+		 
+		@font-face {
+			font-family: 'Noto Serif CJK SC';
+			font-style: normal;
+			font-weight: 300;
+			font-display: swap;
+			src: local('Noto Serif CJK SC Light'), local('NotoSerifCJK-Light'),
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-300.woff2') format('woff2'),
+				 
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-300.woff') format('woff');
+			 
+		}
+
+		 
+		@font-face {
+			font-family: 'Noto Serif CJK SC';
+			font-style: normal;
+			font-weight: 400;
+			font-display: swap;
+			src: local('Noto Serif CJK SC'), local('NotoSerifCJK-Regular'),
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-regular.woff2') format('woff2'),
+				 
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-regular.woff') format('woff');
+			 
+		}
+
+		 
+		@font-face {
+			font-family: 'Noto Serif CJK SC';
+			font-style: normal;
+			font-weight: 500;
+			font-display: swap;
+			src: local('Noto Serif CJK SC Medium'), local('NotoSerifCJK-Medium'),
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-500.woff2') format('woff2'),
+				 
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-500.woff') format('woff');
+			 
+		}
+	</style>
+	
+</head>
+
+<body class="bg-gray-100 text-gray-700 font-sans">
+	<div class="p-6 sm:p-10 md:p-16 flex flex-wrap">
+		<header class="w-full md:w-2/5 xl:w-1/2 md:pr-12 lg:pr-20 xl:pr-24 order-1 md:order-1 max-w-2xl">
+			<div
+				class="z-50 bg-gray-100 bg-opacity-75 bg-opacity-custom lg:min-w-0.7 max-w-xl md:float-right md:text-right leading-loose tracking-tight md:sticky md:top-0 pt-2">
+				
+<div>
+	<h2>
+		<a href="https://imfaye.me/" title="风巷" class="heading font-cursive icon">风巷</a>
+	</h2>
+</div>
+<h1 class="pt-2">操作系统笔记 CH7 Deadlocks</h1>
+
+<div class="flex flex-wrap justify-end pt-2 "><div class="md:flex-grow-0 font-light">
+	
+	
+	
+	
+	<a class="post-taxonomy-category text-medium-red-violet-600 hover:text-medium-red-violet-400"
+		href='/categories/%E6%97%A0%E6%83%85%E7%AC%94%E8%AE%B0'>无情笔记</a>
+	
+	
+	
+
+	
+	&nbsp;&nbsp;
+	
+
+	
+	
+	
+	
+	<a class="post-taxonomy-tag text-eucalyptus-500"
+		href='/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F'>操作系统</a>&nbsp;&#47;
+	
+	<a class="post-taxonomy-tag text-eucalyptus-500"
+		href='/tags/%E5%A4%A7%E6%98%8E%E6%B9%96%E7%95%94%E7%9A%84%E4%B8%93%E4%B8%9A%E8%AF%BE'>大明湖畔的专业课</a>
+	
+	
+	
+</div><time class="text-eucalyptus-500 md:text-right md:flex-grow font-light pl-4"
+		datetime="2020-02-28T13:07:24Z">2020-2-28</time>
+</div>
+
+<details class="toc" open>
+<summary>
+    <hr />
+</summary>
+<div class="inline toc-content">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#deadlock-characteristics">deadlock characteristics</a>
+      <ul>
+        <li><a href="#necessary-conditions">necessary conditions</a></li>
+        <li><a href="#resource-allocation-graph">resource-allocation graph</a></li>
+      </ul>
+    </li>
+    <li><a href="#methods-for-handling-deadlocks">methods for handling deadlocks</a></li>
+    <li><a href="#deadlock-prevention">deadlock prevention</a></li>
+    <li><a href="#deadlock-avoidance">deadlock avoidance</a>
+      <ul>
+        <li><a href="#resource-allocation-graph-algorithm">resource-allocation-graph algorithm</a></li>
+        <li><a href="#bankers-algorithm">banker&rsquo;s algorithm</a></li>
+      </ul>
+    </li>
+    <li><a href="#deadlock-detection">deadlock detection</a>
+      <ul>
+        <li><a href="#每种资源类型单个实例">每种资源类型单个实例</a></li>
+        <li><a href="#每种资源类型多个实例">每种资源类型多个实例</a></li>
+        <li><a href="#资源图消边法">资源图消边法</a></li>
+      </ul>
+    </li>
+    <li><a href="#recovery-from-deadlock">recovery from deadlock</a>
+      <ul>
+        <li><a href="#process-termination">process termination</a></li>
+        <li><a href="#resource-preemption">resource preemption</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+</div>
+</details>
+
+<hr />
+
+
+			</div>
+		</header>
+		<main role="main" class="w-full md:w-3/5 xl:w-1/2 max-w-3xl order-2 md:order-2 min-h-70vh pt-2 pb-4">
+			
+
+<article>
+	<section class="mx-auto content">
+		<div class="c-rich-text"><h2 id="deadlock-characteristics">deadlock characteristics</h2>
+<h3 id="necessary-conditions">necessary conditions</h3>
+<p>4个条件同时满足，引起死锁：</p>
+<ul>
+<li>
+<p>mutual exclusion</p>
+<p>至少有一个资源处于非共享模式，一次只能有一个进程使用</p>
+</li>
+<li>
+<p>hold and wait</p>
+<p>占有至少一个资源，等待另一为其他进程所占资源</p>
+</li>
+<li>
+<p>no preemption</p>
+<p>资源不能被抢占</p>
+</li>
+<li>
+<p>circular wait</p>
+</li>
+</ul>
+<h3 id="resource-allocation-graph">resource-allocation graph</h3>
+<p>request edge : Pi-&gt;Rj</p>
+<p>assignment edge : Rj-&gt;Pi</p>
+<p>申请边只用指向矩形，但分配边必须从某个原点开始</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573293211940.png" style="zoom:67%;" />
+<p>资源分配图有环是死锁的必要条件。若每类资源只有一个实例，含环是充分必要条件。若同类资源数&gt;1,不一定有死锁。</p>
+<h2 id="methods-for-handling-deadlocks">methods for handling deadlocks</h2>
+<p>1.预防或避免死锁</p>
+<p>2.允许进入死锁，检测并恢复</p>
+<p>3.忽视这个问题(为多数OS所用)</p>
+<p>deadlock prevention: 确保至少一个必要条件不成立，通过限制如何申请资源</p>
+<p>deadlock avoidance: 事先得到进程申请和使用资源的额外信息，系统可确定对于一个申请，进程是否等待(申请允许还是延迟)，考虑可用、已分配、进程将来申请和释放的资源</p>
+<h2 id="deadlock-prevention">deadlock prevention</h2>
+<p>确保4个必要条件至少1个不成立</p>
+<ul>
+<li>
+<p>mutual exclusion</p>
+<p>通常不通过这个条件&hellip;</p>
+</li>
+<li>
+<p>hold and wait</p>
+<ul>
+<li>
+<p>每个进程在执行前申请并获得所有资源</p>
+</li>
+<li>
+<p>进程在没有资源时才可申请资源(申请更多资源前，先释放已分配的资源)</p>
+</li>
+</ul>
+<p>缺点:1.资源利用率低 2.starvation</p>
+</li>
+<li>
+<p>no preemption</p>
+<p>如果一个进程占有资源并申请另一个不能立即分配的资源，其现在已分配的资源都可被抢占(被隐式释放)。</p>
+<p>进程申请资源时，不可用也不被其他等待进程占有时，等待</p>
+<p>常应用于状态可以保存恢复的资源，如CPU寄存器和内存，不适用于打印机和磁带驱动器等。</p>
+</li>
+<li>
+<p>circular wait</p>
+<p>对所有资源类型进行完全排序。每个进程只按递增顺序申请资源。(只能申请编号比它大的)</p>
+</li>
+</ul>
+<h2 id="deadlock-avoidance">deadlock avoidance</h2>
+<p>死锁避免比死锁预防要求低</p>
+<p>deadlock prevention 低设备使用率和吞吐率</p>
+<p>a system is in a safe state only if there exists a safe sequence</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573295674796.png" style="zoom:50%;" />
+<h3 id="resource-allocation-graph-algorithm">resource-allocation-graph algorithm</h3>
+<p>增加claim edge(需求边)，虚线</p>
+<p>当进程Pi开始执行时，所有需求边必须先处于资源分配图。(可放宽为只要与Pi有关的需求边)</p>
+<p>只有在申请边Pi-&gt;Rj变成分配边Rj-&gt;Pi，而不会出现环时，才允许申请。环存在是unsafe state</p>
+<p>cycle-detection algorithm</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573296280721.png" style="zoom:50%;" />
+<h3 id="bankers-algorithm">banker&rsquo;s algorithm</h3>
+<p>自己看书做题去 P247</p>
+<h2 id="deadlock-detection">deadlock detection</h2>
+<p>不采用prevention和avoidance，应提供检查是否出现死锁&amp;恢复算法。</p>
+<h3 id="每种资源类型单个实例">每种资源类型单个实例</h3>
+<p>wait-for graph: Pi等待Pj释放一个Pi需要的资源</p>
+<p>Pi-&gt;Pj iff 资源分配图中 Pi-&gt;Rq, Rq-&gt;Pj</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573296978952.png" style="zoom:33%;" />
+<p>图中有环 &lt;-&gt; 死锁</p>
+<h3 id="每种资源类型多个实例">每种资源类型多个实例</h3>
+<p>detection algorithm</p>
+<p><img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573297606742.png" alt=""></p>
+<h3 id="资源图消边法">资源图消边法</h3>
+<p>PPT P45 + 看橘</p>
+<h2 id="recovery-from-deadlock">recovery from deadlock</h2>
+<h3 id="process-termination">process termination</h3>
+<p>不管哪种进程终止方法，系统都会收回分配给终止进程的所有资源</p>
+<ul>
+<li>终止所有死锁进程</li>
+<li>一次终止一个，调用死锁检测，直到取消死锁循环</li>
+</ul>
+<h3 id="resource-preemption">resource preemption</h3>
+<p>select a victim: which resources and which processes are to be preempted 代价因素 cost factors</p>
+<p>rollback: 抢占资源后对进程做什么安排 roll back to some safe state. simplest: total rollback</p>
+<p>starvation: 如何保证资源总是从一个进程抢占 在代价因素中加上回滚次数</p>
+</div>
+	</section>
+
+
+</article>
+
+		</main>
+		<div class="w-full h-0 flex-none order-3"></div>
+		<aside role="contentinfo"
+			class="w-full md:w-2/5 xl:w-1/2 md:pr-12 lg:pr-20 xl:pr-24 order-4 md:order-3 md:sticky md:bottom-0 self-end max-w-2xl">
+			<div class="md:float-right md:text-right leading-loose tracking-tight md:mb-2">
+				
+	<div class="md:max-w-xs  flex flex-col md:items-end">
+	<ul class="font-serif flex-grow-0 flex justify-between flex-wrap md:flex-col">
+	
+	
+	<li class="px-1 md:px-0">
+		<a href="/post/" title="归档 page" 
+			class="font-medium text-medium-red-violet-600 hover:text-medium-red-violet-400" >
+			归档
+		</a>
+	</li>
+	
+	<li class="px-1 md:px-0">
+		<a href="/categories/" title="分类 page" >
+			分类
+		</a>
+	</li>
+	
+	<li class="px-1 md:px-0">
+		<a href="/tags/" title="标签 page" >
+			标签
+		</a>
+	</li>
+	
+	<li class="px-1 md:px-0">
+		<a href="/about/" title="关于 page" >
+			关于
+		</a>
+	</li>
+	
+	
+	
+	
+	<div id="fastSearch" class="m-0">
+		<input id="searchInput" type="text" size=10 
+			class="bg-gray-100 focus:outline-none border-b border-gray-100 focus:border-eucalyptus-300 md:text-right
+			placeholder-java-500 min-w-0 max-w-xxxs"
+			placeholder="search" />
+		<ul id="searchResults" class="bg-gray-200 px-2 divide-y divide-gray-400">
+		</ul>
+	</div>
+	
+</ul>
+	
+
+<div class="flex flex-wrap-reverse md:justify-end content-end md:content-start justify-start items-start   max-h-16">
+	
+</div>
+	<div class="text-sm text-gray-500 leading-tight a-gray">
+		© Faye
+		<br />
+		Built with Hugo and theme <a href="https://github.com/heyeshuang/hugo-theme-tokiwa">Tokiwa</a>. 998 words in this page.
+	</div>
+</div>
+
+			</div>
+		</aside>
+		<footer class="w-full md:w-3/5 xl:w-1/2 order-3 max-w-3xl md:order-4 pt-2">
+			
+<hr class="double-line" />
+<div class="flex flex-wrap justify-between pb-2 leading-loose font-serif">
+    
+    <a class="flex-grow-0" href="/post/os6/">
+        <svg class="fill-current inline-block h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24"
+            height="24">
+            <path fill="none" d="M0 0h24v24H0z" />
+            <path d="M7.828 11H20v2H7.828l5.364 5.364-1.414 1.414L4 12l7.778-7.778 1.414 1.414z" /></svg>
+        操作系统笔记 CH6 Process Synchronization
+    </a>
+    
+    
+    <a class="flex-grow-0" href="/post/os8/">
+        操作系统笔记 CH8 Main Memory
+        <svg class="fill-current inline-block h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24"
+            height="24">
+            <path fill="none" d="M0 0h24v24H0z" />
+            <path d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z" /></svg></a>
+    
+</div>
+<div >
+
+
+
+<div class="font-serif pb-2 flex align-start leading-loose">
+	<span class="heading pr-6 leading-loose">Related</span>
+	<span >
+		
+			<a href="/post/os6/">操作系统笔记 CH6 Process Synchronization</a>&nbsp;&nbsp;&#47;&nbsp;
+		
+			<a href="/post/os5/">操作系统笔记 CH5 CPU Scheduling</a>&nbsp;&nbsp;&#47;&nbsp;
+		
+			<a href="/post/os4/">操作系统笔记 CH4 Threads</a>&nbsp;&nbsp;&#47;&nbsp;
+		
+			<a href="/post/os3/">操作系统笔记 CH3 Process</a>&nbsp;&nbsp;&#47;&nbsp;
+		
+			<a href="/post/os2/">操作系统笔记 CH2 OS structures</a>&nbsp;&nbsp;&#47;&nbsp;
+		
+			<a href="/post/os1/">操作系统笔记 CH1 Intro</a>
+		
+</span>
+</div>
+
+</div>
+<hr />
+<div class="pb-2">
+    <div id="disqus_thread"></div>
+<script type="application/javascript">
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "faye" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+<hr />
+
+		</footer>
+		
+
+<script src="/dist/app.js"></script>
+
+
+<script src="/lib/fuse.min.js"></script> 
+<script src="/lib/fastsearch.js"></script>
+
+	</div>
+</body>
+
+</html>

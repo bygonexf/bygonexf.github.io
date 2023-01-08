@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="cn">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	
+	<title>风巷  | 操作系统笔记 CH5 CPU Scheduling</title>
+	<meta name="viewport" content="width=device-width,minimum-scale=1">
+	<meta name="generator" content="Hugo 0.105.0">
+	
+	
+	<META NAME="ROBOTS" CONTENT="INDEX, FOLLOW">
+	
+
+	
+	
+	<link href="/dist/app.css" rel="stylesheet">
+	
+
+	
+
+	
+	
+<link rel="shortcut icon" href="img/wind.png" type="image/png" />
+
+	
+
+	
+	
+	
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-FAKE', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+	
+	
+	
+
+
+
+<link rel="stylesheet" href='https://imfaye.me/lib/katex.min.css' crossorigin="anonymous">
+
+
+<script defer src='https://imfaye.me/lib/katex.min.js' crossorigin="anonymous"></script>
+
+
+<script defer src='https://imfaye.me/lib/contrib/auto-render.min.js'
+crossorigin="anonymous"
+onload='renderMathInElement(document.body);'></script>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement(document.body, {
+            delimiters: [
+                {left: "$$", right: "$$", display: true},
+                {left: "$", right: "$", display: false}
+            ]
+        });
+    });
+</script>
+
+	
+	
+	
+	<script>
+		(function (u, c) {
+			var d = document,
+				t = 'script',
+				o = d.createElement(t),
+				s = d.getElementsByTagName(t)[0];
+			o.src = u;
+			if (c) {
+				o.addEventListener('load', function (e) {
+					c(e);
+				});
+			}
+			s.parentNode.insertBefore(o, s);
+		})('https:\/\/imfaye.me\/lib\/pangu.min.js', function () {
+			pangu.spacingPage();
+		});
+	</script>
+	
+	
+	
+	<style type="text/css" media="screen, print">
+		@font-face {
+			font-family: "FancyTitleFont";
+			font-style: normal;
+			font-display: swap;
+			src: url('https://imfaye.me/fonts/exampleFont.woff2') format('woff2'),
+				url('https://imfaye.me/fonts/exampleFont.woff') format('woff');
+		}
+		 
+		  
+		 
+		@font-face {
+			font-family: 'Noto Serif CJK SC';
+			font-style: normal;
+			font-weight: 300;
+			font-display: swap;
+			src: local('Noto Serif CJK SC Light'), local('NotoSerifCJK-Light'),
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-300.woff2') format('woff2'),
+				 
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-300.woff') format('woff');
+			 
+		}
+
+		 
+		@font-face {
+			font-family: 'Noto Serif CJK SC';
+			font-style: normal;
+			font-weight: 400;
+			font-display: swap;
+			src: local('Noto Serif CJK SC'), local('NotoSerifCJK-Regular'),
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-regular.woff2') format('woff2'),
+				 
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-regular.woff') format('woff');
+			 
+		}
+
+		 
+		@font-face {
+			font-family: 'Noto Serif CJK SC';
+			font-style: normal;
+			font-weight: 500;
+			font-display: swap;
+			src: local('Noto Serif CJK SC Medium'), local('NotoSerifCJK-Medium'),
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-500.woff2') format('woff2'),
+				 
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-500.woff') format('woff');
+			 
+		}
+	</style>
+	
+</head>
+
+<body class="bg-gray-100 text-gray-700 font-sans">
+	<div class="p-6 sm:p-10 md:p-16 flex flex-wrap">
+		<header class="w-full md:w-2/5 xl:w-1/2 md:pr-12 lg:pr-20 xl:pr-24 order-1 md:order-1 max-w-2xl">
+			<div
+				class="z-50 bg-gray-100 bg-opacity-75 bg-opacity-custom lg:min-w-0.7 max-w-xl md:float-right md:text-right leading-loose tracking-tight md:sticky md:top-0 pt-2">
+				
+<div>
+	<h2>
+		<a href="https://imfaye.me/" title="风巷" class="heading font-cursive icon">风巷</a>
+	</h2>
+</div>
+<h1 class="pt-2">操作系统笔记 CH5 CPU Scheduling</h1>
+
+<div class="flex flex-wrap justify-end pt-2 "><div class="md:flex-grow-0 font-light">
+	
+	
+	
+	
+	<a class="post-taxonomy-category text-medium-red-violet-600 hover:text-medium-red-violet-400"
+		href='/categories/%E6%97%A0%E6%83%85%E7%AC%94%E8%AE%B0'>无情笔记</a>
+	
+	
+	
+
+	
+	&nbsp;&nbsp;
+	
+
+	
+	
+	
+	
+	<a class="post-taxonomy-tag text-eucalyptus-500"
+		href='/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F'>操作系统</a>&nbsp;&#47;
+	
+	<a class="post-taxonomy-tag text-eucalyptus-500"
+		href='/tags/%E5%A4%A7%E6%98%8E%E6%B9%96%E7%95%94%E7%9A%84%E4%B8%93%E4%B8%9A%E8%AF%BE'>大明湖畔的专业课</a>
+	
+	
+	
+</div><time class="text-eucalyptus-500 md:text-right md:flex-grow font-light pl-4"
+		datetime="2020-02-28T13:05:24Z">2020-2-28</time>
+</div>
+
+<details class="toc" open>
+<summary>
+    <hr />
+</summary>
+<div class="inline toc-content">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#scheduling-criteria">scheduling criteria</a></li>
+    <li><a href="#scheduling-algorithm">scheduling algorithm</a></li>
+    <li><a href="#multi-processor-scheduling">multi-processor scheduling</a></li>
+    <li><a href="#thread-scheduling">thread scheduling</a></li>
+    <li><a href="#algorithm-evaluation">algorithm evaluation</a></li>
+  </ul>
+</nav>
+</div>
+</details>
+
+<hr />
+
+
+			</div>
+		</header>
+		<main role="main" class="w-full md:w-3/5 xl:w-1/2 max-w-3xl order-2 md:order-2 min-h-70vh pt-2 pb-4">
+			
+
+<article>
+	<section class="mx-auto content">
+		<div class="c-rich-text"><p>dispatcher: gives control of the CPU to the process selected by the short-term scheduler;</p>
+<p>dispatch latency</p>
+<h2 id="scheduling-criteria">scheduling criteria</h2>
+<ul>
+<li>
+<p>CPU utilization,</p>
+</li>
+<li>
+<p>throughput:</p>
+<p>单位时间完成进程数量</p>
+</li>
+<li>
+<p>turnaround time:</p>
+<p>submission to completion</p>
+</li>
+<li>
+<p>waiting time:</p>
+<p>sum of time spent in the ready queue就绪队列</p>
+</li>
+<li>
+<p>response time:</p>
+<p>submission to first response(time it takes to start responding, not the time it takes to output the response)</p>
+</li>
+</ul>
+<h2 id="scheduling-algorithm">scheduling algorithm</h2>
+<ul>
+<li>
+<p>FCFS first-come, first-served</p>
+<p>non-preemptive</p>
+<p>等待时间较长</p>
+<p>convoy effect(短进程跟在长进程后面)</p>
+</li>
+<li>
+<p>SJF shortest-job-first</p>
+<p>shortest next CPU burst</p>
+<p>常用于长期调度，短期调度可预测next CPU burst</p>
+<ul>
+<li>
+<p>exponential average</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573266645043.png" style="zoom:50%;" />
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573266662578.png" style="zoom:50%;" />
+</li>
+</ul>
+<p>preemptive/non-preemptive</p>
+<p>preemptive SJF : shortest-remaining-time-first scheduling</p>
+</li>
+<li>
+<p>priority scheduling algorithm</p>
+<p>SJF is a special case of it</p>
+<p>priority can be defined internally or externally</p>
+<p>preemptive/non-preemptive(非抢占优先级调度只是将优先级高的新进程加到ready queue的头部)</p>
+<p>主要问题是indefinite blocking/starvation</p>
+<p>低优先级无穷等待问题解决方法: aging(逐渐增加等待很久进程的优先级)</p>
+</li>
+<li>
+<p>RR round-robin</p>
+<p>especially for time-sharing system</p>
+<p>时间片(time quantum/time slice)</p>
+<p>所需时间小，自动释放CPU，所需时间大，时间片到timer会产生中断</p>
+<p>平均等待时间较长</p>
+<p>preemptive</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573267188671.png" style="zoom:50%;" />
+<p>时间片很大：FCFS；时间片很小：<u>processor sharing</u>(仿佛都有自己的处理器，速度为1/n)</p>
+<p>时间片应比context-switch time大，也不应太大</p>
+</li>
+<li>
+<p>multilevel queue scheduling algorithm</p>
+<p>foreground(interactive); background(batch) 前台进程更高优先级。前台可能RR，后台可能FCFS</p>
+<p>ready queue划分成多个队列，一个进程被永久分配到一个队列，每个队列有自己的调度算法</p>
+<p>队列间常采用fixed-priority preemptive scheduling, 或在队列间划分时间片，每个队列有一定CPU时间</p>
+</li>
+<li>
+<p>multilevel feedback queue schedling algorithm</p>
+<p>允许进程在队列之间移动</p>
+<p>使用过多CPU时间，移到低优先级队列。所以<strong>IO bound</strong> &amp; <strong>interactive</strong> processes(使用CPU时间少)会被留在高优先级队列</p>
+<p>较低优先级队列等待时间过长的进程也会被转移到更高优先级队列，prevent starvation</p>
+<p><del>看例子P172</del></p>
+<p>最通用的CPU调度算法</p>
+</li>
+<li>
+<p>HRRN highest response-ratio next 高响应比优先</p>
+<p>non-preemptive</p>
+<p>PPT  P51</p>
+</li>
+</ul>
+<h2 id="multi-processor-scheduling">multi-processor scheduling</h2>
+<p>非对称多处理(asymmetric multiprocessing),一个处理器处理调度，IO，其他系统活动；其余处理器处理用户代码</p>
+<p>SMP symmetric multiprocessing 对称多处理：每个处理器自我调度，许多OS支持SMP</p>
+<p>processor affinity: 使缓存无效或重构的代价太高，所以尽量使一个进程在同一个处理器上允许。不能保证进程不移动:soft affinity，否则hard affinity</p>
+<p>load balancing: 将工作负载平均地分配到SMP所有处理器上。load balancing只对拥有自己私有可执行进程的处理器必要(大部分时候都有私有)</p>
+<p>​	push migration: a specific task周期检查每个处理器上的负载，如果不平衡，push processes from 									overloaded to idle processor</p>
+<p>​	pull migration: an idle processor pulls a waiting task from a busy processor</p>
+<p>multicore processors: PPT P61</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573270374874.png" style="zoom:50%;" />
+<p>SMT: symmetric multithreading 提供多个逻辑处理器实现多线程并发 hyperthreading. 每个逻辑处理器负责自己的中断处理。</p>
+<h2 id="thread-scheduling">thread scheduling</h2>
+<p>对在内核级支持线程的系统而言，系统调度的是内核线程而不是进程。用户线程由线程库管理。</p>
+<p>PCS: process-contention-scope 线程库调度用户级线程到一个有效的LWP上(CPU竞争发生在属于相同进程的线程之间) ,local scheduling</p>
+<p>SCS: system-contention-scope 调度哪个内核线程到CPU(CPU竞争发生在系统的所有线程中)。一对一模型只用使用SCS ,global scheduling</p>
+<p>实例 书P178</p>
+<h2 id="algorithm-evaluation">algorithm evaluation</h2>
+<p>analytic evaluation: 产生一个公式或数字</p>
+<p>deterministic evaluation: 计算在给定负荷下算法的性能</p>
+<p>queueing-network-analysis:</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573271651221.png" style="zoom:50%;" />
+<p>simulation模拟 trace tape</p>
+</div>
+	</section>
+
+
+</article>
+
+		</main>
+		<div class="w-full h-0 flex-none order-3"></div>
+		<aside role="contentinfo"
+			class="w-full md:w-2/5 xl:w-1/2 md:pr-12 lg:pr-20 xl:pr-24 order-4 md:order-3 md:sticky md:bottom-0 self-end max-w-2xl">
+			<div class="md:float-right md:text-right leading-loose tracking-tight md:mb-2">
+				
+	<div class="md:max-w-xs  flex flex-col md:items-end">
+	<ul class="font-serif flex-grow-0 flex justify-between flex-wrap md:flex-col">
+	
+	
+	<li class="px-1 md:px-0">
+		<a href="/post/" title="归档 page" 
+			class="font-medium text-medium-red-violet-600 hover:text-medium-red-violet-400" >
+			归档
+		</a>
+	</li>
+	
+	<li class="px-1 md:px-0">
+		<a href="/categories/" title="分类 page" >
+			分类
+		</a>
+	</li>
+	
+	<li class="px-1 md:px-0">
+		<a href="/tags/" title="标签 page" >
+			标签
+		</a>
+	</li>
+	
+	<li class="px-1 md:px-0">
+		<a href="/about/" title="关于 page" >
+			关于
+		</a>
+	</li>
+	
+	
+	
+	
+	<div id="fastSearch" class="m-0">
+		<input id="searchInput" type="text" size=10 
+			class="bg-gray-100 focus:outline-none border-b border-gray-100 focus:border-eucalyptus-300 md:text-right
+			placeholder-java-500 min-w-0 max-w-xxxs"
+			placeholder="search" />
+		<ul id="searchResults" class="bg-gray-200 px-2 divide-y divide-gray-400">
+		</ul>
+	</div>
+	
+</ul>
+	
+
+<div class="flex flex-wrap-reverse md:justify-end content-end md:content-start justify-start items-start   max-h-16">
+	
+</div>
+	<div class="text-sm text-gray-500 leading-tight a-gray">
+		© Faye
+		<br />
+		Built with Hugo and theme <a href="https://github.com/heyeshuang/hugo-theme-tokiwa">Tokiwa</a>. 1175 words in this page.
+	</div>
+</div>
+
+			</div>
+		</aside>
+		<footer class="w-full md:w-3/5 xl:w-1/2 order-3 max-w-3xl md:order-4 pt-2">
+			
+<hr class="double-line" />
+<div class="flex flex-wrap justify-between pb-2 leading-loose font-serif">
+    
+    <a class="flex-grow-0" href="/post/os4/">
+        <svg class="fill-current inline-block h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24"
+            height="24">
+            <path fill="none" d="M0 0h24v24H0z" />
+            <path d="M7.828 11H20v2H7.828l5.364 5.364-1.414 1.414L4 12l7.778-7.778 1.414 1.414z" /></svg>
+        操作系统笔记 CH4 Threads
+    </a>
+    
+    
+    <a class="flex-grow-0" href="/post/os6/">
+        操作系统笔记 CH6 Process Synchronization
+        <svg class="fill-current inline-block h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24"
+            height="24">
+            <path fill="none" d="M0 0h24v24H0z" />
+            <path d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z" /></svg></a>
+    
+</div>
+<div >
+
+
+
+<div class="font-serif pb-2 flex align-start leading-loose">
+	<span class="heading pr-6 leading-loose">Related</span>
+	<span >
+		
+			<a href="/post/os4/">操作系统笔记 CH4 Threads</a>&nbsp;&nbsp;&#47;&nbsp;
+		
+			<a href="/post/os3/">操作系统笔记 CH3 Process</a>&nbsp;&nbsp;&#47;&nbsp;
+		
+			<a href="/post/os2/">操作系统笔记 CH2 OS structures</a>&nbsp;&nbsp;&#47;&nbsp;
+		
+			<a href="/post/os1/">操作系统笔记 CH1 Intro</a>
+		
+</span>
+</div>
+
+</div>
+<hr />
+<div class="pb-2">
+    <div id="disqus_thread"></div>
+<script type="application/javascript">
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "faye" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+<hr />
+
+		</footer>
+		
+
+<script src="/dist/app.js"></script>
+
+
+<script src="/lib/fuse.min.js"></script> 
+<script src="/lib/fastsearch.js"></script>
+
+	</div>
+</body>
+
+</html>

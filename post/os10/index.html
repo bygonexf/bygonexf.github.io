@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="cn">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	
+	<title>风巷  | 操作系统笔记 CH10 File-System Interface</title>
+	<meta name="viewport" content="width=device-width,minimum-scale=1">
+	<meta name="generator" content="Hugo 0.105.0">
+	
+	
+	<META NAME="ROBOTS" CONTENT="INDEX, FOLLOW">
+	
+
+	
+	
+	<link href="/dist/app.css" rel="stylesheet">
+	
+
+	
+
+	
+	
+<link rel="shortcut icon" href="img/wind.png" type="image/png" />
+
+	
+
+	
+	
+	
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-FAKE', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+	
+	
+	
+
+
+
+<link rel="stylesheet" href='https://imfaye.me/lib/katex.min.css' crossorigin="anonymous">
+
+
+<script defer src='https://imfaye.me/lib/katex.min.js' crossorigin="anonymous"></script>
+
+
+<script defer src='https://imfaye.me/lib/contrib/auto-render.min.js'
+crossorigin="anonymous"
+onload='renderMathInElement(document.body);'></script>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement(document.body, {
+            delimiters: [
+                {left: "$$", right: "$$", display: true},
+                {left: "$", right: "$", display: false}
+            ]
+        });
+    });
+</script>
+
+	
+	
+	
+	<script>
+		(function (u, c) {
+			var d = document,
+				t = 'script',
+				o = d.createElement(t),
+				s = d.getElementsByTagName(t)[0];
+			o.src = u;
+			if (c) {
+				o.addEventListener('load', function (e) {
+					c(e);
+				});
+			}
+			s.parentNode.insertBefore(o, s);
+		})('https:\/\/imfaye.me\/lib\/pangu.min.js', function () {
+			pangu.spacingPage();
+		});
+	</script>
+	
+	
+	
+	<style type="text/css" media="screen, print">
+		@font-face {
+			font-family: "FancyTitleFont";
+			font-style: normal;
+			font-display: swap;
+			src: url('https://imfaye.me/fonts/exampleFont.woff2') format('woff2'),
+				url('https://imfaye.me/fonts/exampleFont.woff') format('woff');
+		}
+		 
+		  
+		 
+		@font-face {
+			font-family: 'Noto Serif CJK SC';
+			font-style: normal;
+			font-weight: 300;
+			font-display: swap;
+			src: local('Noto Serif CJK SC Light'), local('NotoSerifCJK-Light'),
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-300.woff2') format('woff2'),
+				 
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-300.woff') format('woff');
+			 
+		}
+
+		 
+		@font-face {
+			font-family: 'Noto Serif CJK SC';
+			font-style: normal;
+			font-weight: 400;
+			font-display: swap;
+			src: local('Noto Serif CJK SC'), local('NotoSerifCJK-Regular'),
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-regular.woff2') format('woff2'),
+				 
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-regular.woff') format('woff');
+			 
+		}
+
+		 
+		@font-face {
+			font-family: 'Noto Serif CJK SC';
+			font-style: normal;
+			font-weight: 500;
+			font-display: swap;
+			src: local('Noto Serif CJK SC Medium'), local('NotoSerifCJK-Medium'),
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-500.woff2') format('woff2'),
+				 
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-500.woff') format('woff');
+			 
+		}
+	</style>
+	
+</head>
+
+<body class="bg-gray-100 text-gray-700 font-sans">
+	<div class="p-6 sm:p-10 md:p-16 flex flex-wrap">
+		<header class="w-full md:w-2/5 xl:w-1/2 md:pr-12 lg:pr-20 xl:pr-24 order-1 md:order-1 max-w-2xl">
+			<div
+				class="z-50 bg-gray-100 bg-opacity-75 bg-opacity-custom lg:min-w-0.7 max-w-xl md:float-right md:text-right leading-loose tracking-tight md:sticky md:top-0 pt-2">
+				
+<div>
+	<h2>
+		<a href="https://imfaye.me/" title="风巷" class="heading font-cursive icon">风巷</a>
+	</h2>
+</div>
+<h1 class="pt-2">操作系统笔记 CH10 File-System Interface</h1>
+
+<div class="flex flex-wrap justify-end pt-2 "><div class="md:flex-grow-0 font-light">
+	
+	
+	
+	
+	<a class="post-taxonomy-category text-medium-red-violet-600 hover:text-medium-red-violet-400"
+		href='/categories/%E6%97%A0%E6%83%85%E7%AC%94%E8%AE%B0'>无情笔记</a>
+	
+	
+	
+
+	
+	&nbsp;&nbsp;
+	
+
+	
+	
+	
+	
+	<a class="post-taxonomy-tag text-eucalyptus-500"
+		href='/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F'>操作系统</a>&nbsp;&#47;
+	
+	<a class="post-taxonomy-tag text-eucalyptus-500"
+		href='/tags/%E5%A4%A7%E6%98%8E%E6%B9%96%E7%95%94%E7%9A%84%E4%B8%93%E4%B8%9A%E8%AF%BE'>大明湖畔的专业课</a>
+	
+	
+	
+</div><time class="text-eucalyptus-500 md:text-right md:flex-grow font-light pl-4"
+		datetime="2020-02-28T13:10:24Z">2020-2-28</time>
+</div>
+
+<details class="toc" open>
+<summary>
+    <hr />
+</summary>
+<div class="inline toc-content">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#file-concept">file concept</a>
+      <ul>
+        <li><a href="#file-attributes">file attributes</a></li>
+        <li><a href="#file-operations">file operations</a></li>
+        <li><a href="#file-types">file types</a></li>
+      </ul>
+    </li>
+    <li><a href="#access-methods">access methods</a>
+      <ul>
+        <li><a href="#sequential-access-顺序访问">sequential access 顺序访问</a></li>
+        <li><a href="#direct-access-直接访问">direct access 直接访问</a></li>
+        <li><a href="#其他访问方式">其他访问方式</a></li>
+      </ul>
+    </li>
+    <li><a href="#directory-structure">directory structure</a>
+      <ul>
+        <li><a href="#single-level-directory">Single-Level Directory</a></li>
+        <li><a href="#two-level-directory">Two-Level Directory</a></li>
+        <li><a href="#tree-structured-directories">Tree-Structured Directories</a></li>
+        <li><a href="#acyclic-graph-directories-无环图">Acyclic-Graph Directories 无环图</a></li>
+        <li><a href="#general-graph-directory">General Graph Directory</a></li>
+      </ul>
+    </li>
+    <li><a href="#file-system-mounting-文件系统安装">file system mounting 文件系统安装</a></li>
+    <li><a href="#file-sharing">file sharing</a>
+      <ul>
+        <li><a href="#remote-file-system-远程文件系统">remote file system 远程文件系统</a></li>
+        <li><a href="#consistency-semantics-一致性语义">Consistency Semantics 一致性语义</a></li>
+      </ul>
+    </li>
+    <li><a href="#protection">protection</a></li>
+  </ul>
+</nav>
+</div>
+</details>
+
+<hr />
+
+
+			</div>
+		</header>
+		<main role="main" class="w-full md:w-3/5 xl:w-1/2 max-w-3xl order-2 md:order-2 min-h-70vh pt-2 pb-4">
+			
+
+<article>
+	<section class="mx-auto content">
+		<div class="c-rich-text"><h2 id="file-concept">file concept</h2>
+<p>文件：记录在外存上的 相关信息的 具有名称的 集合，逻辑内存的最小分配单元</p>
+<p>通常，文件表示程序和数据</p>
+<p>free form or may be formatted rigidly</p>
+<h3 id="file-attributes">file attributes</h3>
+<ul>
+<li>name: human-readable</li>
+<li>identifier: a unique number, non-human-readable name</li>
+<li>type</li>
+<li>location</li>
+<li>size</li>
+<li>protection</li>
+<li>time, date and user identification</li>
+</ul>
+<p>文件的信息存在directory中，directory也存在外存上</p>
+<p>A directory entry consists of the file&rsquo;s name and its unique id. The id in turn locates the other file attributes.</p>
+<h3 id="file-operations">file operations</h3>
+<p>6个基本文件操作：</p>
+<ul>
+<li>
+<p>create</p>
+</li>
+<li>
+<p>write</p>
+<p>write pointer</p>
+</li>
+<li>
+<p>read</p>
+<p>read pointer</p>
+<p>A per-process current-file-position pointer</p>
+</li>
+<li>
+<p>reposition</p>
+<p>file seek, not need I/O</p>
+</li>
+<li>
+<p>delete</p>
+<p>release file space, erase directory entry</p>
+</li>
+<li>
+<p>truncate</p>
+<p>reset length to 0, release file space</p>
+<p>只删除内容，保留属性</p>
+</li>
+</ul>
+<p>基本操作可以组合成其他操作</p>
+<p>Most file operations involve searching the directory for the entry associated with the named file</p>
+<p>首次使用文件时，使用系统调用open()</p>
+<p>OS维护一个包含所有打开文件的信息表(open-file table)。当需要一个文件操作时，通过该表的一个索引指定文件，无需搜索。文件不再使用时，进程可关闭它，OS从open-file table删除这一条目。系统调用create和delete操作的是关闭文件，而不是打开文件。</p>
+<p>系统调用open()返回一个指向open-file table中一个条目的指针。通过使用该指针，而不是真实文件名称，进行所有IO操作。also accept access mode information, such as create, read-only, read-write, append-only, etc.</p>
+<p>close(Fi), move the content of entry Fi in open-file table to directory structure on disk.</p>
+<p>多进程可能同时打开同一文件。OS采用两级内部表。</p>
+<ul>
+<li>
+<p>Process open-file table, a per-process table</p>
+<p>该进程所使用的文件信息</p>
+<p>单个进程表的每个条目相应地指向整个系统的打开文件表</p>
+</li>
+<li>
+<p>System open-file table, a system-wide table</p>
+<p>包含进程无关信息(如文件在磁盘上的位置，访问日期和文件大小)</p>
+<p>一旦一个进程打开文件，System open-file table会增加相应条目，当另一个进程执行调用open()，在其Process open-file table增加一个条目，并指向System open-file table相应条目</p>
+<p>每个文件有一个open count，记录多少进程打开了该文件。当open count=0，该文件条目可删除。</p>
+</li>
+</ul>
+<p>每个打开文件有如下信息：</p>
+<ul>
+<li>
+<p>file pointer</p>
+<p>pointer to last read/write location</p>
+<p>对每个进程唯一</p>
+</li>
+<li>
+<p>file-open count</p>
+</li>
+<li>
+<p>disk location of file</p>
+</li>
+<li>
+<p>access rights</p>
+<p>每个进程用一个访问模式打开文件</p>
+<p>保存在单个进程打开文件表中</p>
+</li>
+</ul>
+<h4 id="文件锁file-locks">文件锁(file locks)</h4>
+<p>shared lock: 多个进程并发获取</p>
+<p>exclusive lock: 只有一个进程可以获取</p>
+<p>加锁机制：</p>
+<p>mandatory强制：一个进程获得锁，阻止其他进程访问已加锁的文件。access is denied depending on locks held and requested. &ndash; Windows OS.</p>
+<p>advisory建议：processes can find status of locks and decide what to do. &ndash; Unix OS.</p>
+<h3 id="file-types">file types</h3>
+<p>实现文件类型的常用技术：在文件名称内包含类型。名称可分为两部分：name , extension</p>
+<p>Some OS, each file has a type, and a creator attribute containing the name of the program that created it.</p>
+<p>UNIX, a magic number stored at the beginning of some files to indicate roughly the type of the file.</p>
+<h2 id="access-methods">access methods</h2>
+<p>Criteria for File Organization: Rapid access, Ease of update, Economy of storage, Simple maintenance, Reliability</p>
+<h3 id="sequential-access-顺序访问">sequential access 顺序访问</h3>
+<p>基于文件的磁带模型。不仅适用于顺序访问设备，也适用于随机访问设备</p>
+<h3 id="direct-access-直接访问">direct access 直接访问</h3>
+<p>文件由固定长度的逻辑记录组成。基于文件的磁盘模型。可立即访问大量信息。数据库常采用这种类型的文件。</p>
+<p>提供的是相对块号。</p>
+<p>对直接访问文件，可容易地模拟顺序访问。反过来很低效。</p>
+<h3 id="其他访问方式">其他访问方式</h3>
+<p>通常涉及创建索引</p>
+<h2 id="directory-structure">directory structure</h2>
+<p>有时需要在一个磁盘上装多种文件系统</p>
+<p>Disk can be subdivided into partitions.</p>
+<p>Disk or partition can be used：</p>
+<p>​	raw, without a file system, e.g. swap space</p>
+<p>​	formatted with a file system</p>
+<p>Volume: Entity containing file system</p>
+<p>Each volume containing file system also tracks that file system&rsquo;s info in device directory or volume table of contents.</p>
+<p>Disks or partitions can be RAID protected against failure.</p>
+<p>directory可看作符号表，将 文件名 转换成 目录条目</p>
+<p>Both the directory structure and the files reside on disk.</p>
+<h3 id="single-level-directory">Single-Level Directory</h3>
+<p>所有文件包含在同一目录中</p>
+<p>必须有唯一名称</p>
+<p>naming problem , grouping problem</p>
+<h3 id="two-level-directory">Two-Level Directory</h3>
+<p>为每个用户创建独立目录</p>
+<p>A master file directory(主文件目录MFD) and one user file directory(用户文件目录UFD) for each user.</p>
+<p>UFD内文件名唯一即可</p>
+<p>No grouping capability</p>
+<p>File sharing怎么解决</p>
+<ul>
+<li>Path name. defined by a user name and a file name.</li>
+<li>Special user directory, containing system files.</li>
+<li>Search path, the sequence of directories searched.</li>
+</ul>
+<h3 id="tree-structured-directories">Tree-Structured Directories</h3>
+<p>树有根目录，系统内的每个文件都有唯一路径名</p>
+<p>One bit in each entry defines the entry as a file(0) or as a subdirectory(1).</p>
+<p>Grouping Capability</p>
+<p>每个进程有 Current directory (working directory) 当前目录 In accounting file, a pointer/the name of the user&rsquo;s initial directory. Copied to a local variable for this user.</p>
+<p>Absolute path name: 从根开始</p>
+<p>relative path name: 从当前目录开始</p>
+<p>创建子目录/新文件在当前目录下完成</p>
+<p>Deleting a subdirectory</p>
+<p>​	deleting a empty directory. &ndash; MS-DOS 目录不为空不能删除</p>
+<p>​	deleting all files and subdirectories that it contains.&ndash; UNIX 所有该目录的文件和子目录可删除</p>
+<h3 id="acyclic-graph-directories-无环图">Acyclic-Graph Directories 无环图</h3>
+<p>树状结构禁止共享文件和目录</p>
+<p>注意这里是共享文件而不是文件复制，共享文件任何改变为其他用户可见</p>
+<p>Ways implementing shared files and subdirectories:</p>
+<p>​	Create a new directory entry, called a link. &ndash; UNIX  link, a pointer to another file or subdirectory. Resolve the link – follow pointer to locate the file.</p>
+<p>​	duplicate all information about shared files in all sharing directories. 问题：维护一致性</p>
+<p>当用户删除文件时就删除，会留下dangling pointer</p>
+<p>​	对于link: Deletion of a link need not affectt he original file. Deletion of the file entry, leaving the links dangling.</p>
+<p>​	对于duplication: File-reference list, Backpointers. 为每个文件保留一个引用列表或引用计数Backpointers, so we can delete all pointers.</p>
+<h3 id="general-graph-directory">General Graph Directory</h3>
+<p>允许环存在</p>
+<p>为避免无限循环：强制限制在搜索时所访问目录的次数</p>
+<p>何时可删除？因为有环，就算不存在引用，其引用计数也可能不为0，可能存在自我引用。解决办法：Garbage collection: The first pass, traversing the entire file system, marking everything that can be accessed.  The second pass, collects everything that is not marked onto a list of free space.</p>
+<p>How to avoid cycles? Allow only links to file not subdirectories. Every time a new link is added use a cycle detection algorithm. A simpler algorithm, bypass links during directory traversal.</p>
+<h2 id="file-system-mounting-文件系统安装">file system mounting 文件系统安装</h2>
+<ol>
+<li>
+<p>OS需要知道 设备名称 和 安装点(mount point)</p>
+</li>
+<li>
+<p>OS验证设备是否包含一个有效文件系统(通过device driver读入设备目录，验证目录是否具有期望格式)</p>
+</li>
+<li>
+<p>OS在其目录结构记录下：一个文件系统已安装在给定安装点上</p>
+</li>
+</ol>
+<p>Systems impose semantics to clarify functionality.</p>
+<h2 id="file-sharing">file sharing</h2>
+<p>多用户需要共享文件</p>
+<p>Sharing may be done through a protection scheme.</p>
+<p>More file and directory attributes are needed: File / directory owner; File / directory user, access rights; File / directory user groups, access rights</p>
+<p>User IDs identify users, allowing permissions and protections to be per-user. Group IDs allow users to be in groups, permitting group access rights.</p>
+<h3 id="remote-file-system-远程文件系统">remote file system 远程文件系统</h3>
+<ol>
+<li>
+<p>通过程序(如ftp)在机器之间进行文件的人工传输</p>
+</li>
+<li>
+<p>distributed file systems (DFS)</p>
+<p>远程目录可从本机上直接访问</p>
+<p>much tighter integration</p>
+</li>
+<li>
+<p>via the World Wide Web(WWW)</p>
+<p>A browser is needed. uses anonymous file exchange.</p>
+</li>
+</ol>
+<h4 id="client-server-model">Client-server model</h4>
+<p>allows clients to mount remote file systems from servers.</p>
+<p>Client and user-on-client identification is insecure or complicated.</p>
+<p>​	client can be specified by a network name or other identifier, such as an IP address, Can be spoofed or imitated.</p>
+<p>​	Secure authentication via encrypted keys. Ensuring compatibility of the client and server.</p>
+<p>NFS: standard UNIX client-server file sharing protocol</p>
+<p>CIFS(Common Internet File System): standard Windows protocol, uses active directory</p>
+<p>Standard operating system file calls are translated into remote calls远程调用</p>
+<h4 id="distributed-information-systems">Distributed Information Systems</h4>
+<p>Providing unified access to the information needed for remote computing.</p>
+<p>DNS (domain name system) provides host-name-to-network-address translations for entire internet.</p>
+<p>NIS (network information service), yellow pages黄页, centralizes storage of user names, host names, printer information, and the like.</p>
+<p>LDAP (lightweight directory-access protocol), used by industry as a secure distributed naming mechanism. secure single sign-on</p>
+<h4 id="failure-modes-故障模式">Failure Modes 故障模式</h4>
+<p>Remote file systems add new failure modes, due to network failure, server failure.</p>
+<p>Recovery from failure can involve state information about status状态信息 of each remote request.</p>
+<p>Stateless protocols such as NFS V3 include all information in each request, allowing easy recovery but less security.</p>
+<p>In NFS V4, it is made stateful</p>
+<h3 id="consistency-semantics-一致性语义">Consistency Semantics 一致性语义</h3>
+<p>描述多用户同时访问共享文件时的语义。规定了一个用户所修改的数据何时对另一用户可见。</p>
+<p>由于延迟，不适合类似进程同步那些复杂算法</p>
+<ul>
+<li>
+<p>AFS (Andrew File System) implemented complex remote file sharing semantics</p>
+<p>server记录client的动作</p>
+<p>When a client changes a file, the server notifies other clients with a call back promise technique</p>
+<p>一个用户对打开文件的写不能立即被打开同一文件的其他用户看见。一旦文件关闭，其修改只能被以后打开的会话所见。</p>
+<p>多个用户允许对自己的映像进行并发(没有延迟)的读写操作</p>
+</li>
+<li>
+<p>UFS (Unix file system) implements</p>
+<p>一个文件与单个物理映射相关联，该映射作为互斥资源访问。修改立即可见。竞争导致用户进程延迟。</p>
+</li>
+<li>
+<p>Immutable shared files, declared by its creator. Read-only. 不可修改</p>
+</li>
+</ul>
+<h2 id="protection">protection</h2>
+<p>高层功能可以用系统程序调用低层系统调用实现。保护可以只在低层提供。</p>
+<p>Mode of access: read, write, execute</p>
+<p>为每个文件和目录增加一个访问控制列表ACL(Access-control list)，给定每个用户名及其允许访问的类型</p>
+<p>三种用户类型:</p>
+<ul>
+<li>owner</li>
+<li>group</li>
+<li>universe(public): all other users in the system</li>
+</ul>
+<p>每个域三个位:RWX. 需要9个位</p>
+</div>
+	</section>
+
+
+</article>
+
+		</main>
+		<div class="w-full h-0 flex-none order-3"></div>
+		<aside role="contentinfo"
+			class="w-full md:w-2/5 xl:w-1/2 md:pr-12 lg:pr-20 xl:pr-24 order-4 md:order-3 md:sticky md:bottom-0 self-end max-w-2xl">
+			<div class="md:float-right md:text-right leading-loose tracking-tight md:mb-2">
+				
+	<div class="md:max-w-xs  flex flex-col md:items-end">
+	<ul class="font-serif flex-grow-0 flex justify-between flex-wrap md:flex-col">
+	
+	
+	<li class="px-1 md:px-0">
+		<a href="/post/" title="归档 page" 
+			class="font-medium text-medium-red-violet-600 hover:text-medium-red-violet-400" >
+			归档
+		</a>
+	</li>
+	
+	<li class="px-1 md:px-0">
+		<a href="/categories/" title="分类 page" >
+			分类
+		</a>
+	</li>
+	
+	<li class="px-1 md:px-0">
+		<a href="/tags/" title="标签 page" >
+			标签
+		</a>
+	</li>
+	
+	<li class="px-1 md:px-0">
+		<a href="/about/" title="关于 page" >
+			关于
+		</a>
+	</li>
+	
+	
+	
+	
+	<div id="fastSearch" class="m-0">
+		<input id="searchInput" type="text" size=10 
+			class="bg-gray-100 focus:outline-none border-b border-gray-100 focus:border-eucalyptus-300 md:text-right
+			placeholder-java-500 min-w-0 max-w-xxxs"
+			placeholder="search" />
+		<ul id="searchResults" class="bg-gray-200 px-2 divide-y divide-gray-400">
+		</ul>
+	</div>
+	
+</ul>
+	
+
+<div class="flex flex-wrap-reverse md:justify-end content-end md:content-start justify-start items-start   max-h-16">
+	
+</div>
+	<div class="text-sm text-gray-500 leading-tight a-gray">
+		© Faye
+		<br />
+		Built with Hugo and theme <a href="https://github.com/heyeshuang/hugo-theme-tokiwa">Tokiwa</a>. 2742 words in this page.
+	</div>
+</div>
+
+			</div>
+		</aside>
+		<footer class="w-full md:w-3/5 xl:w-1/2 order-3 max-w-3xl md:order-4 pt-2">
+			
+<hr class="double-line" />
+<div class="flex flex-wrap justify-between pb-2 leading-loose font-serif">
+    
+    <a class="flex-grow-0" href="/post/os9/">
+        <svg class="fill-current inline-block h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24"
+            height="24">
+            <path fill="none" d="M0 0h24v24H0z" />
+            <path d="M7.828 11H20v2H7.828l5.364 5.364-1.414 1.414L4 12l7.778-7.778 1.414 1.414z" /></svg>
+        操作系统笔记 CH9 Virtual Memory
+    </a>
+    
+    
+    <a class="flex-grow-0" href="/post/os11/">
+        操作系统笔记 CH11 File-System Implementation
+        <svg class="fill-current inline-block h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24"
+            height="24">
+            <path fill="none" d="M0 0h24v24H0z" />
+            <path d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z" /></svg></a>
+    
+</div>
+<div >
+
+
+
+<div class="font-serif pb-2 flex align-start leading-loose">
+	<span class="heading pr-6 leading-loose">Related</span>
+	<span >
+		
+			<a href="/post/os9/">操作系统笔记 CH9 Virtual Memory</a>&nbsp;&nbsp;&#47;&nbsp;
+		
+			<a href="/post/os8/">操作系统笔记 CH8 Main Memory</a>&nbsp;&nbsp;&#47;&nbsp;
+		
+			<a href="/post/os7/">操作系统笔记 CH7 Deadlocks</a>&nbsp;&nbsp;&#47;&nbsp;
+		
+			<a href="/post/os6/">操作系统笔记 CH6 Process Synchronization</a>&nbsp;&nbsp;&#47;&nbsp;
+		
+			<a href="/post/os5/">操作系统笔记 CH5 CPU Scheduling</a>&nbsp;&nbsp;&#47;&nbsp;
+		
+			<a href="/post/os4/">操作系统笔记 CH4 Threads</a>&nbsp;&nbsp;&#47;&nbsp;
+		
+			<a href="/post/os3/">操作系统笔记 CH3 Process</a>&nbsp;&nbsp;&#47;&nbsp;
+		
+			<a href="/post/os2/">操作系统笔记 CH2 OS structures</a>&nbsp;&nbsp;&#47;&nbsp;
+		
+			<a href="/post/os1/">操作系统笔记 CH1 Intro</a>
+		
+</span>
+</div>
+
+</div>
+<hr />
+<div class="pb-2">
+    <div id="disqus_thread"></div>
+<script type="application/javascript">
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "faye" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+<hr />
+
+		</footer>
+		
+
+<script src="/dist/app.js"></script>
+
+
+<script src="/lib/fuse.min.js"></script> 
+<script src="/lib/fastsearch.js"></script>
+
+	</div>
+</body>
+
+</html>

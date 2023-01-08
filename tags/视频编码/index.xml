@@ -1,0 +1,576 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>视频编码 on 风巷</title>
+    <link>https://imfaye.me/tags/%E8%A7%86%E9%A2%91%E7%BC%96%E7%A0%81/</link>
+    <description>Recent content in 视频编码 on 风巷</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>cn</language>
+    <copyright>© Faye</copyright>
+    <lastBuildDate>Sun, 05 Dec 2021 13:09:24 +0000</lastBuildDate>
+    
+	<atom:link href="https://imfaye.me/tags/%E8%A7%86%E9%A2%91%E7%BC%96%E7%A0%81/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>关于熵编码</title>
+      <link>https://imfaye.me/post/entropy-coding/</link>
+      <pubDate>Sun, 05 Dec 2021 13:09:24 +0000</pubDate>
+      
+      <guid>https://imfaye.me/post/entropy-coding/</guid>
+      <description>&lt;h1 id=&#34;传统熵模型&#34;&gt;传统熵模型&lt;/h1&gt;
+&lt;h2 id=&#34;算术编码-arithmetic-coding&#34;&gt;算术编码 (Arithmetic Coding)&lt;/h2&gt;
+&lt;h3 id=&#34;流程&#34;&gt;流程&lt;/h3&gt;
+&lt;p&gt;（以静态模型举例）&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;假设有一段数据需要编码，统计里面所有的字符和出现的次数。编码从初始区间 (0, 1] 开始。&lt;/li&gt;
+&lt;li&gt;在当前区间内根据各字符概率划分子区间。&lt;/li&gt;
+&lt;li&gt;读入字符，找到该字符落入的子区间，将区间更新为该子区间，并重复 2, 3 步骤&lt;/li&gt;
+&lt;li&gt;最后得到的区间 [low, high) 中任意一个小数以二进制形式输出即得到编码的数据&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;例子如下：&lt;/p&gt;
+&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/image-20220727131100497.png&#34; style=&#34;zoom: 80%;&#34; /&gt;
+&lt;h3 id=&#34;实现细节&#34;&gt;实现细节&lt;/h3&gt;
+&lt;p&gt;最后结果是一个小数，我们不能简单地用一个 double 类型去表示和计算这个小数，因为根据数据的复杂程度，这个小数可能任意长，小数点后可能会有成千上万位。&lt;/p&gt;
+&lt;p&gt;然而，小数点后的数据前几位很有可能是在过程中是可以不断提前确定的。例如如果当前区间为 [0.14432, 0.1456)，高位的 0.14 可以提前确定，14已经可以输出了。那么小数点可以向后移动两位，区间变成 [0.432, 0.56)，在此基础上进行后面的计算。这样编码区间永远保持在一个有限的精度要求上。&lt;/p&gt;
+&lt;p&gt;上述是基于十进制的，实际数字是用二进制表示的，当然原理是一样的，用十进制只是为了表述方便。&lt;/p&gt;
+&lt;h3 id=&#34;静态模型--自适应模型&#34;&gt;静态模型 → 自适应模型&lt;/h3&gt;
+&lt;p&gt;静态模型在初始时对完整的数据统计完概率分布，之后不再更新概率分布；自适应模型随着字符的输入会不断更新概率分布。&lt;/p&gt;
+&lt;p&gt;静态模型的缺点在于：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;在压缩前对信息内字符进行统计的过程会消耗大量时间。&lt;/li&gt;
+&lt;li&gt;对较长的信息，静态模型统计出的符号概率是该符号在整个信息中的出现概率，而自适应模型可以统计出某个符号在某一局部的出现概率或某个符号相对于某一上下文的出现概率，换句话说，自适应模型得到的概率分布将有利于对信息的压缩（可以说结合上下文的自适应模型的信息熵建立在更高的概率层次上，其总熵值更小），好的基于上下文的自适应模型得到的压缩结果将远远超过静态模型。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;例如一段码流，某符号在前面出现概率较大而后面概率小，甚至忽大忽小，采用自适应模型就可以更好的适应这样的变动，压缩效率会比静态模型更高。主流视频编码标准如H.264/H.265都使用自适应模型。&lt;/p&gt;
+&lt;h3 id=&#34;算术编码-vs-哈夫曼编码&#34;&gt;算术编码 vs 哈夫曼编码&lt;/h3&gt;
+&lt;p&gt;首先说结论，算术编码压缩效率更高，哈夫曼编码复杂度更低。&lt;/p&gt;
+&lt;p&gt;这两种编码，或者说熵编码的本质是，概率越小的字符，用更多的 bit 去表示，这反映到概率区间上就是，概率小的字符所对应的区间也小，因此这个区间的上下边际值的差值越小，为了唯一确定当前这个区间，则需要更多的数字去表示它。&lt;/p&gt;
+&lt;p&gt;哈夫曼编码由于不断地二叉，它的子区间总是 $\frac{1}{2}$ 的幂次方。而算术编码可以做到严格按照概率的大小等比例划分子区间。所以哈夫曼编码只是算术编码一种粗略的近似。&lt;/p&gt;
+&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/image-20220727131117834.png&#34; style=&#34;zoom: 80%;&#34; /&gt;
+&lt;h3 id=&#34;cabac&#34;&gt;CABAC&lt;/h3&gt;
+&lt;p&gt;CABAC（Context-based Adaptive Binary Arithmetic Coding），CABAC 被视频标准H.264/H.265所采用。&lt;/p&gt;
+&lt;p&gt;CABAC可以分为二值化、上下文建模和二进制算术编码三个步骤。&lt;/p&gt;
+&lt;p&gt;其中上下文建模相当于把整段码流进行了再次的细分，把相同条件下的字符bin（比如块大小/亮度色度/语法元素/扫描方式/周围情况等）归属于某个context，形成一个比较独立的子队列而进行编码，其更新只与当前的状态和当前字符是否MPS有关（换句话说，只和历史该子队列编码字符和当前字符有关），而与别的子队列/字符是无关的。当然输出码字往往是根据规则而“混”在一起的。&lt;/p&gt;
+&lt;p&gt;CABAC虽然性能很好，但也存在以下几点不足：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;复杂度过高，不易并行处理。存在块级依赖（左/上角的块没有码率估计/熵编码，后继块就无法得到更新后的状态，从而无法开始码率估计/熵编码）、Bin级依赖（同一个子队列的bin存在前后依赖性，后继的bin要等前面bin编完后才能得到更新后的上下文状态）以及编码的几个环节依赖，这些依赖性会影响编码器的并行实现。&lt;/li&gt;
+&lt;li&gt;计算精度问题。为简化计算，CABAC采用128个状态来近似，根据原来状态和当前符号性质查表得到下个状态。这个过程中会有一些精度的损失。另外，如果当一连串的MPS到来，状态到达62后就不会继续改变，只会“原地踏步”。换句话说，当概率到达0.01975时就不会随着符号继续变小，这样会影响压缩效率。&lt;/li&gt;
+&lt;li&gt;Context的设计问题。部分context利用频率很低，在测试中平均一帧都用不到几次，而有的context使用频率很高，需要进一步的优化。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;区间编码-range-coding&#34;&gt;区间编码 (Range Coding)&lt;/h2&gt;
+&lt;p&gt;区间编码可以看为算术编码的一个变种，比算术编码压缩效率略小，但运算速度近乎是算术编码的两倍。&lt;/p&gt;
+&lt;p&gt;区间编码在整数（任意底）空间中进行进行计算，而算术编码的区间总是以小数的形式进行迭代。其他部分都几乎一样。&lt;/p&gt;
+&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/image-20220727131132728.png&#34; style=&#34;zoom:67%;&#34; /&gt;
+&lt;h1 id=&#34;端到端熵模型&#34;&gt;端到端熵模型&lt;/h1&gt;
+&lt;p&gt;Todo&amp;hellip;&lt;/p&gt;
+&lt;h1 id=&#34;参考&#34;&gt;参考&lt;/h1&gt;
+&lt;p&gt;&lt;a href=&#34;https://zhuanlan.zhihu.com/p/23834589&#34;&gt;算术编码（转载加笔记）&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://segmentfault.com/a/1190000011561822&#34;&gt;算数编码原理解析&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>图像质量评价指标(MSE, PSNR, MS-SSIM)</title>
+      <link>https://imfaye.me/post/image-quality-evaluation-metrics/</link>
+      <pubDate>Thu, 02 Dec 2021 23:35:47 +0000</pubDate>
+      
+      <guid>https://imfaye.me/post/image-quality-evaluation-metrics/</guid>
+      <description>&lt;p&gt;如何评价重建图像的质量：比较重建图像与原始图像的可视误差。&lt;/p&gt;
+&lt;h2 id=&#34;mse&#34;&gt;MSE&lt;/h2&gt;
+&lt;p&gt;Mean Squared Error, 均方误差&lt;/p&gt;
+&lt;p&gt;$MSE = \frac{1}{N}\sum\limits_{i=1}^{N}(x_i-y_i)^2$&lt;/p&gt;
+&lt;p&gt;两者越接近，MSE 越小。MSE 损失的范围为 0 到 ∞。&lt;/p&gt;
+&lt;h2 id=&#34;psnr&#34;&gt;PSNR&lt;/h2&gt;
+&lt;p&gt;Peak Signal to Noise Ratio，峰值信噪比，即峰值信号的能量与噪声的平均能量之比，通常取 log 单位为分贝。&lt;/p&gt;
+&lt;p&gt;$PSNR = 10 log_{10}\frac{MaxValue^2}{MSE}$&lt;/p&gt;
+&lt;p&gt;从式子可以看出 PSNR 可以理解为 MSE 的另一种表达形式。与 MSE 相反的是，重建图像质量越好，PSNR 数值越大。&lt;/p&gt;
+&lt;p&gt;对于图像来说，像素点数值以量化方式保存，八比特位深的情况，取值范围为 [0, 255]，$MaxValue$ 就是 255。&lt;/p&gt;
+&lt;h2 id=&#34;ssim&#34;&gt;SSIM&lt;/h2&gt;
+&lt;p&gt;MSE 与 PSNR 的问题是，在计算每个位置上的像素差异时，其结果仅与当前位置的两个像素值有关，与其它任何位置上的像素无关。这种计算差异的方式仅仅将图像看成了一个个孤立的像素点，而忽略了图像内容所包含的一些视觉特征，特别是图像的局部结构信息。而图像质量的好坏极大程度上是一个主观感受，其中结构信息对人主观感受的影响非常之大。&lt;/p&gt;
+&lt;p&gt;而 SSIM (Structural Similarity，结构相似性) 就试图解决这个问题&lt;/p&gt;
+&lt;p&gt;SSIM 由三部分组成：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;亮度对比 平均灰度作为亮度测量： $\mu_x = \frac{1}{N}\sum\limits_{i=1}^{N}x_i$ 亮度对比函数： $l(x,y) = \frac{2\mu_x\mu_y + C_1}{\mu_x^2+\mu_y^2+C_1}$&lt;/li&gt;
+&lt;li&gt;对比度对比 灰度标准差作为对比度测量： $\sigma_x={(\frac{1}{N-1}\sum\limits_{i=1}^N{(x_i-\mu_x)}^2)}^{\frac{1}{2}}$ 亮度对比函数： $c(x,y)=\frac{2\sigma_x\sigma_y+C_2}{\sigma_x^2+\sigma_y^2+C_2}$&lt;/li&gt;
+&lt;li&gt;结构对比 结构测量： $\frac{x-\mu_x}{\sigma_x}$ 结构对比函数： $s(x,y) = \frac{\sigma_{xy}+C_3}{\sigma_x\sigma_y + C_3}$&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;SSIM 函数：&lt;/p&gt;
+&lt;p&gt;$SSIM(x,y)={[l(x,y)]}^\alpha \cdot {[c(x,y)]}^\beta \cdot {[s(x,y)]}^\gamma$&lt;/p&gt;
+&lt;p&gt;$一般取 \alpha = \beta =\gamma=1$&lt;/p&gt;
+&lt;p&gt;$SSIM(x,y)=\frac{(2\mu_x\mu_y+C_1)(2\sigma_x\sigma_y+C_2)}{(\mu_x^2+\mu_y^2+C_1)(\sigma_x^2\sigma_y^2+C_2)}$&lt;/p&gt;
+&lt;p&gt;下图是同样 MSE 的图片，仅仅做对比拉伸（灰度拉伸，增大图像灰度级的动态范围）、均值偏移，其实不怎么影响人眼对图像的理解，而模糊和压缩痕迹则影响较大，这些情况下 SSIM 就能更好地做出判断。&lt;/p&gt;
+&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/image-20220723233900866.png&#34; style=&#34;zoom: 80%;&#34; /&gt;
+&lt;h2 id=&#34;ms-ssim&#34;&gt;MS-SSIM&lt;/h2&gt;
+&lt;p&gt;SSIM 算法基于 HVS 擅长从图像中提取结构信息，并利用结构相似度计算图像的感知质量。但 SSIM 是一种单尺度算法，实际上正确的图像尺度取决于用户的观看条件，如显示设备分辨率、用户的观看距离等。&lt;/p&gt;
+&lt;p&gt;单尺度的 SSIM 算法可能仅适用于某个特定的配置，为了解决该问题，MS-SSIM (Multi-scale structural similarity) 在 SSIM 算法的基础上提出了多尺度的结构相似性评估算法。&lt;/p&gt;
+&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/image-20220723233921947.png&#34; style=&#34;zoom:80%;&#34; /&gt;
+&lt;p&gt;&lt;em&gt;MS-SSIM 算法，L 表示低通滤波器，2↓ 表示采样间隔为 2 的下采样&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;原始图像的尺度为 1，最大尺度为 M，对 $scale=j$ 的尺度而言，其亮度、对比度、结构的相似性分布表示为 $l_j(x,y), c_j(x,y), s_j(x,y)$，MS-SSIM 的计算公式为：&lt;/p&gt;
+&lt;p&gt;$MS-SSIM(x,y) = {[l_M(x,y)]}^{\alpha M} \cdot \prod\limits_{j=1}^M{[c_j(x,y)]}^{\beta j}{[s_j(x,y)]}^{\gamma j}$&lt;/p&gt;
+&lt;p&gt;一般，令 $\alpha_j = \beta_j = \gamma_j$，$j \in [1, M]$，我们得到：&lt;/p&gt;
+&lt;p&gt;$MS-SSIM(x,y) = {[l_M(x,y)]}^{\alpha M} \cdot \prod\limits_{j=1}^M{[c_j(x,y) \cdot s_j(x,y)]}^{\alpha j}$&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>AVS3 编码位流</title>
+      <link>https://imfaye.me/post/avs3-bitstream/</link>
+      <pubDate>Thu, 01 Apr 2021 17:28:29 +0000</pubDate>
+      
+      <guid>https://imfaye.me/post/avs3-bitstream/</guid>
+      <description>&lt;h2 id=&#34;概述&#34;&gt;概述&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;视频序列&lt;/strong&gt;是位流的最高层语法结构。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;帧&lt;/strong&gt;由一个亮度样本矩阵和两个色度样本矩阵构成。&lt;strong&gt;场&lt;/strong&gt;由构成帧的三个样本矩阵中相间的行构成。奇数行构成顶场，偶数行构成底场。&lt;/p&gt;
+&lt;p&gt;视频序列头由视频序列起码码开始，后面跟着一串编码图像数据。序列头可在位流中重复出现，称为重复序列头。使用重复序列头的主要目的是支持对视频序列的随机访问。&lt;/p&gt;
+&lt;p&gt;一副图像可以是一帧或一场，其编码数据由图像起始码开始，到序列起始码、序列结束码或下一个图像起始码结束。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;片&lt;/strong&gt;是图像中的矩形区域，包含若干最大编码单元在图像内的部分，片之间不应重叠。&lt;/p&gt;
+&lt;p&gt;图像划分为&lt;strong&gt;最大编码单元&lt;/strong&gt;，最大编码单元之间不应重叠，最大编码单元左上角的样本不应超出图像边界，最大编码单元右下角的样本可超出图像边界。&lt;/p&gt;
+&lt;p&gt;最大编码单元划分为一个或多个&lt;strong&gt;编码单元&lt;/strong&gt;，由编码树决定。编码单元划分为一个或多个&lt;strong&gt;变换块&lt;/strong&gt;。&lt;/p&gt;
+&lt;h2 id=&#34;码流结构及语义描述&#34;&gt;码流结构及语义描述&lt;/h2&gt;
+&lt;h3 id=&#34;视频序列&#34;&gt;视频序列&lt;/h3&gt;
+&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/20210403170108.png&#34; style=&#34;zoom:80%;&#34; /&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;序列头 sequence_header&lt;/p&gt;
+&lt;p&gt;视频序列起始码、档次标号、级别标号、知识位流标志、知识图像允许标志、知识位流重复序列头标志、逐行序列标志、场图像序列标志、水平尺寸、垂直尺寸、色度格式、样本精度、编码样本精度、宽高比、帧率代码、比特率低位、比特率高位、低延迟、时间层标识允许标志、位流缓冲区尺寸、最大解码图像缓冲区大小、参考图像队列 1 索引存在标志、参考图像队列相同标志、参考图像队列配置集数、默认活跃参考图像数、最大编码单元尺寸、最小编码单元尺寸、划分单元最大比例、编码树最大划分次数、最小四叉树尺寸、最大二叉树尺寸、最大扩展四叉树尺寸、加权量化允许标志、加权量化矩阵加载标志、二次变换允许标志、样值偏倚补偿允许标志、自适应修正滤波允许标志、仿射运动补偿允许标志、对称运动矢量差模式允许标志、脉冲编码调制模式允许标志、自适应运动矢量精度允许标志、候选历史运动信息数、帧内预测滤波允许标志、高级运动矢量表达模式允许标志、运动矢量精度扩展模式允许标志、色度两步预测模式允许标志、帧内衍生模式允许标志、衍生模式划分边长最大尺寸、基于位置的变换允许标志、图像重排序延迟、跨片环路滤波允许标志、片划分一致性标志、参考同位置片标志、统一片大小标志、片宽度、片高度&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;视频编辑码和视频序列结束码&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;视频编辑码 video_edit_code&lt;/p&gt;
+&lt;p&gt;紧跟其后的第一幅 I 图像后续的 B 图像可能因缺少参考图像而不能正确解码&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;视频序列结束码 video_sequence_end_code&lt;/p&gt;
+&lt;p&gt;标识视频序列的结束。如果 POI（显示顺序索引），如果 POI 的值大于 $(2^{32}-1)$，位流中应插入一个视频序列结束码。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;参考图像队列配置集&lt;/p&gt;
+&lt;p&gt;参考知识图像标志、知识图像索引标志、被参考的知识图像索引、参考图像数、参考图像 DOI 差值绝对值、参考图像 DOI 差值符号&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;自定义加权量化矩阵&lt;/p&gt;
+&lt;p&gt;加权量化矩阵系数&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;图像&#34;&gt;图像&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;帧内预测图像头&lt;/p&gt;
+&lt;p&gt;帧内预测图像起始码、BBV 延时、时间编码标志、时间编码、解码顺序索引、知识图像索引、时间层标识、图像输出延迟、引用参考图像队列配置集标志、引用参考图像队列配置集索引、BBV 检测次数、逐行帧标志、图像编码结构标志、顶场在先、重复首场、顶场场图像标志、固定图像量化因子、去块滤波禁用标志、去块滤波参数标志、$\alpha$ 和 C 索引的偏移、$\beta$ 索引的偏移、色度量化参数禁用标志、色度量化参数增量 Cb、色度量化参数增量 Cr、图像加权量化允许标志、图像加权量化数据加载索引、加权量化参数索引、加权量化矩阵模型、加权量化参数增量 1、加权量化参数增量 2、图像自适应修正滤波允许标志&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;帧间预测图像头&lt;/p&gt;
+&lt;p&gt;帧间预测图像起始码、随机访问正确解码标志、图像编码方式、活跃参考图像数重载标志、活跃参考图像数、仿射预测子块尺寸标志&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;片&lt;/p&gt;
+&lt;p&gt;片起始码、固定片量化银子标志、片量化因子、片样值偏移补偿允许标志、高级熵编码字节对齐填充位、最大编码单元量化参数增量、样值偏移补偿合并方式索引、样值偏移补偿模式、样值偏移补偿区间模式偏移绝对值、样值偏移补偿区间模式偏移值符号值、样值偏移补偿区间模式起始偏移子区间位置、样值偏移补偿区间模式起始偏移子区间位置差、样值偏移补偿模式偏移值、样值偏移补偿边缘模式类型、最大编码单元自适应修正滤波允许标志、熵编码最大编码单元填充位、片结束码&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;编码树&#34;&gt;编码树&lt;/h3&gt;
+&lt;p&gt;四叉树划分标志、编码单元预测模式、二叉树扩展四叉树划分标志、二叉树扩展四叉树划分类型标志、二叉树扩展四叉树划分方向标志&lt;/p&gt;
+&lt;h3 id=&#34;编码单元&#34;&gt;编码单元&lt;/h3&gt;
+&lt;p&gt;跳过模式标志、高级运动矢量表达模式标志、仿射模式标志、直接模式标志、帧内编码单元标志、基础运动矢量索引、运动矢量偏移量索引、运动矢量方向索引、仿射运动矢量索引、衍生模式划分标志、衍生模式划分方向、水平四叉衍生模式划分标志、垂直四叉衍生模式划分标志、水平非对称衍生模式标志、仿射自适应运动矢量精度索引、自适应运动矢量精度索引、编码单元子类型索引、预测参考模式、对称运动矢量差标志、运动矢量精度扩展模式标识、帧内亮度预测模式、帧内色度预测模式、帧内预测滤波标志、L0 预测单元参考索引、L0 运动矢量水平分量差绝对值、L0 运动矢量垂直分量差绝对值、L0 运动矢量水平分量差符号值、L0 运动矢量垂直分量差符号值、仿射帧间模式L0 运动矢量水平分量差绝对值、仿射帧间模式 L0 运动矢量垂直分量差绝对值、仿射帧间模式 L0 运动矢量水平分量差符号值、仿射帧间模式 L0 运动矢量垂直分量差符号值、L1&amp;hellip;、变换块系数标志、基于位置的变换块标志、Cb 变换块编码模板、Cr 变换块编码模板、亮度变换块编码模板&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>H.265/HEVC 预测编码 笔记</title>
+      <link>https://imfaye.me/post/prediction-coding/</link>
+      <pubDate>Wed, 31 Mar 2021 17:04:49 +0000</pubDate>
+      
+      <guid>https://imfaye.me/post/prediction-coding/</guid>
+      <description>&lt;h2 id=&#34;视频预测编码技术&#34;&gt;视频预测编码技术&lt;/h2&gt;
+&lt;p&gt;预测编码是指利用已编码的一个或几个样本值，根据某种模型或方法，对当前的样本值进行预测，并对样本真实值和预测值之间的差值进行编码。&lt;/p&gt;
+&lt;h3 id=&#34;帧内预测编码&#34;&gt;帧内预测编码&lt;/h3&gt;
+&lt;p&gt;随着离散余弦变换 (DCT) 在图像、视频编码中的广泛应用，帧内预测转为在频域进行，如相邻块 DC 系数的差分编码等。由 DCT 的性质可知，DC 系数仅能反映当前块像素值的平均大小，因此上述频域中基于 DC 系数的帧内预测无法反映出视频的纹理信息，这限制了频域帧内预测的发展。&lt;/p&gt;
+&lt;p&gt;H.264/AVC 标准中使用基于块的空域帧内预测方法，规定了若干种预测模式，每种模式都对应一种纹理方向（DC 模式除外），当前块预测像素由其预测方向上相邻块的边界重建像素生成。该方法使得编码器能根据视频内容特征自适应地选择预测模式。&lt;/p&gt;
+&lt;p&gt;H.264/AVC 使用拉格朗日率失真优化 (RDO) 进行模式选择。它为每一种模式计算其拉格朗日代价：
+$$
+J = D + \lambda \cdot R
+$$
+其中，$D$ 表示当前预测模式下地失真，$R$ 表示编码当前预测模式下所有信息（如变换系数、模式细腻些、宏块划分方式等）所需的比特数。&lt;strong&gt;最优的预测模式不一定满足残差最小，而应指残差信号经过其他编码模块后最终的编码性能最优。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;H.264/AVC 标准及后来的 FRExt 扩展层一共规定了 3 种大小的亮度帧内预测块：4 × 4、8 × 8 以及 16 × 16。其中 4 × 4 和 8 × 8 块包含 9 种预测模式，16 × 16 块包含 4 种预测模式。色度分量的帧内预测都是基于 8 × 8 大小的块进行的，也有 4 种预测模式。&lt;/p&gt;
+&lt;h3 id=&#34;帧间预测编码&#34;&gt;帧间预测编码&lt;/h3&gt;
+&lt;h4 id=&#34;帧间预测编码原理&#34;&gt;帧间预测编码原理&lt;/h4&gt;
+&lt;p&gt;目前主要的视频编码标准帧间预测部分都采样了基于块的运动补偿技术。其主要原理是为当前图像的每个像素块在之前已编码图像中寻找一个最佳匹配块，该过程被称为&lt;strong&gt;运动估计 (Motion Estimation, ME)&lt;/strong&gt;。其中被参考的图像称为&lt;strong&gt;参考图像 (Reference Frame)&lt;/strong&gt;，参考块到当前像素块的位移称为&lt;strong&gt;运动向量 (Motion Vector, MV)&lt;/strong&gt;，当前像素块与参考块的差值称为&lt;strong&gt;预测残差 (Prediction Residual)&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;在 H.261 标准中，P 图像的预测方式只有前向预测。但实际场景中往往会产生不可预测的运动和遮挡，因此当前图像可能在之后的图像中更容易找到匹配块。为此，MPEG-1 标准定义了第三类图像，B 图像。为了提高运动估计精度，MPEG-1 首次采用了半像素精度的运动估计，半像素位置的参考像素值可由双线性差值方法产生。&lt;/p&gt;
+&lt;p&gt;面向数字广播电视的标准 MPEG-2 首次支持了隔行扫描视频。一帧图像包含两个场，顶场和底场，每个帧图像的宏块需要被拆分成两个 16 × 8 的块分别进行预测。H.263 标准沿用了 MPEG-1 的双向预测和半像素精度运动估计，并进一步发展了 MPEG-2 中将一个宏块分成更小的块进行预测的思想。&lt;/p&gt;
+&lt;p&gt;H.264/AVC 标准规定了 7 种大小的运动补偿块，一个宏块内部允许存在不同大小块的组合。此外 H.264/AVC 还使用了 1/4 精度像素运动估计、多参考图像预测、加权预测以及空域/时域 MV 预测等。&lt;/p&gt;
+&lt;h4 id=&#34;帧间预测编码关键技术&#34;&gt;帧间预测编码关键技术&lt;/h4&gt;
+&lt;h5 id=&#34;1-运动估计&#34;&gt;1. 运动估计&lt;/h5&gt;
+&lt;p&gt;在大多数视频序列中，相邻图像内容非常相似，不需要对每幅图像的全部信息编码，只需要将当前图像中运动物体的运动信息传给解码器。运动估计就是提取当前图像运动信息的过程。&lt;/p&gt;
+&lt;p&gt;将图像分为不同大小的像素块，只要块大小选择合适，则各个块的运动形式可以看成是统一的，每个块的运动参数可以独立地估计，这就是常用地基于块地运动表示法。&lt;/p&gt;
+&lt;p&gt;有几个核心问题：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;运动估计准则&lt;/p&gt;
+&lt;p&gt;常用地匹配准则主要有最小均方误差 (MSE)、最小平均绝对误差 (MAD) 和最大匹配像素数 (MPC) 等。为了简化计算，一般使用绝对误差和 (SAD) 来代替 MAD。此外，最小变换域绝对误差和 (SATD) 也是一种性能优异的匹配准则。&lt;/p&gt;
+&lt;p&gt;最小 SAD 准则不含乘除法，且便于硬件实现，因而使用最广泛。SAD 准则仅考虑了残差的大小，而未考虑编码运动信息所需的比特数。因此，H.264/AVC 编码器在运动估计过程中使用 RDO 来选择 MV。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;搜索算法&lt;/p&gt;
+&lt;p&gt;常用的搜索算法有全搜索算法、二维对数搜索算法、三步搜索算法等。除全搜索算法，其余算法统称为快速算法。快速算法容易陷入局部最优点，为避免这一点，在搜索算法的每一步中尽量搜索更多的点。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;亚像素精度运动估计&lt;/p&gt;
+&lt;p&gt;亚像素精度运动估计意味着需要对参考图像进行插值，好的插值方法能大幅改善运动补偿的性能。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h5 id=&#34;2-mv-预测&#34;&gt;2. MV 预测&lt;/h5&gt;
+&lt;p&gt;在大多数图像和视频中，一个运动物体可能会覆盖多个运动补偿块，因此空间域相邻块的运动向量具有较强的相关性。若使用相邻已编码块对当前块 MV 预测，将二者差值进行编码，则会大幅减少编码 MV 所需的比特数。同时，由于物体运动具有连续性，因此相邻图像同一位置像素块的 MV 也具有一定相关性。H.264/AVC 使用了空域和时域两种 MV 的预测方式。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;MV 空域预测&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/NMJ$SDFJ_`NZL~05}P~67IA.jpg&#34; style=&#34;zoom:50%;&#34; /&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/20210331212942.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;MV 时域预测&lt;/p&gt;
+&lt;p&gt;在 H.264/AVC 中，MV 时域预测主要针对 B Slice。主要有以下两种形式&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;当 B 图像的两个 MV 都来自同一个方向时（都来自当前图像之前的参考图像或之后的），其中一个 MV 可用另一个 MV 来预测&lt;/p&gt;
+&lt;p&gt;设两参考图像 $ref_0$ 和 $ref_1$ 与当前图像的距离分别为 $l_0$ 和 $l_1$，二者 MV 分别为 $MV_0$ 和 $MV_1$，则 $MV_1$ 可由下式预测：
+$$
+MVP_1 = \frac{l_1}{l_0} MV_0
+$$&lt;/p&gt;
+&lt;p&gt;$$
+MVD_1 = MV_1 - MVP_1
+$$&lt;/p&gt;
+&lt;p&gt;编码器只需要传输 $MVD_1$，解码器可按相同规则产生 $MV_1$。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;直接模式 MV 预测&lt;/p&gt;
+&lt;p&gt;H.264/AVC 为 B Slice 提供一种 Direct Mode。在该模式下，MV 可直接预测的出，无需传送 MV 差值。预测方式有时域空域两种。时域预测介绍如下。&lt;/p&gt;
+&lt;p&gt;设两参考图像 $ref_0$ 和 $ref_1$ 分别位于当前图像的前方和后方，与当前图像的距离分别为 $l_0$ 和 $l_1$，且 $ref_1$ 中与当前块对应位置块有一个指向 $ref_0$ 的 MV，则当前图像的两个 MV 可计算如下：
+$$
+MV_0 = \frac{l_0}{l_0 + l_1}MV
+$$
+$$
+MV_1 = MV_0 - MV
+$$&lt;/p&gt;
+&lt;p&gt;MV 时域预测主要运用了自然界物体匀速运动的思想。&lt;/p&gt;
+&lt;p&gt;与 H.264 标准相比，H.265 剔除里 Merge 和 AMVP 两种先进的 MV 预测技术。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;多参考图像及加权预测&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;帧内预测&#34;&gt;帧内预测&lt;/h2&gt;
+&lt;h3 id=&#34;帧内预测模式&#34;&gt;帧内预测模式&lt;/h3&gt;
+&lt;h4 id=&#34;亮度帧内预测模式&#34;&gt;亮度帧内预测模式&lt;/h4&gt;
+&lt;p&gt;H.265/HEVC 亮度分量帧内预测支持 5 种大小的 PU，每一种大小的 PU 都对应 35 种预测模式，包括 Planar 模式、DC 模式以及 33 种角度模式。所有预测模式都使用相同的模板。&lt;/p&gt;
+&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/]5%KJ{TWLY0XF107LI}GWLD.jpg&#34; style=&#34;zoom:50%;&#34; /&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;Planar 模式&lt;/p&gt;
+&lt;p&gt;由 H.264/AVC 中的 Plane 模式发展而来，适用于像素值缓慢变化的区域。使用水平和垂直方向两个线性滤波器，并将二者的平均值作为当前块像素的预测值。这一做法能使预测像素平缓变化，与其他模式相比能提升视频的主观质量。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;DC 模式&lt;/p&gt;
+&lt;p&gt;适用于大面积平坦区域。当前块预测值可由其左侧和上方（不包含左上角、左下方和右上方）参考像素的平均值得到。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;角度模式&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4 id=&#34;亮度模式的编码&#34;&gt;亮度模式的编码&lt;/h4&gt;
+&lt;p&gt;H.265/HEVC 标准建立了一个帧内预测模式候选列表 candModeList，表中有 3 个候选预测模式，用于存储相邻 PU 的预测模式。&lt;/p&gt;
+&lt;h4 id=&#34;色度模式的编码&#34;&gt;色度模式的编码&lt;/h4&gt;
+&lt;p&gt;共有 5 种模式：Planar 模式、垂直模式、水平模式、DC 模式以及对应亮度分量的预测模式。若对应亮度预测模式为前四种之一，则替换为角度预测中的模式 34。&lt;/p&gt;
+&lt;h3 id=&#34;帧内预测过程&#34;&gt;帧内预测过程&lt;/h3&gt;
+&lt;p&gt;在 H.265/HEVC 中，35 种预测模式是在 PU 的基础上定义的，而具体帧内预测过程的实现则是以 TU 为单位的。标准规定 PU 可以以四叉树的形式划分 TU，且一个 PU 内的所有 TU 共享一种预测模式。&lt;/p&gt;
+&lt;p&gt;帧内预测可分为以下 3 个步骤：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;判断当前 TU 相邻参考像素是否可用（边界或未编码的就不可用）并作相应处理&lt;/li&gt;
+&lt;li&gt;对参考像素进行滤波&lt;/li&gt;
+&lt;li&gt;根据滤波后的参考像素计算当前 TU 的预测像素值&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;帧间预测&#34;&gt;帧间预测&lt;/h2&gt;
+&lt;h3 id=&#34;运动估计&#34;&gt;运动估计&lt;/h3&gt;
+&lt;h4 id=&#34;搜索算法&#34;&gt;搜索算法&lt;/h4&gt;
+&lt;p&gt;在基于块运动补偿的视频编码框架中，运动搜索是最为重要的环节之一，也是编码器最耗时的模块。H.265/HEVC 官方测试编码器 HM10.0 给出了两种搜索算法：全搜索算法和 TZSearch 算法。&lt;/p&gt;
+&lt;h4 id=&#34;亚像素精度运动估计&#34;&gt;亚像素精度运动估计&lt;/h4&gt;
+&lt;h3 id=&#34;mv-预测技术&#34;&gt;MV 预测技术&lt;/h3&gt;
+&lt;p&gt;H.265/HEVC 在 MV 预测方面提出了两种新技术，Merge 技术和 AMVP 技术。二者区别主要体现于：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Merge 可以看成一种编码模式，在该模式下，当前 PU 的 MV 直接由空域或时域上邻近的 PU 预测得到，不存在 MVD (MV Difference)；而 AMVP 可以看成一种 MV 预测技术，编码器只需要对实际 MV 与预测 MV的差值进行编码，因此存在 MVD。&lt;/li&gt;
+&lt;li&gt;二者 MV 候选列表长度不同，构建候选 MV 列表的方式也有所区别&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;merge-模式&#34;&gt;Merge 模式&lt;/h4&gt;
+&lt;p&gt;为当前 PU 建立一个 MV 候选列表，列表中存在 5 个候选 MV（及其对应的参考图像），通过遍历这 5 个候选 MV，并进行率失真代价的计算，选取率失真代价最小的一个作为该 Merge 模式的最优 MV。若编/解码端按相同的方式键立该候选列表，则编码器只需要传输最优 MV 在候选列表中的索引即可。&lt;/p&gt;
+&lt;p&gt;Merge 模式建立的 MV 候选列表包含时域和空域两种情形，对于 B Slice，还包含组合列表的方式。&lt;/p&gt;
+&lt;h5 id=&#34;空域候选列表的建立&#34;&gt;空域候选列表的建立&lt;/h5&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/NMJ$SDFJ_`NZL~05}P~67IA.jpg&#34; style=&#34;zoom:50%;&#34; /&gt;![]&lt;/p&gt;
+&lt;h5 id=&#34;时域候选列表的建立&#34;&gt;时域候选列表的建立&lt;/h5&gt;
+&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/20210331212942.png&#34; style=&#34;zoom:50%;&#34; /&gt;
+&lt;h5 id=&#34;组合列表的建立&#34;&gt;组合列表的建立&lt;/h5&gt;
+&lt;p&gt;对于 B Slice 中的 PU 而言，由于存在两个 MV，因此其 MV 候选列表也需要提供两个预测 MV。H.265/HEVC 将 MV 候选列表中的前 4 个 MV 进行两两组合，产生了用于 B Slice 的组合列表。&lt;/p&gt;
+&lt;h4 id=&#34;amvp-技术&#34;&gt;AMVP 技术&lt;/h4&gt;
+&lt;p&gt;高级运动向量预测 (Advanced Motion Vector Prediction, AMVP) 为当前 PU 建立候选 MV 列表，编码器从中最优的预测 MV，并对 MV 进行差分编码；解码端通过建立相同的列表，仅需要将 MVD 与预测 MV 在该列表中的序号即可计算出当前 PU 的 MV。&lt;/p&gt;
+&lt;p&gt;类似于 Merge 模式，AMVP 候选 MV 列表也包含空域和时域两种情形，不同的是 AMVP 列表长度仅为 2。&lt;/p&gt;
+&lt;h3 id=&#34;加权预测&#34;&gt;加权预测&lt;/h3&gt;
+&lt;p&gt;加权预测可用于修正 P Slice 或 B Slice 中的运动补偿预测像素。H.265/HEVC 中介绍了两种加权预测方法：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;默认加权预测&lt;/p&gt;
+&lt;p&gt;未使用权值 $\omega$，根据参考图像队列的不同分 3 种情况计算。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Explicit 加权预测&lt;/p&gt;
+&lt;p&gt;其权值 $\omega$ 由编码器决定，并需要传送至解码端。也分 3 种情况。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;pcm-模式&#34;&gt;PCM 模式&lt;/h2&gt;
+&lt;p&gt;在 PCM 模式下，编码器直接传输一个 CU 的像素值，而不经过预测、变换等其他操作。&lt;/p&gt;
+&lt;p&gt;对于一些特殊情况，例如当图像的内容极不规则或量化参数非常小时，该模式与传统的“帧内 - 变换 - 量化 - 熵编码”相比，效率会更高。此外，PCM 模式还适用于无损编码情形。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>H.265/HEVC 编码结构 笔记</title>
+      <link>https://imfaye.me/post/video-coding-structure/</link>
+      <pubDate>Wed, 31 Mar 2021 11:34:13 +0000</pubDate>
+      
+      <guid>https://imfaye.me/post/video-coding-structure/</guid>
+      <description>&lt;h2 id=&#34;名词一览&#34;&gt;名词一览&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;GOP (Group of Pictures) - 图像组&lt;/li&gt;
+&lt;li&gt;IDR (Instantaneous Decoding Refresh) - 即时解码刷新&lt;/li&gt;
+&lt;li&gt;Slice - 片&lt;/li&gt;
+&lt;li&gt;SS (Slice Segment) - 片段&lt;/li&gt;
+&lt;li&gt;CTU (Coding Tree Unit) - 树形结构单元&lt;/li&gt;
+&lt;li&gt;CTB (Coding Tree Block) - 树形编码块&lt;/li&gt;
+&lt;li&gt;CU (Coding Unit) - 编码单元&lt;/li&gt;
+&lt;li&gt;SPS (Sequence Parameter Set) - 序列参数集&lt;/li&gt;
+&lt;li&gt;PPS (Picture Parameter Set) - 图像参数集&lt;/li&gt;
+&lt;li&gt;CVS (Coded Video Sequence) - 一个 GOP 编码后生成的压缩数据&lt;/li&gt;
+&lt;li&gt;VPS (Video Parameter Set) - 视频参数集&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;编码结构概述&#34;&gt;编码结构概述&lt;/h2&gt;
+&lt;h3 id=&#34;编码结构&#34;&gt;编码结构&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;视频序列&lt;/strong&gt;分隔为若干个图像组 (&lt;strong&gt;GOP&lt;/strong&gt;)。&lt;/p&gt;
+&lt;p&gt;存在两种 GOP 类型：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;封闭式 GOP&lt;/p&gt;
+&lt;p&gt;每一个 GOP 以 IDR 图像开始，各个 GOP 之间独立编解码。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;开放式 GOP&lt;/p&gt;
+&lt;p&gt;第一个 GOP 中的第一个帧内编码图像为 IDR 图像，后续 GOP 中的第一个帧内编码图像为 non-IDR 图像。后面 GOP 中的帧间编码图像可以使用前一个 GOP 的已编码图像作为参考图像。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/20210331120920.png&#34; style=&#34;zoom: 50%;&#34; /&gt;
+&lt;p&gt;每个 GOP 又被分为多个片 (&lt;strong&gt;Slice&lt;/strong&gt;)，片与片之间独立编解码。主要目的之一是在数据丢失的情况下进行重新同步。&lt;/p&gt;
+&lt;p&gt;每个片由一个或多个片段 (&lt;strong&gt;SS&lt;/strong&gt;, Slice Segment) 组成。&lt;/p&gt;
+&lt;p&gt;树形结构单元 (CTU) 类似传统的宏块。每个 CTU 包括一个亮度 CTB 和两个色差 CTB。&lt;/p&gt;
+&lt;p&gt;一个 SS 在编码时，先被分割为相同大小的 &lt;strong&gt;CTU&lt;/strong&gt;，每一个 CTU 按照四叉树分割方式被划分为不同类型的 &lt;strong&gt;CU&lt;/strong&gt;。&lt;/p&gt;
+&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/20210331120838.png&#34; style=&#34;zoom: 50%;&#34; /&gt;
+&lt;p&gt;以上即为编码时的分层处理架构。&lt;/p&gt;
+&lt;h3 id=&#34;码流结构&#34;&gt;码流结构&lt;/h3&gt;
+&lt;p&gt;码流结构上，H.265/HEVC 压缩数据采用了类似于 H.264/AVC 的分层结构。&lt;/p&gt;
+&lt;p&gt;将属于 GOP 层、Slice 层中共用的大部分语法元素游离出来，组成 SPS 和 PPS。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;SPS&lt;/strong&gt; 中包含了一个 CVS 中所有图像共用的信息。SPS 中大致包括解码相关信息，如档次级别、分辨率、某档次中编码工具开关标识和涉及的参数、时域可分级信息等。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;PPS&lt;/strong&gt; 中包含一副图像所用的公共参数，大致包括初始图像控制信息，如初始量化参数、分块信息等。一副图像中所有 SS 引用同一个 PPS。&lt;/p&gt;
+&lt;p&gt;此外，为了兼容在其他应用上的扩展，H.265/HEVC 的语法架构中增加了 &lt;strong&gt;VPS&lt;/strong&gt;，其内容大致包括多个子层共享的语法元素，其他不属于 SPS 的特定信息等。&lt;/p&gt;
+&lt;p&gt;对于一个 SS，通过引用它所使用的 PPS，该 PPS 又引用对应的 SPS，该 SPS 又引用对应的 VPS，最终得到 SS 的公用信息。&lt;/p&gt;
+&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/20210331120942.png&#34; style=&#34;zoom:50%;&#34; /&gt;
+&lt;h2 id=&#34;片段层&#34;&gt;片段层&lt;/h2&gt;
+&lt;p&gt;一副图像可以被分割为一个或多个 Slice，每个 Slice 的压缩数据都是独立的，Slice 头信息无法通过前一个 Slice 的头信息推断得到。这就要求 Slice 不能跨过它的边界来进行帧内或帧间预测。&lt;/p&gt;
+&lt;p&gt;根据编码类型不同，Slice 可分为以下几部分：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;I Slice&lt;/p&gt;
+&lt;p&gt;该 Slice 中所有 CU 的编码过程都使用帧内预测&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;P Slice&lt;/p&gt;
+&lt;p&gt;在 I Slice 的基础上，该 Slice 中的 CU 还可以使用帧间预测，每个 PB（预测块）使用至多一个运动补偿预测信息。P Slice 只使用图像参考列表 list 0。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;B Slice&lt;/p&gt;
+&lt;p&gt;在 P Slice 的基础上，该 Slice 中的 CU也可以使用帧间预测，每个 PB（预测块）可以使用至多两个运动补偿预测信息。B Slice 可以使用图像参考列表 list 0 和 list 1。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;一个独立的 Slice 可以被进一步划分为若干个 SS，包括一个独立 SS 和若干个依赖 SS，并且以独立 SS 作为该 Slice 的开始。&lt;/p&gt;
+&lt;p&gt;一个 SS 包含整数个 CTU（至少一个），并且这些 CTU 分布在同一个 NAL 单元中。SS 可以作为一个分组来传送视频编码数据。&lt;/p&gt;
+&lt;h2 id=&#34;tile-单元&#34;&gt;Tile 单元&lt;/h2&gt;
+&lt;h3 id=&#34;tile-单元描述&#34;&gt;Tile 单元描述&lt;/h3&gt;
+&lt;p&gt;一副图像不仅可以划分为若干个 Slice，也可以划分为若干个 Tile。即从水平和垂直方向将一个图像分割为若干个矩形区域，一个矩形区域就是一个 Tile。每个 Tile 包含整数个 CTU。&lt;/p&gt;
+&lt;p&gt;Tile 提供比 CTB 更大程度的并行，在使用时无须进行复杂的线程同步。&lt;/p&gt;
+&lt;p&gt;在同一幅图像中，可以存在某些 Slice 中包含多个 Tile 和某些 Tile 包含多个 Slice 的情况。&lt;/p&gt;
+&lt;h3 id=&#34;slice-和-tile&#34;&gt;Slice 和 Tile&lt;/h3&gt;
+&lt;p&gt;Tile 形装基本上为矩形，Slice 为条带状。&lt;/p&gt;
+&lt;p&gt;Slice 由一系列 SS 组成，一个 SS 由一系列 CTU 组成。Tile 则直接由一系列 CTU 组成。&lt;/p&gt;
+&lt;p&gt;每个 Slice/SS 和 Tile 至少要满足以下两个条件之一：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;一个 Slice/SS 中的所有 CTU 属于同一个 Tile&lt;/li&gt;
+&lt;li&gt;一个 Tile 中的所有 CTU 属于同一个 Slice/SS&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;树形编码块&#34;&gt;树形编码块&lt;/h2&gt;
+&lt;p&gt;传统的视频编码基于宏块实现。考虑到高清视频 / 超高清视频的自身特性，H.265/HEVC 标准中引入了树形编码单元 CTU，其尺寸由编码器指定，且可大于宏块尺寸。&lt;/p&gt;
+&lt;p&gt;同一位置处的一个亮度 CTB 和两个色度 CTB，再加上相应的语法元素形成一个 CTU。在高分辨率视频的编码中，使用较大的 CTB 可以获得更好的压缩性能。&lt;/p&gt;
+&lt;p&gt;H.265/HEVC 为图像划分定义了一套全新的语法单元，包括编码单元 (CU)、预测单元 (PU)、变换单元  (TU)。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;CU 是进行预测、变换、量化和熵处理等处理的基本单元&lt;/li&gt;
+&lt;li&gt;PU 是进行帧内/帧间预测的基本单元&lt;/li&gt;
+&lt;li&gt;TU 是进行变换和量化的基本单元&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;编码单元&#34;&gt;编码单元&lt;/h3&gt;
+&lt;p&gt;大尺寸图像的一个特点是平缓区域的面积更大，用较大的块编码能极大提升编码效率。在 H.264/AVC 中，编码块的大小是固定的。而在 H.265/HEVC 中，一个 CTB 可以直接作为一个 CB，也可以进一步以四叉树的形式划分为多个小的 CB。大的 CB 可以使得平缓区域的编码效率提高，小 CB 能很好地处理图像局部的细节。&lt;/p&gt;
+&lt;p&gt;编码单元是否继续划分取决于分割标志位 Split Flag。&lt;/p&gt;
+&lt;h3 id=&#34;预测单元&#34;&gt;预测单元&lt;/h3&gt;
+&lt;p&gt;预测单元规定了编码单元的所有预测模式。帧内预测的方向、帧间预测的分割方式、运动矢量预测、帧间预测参考图像索引号都属于预测单元的范畴。&lt;/p&gt;
+&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/20210331153821.png&#34; style=&#34;zoom:50%;&#34; /&gt;
+&lt;h3 id=&#34;变换单元&#34;&gt;变换单元&lt;/h3&gt;
+&lt;p&gt;TU 的大小依赖于 CU 模式，在一个 CU 内，允许 TU 跨越多个 PU，以四叉树的形式递归划分。对于一个 2N × 2N 的 CU，有一个标志位决定其是否划分为 4 个 N × N 的 TU，是否可以进一步划分由 SPS 中的 TU 最大划分深度决定。&lt;/p&gt;
+&lt;h2 id=&#34;档次层和级别&#34;&gt;档次、层和级别&lt;/h2&gt;
+&lt;p&gt;在 H.264 中就有对档次 (Profile) 和级别 (Level) 的划分，它们规定了比特流必须遵守的一些限制要求。而 H.265/HEVC 中在此基础上又新定义了一个概念：层 (Tile)。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Profile 主要规定编码器可采用哪些编码工具或算法&lt;/li&gt;
+&lt;li&gt;Level 是指根据解码端的负载和存储空间情况对关键参数加以限制&lt;/li&gt;
+&lt;li&gt;有些 Level 定义了两个 Tile: 主层 (Main Tile) 和高层 (High Tile)，主层用于大多数应用，高层用于那些最苛刻的应用&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;满足某一 Level 和 Tile 的解码器应当可以解码当前以及比当前更低的 Level 和 Tile 的所有码流。&lt;/p&gt;
+&lt;p&gt;满足某一 Profile 的解码器必须支持该 Profile 中的所有特性。编码器不必实现 Profile 中的所有特性，但生成的码流必须遵守标准规定。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>多媒体基础知识</title>
+      <link>https://imfaye.me/post/multimedia-basics/</link>
+      <pubDate>Mon, 29 Mar 2021 15:10:25 +0000</pubDate>
+      
+      <guid>https://imfaye.me/post/multimedia-basics/</guid>
+      <description>&lt;h2 id=&#34;图像数值表示&#34;&gt;图像数值表示&lt;/h2&gt;
+&lt;h3 id=&#34;分辨率&#34;&gt;分辨率&lt;/h3&gt;
+&lt;p&gt;分辨率的基础单位是像素。1280 * 720 P 的分辨率代表共有 1280 * 720 个像素点。&lt;/p&gt;
+&lt;p&gt;一台物理设备出厂时就已经定下了它所能拥有的最大像素点是多少。电脑显示屏调整分辨率是系统通过运算来给出模拟色彩块填充适配的。&lt;/p&gt;
+&lt;p&gt;下述像素排列方式内容为 expansion pack，可略过。&lt;/p&gt;
+&lt;h3 id=&#34;像素排列方式&#34;&gt;像素排列方式&lt;/h3&gt;
+&lt;h4 id=&#34;标准-rgb-排列&#34;&gt;标准 RGB 排列&lt;/h4&gt;
+&lt;p&gt;LCD 屏幕上常采用标准 RGB 排列，会将一个像素分为 3 个子像素并排排列，通过红、绿、蓝滤色片将 LCD 背光模组的白光过滤后形成相应的 RGB 子像素排列。当需要显示不同颜色的时候，3 个子像素以不同的亮度发光，在视觉上会混合成所需要的颜色。&lt;/p&gt;
+&lt;h4 id=&#34;pentile-排列&#34;&gt;PenTile 排列&lt;/h4&gt;
+&lt;p&gt;PenTile 排列多见于 OLED 屏幕上，因子像素呈现钻石排列而得名。PenTile 排列的每个像素由红、绿和蓝、绿子像素组合而成，绿色像素是完整的，而红蓝像素相比传统 RGB 排列各减少二分之一，子像素总数减少了约三分之一。&lt;/p&gt;
+&lt;p&gt;不像标准 RGB 排列每个像素更加独立，PenTile 排列在显示许多内容时需要借用相邻像素，显示精细内容时同分辨率下相较标准 RGB 排列的屏幕细腻度不足。&lt;/p&gt;
+&lt;p&gt;蓝色 OLED 的发光效率要比红色和绿色低，达到相同的发光强度必须使用更高的通过电流，因而蓝色像素衰减速度更快，也就会加速“烧屏”现象的产生。&lt;/p&gt;
+&lt;h3 id=&#34;yuv-表示方式&#34;&gt;YUV 表示方式&lt;/h3&gt;
+&lt;p&gt;对于视频裸数据而言，更多使用 YUV 数据格式显示。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Y 表示明亮度 (Luminance / Luma)，即灰阶值&lt;/li&gt;
+&lt;li&gt;U、V 表示色度 (Chrominance / Chroma)，描述色调饱和度&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;亮度通过 RGB 输入信号来建立，方法是将 RGB 信号的特定部分叠加到一起。色度定义了颜色的色彩和饱和度，分别用 Cr 和 Cb 表示。Cr 表示 RGB 输入信号红色部分与 RGB 亮度值之间的差异，Cb 表示 RGB 输入信号蓝色部分与 RGB 信号亮度值之间的差异。&lt;/p&gt;
+&lt;h4 id=&#34;yuv-优点&#34;&gt;YUV 优点&lt;/h4&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;与黑白电视机也能兼容&lt;/p&gt;
+&lt;p&gt;Y 和 UV 分量分离，只有 Y 分量就是黑白图像。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;相较于 RGB，YUV 数据格式占用空间小&lt;/p&gt;
+&lt;p&gt;人眼对色度的敏感程度低于对亮度的敏感程度（因为识别亮度的视网膜杆细胞比识别色度的视网膜锥细胞多）。将色的信息减少，人眼也无法察觉。且并不是每个像素点都需要包含 YUV 三个分量，根据不同的采用格式，每个 Y 分量可以对应自己的 UV 分量。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4 id=&#34;yuv-采样格式&#34;&gt;YUV 采样格式&lt;/h4&gt;
+&lt;h5 id=&#34;yuv-444-采样&#34;&gt;YUV 4:4:4 采样&lt;/h5&gt;
+&lt;p&gt;每个像素三个分量信息完整。&lt;/p&gt;
+&lt;p&gt;举个例子，一张 1 * 4 的图片：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;图像像素为：[Y0 U0 V0]、[Y1 U1 V1]、[Y2 U2 V2]、[Y3 U3 V3]&lt;/p&gt;
+&lt;p&gt;采样码流为：Y0 U0 V0 Y1 U1 V1 Y2 U2 V2 Y3 U3 V3&lt;/p&gt;
+&lt;p&gt;最后映射出的像素点依旧为 [Y0 U0 V0]、[Y1 U1 V1]、[Y2 U2 V2]、[Y3 U3 V3]&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;一张 1280 * 720P 的图片使用 YUV 4:4:4 采样，大小为：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;1280 * 720 * 3 / 1024 / 1024 = 2.636 MB
+&lt;/code&gt;&lt;/pre&gt;&lt;h5 id=&#34;yuv-422-采样&#34;&gt;YUV 4:2:2 采样&lt;/h5&gt;
+&lt;p&gt;Y 分量和 UV 分量按 2:1 的比例采样。&lt;/p&gt;
+&lt;p&gt;举个例子，一张 1 * 4 的图片：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;图像像素为：[Y0 U0 V0]、[Y1 U1 V1]、[Y2 U2 V2]、[Y3 U3 V3]&lt;/p&gt;
+&lt;p&gt;采样码流为：Y0 U0 Y1 V1 Y2 U2 Y3 V3&lt;/p&gt;
+&lt;p&gt;最后映射出的像素点依旧为 [Y0 U0 V1]、[Y1 U0 V1]、[Y2 U2 V3]、[Y3 U2 V3]&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;一张 1280 * 720 P 的图片使用 YUV 4:2:2 采样，大小为：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;(1280 * 720 + 1280 * 720 * 0.5 * 2) / 1024 / 1024 = 1.759 MB
+&lt;/code&gt;&lt;/pre&gt;&lt;h5 id=&#34;yuv-420-采样&#34;&gt;YUV 4:2:0 采样&lt;/h5&gt;
+&lt;p&gt;不是指没有 Cb，而是意味着第一行 Y 分量和 U 分量按 2:1 的比例采样，第二行 Y 分量和 V 分量按 2:1 的比例采样。Y 分量和 UV 分量按 4:1 的比例采样。&lt;/p&gt;
+&lt;p&gt;举个例子，一张 2* 4 的图片：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;图像像素为：[Y0 U0 V0]、[Y1 U1 V1]、[Y2 U2 V2]、[Y3 U3 V3]、[Y4 U4 V4]、[Y5 U5 V5]、[Y6 U6 V6]、[Y7 U7 V7]&lt;/p&gt;
+&lt;p&gt;采样码流为：Y0 U0 Y1 Y2 U2 Y3 Y4 V4 Y5 Y6 V6 Y7&lt;/p&gt;
+&lt;p&gt;最后映射出的像素点依旧为 [Y0 U0 V4]、[Y1 U0 V4]、[Y2 U2 V6]、[Y3 U2 V6]、[Y4 U0 V4]、[Y5 U0 V4]、[Y6 U2 V6]、[Y7 U2 V6]&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;一张 1280 * 720 P 的图片使用 YUV 4:2:0 采样，大小为：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;(1280 * 720 + 1280 * 720 * 0.25 * 2) / 1024 / 1024 = 1.318 MB
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id=&#34;yuv-存储格式&#34;&gt;YUV 存储格式&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;planar 平面格式&lt;/p&gt;
+&lt;p&gt;先连续存储所有像素点的 Y 分量，然后存储 UV 分量。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;packed 打包模式&lt;/p&gt;
+&lt;p&gt;每个像素点的 YUV 分量连续交替存储。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;rgb-和-yuv-转化&#34;&gt;RGB 和 YUV 转化&lt;/h4&gt;
+&lt;p&gt;对于图像显示器来说，它是通过 RGB 模型显示图像的，而在传输图像数据时又是使用 YUV 模型的。因此两种模型需要互相转化。&lt;/p&gt;
+&lt;p&gt;有如下公式：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;Y = 0.299 * R + 0.587 * G + 0.114 * B
+U = - 0.147 * R - 0.289 * G + 0.436 * B
+V = 0.615 * R - 0.515 * G - 0.100 * B
+&lt;/code&gt;&lt;/pre&gt;&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;R = Y + 1.14 * V
+G = Y - 0.39 * U - 0.58 * V
+B = Y + 2.03 * U
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;ibp-帧&#34;&gt;IBP 帧&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;I 帧 (intra picture)&lt;/p&gt;
+&lt;p&gt;内部编码帧（也称为关键帧），通常是每个 GOP 片段的第一帧，经过适度压缩，作为随机访问的参考点，可以当作静态图像。I 帧压缩可去掉视频的空间冗余信息。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;P 帧 (predictive-frame)&lt;/p&gt;
+&lt;p&gt;前向预测编码帧（也称为预测帧），通过将图像序列中前面已编码帧的时间冗余信息去充分去除压缩传输数据量的编码图像，需要参考前面的一个 I 帧或者 P 帧才能解码成一张完整的图像。P 帧可以简单理解为当前帧画面与前一帧的差别。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;B 帧 (bi-directional interpolated prediction frame)&lt;/p&gt;
+&lt;p&gt;双向预测内插编码帧（也称双向预测帧），需要参考前面的一个 I 帧或者 P 帧以及后面的一个 P 帧才能编码成一张完整的图像。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;简单来说，I 帧是一个完整的画面，而 P 帧和 B 帧记录的是相对于 I 帧的变化。如果没有 I 帧，P 帧和 B 帧就无法解码。压缩比 I 帧 &amp;lt; P 帧 &amp;lt; B 帧。&lt;/p&gt;
+&lt;h2 id=&#34;gop&#34;&gt;GOP&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/20210329171222.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;编码器将多张图像进行编码后生产成一段一段的 GOP (Group of Pictures)，解码器在播放时则是读取一段一段的 GOP 进行编码后读取画面再渲染显示。GOP 是一组连续的画面，由一张 I 帧和数张 B / P 帧组成，是视频图像编码器和解码器存取的基本单位。gop_size 描述的是两个 I 帧之间的帧数目。&lt;/p&gt;
+&lt;h2 id=&#34;码率和帧率&#34;&gt;码率和帧率&lt;/h2&gt;
+&lt;h3 id=&#34;帧率-frame-rate&#34;&gt;帧率 (Frame Rate)&lt;/h3&gt;
+&lt;p&gt;表示每秒实践显示的帧数（Frames per Second，简称 FPS）。&lt;/p&gt;
+&lt;p&gt;对于人眼来说，如果所看画面的帧率高于 24，就会认为是连贯的，此现象称为视觉暂留。&lt;/p&gt;
+&lt;h3 id=&#34;码率比特率&#34;&gt;码率（比特率）&lt;/h3&gt;
+&lt;p&gt;码率指每秒传输的比特数，单位为 bps (Bits Per Second)，通俗一点讲就是取样率，单位时间内取样率越大，精度就越高，处理出的文件就越接近原始文件。&lt;/p&gt;
+&lt;p&gt;文件体积与取样率成正比，所有的编码格式都很重视如何用最低的码率达到最少的失真。&lt;/p&gt;
+&lt;p&gt;码率简单来说是指再压缩视频时给这个视频指定一个参数，用以告诉压缩软件&lt;strong&gt;期望的压缩后视频的大小&lt;/strong&gt;。&lt;/p&gt;
+&lt;h2 id=&#34;参考&#34;&gt;参考&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;视频基础知识扫盲&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&#34;https://glumes.com/post/ffmpeg/understand-yuv-format/&#34;&gt;一文读懂 YUV 的采样与格式&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.yuque.com/webmedia/handbook/ibp&#34;&gt;IBP帧&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

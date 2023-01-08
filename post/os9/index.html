@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="cn">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	
+	<title>风巷  | 操作系统笔记 CH9 Virtual Memory</title>
+	<meta name="viewport" content="width=device-width,minimum-scale=1">
+	<meta name="generator" content="Hugo 0.105.0">
+	
+	
+	<META NAME="ROBOTS" CONTENT="INDEX, FOLLOW">
+	
+
+	
+	
+	<link href="/dist/app.css" rel="stylesheet">
+	
+
+	
+
+	
+	
+<link rel="shortcut icon" href="img/wind.png" type="image/png" />
+
+	
+
+	
+	
+	
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-FAKE', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+	
+	
+	
+
+
+
+<link rel="stylesheet" href='https://imfaye.me/lib/katex.min.css' crossorigin="anonymous">
+
+
+<script defer src='https://imfaye.me/lib/katex.min.js' crossorigin="anonymous"></script>
+
+
+<script defer src='https://imfaye.me/lib/contrib/auto-render.min.js'
+crossorigin="anonymous"
+onload='renderMathInElement(document.body);'></script>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement(document.body, {
+            delimiters: [
+                {left: "$$", right: "$$", display: true},
+                {left: "$", right: "$", display: false}
+            ]
+        });
+    });
+</script>
+
+	
+	
+	
+	<script>
+		(function (u, c) {
+			var d = document,
+				t = 'script',
+				o = d.createElement(t),
+				s = d.getElementsByTagName(t)[0];
+			o.src = u;
+			if (c) {
+				o.addEventListener('load', function (e) {
+					c(e);
+				});
+			}
+			s.parentNode.insertBefore(o, s);
+		})('https:\/\/imfaye.me\/lib\/pangu.min.js', function () {
+			pangu.spacingPage();
+		});
+	</script>
+	
+	
+	
+	<style type="text/css" media="screen, print">
+		@font-face {
+			font-family: "FancyTitleFont";
+			font-style: normal;
+			font-display: swap;
+			src: url('https://imfaye.me/fonts/exampleFont.woff2') format('woff2'),
+				url('https://imfaye.me/fonts/exampleFont.woff') format('woff');
+		}
+		 
+		  
+		 
+		@font-face {
+			font-family: 'Noto Serif CJK SC';
+			font-style: normal;
+			font-weight: 300;
+			font-display: swap;
+			src: local('Noto Serif CJK SC Light'), local('NotoSerifCJK-Light'),
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-300.woff2') format('woff2'),
+				 
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-300.woff') format('woff');
+			 
+		}
+
+		 
+		@font-face {
+			font-family: 'Noto Serif CJK SC';
+			font-style: normal;
+			font-weight: 400;
+			font-display: swap;
+			src: local('Noto Serif CJK SC'), local('NotoSerifCJK-Regular'),
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-regular.woff2') format('woff2'),
+				 
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-regular.woff') format('woff');
+			 
+		}
+
+		 
+		@font-face {
+			font-family: 'Noto Serif CJK SC';
+			font-style: normal;
+			font-weight: 500;
+			font-display: swap;
+			src: local('Noto Serif CJK SC Medium'), local('NotoSerifCJK-Medium'),
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-500.woff2') format('woff2'),
+				 
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-500.woff') format('woff');
+			 
+		}
+	</style>
+	
+</head>
+
+<body class="bg-gray-100 text-gray-700 font-sans">
+	<div class="p-6 sm:p-10 md:p-16 flex flex-wrap">
+		<header class="w-full md:w-2/5 xl:w-1/2 md:pr-12 lg:pr-20 xl:pr-24 order-1 md:order-1 max-w-2xl">
+			<div
+				class="z-50 bg-gray-100 bg-opacity-75 bg-opacity-custom lg:min-w-0.7 max-w-xl md:float-right md:text-right leading-loose tracking-tight md:sticky md:top-0 pt-2">
+				
+<div>
+	<h2>
+		<a href="https://imfaye.me/" title="风巷" class="heading font-cursive icon">风巷</a>
+	</h2>
+</div>
+<h1 class="pt-2">操作系统笔记 CH9 Virtual Memory</h1>
+
+<div class="flex flex-wrap justify-end pt-2 "><div class="md:flex-grow-0 font-light">
+	
+	
+	
+	
+	<a class="post-taxonomy-category text-medium-red-violet-600 hover:text-medium-red-violet-400"
+		href='/categories/%E6%97%A0%E6%83%85%E7%AC%94%E8%AE%B0'>无情笔记</a>
+	
+	
+	
+
+	
+	&nbsp;&nbsp;
+	
+
+	
+	
+	
+	
+	<a class="post-taxonomy-tag text-eucalyptus-500"
+		href='/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F'>操作系统</a>&nbsp;&#47;
+	
+	<a class="post-taxonomy-tag text-eucalyptus-500"
+		href='/tags/%E5%A4%A7%E6%98%8E%E6%B9%96%E7%95%94%E7%9A%84%E4%B8%93%E4%B8%9A%E8%AF%BE'>大明湖畔的专业课</a>
+	
+	
+	
+</div><time class="text-eucalyptus-500 md:text-right md:flex-grow font-light pl-4"
+		datetime="2020-02-28T13:09:24Z">2020-2-28</time>
+</div>
+
+<details class="toc" open>
+<summary>
+    <hr />
+</summary>
+<div class="inline toc-content">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#background">background</a></li>
+    <li><a href="#demand-paging-按需调页">demand paging 按需调页</a></li>
+    <li><a href="#copy-on-write-写时复制">Copy-on-Write 写时复制</a></li>
+    <li><a href="#page-replacement">page replacement</a>
+      <ul>
+        <li><a href="#fifo">FIFO</a></li>
+        <li><a href="#optmin">OPT/MIN</a></li>
+        <li><a href="#lru">LRU</a></li>
+        <li><a href="#lru-approximation-algorithms">LRU Approximation Algorithms</a></li>
+        <li><a href="#counting-based-page-replacement">Counting-based page replacement</a></li>
+      </ul>
+    </li>
+    <li><a href="#page-allocation-帧分配">page allocation 帧分配</a></li>
+    <li><a href="#thrashing-系统颠簸">thrashing 系统颠簸</a>
+      <ul>
+        <li><a href="#working-set-model-工作集合模型">Working-Set Model 工作集合模型</a></li>
+        <li><a href="#page-fault-frequency-schemeppf-页错误频率">Page-Fault Frequency Scheme(PPF) 页错误频率</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+</div>
+</details>
+
+<hr />
+
+
+			</div>
+		</header>
+		<main role="main" class="w-full md:w-3/5 xl:w-1/2 max-w-3xl order-2 md:order-2 min-h-70vh pt-2 pb-4">
+			
+
+<article>
+	<section class="mx-auto content">
+		<div class="c-rich-text"><h2 id="background">background</h2>
+<p>CH8的内存管理方案需要将整个进程放入内存，动态载入只能减轻这一限制</p>
+<p>Code needs to be in memory to execute, but entire program rarely used.</p>
+<p>execute partially-loaded program</p>
+<ul>
+<li>程序不受现有物理内存大小限制，可以为virtual address space编写程序</li>
+<li>更多程序可以同时执行，CPU利用率增加，而响应时间、周转时间不增加</li>
+<li>载入或交换程序所需IO变少，用户程序运行更快</li>
+</ul>
+<p>Virtual memory – separation of user logical memory from physical memory.</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577436249080.png" style="zoom:50%;" />
+<p>动态内存分配，堆向上增长；子程序调用，栈向下增长。包括洞的虚拟地址空间是稀地址空间。</p>
+<p>Enables sparse address spaces with holes left for growth, dynamically linked libraries, etc.</p>
+<p>Virtual memory allows files and memory to be shared by two or more processes through page sharing.</p>
+<p>虚拟内存实现：</p>
+<ul>
+<li>demand paging</li>
+<li>demand segmentation</li>
+</ul>
+<h2 id="demand-paging-按需调页">demand paging 按需调页</h2>
+<p>Lazy swapper: never swaps a page into memory unless that page will be needed.</p>
+<p>swapper对整个进程进行操作，pager只对进程的单个页进行操作</p>
+<p>页表条目，valid-invalid bit: valid-合法也在内存 invalid-无效(不在逻辑地址空间) 或 有效但在磁盘</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577443877399.png" style="zoom:50%;" />
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577444151280.png" style="zoom:50%;" />
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577444186893.png" style="zoom:50%;" />
+<p>pure demand paging: 只有在需要时才将页调入内存</p>
+<p>单个指令可能访问多个页的内存(一页指令，其他页数据)，一个指令可能产生多个page fault. 不过由于locality of reference, 按需调页的性能还算合理。</p>
+<p>按需调页的硬件支持：</p>
+<ul>
+<li>Page table with valid-Invalid bit</li>
+<li>Secondary memory (swap device with swap space)</li>
+</ul>
+<p>请求调页的关键要求是能够在页错误后instruction restart</p>
+<p>如果页错误在获取操作数时，再次获取指令，再次译码指令，再次获取操作数。</p>
+<p>一个指令可能改变多个不同位置。若源和目的块有重叠，源块可能已修改，不能简单地再次执行。(微码计算试图访问两块的两端；临时寄存器保存覆盖位置的值)</p>
+<p>EAT = (1– p) * memory access time + p * page fault service time</p>
+<p>page fault service time = page fault overhead+[ swap page out ]+swap page in+restart overhead</p>
+<p>处理页错误中断和重新启动进程可以通过仔细编码降低开销</p>
+<p>EAT与页错误率直接相关</p>
+<p>与文件无关的页需要使用交换空间</p>
+<h2 id="copy-on-write-写时复制">Copy-on-Write 写时复制</h2>
+<p>fork()使用写时复制技术</p>
+<p>父子进程开始时共享同一页面。这些页面标记为写时复制页(只有可能修改的页需要标记)。如果任一进程对页进行写，创建一个共享页的副本。</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577445363016.png" style="zoom:50%;" />
+<p>COW allows more efficient process creation as only modified pages are copied.</p>
+<p>free pages are allocated from a pool of free pages. 采用按需填零(zero-fill-on-demand)技术分配这些页，需要分配前先填零，因此清除了以前的内容。</p>
+<p>vfork()，不采用copy-on-write，vfork()将父进程挂起，子进程使用父进程的地址空间。如果子进程修改父进程地址空间的任何页， 父进程重启时可见。主要用于子进程被创建后立即调用exec()的情况。比较高效。用于实现UNIX命令行shell的接口。</p>
+<h2 id="page-replacement">page replacement</h2>
+<p>Use modify bit (dirty bit) to reduce overhead of page transfers. 不修改的话不需要写回磁盘</p>
+<p>Page replacement completes separation between logical memory and physical memory.</p>
+<p>frame-allocation algorithm</p>
+<p>page replacement algorithm</p>
+<p>reference string: 内存的引用序列</p>
+<h3 id="fifo">FIFO</h3>
+<p>Belady&rsquo;s anomaly: 页错误率可能会随着所分配的帧数的增加而增加</p>
+<h3 id="optmin">OPT/MIN</h3>
+<p>置换最长时间不会使用的页</p>
+<p>未来知识</p>
+<h3 id="lru">LRU</h3>
+<p>最长时间没有使用的页</p>
+<p>By the principle of locality, this should be the page least likely to be referenced in the near future.</p>
+<p>Associates with each page the time of that page’s last use.</p>
+<p>两种可行实现：</p>
+<ul>
+<li>
+<p>counter</p>
+<p>每个页表项关联一个使用时间域。对每次引用，计数器增加。置换具有最小时间的页。</p>
+</li>
+<li>
+<p>stack</p>
+<p>没引用一个页，页就从栈中删除并放在顶部</p>
+<p>No search for replacement, LRU page is at the bottom.</p>
+</li>
+</ul>
+<h3 id="lru-approximation-algorithms">LRU Approximation Algorithms</h3>
+<p>LRU needs special hardware and still slow.所以用近似算法</p>
+<p>页表每项都关联一个reference bit, 每引用一个页(读or写)，引用位被硬件置1</p>
+<h4 id="reference-bit-algorithm">Reference bit algorithm</h4>
+<p>When page is referenced, the bit is set to 1 by the hardware.</p>
+<p>Replace the one which is 0 (if one exists).</p>
+<p>Problem ：We do not know the order.</p>
+<h4 id="additional-reference-bits-algorithm">Additional-reference-bits algorithm</h4>
+<p>Keep an 8-bit byte for each page in a table in memory.</p>
+<p>规定时间间隔里记录引用位</p>
+<p>At regular intervals, a timer interrupts, OS shifts the reference bit for each page into the high-order bit of its 8- bit byte, shifting the other bits right by 1 bit and discarding the low-order bit.</p>
+<p>将这8位看作无符号整数，置换具有最小值的页</p>
+<h4 id="second-chance--clock">Second chance / Clock</h4>
+<p>Basic algorithm: FIFO</p>
+<p>循环队列，指针向前移动直到找到一个引用位为0的页，在向前移动时，清除引用位。</p>
+<p>如果所有位均已设置，会遍历整个队列。成了FIFO</p>
+<h4 id="enhanced-second-chance-algorithm">Enhanced Second-Chance Algorithm</h4>
+<p>(reference bit, modify bit)</p>
+<p>(0,0)最好 (0,1) (1,0) (1,1)</p>
+<p>降低IO</p>
+<h3 id="counting-based-page-replacement">Counting-based page replacement</h3>
+<p>每个页保留一个用于记录引用次数的计数器。</p>
+<p>LFU: replaces page with the smallest count</p>
+<p>MFU: page with the smallest count was probably just brought in and has yet to be used.</p>
+<h2 id="page-allocation-帧分配">page allocation 帧分配</h2>
+<p>分配至少最少数量的帧。必须有足够的帧容纳所有单个指令所引用的页。</p>
+<p>每个进程的帧的最少数量由体系结构决定，最大数量由可用物理内存的数量决定。</p>
+<ul>
+<li>
+<p>fixed allocation</p>
+<p>高低优先级一样处理</p>
+<p>when a page fault occurs, one of the pages of that process must be replaced. &ndash; Local replacement</p>
+<p>固定分配必须局部置换(置换自己进程里的页)</p>
+<ul>
+<li>
+<p>equal allocation</p>
+<p>n个进程之间分配m个帧，每个m/n帧</p>
+</li>
+<li>
+<p>proportional allocation</p>
+<p>根据进程大小比例地分配内存</p>
+<p>进程pi的虚拟内存大小si</p>
+<p>a i = s i /S * m</p>
+</li>
+</ul>
+</li>
+<li>
+<p>priority allocation</p>
+<p>Use a proportional allocation scheme using priorities rather than size, or on a combination of size and priority.</p>
+</li>
+</ul>
+<p>Local replacement:  select for replacement one of its frames</p>
+<p>​	分配每个进程的帧的数量不变</p>
+<p>Global replacement:  select for replacement a frame from a process with lower priority number</p>
+<p>​	易于实现。更好的系统吞吐量，常用。</p>
+<p>​	OS keeps list of free frames.</p>
+<p>​	进程不能控制其页错误率(受其他进程调页行为影响)</p>
+<h2 id="thrashing-系统颠簸">thrashing 系统颠簸</h2>
+<p>thrashing: 频繁的页调度行为</p>
+<p>如果一个进程在换页上用的时间多于执行时间，这个进程就在颠簸</p>
+<p>CPU调度程序发现CPU使用率降低，增加多道程序程度&hellip;更多页错误，CPU使用率更低</p>
+<p>颠簸时，为了增加CPU使用率和降低系统颠簸，必须降低多道程序的程度</p>
+<p>采用局部置换，一个进程颠簸不会使其他进程颠簸</p>
+<p>Why does thrashing occur? Σ locality size &gt; total memory size</p>
+<p>using a local (or priority) replacement algorithm, Can limit the effect of thrashing.</p>
+<p>为了防止颠簸，必须提供进程所需的足够多的帧。</p>
+<p>Locality: a set of pages that are actively used together. Process migrates from one locality to another. Localities may overlap.</p>
+<h3 id="working-set-model-工作集合模型">Working-Set Model 工作集合模型</h3>
+<p>基于局部性假设</p>
+<p>参数Δ定义working-set window：a fixed number of page references</p>
+<p>Working Set: the set of pages in the most recent Δ page references.</p>
+<p>WSS i (working set size of Process P i ) : (varies in time) the number of pages in Working Set of process P i .</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577453374315.png" style="zoom:50%;" />
+<p>工作集合的精度与Δ的选择有关，太小不能包含整个局部，太大包含多个局部</p>
+<p>总的帧需求量 D =Σ WSS i  总的需求大于帧的数量，会出现颠簸</p>
+<p>OS跟踪每个进程的工作集合，如果D &gt; m，暂停一个进程，该进程的页被写出，且其帧可分配给其他进程</p>
+<p>通过固定定时中断(interval timer)和引用位(reference bit)可以近似模拟工作集合模型</p>
+<h3 id="page-fault-frequency-schemeppf-页错误频率">Page-Fault Frequency Scheme(PPF) 页错误频率</h3>
+<p>为所期望的页错误率设置上限和下限。超过上限，为进程分配更多的帧；低于下限，从该进程中移走帧。</p>
+<p>如果页错误率增加且没有可用帧，必须选择一个进程暂停，可将释放的帧分配给具有高页错误率的进程</p>
+</div>
+	</section>
+
+
+</article>
+
+		</main>
+		<div class="w-full h-0 flex-none order-3"></div>
+		<aside role="contentinfo"
+			class="w-full md:w-2/5 xl:w-1/2 md:pr-12 lg:pr-20 xl:pr-24 order-4 md:order-3 md:sticky md:bottom-0 self-end max-w-2xl">
+			<div class="md:float-right md:text-right leading-loose tracking-tight md:mb-2">
+				
+	<div class="md:max-w-xs  flex flex-col md:items-end">
+	<ul class="font-serif flex-grow-0 flex justify-between flex-wrap md:flex-col">
+	
+	
+	<li class="px-1 md:px-0">
+		<a href="/post/" title="归档 page" 
+			class="font-medium text-medium-red-violet-600 hover:text-medium-red-violet-400" >
+			归档
+		</a>
+	</li>
+	
+	<li class="px-1 md:px-0">
+		<a href="/categories/" title="分类 page" >
+			分类
+		</a>
+	</li>
+	
+	<li class="px-1 md:px-0">
+		<a href="/tags/" title="标签 page" >
+			标签
+		</a>
+	</li>
+	
+	<li class="px-1 md:px-0">
+		<a href="/about/" title="关于 page" >
+			关于
+		</a>
+	</li>
+	
+	
+	
+	
+	<div id="fastSearch" class="m-0">
+		<input id="searchInput" type="text" size=10 
+			class="bg-gray-100 focus:outline-none border-b border-gray-100 focus:border-eucalyptus-300 md:text-right
+			placeholder-java-500 min-w-0 max-w-xxxs"
+			placeholder="search" />
+		<ul id="searchResults" class="bg-gray-200 px-2 divide-y divide-gray-400">
+		</ul>
+	</div>
+	
+</ul>
+	
+
+<div class="flex flex-wrap-reverse md:justify-end content-end md:content-start justify-start items-start   max-h-16">
+	
+</div>
+	<div class="text-sm text-gray-500 leading-tight a-gray">
+		© Faye
+		<br />
+		Built with Hugo and theme <a href="https://github.com/heyeshuang/hugo-theme-tokiwa">Tokiwa</a>. 2333 words in this page.
+	</div>
+</div>
+
+			</div>
+		</aside>
+		<footer class="w-full md:w-3/5 xl:w-1/2 order-3 max-w-3xl md:order-4 pt-2">
+			
+<hr class="double-line" />
+<div class="flex flex-wrap justify-between pb-2 leading-loose font-serif">
+    
+    <a class="flex-grow-0" href="/post/os8/">
+        <svg class="fill-current inline-block h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24"
+            height="24">
+            <path fill="none" d="M0 0h24v24H0z" />
+            <path d="M7.828 11H20v2H7.828l5.364 5.364-1.414 1.414L4 12l7.778-7.778 1.414 1.414z" /></svg>
+        操作系统笔记 CH8 Main Memory
+    </a>
+    
+    
+    <a class="flex-grow-0" href="/post/os10/">
+        操作系统笔记 CH10 File-System Interface
+        <svg class="fill-current inline-block h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24"
+            height="24">
+            <path fill="none" d="M0 0h24v24H0z" />
+            <path d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z" /></svg></a>
+    
+</div>
+<div >
+
+
+
+<div class="font-serif pb-2 flex align-start leading-loose">
+	<span class="heading pr-6 leading-loose">Related</span>
+	<span >
+		
+			<a href="/post/os8/">操作系统笔记 CH8 Main Memory</a>&nbsp;&nbsp;&#47;&nbsp;
+		
+			<a href="/post/os7/">操作系统笔记 CH7 Deadlocks</a>&nbsp;&nbsp;&#47;&nbsp;
+		
+			<a href="/post/os6/">操作系统笔记 CH6 Process Synchronization</a>&nbsp;&nbsp;&#47;&nbsp;
+		
+			<a href="/post/os5/">操作系统笔记 CH5 CPU Scheduling</a>&nbsp;&nbsp;&#47;&nbsp;
+		
+			<a href="/post/os4/">操作系统笔记 CH4 Threads</a>&nbsp;&nbsp;&#47;&nbsp;
+		
+			<a href="/post/os3/">操作系统笔记 CH3 Process</a>&nbsp;&nbsp;&#47;&nbsp;
+		
+			<a href="/post/os2/">操作系统笔记 CH2 OS structures</a>&nbsp;&nbsp;&#47;&nbsp;
+		
+			<a href="/post/os1/">操作系统笔记 CH1 Intro</a>
+		
+</span>
+</div>
+
+</div>
+<hr />
+<div class="pb-2">
+    <div id="disqus_thread"></div>
+<script type="application/javascript">
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "faye" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+<hr />
+
+		</footer>
+		
+
+<script src="/dist/app.js"></script>
+
+
+<script src="/lib/fuse.min.js"></script> 
+<script src="/lib/fastsearch.js"></script>
+
+	</div>
+</body>
+
+</html>

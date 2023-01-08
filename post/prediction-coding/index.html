@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="cn">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	
+	<title>风巷  | H.265/HEVC 预测编码 笔记</title>
+	<meta name="viewport" content="width=device-width,minimum-scale=1">
+	<meta name="generator" content="Hugo 0.105.0">
+	
+	
+	<META NAME="ROBOTS" CONTENT="INDEX, FOLLOW">
+	
+
+	
+	
+	<link href="/dist/app.css" rel="stylesheet">
+	
+
+	
+
+	
+	
+<link rel="shortcut icon" href="img/wind.png" type="image/png" />
+
+	
+
+	
+	
+	
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-FAKE', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+	
+	
+	
+
+
+
+<link rel="stylesheet" href='https://imfaye.me/lib/katex.min.css' crossorigin="anonymous">
+
+
+<script defer src='https://imfaye.me/lib/katex.min.js' crossorigin="anonymous"></script>
+
+
+<script defer src='https://imfaye.me/lib/contrib/auto-render.min.js'
+crossorigin="anonymous"
+onload='renderMathInElement(document.body);'></script>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement(document.body, {
+            delimiters: [
+                {left: "$$", right: "$$", display: true},
+                {left: "$", right: "$", display: false}
+            ]
+        });
+    });
+</script>
+
+	
+	
+	
+	<script>
+		(function (u, c) {
+			var d = document,
+				t = 'script',
+				o = d.createElement(t),
+				s = d.getElementsByTagName(t)[0];
+			o.src = u;
+			if (c) {
+				o.addEventListener('load', function (e) {
+					c(e);
+				});
+			}
+			s.parentNode.insertBefore(o, s);
+		})('https:\/\/imfaye.me\/lib\/pangu.min.js', function () {
+			pangu.spacingPage();
+		});
+	</script>
+	
+	
+	
+	<style type="text/css" media="screen, print">
+		@font-face {
+			font-family: "FancyTitleFont";
+			font-style: normal;
+			font-display: swap;
+			src: url('https://imfaye.me/fonts/exampleFont.woff2') format('woff2'),
+				url('https://imfaye.me/fonts/exampleFont.woff') format('woff');
+		}
+		 
+		  
+		 
+		@font-face {
+			font-family: 'Noto Serif CJK SC';
+			font-style: normal;
+			font-weight: 300;
+			font-display: swap;
+			src: local('Noto Serif CJK SC Light'), local('NotoSerifCJK-Light'),
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-300.woff2') format('woff2'),
+				 
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-300.woff') format('woff');
+			 
+		}
+
+		 
+		@font-face {
+			font-family: 'Noto Serif CJK SC';
+			font-style: normal;
+			font-weight: 400;
+			font-display: swap;
+			src: local('Noto Serif CJK SC'), local('NotoSerifCJK-Regular'),
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-regular.woff2') format('woff2'),
+				 
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-regular.woff') format('woff');
+			 
+		}
+
+		 
+		@font-face {
+			font-family: 'Noto Serif CJK SC';
+			font-style: normal;
+			font-weight: 500;
+			font-display: swap;
+			src: local('Noto Serif CJK SC Medium'), local('NotoSerifCJK-Medium'),
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-500.woff2') format('woff2'),
+				 
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-500.woff') format('woff');
+			 
+		}
+	</style>
+	
+</head>
+
+<body class="bg-gray-100 text-gray-700 font-sans">
+	<div class="p-6 sm:p-10 md:p-16 flex flex-wrap">
+		<header class="w-full md:w-2/5 xl:w-1/2 md:pr-12 lg:pr-20 xl:pr-24 order-1 md:order-1 max-w-2xl">
+			<div
+				class="z-50 bg-gray-100 bg-opacity-75 bg-opacity-custom lg:min-w-0.7 max-w-xl md:float-right md:text-right leading-loose tracking-tight md:sticky md:top-0 pt-2">
+				
+<div>
+	<h2>
+		<a href="https://imfaye.me/" title="风巷" class="heading font-cursive icon">风巷</a>
+	</h2>
+</div>
+<h1 class="pt-2">H.265/HEVC 预测编码 笔记</h1>
+
+<div class="flex flex-wrap justify-end pt-2 "><div class="md:flex-grow-0 font-light">
+	
+	
+	
+	
+	<a class="post-taxonomy-category text-medium-red-violet-600 hover:text-medium-red-violet-400"
+		href='/categories/%E6%97%A0%E6%83%85%E7%AC%94%E8%AE%B0'>无情笔记</a>
+	
+	
+	
+
+	
+	&nbsp;&nbsp;
+	
+
+	
+	
+	
+	
+	<a class="post-taxonomy-tag text-eucalyptus-500"
+		href='/tags/hevc'>HEVC</a>&nbsp;&#47;
+	
+	<a class="post-taxonomy-tag text-eucalyptus-500"
+		href='/tags/%E8%A7%86%E9%A2%91%E7%BC%96%E7%A0%81'>视频编码</a>
+	
+	
+	
+</div><time class="text-eucalyptus-500 md:text-right md:flex-grow font-light pl-4"
+		datetime="2021-03-31T17:04:49Z">2021-3-31</time>
+</div>
+
+<details class="toc" open>
+<summary>
+    <hr />
+</summary>
+<div class="inline toc-content">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#视频预测编码技术">视频预测编码技术</a>
+      <ul>
+        <li><a href="#帧内预测编码">帧内预测编码</a></li>
+        <li><a href="#帧间预测编码">帧间预测编码</a></li>
+      </ul>
+    </li>
+    <li><a href="#帧内预测">帧内预测</a>
+      <ul>
+        <li><a href="#帧内预测模式">帧内预测模式</a></li>
+        <li><a href="#帧内预测过程">帧内预测过程</a></li>
+      </ul>
+    </li>
+    <li><a href="#帧间预测">帧间预测</a>
+      <ul>
+        <li><a href="#运动估计">运动估计</a></li>
+        <li><a href="#mv-预测技术">MV 预测技术</a></li>
+        <li><a href="#加权预测">加权预测</a></li>
+      </ul>
+    </li>
+    <li><a href="#pcm-模式">PCM 模式</a></li>
+  </ul>
+</nav>
+</div>
+</details>
+
+<hr />
+
+
+			</div>
+		</header>
+		<main role="main" class="w-full md:w-3/5 xl:w-1/2 max-w-3xl order-2 md:order-2 min-h-70vh pt-2 pb-4">
+			
+
+<article>
+	<section class="mx-auto content">
+		<div class="c-rich-text"><h2 id="视频预测编码技术">视频预测编码技术</h2>
+<p>预测编码是指利用已编码的一个或几个样本值，根据某种模型或方法，对当前的样本值进行预测，并对样本真实值和预测值之间的差值进行编码。</p>
+<h3 id="帧内预测编码">帧内预测编码</h3>
+<p>随着离散余弦变换 (DCT) 在图像、视频编码中的广泛应用，帧内预测转为在频域进行，如相邻块 DC 系数的差分编码等。由 DCT 的性质可知，DC 系数仅能反映当前块像素值的平均大小，因此上述频域中基于 DC 系数的帧内预测无法反映出视频的纹理信息，这限制了频域帧内预测的发展。</p>
+<p>H.264/AVC 标准中使用基于块的空域帧内预测方法，规定了若干种预测模式，每种模式都对应一种纹理方向（DC 模式除外），当前块预测像素由其预测方向上相邻块的边界重建像素生成。该方法使得编码器能根据视频内容特征自适应地选择预测模式。</p>
+<p>H.264/AVC 使用拉格朗日率失真优化 (RDO) 进行模式选择。它为每一种模式计算其拉格朗日代价：
+$$
+J = D + \lambda \cdot R
+$$
+其中，$D$ 表示当前预测模式下地失真，$R$ 表示编码当前预测模式下所有信息（如变换系数、模式细腻些、宏块划分方式等）所需的比特数。<strong>最优的预测模式不一定满足残差最小，而应指残差信号经过其他编码模块后最终的编码性能最优。</strong></p>
+<p>H.264/AVC 标准及后来的 FRExt 扩展层一共规定了 3 种大小的亮度帧内预测块：4 × 4、8 × 8 以及 16 × 16。其中 4 × 4 和 8 × 8 块包含 9 种预测模式，16 × 16 块包含 4 种预测模式。色度分量的帧内预测都是基于 8 × 8 大小的块进行的，也有 4 种预测模式。</p>
+<h3 id="帧间预测编码">帧间预测编码</h3>
+<h4 id="帧间预测编码原理">帧间预测编码原理</h4>
+<p>目前主要的视频编码标准帧间预测部分都采样了基于块的运动补偿技术。其主要原理是为当前图像的每个像素块在之前已编码图像中寻找一个最佳匹配块，该过程被称为<strong>运动估计 (Motion Estimation, ME)</strong>。其中被参考的图像称为<strong>参考图像 (Reference Frame)</strong>，参考块到当前像素块的位移称为<strong>运动向量 (Motion Vector, MV)</strong>，当前像素块与参考块的差值称为<strong>预测残差 (Prediction Residual)</strong>。</p>
+<p>在 H.261 标准中，P 图像的预测方式只有前向预测。但实际场景中往往会产生不可预测的运动和遮挡，因此当前图像可能在之后的图像中更容易找到匹配块。为此，MPEG-1 标准定义了第三类图像，B 图像。为了提高运动估计精度，MPEG-1 首次采用了半像素精度的运动估计，半像素位置的参考像素值可由双线性差值方法产生。</p>
+<p>面向数字广播电视的标准 MPEG-2 首次支持了隔行扫描视频。一帧图像包含两个场，顶场和底场，每个帧图像的宏块需要被拆分成两个 16 × 8 的块分别进行预测。H.263 标准沿用了 MPEG-1 的双向预测和半像素精度运动估计，并进一步发展了 MPEG-2 中将一个宏块分成更小的块进行预测的思想。</p>
+<p>H.264/AVC 标准规定了 7 种大小的运动补偿块，一个宏块内部允许存在不同大小块的组合。此外 H.264/AVC 还使用了 1/4 精度像素运动估计、多参考图像预测、加权预测以及空域/时域 MV 预测等。</p>
+<h4 id="帧间预测编码关键技术">帧间预测编码关键技术</h4>
+<h5 id="1-运动估计">1. 运动估计</h5>
+<p>在大多数视频序列中，相邻图像内容非常相似，不需要对每幅图像的全部信息编码，只需要将当前图像中运动物体的运动信息传给解码器。运动估计就是提取当前图像运动信息的过程。</p>
+<p>将图像分为不同大小的像素块，只要块大小选择合适，则各个块的运动形式可以看成是统一的，每个块的运动参数可以独立地估计，这就是常用地基于块地运动表示法。</p>
+<p>有几个核心问题：</p>
+<ol>
+<li>
+<p>运动估计准则</p>
+<p>常用地匹配准则主要有最小均方误差 (MSE)、最小平均绝对误差 (MAD) 和最大匹配像素数 (MPC) 等。为了简化计算，一般使用绝对误差和 (SAD) 来代替 MAD。此外，最小变换域绝对误差和 (SATD) 也是一种性能优异的匹配准则。</p>
+<p>最小 SAD 准则不含乘除法，且便于硬件实现，因而使用最广泛。SAD 准则仅考虑了残差的大小，而未考虑编码运动信息所需的比特数。因此，H.264/AVC 编码器在运动估计过程中使用 RDO 来选择 MV。</p>
+</li>
+<li>
+<p>搜索算法</p>
+<p>常用的搜索算法有全搜索算法、二维对数搜索算法、三步搜索算法等。除全搜索算法，其余算法统称为快速算法。快速算法容易陷入局部最优点，为避免这一点，在搜索算法的每一步中尽量搜索更多的点。</p>
+</li>
+<li>
+<p>亚像素精度运动估计</p>
+<p>亚像素精度运动估计意味着需要对参考图像进行插值，好的插值方法能大幅改善运动补偿的性能。</p>
+</li>
+</ol>
+<h5 id="2-mv-预测">2. MV 预测</h5>
+<p>在大多数图像和视频中，一个运动物体可能会覆盖多个运动补偿块，因此空间域相邻块的运动向量具有较强的相关性。若使用相邻已编码块对当前块 MV 预测，将二者差值进行编码，则会大幅减少编码 MV 所需的比特数。同时，由于物体运动具有连续性，因此相邻图像同一位置像素块的 MV 也具有一定相关性。H.264/AVC 使用了空域和时域两种 MV 的预测方式。</p>
+<ol>
+<li>
+<p>MV 空域预测</p>
+<p><img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/NMJ$SDFJ_`NZL~05}P~67IA.jpg" style="zoom:50%;" /><img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/20210331212942.png" alt=""></p>
+</li>
+<li>
+<p>MV 时域预测</p>
+<p>在 H.264/AVC 中，MV 时域预测主要针对 B Slice。主要有以下两种形式</p>
+<ul>
+<li>
+<p>当 B 图像的两个 MV 都来自同一个方向时（都来自当前图像之前的参考图像或之后的），其中一个 MV 可用另一个 MV 来预测</p>
+<p>设两参考图像 $ref_0$ 和 $ref_1$ 与当前图像的距离分别为 $l_0$ 和 $l_1$，二者 MV 分别为 $MV_0$ 和 $MV_1$，则 $MV_1$ 可由下式预测：
+$$
+MVP_1 = \frac{l_1}{l_0} MV_0
+$$</p>
+<p>$$
+MVD_1 = MV_1 - MVP_1
+$$</p>
+<p>编码器只需要传输 $MVD_1$，解码器可按相同规则产生 $MV_1$。</p>
+</li>
+<li>
+<p>直接模式 MV 预测</p>
+<p>H.264/AVC 为 B Slice 提供一种 Direct Mode。在该模式下，MV 可直接预测的出，无需传送 MV 差值。预测方式有时域空域两种。时域预测介绍如下。</p>
+<p>设两参考图像 $ref_0$ 和 $ref_1$ 分别位于当前图像的前方和后方，与当前图像的距离分别为 $l_0$ 和 $l_1$，且 $ref_1$ 中与当前块对应位置块有一个指向 $ref_0$ 的 MV，则当前图像的两个 MV 可计算如下：
+$$
+MV_0 = \frac{l_0}{l_0 + l_1}MV
+$$
+$$
+MV_1 = MV_0 - MV
+$$</p>
+<p>MV 时域预测主要运用了自然界物体匀速运动的思想。</p>
+<p>与 H.264 标准相比，H.265 剔除里 Merge 和 AMVP 两种先进的 MV 预测技术。</p>
+</li>
+</ul>
+</li>
+<li>
+<p>多参考图像及加权预测</p>
+</li>
+</ol>
+<h2 id="帧内预测">帧内预测</h2>
+<h3 id="帧内预测模式">帧内预测模式</h3>
+<h4 id="亮度帧内预测模式">亮度帧内预测模式</h4>
+<p>H.265/HEVC 亮度分量帧内预测支持 5 种大小的 PU，每一种大小的 PU 都对应 35 种预测模式，包括 Planar 模式、DC 模式以及 33 种角度模式。所有预测模式都使用相同的模板。</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/]5%KJ{TWLY0XF107LI}GWLD.jpg" style="zoom:50%;" />
+<ol>
+<li>
+<p>Planar 模式</p>
+<p>由 H.264/AVC 中的 Plane 模式发展而来，适用于像素值缓慢变化的区域。使用水平和垂直方向两个线性滤波器，并将二者的平均值作为当前块像素的预测值。这一做法能使预测像素平缓变化，与其他模式相比能提升视频的主观质量。</p>
+</li>
+<li>
+<p>DC 模式</p>
+<p>适用于大面积平坦区域。当前块预测值可由其左侧和上方（不包含左上角、左下方和右上方）参考像素的平均值得到。</p>
+</li>
+<li>
+<p>角度模式</p>
+</li>
+</ol>
+<h4 id="亮度模式的编码">亮度模式的编码</h4>
+<p>H.265/HEVC 标准建立了一个帧内预测模式候选列表 candModeList，表中有 3 个候选预测模式，用于存储相邻 PU 的预测模式。</p>
+<h4 id="色度模式的编码">色度模式的编码</h4>
+<p>共有 5 种模式：Planar 模式、垂直模式、水平模式、DC 模式以及对应亮度分量的预测模式。若对应亮度预测模式为前四种之一，则替换为角度预测中的模式 34。</p>
+<h3 id="帧内预测过程">帧内预测过程</h3>
+<p>在 H.265/HEVC 中，35 种预测模式是在 PU 的基础上定义的，而具体帧内预测过程的实现则是以 TU 为单位的。标准规定 PU 可以以四叉树的形式划分 TU，且一个 PU 内的所有 TU 共享一种预测模式。</p>
+<p>帧内预测可分为以下 3 个步骤：</p>
+<ol>
+<li>判断当前 TU 相邻参考像素是否可用（边界或未编码的就不可用）并作相应处理</li>
+<li>对参考像素进行滤波</li>
+<li>根据滤波后的参考像素计算当前 TU 的预测像素值</li>
+</ol>
+<h2 id="帧间预测">帧间预测</h2>
+<h3 id="运动估计">运动估计</h3>
+<h4 id="搜索算法">搜索算法</h4>
+<p>在基于块运动补偿的视频编码框架中，运动搜索是最为重要的环节之一，也是编码器最耗时的模块。H.265/HEVC 官方测试编码器 HM10.0 给出了两种搜索算法：全搜索算法和 TZSearch 算法。</p>
+<h4 id="亚像素精度运动估计">亚像素精度运动估计</h4>
+<h3 id="mv-预测技术">MV 预测技术</h3>
+<p>H.265/HEVC 在 MV 预测方面提出了两种新技术，Merge 技术和 AMVP 技术。二者区别主要体现于：</p>
+<ul>
+<li>Merge 可以看成一种编码模式，在该模式下，当前 PU 的 MV 直接由空域或时域上邻近的 PU 预测得到，不存在 MVD (MV Difference)；而 AMVP 可以看成一种 MV 预测技术，编码器只需要对实际 MV 与预测 MV的差值进行编码，因此存在 MVD。</li>
+<li>二者 MV 候选列表长度不同，构建候选 MV 列表的方式也有所区别</li>
+</ul>
+<h4 id="merge-模式">Merge 模式</h4>
+<p>为当前 PU 建立一个 MV 候选列表，列表中存在 5 个候选 MV（及其对应的参考图像），通过遍历这 5 个候选 MV，并进行率失真代价的计算，选取率失真代价最小的一个作为该 Merge 模式的最优 MV。若编/解码端按相同的方式键立该候选列表，则编码器只需要传输最优 MV 在候选列表中的索引即可。</p>
+<p>Merge 模式建立的 MV 候选列表包含时域和空域两种情形，对于 B Slice，还包含组合列表的方式。</p>
+<h5 id="空域候选列表的建立">空域候选列表的建立</h5>
+<p><img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/NMJ$SDFJ_`NZL~05}P~67IA.jpg" style="zoom:50%;" />![]</p>
+<h5 id="时域候选列表的建立">时域候选列表的建立</h5>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/20210331212942.png" style="zoom:50%;" />
+<h5 id="组合列表的建立">组合列表的建立</h5>
+<p>对于 B Slice 中的 PU 而言，由于存在两个 MV，因此其 MV 候选列表也需要提供两个预测 MV。H.265/HEVC 将 MV 候选列表中的前 4 个 MV 进行两两组合，产生了用于 B Slice 的组合列表。</p>
+<h4 id="amvp-技术">AMVP 技术</h4>
+<p>高级运动向量预测 (Advanced Motion Vector Prediction, AMVP) 为当前 PU 建立候选 MV 列表，编码器从中最优的预测 MV，并对 MV 进行差分编码；解码端通过建立相同的列表，仅需要将 MVD 与预测 MV 在该列表中的序号即可计算出当前 PU 的 MV。</p>
+<p>类似于 Merge 模式，AMVP 候选 MV 列表也包含空域和时域两种情形，不同的是 AMVP 列表长度仅为 2。</p>
+<h3 id="加权预测">加权预测</h3>
+<p>加权预测可用于修正 P Slice 或 B Slice 中的运动补偿预测像素。H.265/HEVC 中介绍了两种加权预测方法：</p>
+<ol>
+<li>
+<p>默认加权预测</p>
+<p>未使用权值 $\omega$，根据参考图像队列的不同分 3 种情况计算。</p>
+</li>
+<li>
+<p>Explicit 加权预测</p>
+<p>其权值 $\omega$ 由编码器决定，并需要传送至解码端。也分 3 种情况。</p>
+</li>
+</ol>
+<h2 id="pcm-模式">PCM 模式</h2>
+<p>在 PCM 模式下，编码器直接传输一个 CU 的像素值，而不经过预测、变换等其他操作。</p>
+<p>对于一些特殊情况，例如当图像的内容极不规则或量化参数非常小时，该模式与传统的“帧内 - 变换 - 量化 - 熵编码”相比，效率会更高。此外，PCM 模式还适用于无损编码情形。</p>
+</div>
+	</section>
+
+
+</article>
+
+		</main>
+		<div class="w-full h-0 flex-none order-3"></div>
+		<aside role="contentinfo"
+			class="w-full md:w-2/5 xl:w-1/2 md:pr-12 lg:pr-20 xl:pr-24 order-4 md:order-3 md:sticky md:bottom-0 self-end max-w-2xl">
+			<div class="md:float-right md:text-right leading-loose tracking-tight md:mb-2">
+				
+	<div class="md:max-w-xs  flex flex-col md:items-end">
+	<ul class="font-serif flex-grow-0 flex justify-between flex-wrap md:flex-col">
+	
+	
+	<li class="px-1 md:px-0">
+		<a href="/post/" title="归档 page" 
+			class="font-medium text-medium-red-violet-600 hover:text-medium-red-violet-400" >
+			归档
+		</a>
+	</li>
+	
+	<li class="px-1 md:px-0">
+		<a href="/categories/" title="分类 page" >
+			分类
+		</a>
+	</li>
+	
+	<li class="px-1 md:px-0">
+		<a href="/tags/" title="标签 page" >
+			标签
+		</a>
+	</li>
+	
+	<li class="px-1 md:px-0">
+		<a href="/about/" title="关于 page" >
+			关于
+		</a>
+	</li>
+	
+	
+	
+	
+	<div id="fastSearch" class="m-0">
+		<input id="searchInput" type="text" size=10 
+			class="bg-gray-100 focus:outline-none border-b border-gray-100 focus:border-eucalyptus-300 md:text-right
+			placeholder-java-500 min-w-0 max-w-xxxs"
+			placeholder="search" />
+		<ul id="searchResults" class="bg-gray-200 px-2 divide-y divide-gray-400">
+		</ul>
+	</div>
+	
+</ul>
+	
+
+<div class="flex flex-wrap-reverse md:justify-end content-end md:content-start justify-start items-start   max-h-16">
+	
+</div>
+	<div class="text-sm text-gray-500 leading-tight a-gray">
+		© Faye
+		<br />
+		Built with Hugo and theme <a href="https://github.com/heyeshuang/hugo-theme-tokiwa">Tokiwa</a>. 3673 words in this page.
+	</div>
+</div>
+
+			</div>
+		</aside>
+		<footer class="w-full md:w-3/5 xl:w-1/2 order-3 max-w-3xl md:order-4 pt-2">
+			
+<hr class="double-line" />
+<div class="flex flex-wrap justify-between pb-2 leading-loose font-serif">
+    
+    <a class="flex-grow-0" href="/post/video-coding-structure/">
+        <svg class="fill-current inline-block h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24"
+            height="24">
+            <path fill="none" d="M0 0h24v24H0z" />
+            <path d="M7.828 11H20v2H7.828l5.364 5.364-1.414 1.414L4 12l7.778-7.778 1.414 1.414z" /></svg>
+        H.265/HEVC 编码结构 笔记
+    </a>
+    
+    
+    <a class="flex-grow-0" href="/post/avs3-bitstream/">
+        AVS3 编码位流
+        <svg class="fill-current inline-block h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24"
+            height="24">
+            <path fill="none" d="M0 0h24v24H0z" />
+            <path d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z" /></svg></a>
+    
+</div>
+<div >
+
+
+
+<div class="font-serif pb-2 flex align-start leading-loose">
+	<span class="heading pr-6 leading-loose">Related</span>
+	<span >
+		
+			<a href="/post/video-coding-structure/">H.265/HEVC 编码结构 笔记</a>&nbsp;&nbsp;&#47;&nbsp;
+		
+			<a href="/post/multimedia-basics/">多媒体基础知识</a>
+		
+</span>
+</div>
+
+</div>
+<hr />
+<div class="pb-2">
+    <div id="disqus_thread"></div>
+<script type="application/javascript">
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "faye" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+<hr />
+
+		</footer>
+		
+
+<script src="/dist/app.js"></script>
+
+
+<script src="/lib/fuse.min.js"></script> 
+<script src="/lib/fastsearch.js"></script>
+
+	</div>
+</body>
+
+</html>

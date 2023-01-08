@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="cn">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	
+	<title>风巷  | 关于熵编码</title>
+	<meta name="viewport" content="width=device-width,minimum-scale=1">
+	<meta name="generator" content="Hugo 0.105.0">
+	
+	
+	<META NAME="ROBOTS" CONTENT="INDEX, FOLLOW">
+	
+
+	
+	
+	<link href="/dist/app.css" rel="stylesheet">
+	
+
+	
+
+	
+	
+<link rel="shortcut icon" href="img/wind.png" type="image/png" />
+
+	
+
+	
+	
+	
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-FAKE', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+	
+	
+	
+
+
+
+<link rel="stylesheet" href='https://imfaye.me/lib/katex.min.css' crossorigin="anonymous">
+
+
+<script defer src='https://imfaye.me/lib/katex.min.js' crossorigin="anonymous"></script>
+
+
+<script defer src='https://imfaye.me/lib/contrib/auto-render.min.js'
+crossorigin="anonymous"
+onload='renderMathInElement(document.body);'></script>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement(document.body, {
+            delimiters: [
+                {left: "$$", right: "$$", display: true},
+                {left: "$", right: "$", display: false}
+            ]
+        });
+    });
+</script>
+
+	
+	
+	
+	<script>
+		(function (u, c) {
+			var d = document,
+				t = 'script',
+				o = d.createElement(t),
+				s = d.getElementsByTagName(t)[0];
+			o.src = u;
+			if (c) {
+				o.addEventListener('load', function (e) {
+					c(e);
+				});
+			}
+			s.parentNode.insertBefore(o, s);
+		})('https:\/\/imfaye.me\/lib\/pangu.min.js', function () {
+			pangu.spacingPage();
+		});
+	</script>
+	
+	
+	
+	<style type="text/css" media="screen, print">
+		@font-face {
+			font-family: "FancyTitleFont";
+			font-style: normal;
+			font-display: swap;
+			src: url('https://imfaye.me/fonts/exampleFont.woff2') format('woff2'),
+				url('https://imfaye.me/fonts/exampleFont.woff') format('woff');
+		}
+		 
+		  
+		 
+		@font-face {
+			font-family: 'Noto Serif CJK SC';
+			font-style: normal;
+			font-weight: 300;
+			font-display: swap;
+			src: local('Noto Serif CJK SC Light'), local('NotoSerifCJK-Light'),
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-300.woff2') format('woff2'),
+				 
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-300.woff') format('woff');
+			 
+		}
+
+		 
+		@font-face {
+			font-family: 'Noto Serif CJK SC';
+			font-style: normal;
+			font-weight: 400;
+			font-display: swap;
+			src: local('Noto Serif CJK SC'), local('NotoSerifCJK-Regular'),
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-regular.woff2') format('woff2'),
+				 
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-regular.woff') format('woff');
+			 
+		}
+
+		 
+		@font-face {
+			font-family: 'Noto Serif CJK SC';
+			font-style: normal;
+			font-weight: 500;
+			font-display: swap;
+			src: local('Noto Serif CJK SC Medium'), local('NotoSerifCJK-Medium'),
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-500.woff2') format('woff2'),
+				 
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-500.woff') format('woff');
+			 
+		}
+	</style>
+	
+</head>
+
+<body class="bg-gray-100 text-gray-700 font-sans">
+	<div class="p-6 sm:p-10 md:p-16 flex flex-wrap">
+		<header class="w-full md:w-2/5 xl:w-1/2 md:pr-12 lg:pr-20 xl:pr-24 order-1 md:order-1 max-w-2xl">
+			<div
+				class="z-50 bg-gray-100 bg-opacity-75 bg-opacity-custom lg:min-w-0.7 max-w-xl md:float-right md:text-right leading-loose tracking-tight md:sticky md:top-0 pt-2">
+				
+<div>
+	<h2>
+		<a href="https://imfaye.me/" title="风巷" class="heading font-cursive icon">风巷</a>
+	</h2>
+</div>
+<h1 class="pt-2">关于熵编码</h1>
+
+<div class="flex flex-wrap justify-end pt-2 "><div class="md:flex-grow-0 font-light">
+	
+	
+	
+	
+	<a class="post-taxonomy-category text-medium-red-violet-600 hover:text-medium-red-violet-400"
+		href='/categories/%E6%97%A0%E6%83%85%E7%AC%94%E8%AE%B0'>无情笔记</a>
+	
+	
+	
+
+	
+	&nbsp;&nbsp;
+	
+
+	
+	
+	
+	
+	<a class="post-taxonomy-tag text-eucalyptus-500"
+		href='/tags/%E8%A7%86%E9%A2%91%E7%BC%96%E7%A0%81'>视频编码</a>
+	
+	
+	
+</div><time class="text-eucalyptus-500 md:text-right md:flex-grow font-light pl-4"
+		datetime="2021-12-05T13:09:24Z">2021-12-5</time>
+</div>
+
+<details class="toc" open>
+<summary>
+    <hr />
+</summary>
+<div class="inline toc-content">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#算术编码-arithmetic-coding">算术编码 (Arithmetic Coding)</a>
+      <ul>
+        <li><a href="#流程">流程</a></li>
+        <li><a href="#实现细节">实现细节</a></li>
+        <li><a href="#静态模型--自适应模型">静态模型 → 自适应模型</a></li>
+        <li><a href="#算术编码-vs-哈夫曼编码">算术编码 vs 哈夫曼编码</a></li>
+        <li><a href="#cabac">CABAC</a></li>
+      </ul>
+    </li>
+    <li><a href="#区间编码-range-coding">区间编码 (Range Coding)</a></li>
+  </ul>
+</nav>
+</div>
+</details>
+
+<hr />
+
+
+			</div>
+		</header>
+		<main role="main" class="w-full md:w-3/5 xl:w-1/2 max-w-3xl order-2 md:order-2 min-h-70vh pt-2 pb-4">
+			
+
+<article>
+	<section class="mx-auto content">
+		<div class="c-rich-text"><h1 id="传统熵模型">传统熵模型</h1>
+<h2 id="算术编码-arithmetic-coding">算术编码 (Arithmetic Coding)</h2>
+<h3 id="流程">流程</h3>
+<p>（以静态模型举例）</p>
+<ol>
+<li>假设有一段数据需要编码，统计里面所有的字符和出现的次数。编码从初始区间 (0, 1] 开始。</li>
+<li>在当前区间内根据各字符概率划分子区间。</li>
+<li>读入字符，找到该字符落入的子区间，将区间更新为该子区间，并重复 2, 3 步骤</li>
+<li>最后得到的区间 [low, high) 中任意一个小数以二进制形式输出即得到编码的数据</li>
+</ol>
+<p>例子如下：</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/image-20220727131100497.png" style="zoom: 80%;" />
+<h3 id="实现细节">实现细节</h3>
+<p>最后结果是一个小数，我们不能简单地用一个 double 类型去表示和计算这个小数，因为根据数据的复杂程度，这个小数可能任意长，小数点后可能会有成千上万位。</p>
+<p>然而，小数点后的数据前几位很有可能是在过程中是可以不断提前确定的。例如如果当前区间为 [0.14432, 0.1456)，高位的 0.14 可以提前确定，14已经可以输出了。那么小数点可以向后移动两位，区间变成 [0.432, 0.56)，在此基础上进行后面的计算。这样编码区间永远保持在一个有限的精度要求上。</p>
+<p>上述是基于十进制的，实际数字是用二进制表示的，当然原理是一样的，用十进制只是为了表述方便。</p>
+<h3 id="静态模型--自适应模型">静态模型 → 自适应模型</h3>
+<p>静态模型在初始时对完整的数据统计完概率分布，之后不再更新概率分布；自适应模型随着字符的输入会不断更新概率分布。</p>
+<p>静态模型的缺点在于：</p>
+<ol>
+<li>在压缩前对信息内字符进行统计的过程会消耗大量时间。</li>
+<li>对较长的信息，静态模型统计出的符号概率是该符号在整个信息中的出现概率，而自适应模型可以统计出某个符号在某一局部的出现概率或某个符号相对于某一上下文的出现概率，换句话说，自适应模型得到的概率分布将有利于对信息的压缩（可以说结合上下文的自适应模型的信息熵建立在更高的概率层次上，其总熵值更小），好的基于上下文的自适应模型得到的压缩结果将远远超过静态模型。</li>
+</ol>
+<p>例如一段码流，某符号在前面出现概率较大而后面概率小，甚至忽大忽小，采用自适应模型就可以更好的适应这样的变动，压缩效率会比静态模型更高。主流视频编码标准如H.264/H.265都使用自适应模型。</p>
+<h3 id="算术编码-vs-哈夫曼编码">算术编码 vs 哈夫曼编码</h3>
+<p>首先说结论，算术编码压缩效率更高，哈夫曼编码复杂度更低。</p>
+<p>这两种编码，或者说熵编码的本质是，概率越小的字符，用更多的 bit 去表示，这反映到概率区间上就是，概率小的字符所对应的区间也小，因此这个区间的上下边际值的差值越小，为了唯一确定当前这个区间，则需要更多的数字去表示它。</p>
+<p>哈夫曼编码由于不断地二叉，它的子区间总是 $\frac{1}{2}$ 的幂次方。而算术编码可以做到严格按照概率的大小等比例划分子区间。所以哈夫曼编码只是算术编码一种粗略的近似。</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/image-20220727131117834.png" style="zoom: 80%;" />
+<h3 id="cabac">CABAC</h3>
+<p>CABAC（Context-based Adaptive Binary Arithmetic Coding），CABAC 被视频标准H.264/H.265所采用。</p>
+<p>CABAC可以分为二值化、上下文建模和二进制算术编码三个步骤。</p>
+<p>其中上下文建模相当于把整段码流进行了再次的细分，把相同条件下的字符bin（比如块大小/亮度色度/语法元素/扫描方式/周围情况等）归属于某个context，形成一个比较独立的子队列而进行编码，其更新只与当前的状态和当前字符是否MPS有关（换句话说，只和历史该子队列编码字符和当前字符有关），而与别的子队列/字符是无关的。当然输出码字往往是根据规则而“混”在一起的。</p>
+<p>CABAC虽然性能很好，但也存在以下几点不足：</p>
+<ol>
+<li>复杂度过高，不易并行处理。存在块级依赖（左/上角的块没有码率估计/熵编码，后继块就无法得到更新后的状态，从而无法开始码率估计/熵编码）、Bin级依赖（同一个子队列的bin存在前后依赖性，后继的bin要等前面bin编完后才能得到更新后的上下文状态）以及编码的几个环节依赖，这些依赖性会影响编码器的并行实现。</li>
+<li>计算精度问题。为简化计算，CABAC采用128个状态来近似，根据原来状态和当前符号性质查表得到下个状态。这个过程中会有一些精度的损失。另外，如果当一连串的MPS到来，状态到达62后就不会继续改变，只会“原地踏步”。换句话说，当概率到达0.01975时就不会随着符号继续变小，这样会影响压缩效率。</li>
+<li>Context的设计问题。部分context利用频率很低，在测试中平均一帧都用不到几次，而有的context使用频率很高，需要进一步的优化。</li>
+</ol>
+<h2 id="区间编码-range-coding">区间编码 (Range Coding)</h2>
+<p>区间编码可以看为算术编码的一个变种，比算术编码压缩效率略小，但运算速度近乎是算术编码的两倍。</p>
+<p>区间编码在整数（任意底）空间中进行进行计算，而算术编码的区间总是以小数的形式进行迭代。其他部分都几乎一样。</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/image-20220727131132728.png" style="zoom:67%;" />
+<h1 id="端到端熵模型">端到端熵模型</h1>
+<p>Todo&hellip;</p>
+<h1 id="参考">参考</h1>
+<p><a href="https://zhuanlan.zhihu.com/p/23834589">算术编码（转载加笔记）</a></p>
+<p><a href="https://segmentfault.com/a/1190000011561822">算数编码原理解析</a></p>
+</div>
+	</section>
+
+
+</article>
+
+		</main>
+		<div class="w-full h-0 flex-none order-3"></div>
+		<aside role="contentinfo"
+			class="w-full md:w-2/5 xl:w-1/2 md:pr-12 lg:pr-20 xl:pr-24 order-4 md:order-3 md:sticky md:bottom-0 self-end max-w-2xl">
+			<div class="md:float-right md:text-right leading-loose tracking-tight md:mb-2">
+				
+	<div class="md:max-w-xs  flex flex-col md:items-end">
+	<ul class="font-serif flex-grow-0 flex justify-between flex-wrap md:flex-col">
+	
+	
+	<li class="px-1 md:px-0">
+		<a href="/post/" title="归档 page" 
+			class="font-medium text-medium-red-violet-600 hover:text-medium-red-violet-400" >
+			归档
+		</a>
+	</li>
+	
+	<li class="px-1 md:px-0">
+		<a href="/categories/" title="分类 page" >
+			分类
+		</a>
+	</li>
+	
+	<li class="px-1 md:px-0">
+		<a href="/tags/" title="标签 page" >
+			标签
+		</a>
+	</li>
+	
+	<li class="px-1 md:px-0">
+		<a href="/about/" title="关于 page" >
+			关于
+		</a>
+	</li>
+	
+	
+	
+	
+	<div id="fastSearch" class="m-0">
+		<input id="searchInput" type="text" size=10 
+			class="bg-gray-100 focus:outline-none border-b border-gray-100 focus:border-eucalyptus-300 md:text-right
+			placeholder-java-500 min-w-0 max-w-xxxs"
+			placeholder="search" />
+		<ul id="searchResults" class="bg-gray-200 px-2 divide-y divide-gray-400">
+		</ul>
+	</div>
+	
+</ul>
+	
+
+<div class="flex flex-wrap-reverse md:justify-end content-end md:content-start justify-start items-start   max-h-16">
+	
+</div>
+	<div class="text-sm text-gray-500 leading-tight a-gray">
+		© Faye
+		<br />
+		Built with Hugo and theme <a href="https://github.com/heyeshuang/hugo-theme-tokiwa">Tokiwa</a>. 1785 words in this page.
+	</div>
+</div>
+
+			</div>
+		</aside>
+		<footer class="w-full md:w-3/5 xl:w-1/2 order-3 max-w-3xl md:order-4 pt-2">
+			
+<hr class="double-line" />
+<div class="flex flex-wrap justify-between pb-2 leading-loose font-serif">
+    
+    <a class="flex-grow-0" href="/post/image-quality-evaluation-metrics/">
+        <svg class="fill-current inline-block h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24"
+            height="24">
+            <path fill="none" d="M0 0h24v24H0z" />
+            <path d="M7.828 11H20v2H7.828l5.364 5.364-1.414 1.414L4 12l7.778-7.778 1.414 1.414z" /></svg>
+        图像质量评价指标(MSE, PSNR, MS-SSIM)
+    </a>
+    
+    
+    <a class="flex-grow-0" href="/post/vae/">
+        耶，VAE
+        <svg class="fill-current inline-block h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24"
+            height="24">
+            <path fill="none" d="M0 0h24v24H0z" />
+            <path d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z" /></svg></a>
+    
+</div>
+<div >
+
+
+
+<div class="font-serif pb-2 flex align-start leading-loose">
+	<span class="heading pr-6 leading-loose">Related</span>
+	<span >
+		
+			<a href="/post/image-quality-evaluation-metrics/">图像质量评价指标(MSE, PSNR, MS-SSIM)</a>&nbsp;&nbsp;&#47;&nbsp;
+		
+			<a href="/post/avs3-bitstream/">AVS3 编码位流</a>&nbsp;&nbsp;&#47;&nbsp;
+		
+			<a href="/post/prediction-coding/">H.265/HEVC 预测编码 笔记</a>&nbsp;&nbsp;&#47;&nbsp;
+		
+			<a href="/post/video-coding-structure/">H.265/HEVC 编码结构 笔记</a>&nbsp;&nbsp;&#47;&nbsp;
+		
+			<a href="/post/multimedia-basics/">多媒体基础知识</a>
+		
+</span>
+</div>
+
+</div>
+<hr />
+<div class="pb-2">
+    <div id="disqus_thread"></div>
+<script type="application/javascript">
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "faye" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+<hr />
+
+		</footer>
+		
+
+<script src="/dist/app.js"></script>
+
+
+<script src="/lib/fuse.min.js"></script> 
+<script src="/lib/fastsearch.js"></script>
+
+	</div>
+</body>
+
+</html>

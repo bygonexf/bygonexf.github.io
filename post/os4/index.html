@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="cn">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	
+	<title>风巷  | 操作系统笔记 CH4 Threads</title>
+	<meta name="viewport" content="width=device-width,minimum-scale=1">
+	<meta name="generator" content="Hugo 0.105.0">
+	
+	
+	<META NAME="ROBOTS" CONTENT="INDEX, FOLLOW">
+	
+
+	
+	
+	<link href="/dist/app.css" rel="stylesheet">
+	
+
+	
+
+	
+	
+<link rel="shortcut icon" href="img/wind.png" type="image/png" />
+
+	
+
+	
+	
+	
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-FAKE', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+	
+	
+	
+
+
+
+<link rel="stylesheet" href='https://imfaye.me/lib/katex.min.css' crossorigin="anonymous">
+
+
+<script defer src='https://imfaye.me/lib/katex.min.js' crossorigin="anonymous"></script>
+
+
+<script defer src='https://imfaye.me/lib/contrib/auto-render.min.js'
+crossorigin="anonymous"
+onload='renderMathInElement(document.body);'></script>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement(document.body, {
+            delimiters: [
+                {left: "$$", right: "$$", display: true},
+                {left: "$", right: "$", display: false}
+            ]
+        });
+    });
+</script>
+
+	
+	
+	
+	<script>
+		(function (u, c) {
+			var d = document,
+				t = 'script',
+				o = d.createElement(t),
+				s = d.getElementsByTagName(t)[0];
+			o.src = u;
+			if (c) {
+				o.addEventListener('load', function (e) {
+					c(e);
+				});
+			}
+			s.parentNode.insertBefore(o, s);
+		})('https:\/\/imfaye.me\/lib\/pangu.min.js', function () {
+			pangu.spacingPage();
+		});
+	</script>
+	
+	
+	
+	<style type="text/css" media="screen, print">
+		@font-face {
+			font-family: "FancyTitleFont";
+			font-style: normal;
+			font-display: swap;
+			src: url('https://imfaye.me/fonts/exampleFont.woff2') format('woff2'),
+				url('https://imfaye.me/fonts/exampleFont.woff') format('woff');
+		}
+		 
+		  
+		 
+		@font-face {
+			font-family: 'Noto Serif CJK SC';
+			font-style: normal;
+			font-weight: 300;
+			font-display: swap;
+			src: local('Noto Serif CJK SC Light'), local('NotoSerifCJK-Light'),
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-300.woff2') format('woff2'),
+				 
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-300.woff') format('woff');
+			 
+		}
+
+		 
+		@font-face {
+			font-family: 'Noto Serif CJK SC';
+			font-style: normal;
+			font-weight: 400;
+			font-display: swap;
+			src: local('Noto Serif CJK SC'), local('NotoSerifCJK-Regular'),
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-regular.woff2') format('woff2'),
+				 
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-regular.woff') format('woff');
+			 
+		}
+
+		 
+		@font-face {
+			font-family: 'Noto Serif CJK SC';
+			font-style: normal;
+			font-weight: 500;
+			font-display: swap;
+			src: local('Noto Serif CJK SC Medium'), local('NotoSerifCJK-Medium'),
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-500.woff2') format('woff2'),
+				 
+				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-500.woff') format('woff');
+			 
+		}
+	</style>
+	
+</head>
+
+<body class="bg-gray-100 text-gray-700 font-sans">
+	<div class="p-6 sm:p-10 md:p-16 flex flex-wrap">
+		<header class="w-full md:w-2/5 xl:w-1/2 md:pr-12 lg:pr-20 xl:pr-24 order-1 md:order-1 max-w-2xl">
+			<div
+				class="z-50 bg-gray-100 bg-opacity-75 bg-opacity-custom lg:min-w-0.7 max-w-xl md:float-right md:text-right leading-loose tracking-tight md:sticky md:top-0 pt-2">
+				
+<div>
+	<h2>
+		<a href="https://imfaye.me/" title="风巷" class="heading font-cursive icon">风巷</a>
+	</h2>
+</div>
+<h1 class="pt-2">操作系统笔记 CH4 Threads</h1>
+
+<div class="flex flex-wrap justify-end pt-2 "><div class="md:flex-grow-0 font-light">
+	
+	
+	
+	
+	<a class="post-taxonomy-category text-medium-red-violet-600 hover:text-medium-red-violet-400"
+		href='/categories/%E6%97%A0%E6%83%85%E7%AC%94%E8%AE%B0'>无情笔记</a>
+	
+	
+	
+
+	
+	&nbsp;&nbsp;
+	
+
+	
+	
+	
+	
+	<a class="post-taxonomy-tag text-eucalyptus-500"
+		href='/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F'>操作系统</a>&nbsp;&#47;
+	
+	<a class="post-taxonomy-tag text-eucalyptus-500"
+		href='/tags/%E5%A4%A7%E6%98%8E%E6%B9%96%E7%95%94%E7%9A%84%E4%B8%93%E4%B8%9A%E8%AF%BE'>大明湖畔的专业课</a>
+	
+	
+	
+</div><time class="text-eucalyptus-500 md:text-right md:flex-grow font-light pl-4"
+		datetime="2020-02-28T13:04:24Z">2020-2-28</time>
+</div>
+
+<details class="toc" open>
+<summary>
+    <hr />
+</summary>
+<div class="inline toc-content">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#multithreading-models">multithreading models</a></li>
+    <li><a href="#thread-libraries">thread libraries</a></li>
+    <li><a href="#thread-issues">thread issues</a>
+      <ul>
+        <li><a href="#the-fork-and-exec-system-calls">The fork() and exec() system calls</a></li>
+        <li><a href="#thread-cancellation">thread cancellation</a></li>
+        <li><a href="#signal-handling">signal handling</a></li>
+        <li><a href="#thread-pools">thread pools</a></li>
+        <li><a href="#thread-specific-data">thread-specific data</a></li>
+        <li><a href="#scheduler-activation">scheduler activation</a></li>
+      </ul>
+    </li>
+    <li><a href="#os-examples">OS examples</a></li>
+    <li><a href="#windows-xp-threads">windows XP threads</a></li>
+    <li><a href="#linux-threads---tasks">Linux threads - tasks</a></li>
+  </ul>
+</nav>
+</div>
+</details>
+
+<hr />
+
+
+			</div>
+		</header>
+		<main role="main" class="w-full md:w-3/5 xl:w-1/2 max-w-3xl order-2 md:order-2 min-h-70vh pt-2 pb-4">
+			
+
+<article>
+	<section class="mx-auto content">
+		<div class="c-rich-text"><p>Dispatching is referred to as a thread. Resource of ownership is referred to as a process or
+task.</p>
+<p>对进程的swapping和termination都牵扯它所有线程</p>
+<p>线程是CPU使用的基本单位。由thread ID, program counter, register set, stack组成</p>
+<h2 id="multithreading-models">multithreading models</h2>
+<p>User threads, supported above the kernel and are managed without kernel support.</p>
+<p>Kernel threads, supported and managed directly by the operating system.</p>
+<ul>
+<li>
+<p>many-to-one</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573189948482.png" style="zoom:50%;" />
+</li>
+<li>
+<p>one-to-one</p>
+<p>一个线程阻塞，另一个还能运行</p>
+<p>并发。开销大。</p>
+<p>windows, linux, solaris 9</p>
+</li>
+<li>
+<p>many-to-many</p>
+<p>用户线程映射到数量相同或更少的内核线程</p>
+<p>When a thread performs a blocking system call, the kernel can schedule another thread for execution.</p>
+<p>two-level model:</p>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573562767512.png" style="zoom:50%;" />
+</li>
+</ul>
+<h2 id="thread-libraries">thread libraries</h2>
+<p>两种方法实现：1 在用户空间提供一个没有内核支持的库 2 由OS直接支持的内核级的库</p>
+<ol>
+<li>
+<p>POSIX Pthreads</p>
+<p>Portable Operating System Interface of UNIX</p>
+<p>Referred to user-level library</p>
+</li>
+<li>
+<p>Win32 threads</p>
+<p>kernel-level threads library</p>
+</li>
+<li>
+<p>Java threads</p>
+<p>provides support at the language level for the creation and management of threads.</p>
+<p>两种创建线程的方法</p>
+<ul>
+<li>extending thread class</li>
+<li>define a class that implements the Runnable interface</li>
+</ul>
+</li>
+</ol>
+<h2 id="thread-issues">thread issues</h2>
+<h3 id="the-fork-and-exec-system-calls">The fork() and exec() system calls</h3>
+<h3 id="thread-cancellation">thread cancellation</h3>
+<p>Asynchronous cancellation 异步取消：立即取消</p>
+<p>Deferred cancellation 延迟取消：不断检查是否该终止</p>
+<h3 id="signal-handling">signal handling</h3>
+<p>A signal is used in UNIX systems to notify a process that a particular event has occurred.</p>
+<p>Synchronous signal: illegal memory access, division by 0.</p>
+<p>Asynchronously signal: terminating a process with specific keystrokes, Ctrl+C ，由运行进程之外的事产生</p>
+<p>two possible handlers:</p>
+<ul>
+<li>a user-defined signal handler</li>
+<li>a default signal handler, which is run by the kernel</li>
+</ul>
+<p>同步信号送到需要发到产生它的线程</p>
+<h3 id="thread-pools">thread pools</h3>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573563518826.png" style="zoom:50%;" />
+<p>优点：1 快 2 限制可用线程数量</p>
+<h3 id="thread-specific-data">thread-specific data</h3>
+<p>Thread-specific data allows each thread to have its own copy of data (Thread-local storage (TLS) ).</p>
+<p>TLS visible across function invocations</p>
+<h3 id="scheduler-activation">scheduler activation</h3>
+<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573563717238.png" style="zoom:50%;" />
+<p>Scheduler activation &ndash; one scheme for communication between the user-thread library and the kernel.</p>
+<p>provides upcalls, the kernel inform an application about certain events.</p>
+<p>upcall handlers must run on a LWP.</p>
+<p>当一个应用线程要阻塞，内核向应用程序发upcall，分配一个新LWP给应用线程，应用线程在这个LWP上运行upcall handler</p>
+<p>当阻塞线程等待事件发生，内核向线程库发另一个upcall， kernel allocates a new LWP or preempt one of the user threads to run the upcall handler for this event.</p>
+<h2 id="os-examples">OS examples</h2>
+<h2 id="windows-xp-threads">windows XP threads</h2>
+<p>one-to-one</p>
+<p>ETHREAD (in kernel space), KTHREAD (in kernel space), TEB (in user space)</p>
+<h2 id="linux-threads---tasks">Linux threads - tasks</h2>
+<p>clone() system call</p>
+</div>
+	</section>
+
+
+</article>
+
+		</main>
+		<div class="w-full h-0 flex-none order-3"></div>
+		<aside role="contentinfo"
+			class="w-full md:w-2/5 xl:w-1/2 md:pr-12 lg:pr-20 xl:pr-24 order-4 md:order-3 md:sticky md:bottom-0 self-end max-w-2xl">
+			<div class="md:float-right md:text-right leading-loose tracking-tight md:mb-2">
+				
+	<div class="md:max-w-xs  flex flex-col md:items-end">
+	<ul class="font-serif flex-grow-0 flex justify-between flex-wrap md:flex-col">
+	
+	
+	<li class="px-1 md:px-0">
+		<a href="/post/" title="归档 page" 
+			class="font-medium text-medium-red-violet-600 hover:text-medium-red-violet-400" >
+			归档
+		</a>
+	</li>
+	
+	<li class="px-1 md:px-0">
+		<a href="/categories/" title="分类 page" >
+			分类
+		</a>
+	</li>
+	
+	<li class="px-1 md:px-0">
+		<a href="/tags/" title="标签 page" >
+			标签
+		</a>
+	</li>
+	
+	<li class="px-1 md:px-0">
+		<a href="/about/" title="关于 page" >
+			关于
+		</a>
+	</li>
+	
+	
+	
+	
+	<div id="fastSearch" class="m-0">
+		<input id="searchInput" type="text" size=10 
+			class="bg-gray-100 focus:outline-none border-b border-gray-100 focus:border-eucalyptus-300 md:text-right
+			placeholder-java-500 min-w-0 max-w-xxxs"
+			placeholder="search" />
+		<ul id="searchResults" class="bg-gray-200 px-2 divide-y divide-gray-400">
+		</ul>
+	</div>
+	
+</ul>
+	
+
+<div class="flex flex-wrap-reverse md:justify-end content-end md:content-start justify-start items-start   max-h-16">
+	
+</div>
+	<div class="text-sm text-gray-500 leading-tight a-gray">
+		© Faye
+		<br />
+		Built with Hugo and theme <a href="https://github.com/heyeshuang/hugo-theme-tokiwa">Tokiwa</a>. 589 words in this page.
+	</div>
+</div>
+
+			</div>
+		</aside>
+		<footer class="w-full md:w-3/5 xl:w-1/2 order-3 max-w-3xl md:order-4 pt-2">
+			
+<hr class="double-line" />
+<div class="flex flex-wrap justify-between pb-2 leading-loose font-serif">
+    
+    <a class="flex-grow-0" href="/post/os3/">
+        <svg class="fill-current inline-block h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24"
+            height="24">
+            <path fill="none" d="M0 0h24v24H0z" />
+            <path d="M7.828 11H20v2H7.828l5.364 5.364-1.414 1.414L4 12l7.778-7.778 1.414 1.414z" /></svg>
+        操作系统笔记 CH3 Process
+    </a>
+    
+    
+    <a class="flex-grow-0" href="/post/os5/">
+        操作系统笔记 CH5 CPU Scheduling
+        <svg class="fill-current inline-block h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24"
+            height="24">
+            <path fill="none" d="M0 0h24v24H0z" />
+            <path d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z" /></svg></a>
+    
+</div>
+<div >
+
+
+
+<div class="font-serif pb-2 flex align-start leading-loose">
+	<span class="heading pr-6 leading-loose">Related</span>
+	<span >
+		
+			<a href="/post/os3/">操作系统笔记 CH3 Process</a>&nbsp;&nbsp;&#47;&nbsp;
+		
+			<a href="/post/os2/">操作系统笔记 CH2 OS structures</a>&nbsp;&nbsp;&#47;&nbsp;
+		
+			<a href="/post/os1/">操作系统笔记 CH1 Intro</a>
+		
+</span>
+</div>
+
+</div>
+<hr />
+<div class="pb-2">
+    <div id="disqus_thread"></div>
+<script type="application/javascript">
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "faye" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+<hr />
+
+		</footer>
+		
+
+<script src="/dist/app.js"></script>
+
+
+<script src="/lib/fuse.min.js"></script> 
+<script src="/lib/fastsearch.js"></script>
+
+	</div>
+</body>
+
+</html>
