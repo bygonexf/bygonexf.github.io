@@ -1,20 +1,16 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>index on Play Back End Roll</title>
+    <title>index on PIKA☆NCHI</title>
     <link>https://imfaye.me/tags/index/</link>
-    <description>Recent content in index on Play Back End Roll</description>
+    <description>Recent content in index on PIKA☆NCHI</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>cn</language>
-    <copyright>© Faye</copyright>
-    
-	<atom:link href="https://imfaye.me/tags/index/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <language>en-us</language>
+    <copyright>Faye</copyright><atom:link href="https://imfaye.me/tags/index/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Posts</title>
       <link>https://imfaye.me/post/</link>
-      <pubDate>Thu, 10 Feb 2022 23:43:59 +0000</pubDate>
+      <pubDate>Sun, 15 Jan 2023 15:04:21 +0800</pubDate>
       
       <guid>https://imfaye.me/post/</guid>
       <description></description>

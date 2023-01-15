@@ -1,46 +1,27 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>WSL on Play Back End Roll</title>
+    <title>WSL on PIKA☆NCHI</title>
     <link>https://imfaye.me/tags/wsl/</link>
-    <description>Recent content in WSL on Play Back End Roll</description>
+    <description>Recent content in WSL on PIKA☆NCHI</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>cn</language>
-    <copyright>© Faye</copyright>
-    <lastBuildDate>Sun, 21 Mar 2021 20:29:24 +0000</lastBuildDate>
-    
-	<atom:link href="https://imfaye.me/tags/wsl/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <language>en-us</language>
+    <copyright>Faye</copyright>
+    <lastBuildDate>Sun, 21 Mar 2021 20:29:24 +0000</lastBuildDate><atom:link href="https://imfaye.me/tags/wsl/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Win10 下 Linux 子系统 (WSL) 配置小记</title>
       <link>https://imfaye.me/post/wsl/</link>
       <pubDate>Sun, 21 Mar 2021 20:29:24 +0000</pubDate>
       
       <guid>https://imfaye.me/post/wsl/</guid>
-      <description>&lt;h2 id=&#34;网络代理配置&#34;&gt;网络代理配置&lt;/h2&gt;
-&lt;p&gt;刚开始用 &lt;code&gt;apt-get&lt;/code&gt; 就被卡到。&lt;/p&gt;
-&lt;p&gt;WSL1 的时候，Linux 子系统和 Windows 主机是共享一个 localhost 的。WSL2 由于通过虚拟机实现，若要访问 Windows 主机的网络，需要使用主机的 IP 地址（IP 地址可以用 &lt;code&gt;ipconfig&lt;/code&gt; 命令查看）。&lt;/p&gt;
-&lt;h3 id=&#34;wsl2-环境变量配置&#34;&gt;WSL2 环境变量配置&lt;/h3&gt;
-&lt;p&gt;如果是 V2rayX 的话，默认 socks5 端口是 10808，默认 http 端口是 10809。&lt;/p&gt;
-&lt;p&gt;如果是 Clash for Windows 的话，默认 socks5 端口是 7891，默认 http 端口是 7890。&lt;/p&gt;
-&lt;p&gt;以个人经验教训来说，http 和 socks5 两种代理方式可以都尝试一下。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#272822;background-color:#fafafa;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#111&#34;&gt;export&lt;/span&gt; &lt;span style=&#34;color:#111&#34;&gt;http_proxy&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#d88200&#34;&gt;&amp;#34;socks5://&amp;lt;windows_ip&amp;gt;:&amp;lt;socks5_port&amp;gt;&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#111&#34;&gt;export&lt;/span&gt; &lt;span style=&#34;color:#111&#34;&gt;https_proxy&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#d88200&#34;&gt;&amp;#34;socks5://&amp;lt;windows_ip&amp;gt;:&amp;lt;socks5_port&amp;gt;&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;git 也可以设置使用代理。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#272822;background-color:#fafafa;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git config --global http.proxy &lt;span style=&#34;color:#d88200&#34;&gt;&amp;#34;socks5://&amp;lt;windows_ip&amp;gt;:&amp;lt;socks5_port&amp;gt;&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git config --global https.proxy &lt;span style=&#34;color:#d88200&#34;&gt;&amp;#34;socks5://&amp;lt;windows_ip&amp;gt;:&amp;lt;socks5_port&amp;gt;&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;当然，如果希望每次启动的时候代理配置都生效，可以写入 &lt;code&gt;~/.bashrc&lt;/code&gt; 文件中。&lt;/p&gt;
-&lt;p&gt;顺便一提查看 git 全局配置的命令是：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#272822;background-color:#fafafa;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git config --global --list
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;v2ray-配置&#34;&gt;V2ray 配置&lt;/h3&gt;
-&lt;p&gt;在设置中要勾选上「允许来自局域网的连接」。&lt;/p&gt;
-&lt;h2 id=&#34;默认-shell-设置&#34;&gt;默认 shell 设置&lt;/h2&gt;
-&lt;p&gt;执行 &lt;code&gt;chsh&lt;/code&gt; 命令打开新的 WSL 窗口的时候，默认 shell 仍然没有变化。&lt;/p&gt;
-&lt;p&gt;还是需要在 &lt;code&gt;~/.bashrc&lt;/code&gt; 中加上一行：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#272822;background-color:#fafafa;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;bash -c fish
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;当然如果是 zsh 还是 fish 就随意啦。&lt;/p&gt;
-</description>
+      <description>网络代理配置 刚开始用 apt-get 就被卡到。
+WSL1 的时候，Linux 子系统和 Windows 主机是共享一个 localhost 的。WSL2 由于通过虚拟机实现，若要访问 Windows 主机的网络，需要使用主机的 IP 地址（IP 地址可以用 ipconfig 命令查看）。
+WSL2 环境变量配置 如果是 V2rayX 的话，默认 socks5 端口是 10808，默认 http 端口是 10809。
+如果是 Clash for Windows 的话，默认 socks5 端口是 7891，默认 http 端口是 7890。
+以个人经验教训来说，http 和 socks5 两种代理方式可以都尝试一下。
+export http_proxy = &amp;#34;socks5://&amp;lt;windows_ip&amp;gt;:&amp;lt;socks5_port&amp;gt;&amp;#34; export https_proxy = &amp;#34;socks5://&amp;lt;windows_ip&amp;gt;:&amp;lt;socks5_port&amp;gt;&amp;#34; git 也可以设置使用代理。
+git config --global http.proxy &amp;#34;socks5://&amp;lt;windows_ip&amp;gt;:&amp;lt;socks5_port&amp;gt;&amp;#34; git config --global https.proxy &amp;#34;socks5://&amp;lt;windows_ip&amp;gt;:&amp;lt;socks5_port&amp;gt;&amp;#34; 当然，如果希望每次启动的时候代理配置都生效，可以写入 ~/.bashrc 文件中。
+顺便一提查看 git 全局配置的命令是：</description>
     </item>
     
   </channel>

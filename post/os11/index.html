@@ -1,250 +1,1218 @@
 <!DOCTYPE html>
-<html lang="cn">
-
-<head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-	
-	<title>Play Back End Roll  | 操作系统笔记 CH11 File-System Implementation</title>
-	<meta name="viewport" content="width=device-width,minimum-scale=1">
-	<meta name="generator" content="Hugo 0.105.0">
-	
-	
-	<META NAME="ROBOTS" CONTENT="INDEX, FOLLOW">
-	
-
-	
-	
-	<link href="/dist/app.css" rel="stylesheet">
-	
-
-	
-
-	
-	
-<link rel="shortcut icon" href="img/wind.png" type="image/png" />
-
-	
-
-	
-	
-	
-<script type="application/javascript">
-var doNotTrack = false;
-if (!doNotTrack) {
-	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-	ga('create', 'UA-FAKE', 'auto');
-	
-	ga('send', 'pageview');
-}
-</script>
-	
-	
-	
+<html><head>
+<title>操作系统笔记 CH11 File-System Implementation</title>
 
 
 
-<link rel="stylesheet" href='https://imfaye.me/lib/katex.min.css' crossorigin="anonymous">
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
 
 
-<script defer src='https://imfaye.me/lib/katex.min.js' crossorigin="anonymous"></script>
+
+<meta property="og:title" content="操作系统笔记 CH11 File-System Implementation" />
+<meta property="og:description" content="文件系统结构 磁盘特点：可以原地重写，可以直接访问任意一块。
+内存和磁盘之间的IO以块为单位。每块为一个或多个扇区。扇区通常为512B
+File system resides on secondary storage (disks) OS通过文件系统存储、定位、提取数据
+IO control 最底层
+由device driver 和 Interrupt handlers组成
+实现内存和磁盘之间的信息传输。
+device driver可作为翻译器。输入是高层命令，输出是底层的、硬件特定的命令。命令用于控制hardware controller
+device driver控制一类设备
+basic file system
+Issue generic commands to the appropriate device driver to read and write physical blocks on the disk.
+file-organization module
+将逻辑块地址 转换成 物理块地址
+也包括空闲空间管理器
+logical file system
+管理metadata，元数据包括文件系统所有结构数据，而不包括实际数据
+管理目录结构
+通过FCB((inodes in UNIX))维护文件结构
+负责保护和安全
+Layering useful for reducing complexity and redundancy, but adds overhead and can decrease performance." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://imfaye.me/post/os11/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2020-02-28T13:11:24+00:00" />
+<meta property="article:modified_time" content="2020-02-28T13:11:24+00:00" /><meta property="og:site_name" content="My Blog" />
 
 
-<script defer src='https://imfaye.me/lib/contrib/auto-render.min.js'
-crossorigin="anonymous"
-onload='renderMathInElement(document.body);'></script>
 
 
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="操作系统笔记 CH11 File-System Implementation"/>
+<meta name="twitter:description" content="文件系统结构 磁盘特点：可以原地重写，可以直接访问任意一块。
+内存和磁盘之间的IO以块为单位。每块为一个或多个扇区。扇区通常为512B
+File system resides on secondary storage (disks) OS通过文件系统存储、定位、提取数据
+IO control 最底层
+由device driver 和 Interrupt handlers组成
+实现内存和磁盘之间的信息传输。
+device driver可作为翻译器。输入是高层命令，输出是底层的、硬件特定的命令。命令用于控制hardware controller
+device driver控制一类设备
+basic file system
+Issue generic commands to the appropriate device driver to read and write physical blocks on the disk.
+file-organization module
+将逻辑块地址 转换成 物理块地址
+也包括空闲空间管理器
+logical file system
+管理metadata，元数据包括文件系统所有结构数据，而不包括实际数据
+管理目录结构
+通过FCB((inodes in UNIX))维护文件结构
+负责保护和安全
+Layering useful for reducing complexity and redundancy, but adds overhead and can decrease performance."/>
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+<link rel="icon" href="https://imfaye.me/img/wind.png">
+
+
+
+      <script src="/js/toc.js"></script>
+    
+    <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
+<link rel="stylesheet" href="/scss/journal.min.d4c42cc03dd5885ad6a856f72cdc8991e948d78f13915e5ad7a9ea75041f0501.css" integrity="sha256-1MQswD3ViFrWqFb3LNyJkelI148TkV5a16nqdQQfBQE=" media="screen">
+
+
+
+<link rel="stylesheet" href="/scss/dark-mode.min.b063970adbc0451db461a3b3a99c3ac07ae784200123238e4bc8fc340e6b69ce.css" integrity="sha256-sGOXCtvARR20YaOzqZw6wHrnhCABIyOOS8j8NA5rac4=" media="screen">
+
+
+<link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Material+Icons">
+
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.css" integrity="sha384-RZU/ijkSsFbcmivfdRBQDtwuwVqK7GMOw6IMvKyeWL2K5UAlyp6WonmB8m7Jd0Hn" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.js" integrity="sha384-pK1WpvzWVBQiP0/GjnvRxV4mOb0oxFuyRxJlk6vVw146n3egcN5C925NCP7a7BY8" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/contrib/auto-render.min.js" integrity="sha384-vZTG03m+2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl" crossorigin="anonymous"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         renderMathInElement(document.body, {
-            delimiters: [
-                {left: "$$", right: "$$", display: true},
-                {left: "$", right: "$", display: false}
-            ]
+          
+          
+          delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false},
+              {left: '\\(', right: '\\)', display: false},
+              {left: '\\[', right: '\\]', display: true}
+          ],
+          
+          throwOnError : false
         });
     });
 </script>
 
-	
-	
-	
-	<script>
-		(function (u, c) {
-			var d = document,
-				t = 'script',
-				o = d.createElement(t),
-				s = d.getElementsByTagName(t)[0];
-			o.src = u;
-			if (c) {
-				o.addEventListener('load', function (e) {
-					c(e);
-				});
-			}
-			s.parentNode.insertBefore(o, s);
-		})('https:\/\/imfaye.me\/lib\/pangu.min.js', function () {
-			pangu.spacingPage();
-		});
-	</script>
-	
-	
-	
-	<style type="text/css" media="screen, print">
-		@font-face {
-			font-family: "FancyTitleFont";
-			font-style: normal;
-			font-display: swap;
-			src: url('https://imfaye.me/fonts/exampleFont.woff2') format('woff2'),
-				url('https://imfaye.me/fonts/exampleFont.woff') format('woff');
-		}
-		 
-		  
-		 
-		@font-face {
-			font-family: 'Noto Serif CJK SC';
-			font-style: normal;
-			font-weight: 300;
-			font-display: swap;
-			src: local('Noto Serif CJK SC Light'), local('NotoSerifCJK-Light'),
-				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-300.woff2') format('woff2'),
-				 
-				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-300.woff') format('woff');
-			 
-		}
 
-		 
-		@font-face {
-			font-family: 'Noto Serif CJK SC';
-			font-style: normal;
-			font-weight: 400;
-			font-display: swap;
-			src: local('Noto Serif CJK SC'), local('NotoSerifCJK-Regular'),
-				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-regular.woff2') format('woff2'),
-				 
-				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-regular.woff') format('woff');
-			 
-		}
 
-		 
-		@font-face {
-			font-family: 'Noto Serif CJK SC';
-			font-style: normal;
-			font-weight: 500;
-			font-display: swap;
-			src: local('Noto Serif CJK SC Medium'), local('NotoSerifCJK-Medium'),
-				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-500.woff2') format('woff2'),
-				 
-				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-500.woff') format('woff');
-			 
-		}
-	</style>
-	
+
+
+
+
+
+
+
+
+
+
+
+
+
 </head>
+<body>
+    	<div id="app"><div id="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="https://imfaye.me/">
+    
+        <div class="nav-title">
+            PIKA☆NCHI
+        </div>
+        
+        <div class="nav-subtitle">
+            Faye&#39;s Blog
+        </div>
+        
+    </a>
 
-<body class="bg-gray-100 text-gray-700 font-sans">
-	<div class="p-6 sm:p-10 md:p-16 flex flex-wrap">
-		<header class="w-full md:w-2/5 xl:w-1/2 md:pr-12 lg:pr-20 xl:pr-24 order-1 md:order-1 max-w-2xl">
-			<div
-				class="z-50 bg-gray-100 bg-opacity-75 bg-opacity-custom lg:min-w-0.7 max-w-xl md:float-right md:text-right leading-loose tracking-tight md:sticky md:top-0 pt-2">
-				
-<div>
-	<h2>
-		<a href="https://imfaye.me/" title="Play Back End Roll" class="heading font-cursive icon">Play Back End Roll</a>
-	</h2>
-</div>
-<h1 class="pt-2">操作系统笔记 CH11 File-System Implementation</h1>
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/posts">
+                归档
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/categories">
+                分类
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/tags">
+                标签
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/about">
+                关于
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/index.xml">
+                RSS
+            </a>
+            
+        
+    </div>
 
-<div class="flex flex-wrap justify-end pt-2 "><div class="md:flex-grow-0 font-light">
+    
+
+    <div class="nav-footer">
+        
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+移植自 <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
 	
-	
-	
-	
-	<a class="post-taxonomy-category text-medium-red-violet-600 hover:text-medium-red-violet-400"
-		href='/categories/%E6%97%A0%E6%83%85%E7%AC%94%E8%AE%B0'>无情笔记</a>
-	
-	
+	Faye
 	
 
-	
-	&nbsp;&nbsp;
-	
-
-	
-	
-	
-	
-	<a class="post-taxonomy-tag text-eucalyptus-500"
-		href='/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F'>操作系统</a>&nbsp;&#47;
-	
-	<a class="post-taxonomy-tag text-eucalyptus-500"
-		href='/tags/%E5%A4%A7%E6%98%8E%E6%B9%96%E7%95%94%E7%9A%84%E4%B8%93%E4%B8%9A%E8%AF%BE'>大明湖畔的专业课</a>
-	
-	
-	
-</div><time class="text-eucalyptus-500 md:text-right md:flex-grow font-light pl-4"
-		datetime="2020-02-28T13:11:24Z">2020-2-28</time>
-</div>
-
-<details class="toc" open>
-<summary>
-    <hr />
-</summary>
-<div class="inline toc-content">
-    <nav id="TableOfContents">
-  <ul>
-    <li><a href="#文件系统结构">文件系统结构</a></li>
-    <li><a href="#文件系统实现">文件系统实现</a>
-      <ul>
-        <li><a href="#in-memory-file-system-structures">In-Memory File System Structures</a></li>
-        <li><a href="#partitions-and-mounting-分区和安装">partitions and mounting 分区和安装</a></li>
-        <li><a href="#virtual-file-system-vfs">virtual file system (VFS)</a></li>
-      </ul>
-    </li>
-    <li><a href="#目录实现">目录实现</a>
-      <ul>
-        <li><a href="#linear-list-线性列表">linear list 线性列表</a></li>
-        <li><a href="#hash-table">hash table</a></li>
-      </ul>
-    </li>
-    <li><a href="#分配方法">分配方法</a>
-      <ul>
-        <li><a href="#contiguous-allocation-连续分配">Contiguous Allocation 连续分配</a></li>
-        <li><a href="#linked-allocation-链接分配">Linked Allocation 链接分配</a></li>
-        <li><a href="#indexed-allocation-索引分配">Indexed Allocation 索引分配</a></li>
-        <li><a href="#性能">性能</a></li>
-        <li><a href="#free-space-management">free-space management</a></li>
-      </ul>
-    </li>
-  </ul>
-</nav>
-</div>
-</details>
-
-<hr />
+    </div>
+    
+</div><div id="extraContainer" class="extra-container">
+    
+    
+    <div class="toc animated-visibility" :class="{ invisible: scrollY <= 140 }">
 
 
-			</div>
-		</header>
-		<main role="main" class="w-full md:w-3/5 xl:w-1/2 max-w-3xl order-2 md:order-2 min-h-70vh pt-2 pb-4">
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- 目录 -</center>
+		
+		
+		<ul>
 			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e6%96%87%e4%bb%b6%e7%b3%bb%e7%bb%9f%e7%bb%93%e6%9e%84" onclick="onNavClick(`#文件系统结构-nav`)" id="文件系统结构-nav">
+									文件系统结构
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%96%87%e4%bb%b6%e7%b3%bb%e7%bb%9f%e5%ae%9e%e7%8e%b0" onclick="onNavClick(`#文件系统实现-nav`)" id="文件系统实现-nav">
+									文件系统实现
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#in-memory-file-system-structures" onclick="onNavClick(`#in-memory-file-system-structures-nav`)" id="in-memory-file-system-structures-nav">
+									In-Memory File System Structures
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#partitions-and-mounting-%e5%88%86%e5%8c%ba%e5%92%8c%e5%ae%89%e8%a3%85" onclick="onNavClick(`#partitions-and-mounting-分区和安装-nav`)" id="partitions-and-mounting-分区和安装-nav">
+									partitions and mounting 分区和安装
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#virtual-file-system-vfs" onclick="onNavClick(`#virtual-file-system-vfs-nav`)" id="virtual-file-system-vfs-nav">
+									virtual file system (VFS)
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e7%9b%ae%e5%bd%95%e5%ae%9e%e7%8e%b0" onclick="onNavClick(`#目录实现-nav`)" id="目录实现-nav">
+									目录实现
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#linear-list-%e7%ba%bf%e6%80%a7%e5%88%97%e8%a1%a8" onclick="onNavClick(`#linear-list-线性列表-nav`)" id="linear-list-线性列表-nav">
+									linear list 线性列表
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#hash-table" onclick="onNavClick(`#hash-table-nav`)" id="hash-table-nav">
+									hash table
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e5%88%86%e9%85%8d%e6%96%b9%e6%b3%95" onclick="onNavClick(`#分配方法-nav`)" id="分配方法-nav">
+									分配方法
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#contiguous-allocation-%e8%bf%9e%e7%bb%ad%e5%88%86%e9%85%8d" onclick="onNavClick(`#contiguous-allocation-连续分配-nav`)" id="contiguous-allocation-连续分配-nav">
+									Contiguous Allocation 连续分配
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#linked-allocation-%e9%93%be%e6%8e%a5%e5%88%86%e9%85%8d" onclick="onNavClick(`#linked-allocation-链接分配-nav`)" id="linked-allocation-链接分配-nav">
+									Linked Allocation 链接分配
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#fatfile-allocation-table%e6%96%87%e4%bb%b6%e5%88%86%e9%85%8d%e8%a1%a8" onclick="onNavClick(`#fatfile-allocation-table文件分配表-nav`)" id="fatfile-allocation-table文件分配表-nav">
+									FAT(file-allocation table)文件分配表
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#indexed-allocation-%e7%b4%a2%e5%bc%95%e5%88%86%e9%85%8d" onclick="onNavClick(`#indexed-allocation-索引分配-nav`)" id="indexed-allocation-索引分配-nav">
+									Indexed Allocation 索引分配
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%80%a7%e8%83%bd" onclick="onNavClick(`#性能-nav`)" id="性能-nav">
+									性能
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#free-space-management" onclick="onNavClick(`#free-space-management-nav`)" id="free-space-management-nav">
+									free-space management
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#bit-map--bit-vector" onclick="onNavClick(`#bit-map--bit-vector-nav`)" id="bit-map--bit-vector-nav">
+									bit map / bit vector
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#linked-list-%e9%93%be%e8%a1%a8" onclick="onNavClick(`#linked-list-链表-nav`)" id="linked-list-链表-nav">
+									linked list 链表
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#grouping" onclick="onNavClick(`#grouping-nav`)" id="grouping-nav">
+									grouping
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#counting" onclick="onNavClick(`#counting-nav`)" id="counting-nav">
+									counting
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
 
-<article>
-	<section class="mx-auto content">
-		<div class="c-rich-text"><h2 id="文件系统结构">文件系统结构</h2>
+</div>
+    
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+                dark_mode
+            </span>
+        </a>
+        
+        
+    </div>
+</div>
+<div class="single-column-drawer-container" id="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/posts">
+                    归档
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/categories">
+                    分类
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/tags">
+                    标签
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/about">
+                    关于
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/index.xml">
+                    RSS
+                </a>
+                
+            
+            
+            <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- 目录 -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e6%96%87%e4%bb%b6%e7%b3%bb%e7%bb%9f%e7%bb%93%e6%9e%84" onclick="onNavClick(`#文件系统结构-nav`)" id="文件系统结构-nav">
+									文件系统结构
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%96%87%e4%bb%b6%e7%b3%bb%e7%bb%9f%e5%ae%9e%e7%8e%b0" onclick="onNavClick(`#文件系统实现-nav`)" id="文件系统实现-nav">
+									文件系统实现
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#in-memory-file-system-structures" onclick="onNavClick(`#in-memory-file-system-structures-nav`)" id="in-memory-file-system-structures-nav">
+									In-Memory File System Structures
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#partitions-and-mounting-%e5%88%86%e5%8c%ba%e5%92%8c%e5%ae%89%e8%a3%85" onclick="onNavClick(`#partitions-and-mounting-分区和安装-nav`)" id="partitions-and-mounting-分区和安装-nav">
+									partitions and mounting 分区和安装
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#virtual-file-system-vfs" onclick="onNavClick(`#virtual-file-system-vfs-nav`)" id="virtual-file-system-vfs-nav">
+									virtual file system (VFS)
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e7%9b%ae%e5%bd%95%e5%ae%9e%e7%8e%b0" onclick="onNavClick(`#目录实现-nav`)" id="目录实现-nav">
+									目录实现
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#linear-list-%e7%ba%bf%e6%80%a7%e5%88%97%e8%a1%a8" onclick="onNavClick(`#linear-list-线性列表-nav`)" id="linear-list-线性列表-nav">
+									linear list 线性列表
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#hash-table" onclick="onNavClick(`#hash-table-nav`)" id="hash-table-nav">
+									hash table
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e5%88%86%e9%85%8d%e6%96%b9%e6%b3%95" onclick="onNavClick(`#分配方法-nav`)" id="分配方法-nav">
+									分配方法
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#contiguous-allocation-%e8%bf%9e%e7%bb%ad%e5%88%86%e9%85%8d" onclick="onNavClick(`#contiguous-allocation-连续分配-nav`)" id="contiguous-allocation-连续分配-nav">
+									Contiguous Allocation 连续分配
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#linked-allocation-%e9%93%be%e6%8e%a5%e5%88%86%e9%85%8d" onclick="onNavClick(`#linked-allocation-链接分配-nav`)" id="linked-allocation-链接分配-nav">
+									Linked Allocation 链接分配
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#fatfile-allocation-table%e6%96%87%e4%bb%b6%e5%88%86%e9%85%8d%e8%a1%a8" onclick="onNavClick(`#fatfile-allocation-table文件分配表-nav`)" id="fatfile-allocation-table文件分配表-nav">
+									FAT(file-allocation table)文件分配表
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#indexed-allocation-%e7%b4%a2%e5%bc%95%e5%88%86%e9%85%8d" onclick="onNavClick(`#indexed-allocation-索引分配-nav`)" id="indexed-allocation-索引分配-nav">
+									Indexed Allocation 索引分配
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%80%a7%e8%83%bd" onclick="onNavClick(`#性能-nav`)" id="性能-nav">
+									性能
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#free-space-management" onclick="onNavClick(`#free-space-management-nav`)" id="free-space-management-nav">
+									free-space management
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#bit-map--bit-vector" onclick="onNavClick(`#bit-map--bit-vector-nav`)" id="bit-map--bit-vector-nav">
+									bit map / bit vector
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#linked-list-%e9%93%be%e8%a1%a8" onclick="onNavClick(`#linked-list-链表-nav`)" id="linked-list-链表-nav">
+									linked list 链表
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#grouping" onclick="onNavClick(`#grouping-nav`)" id="grouping-nav">
+									grouping
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#counting" onclick="onNavClick(`#counting-nav`)" id="counting-nav">
+									counting
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+            
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div id="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a id="navTitle" class="navbar-brand" href="https://imfaye.me/">
+            PIKA☆NCHI
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
+            <i class="material-icons" id="darkModeToggleIcon2">
+                dark_mode
+            </i>
+        </button>
+        
+    </div>
+</nav>
+<div class="single-column-header-container" id="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="https://imfaye.me/">
+        <div class="single-column-header-title">PIKA☆NCHI</div>
+        
+        <div class="single-column-header-subtitle">Faye&#39;s Blog</div>
+        
+
+    </a>
+</div>
+
+            <div id="content">
+                <div id="streamContainer" class="stream-container">
+
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
+
+            <div class="post-head-wrapper-text-only"
+                
+            >
+                <div class="post-title">
+                    操作系统笔记 CH11 File-System Implementation
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2020-02-28 13:11
+                        </time>
+                        
+
+                        
+                            <i class="material-icons" style="">folder</i>
+                                <a href="/categories/">[无情笔记]</a>
+                                &nbsp;
+                        
+
+                        
+                            <i class="material-icons" style="">label</i>
+                            
+                                <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F">操作系统</a>
+                                &nbsp;
+                            
+                                <a href="/tags/%E5%A4%A7%E6%98%8E%E6%B9%96%E7%95%94%E7%9A%84%E4%B8%93%E4%B8%9A%E8%AF%BE">大明湖畔的专业课</a>
+                                &nbsp;
+                            
+                        
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <h2 id="文件系统结构">文件系统结构</h2>
 <p>磁盘特点：可以原地重写，可以直接访问任意一块。</p>
 <p>内存和磁盘之间的IO以块为单位。每块为一个或多个扇区。扇区通常为512B</p>
 <p>File system resides on secondary storage (disks) OS通过文件系统存储、定位、提取数据</p>
-<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577502786991.png" style="zoom: 50%;" />
+<p><img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577502786991.png" alt=""></p>
 <ul>
 <li>
 <p>IO control 最底层</p>
 <p>由device driver 和 Interrupt handlers组成</p>
 <p>实现内存和磁盘之间的信息传输。</p>
 <p>device driver可作为翻译器。输入是高层命令，输出是底层的、硬件特定的命令。命令用于控制hardware controller</p>
-<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577503036078.png" style="zoom:50%;" />
+<p><img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577503036078.png" alt=""></p>
 <p>device driver控制一类设备</p>
 </li>
 <li>
@@ -279,7 +1247,7 @@ onload='renderMathInElement(document.body);'></script>
 <p>system-wide open-file table: 包括每个打开文件的FCB副本</p>
 <p>per-process open-file table: Contains a pointer to the appropriate entry in the system-wide open-file table.</p>
 <p>buffers hold data blocks from secondary storage.</p>
-<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577507477227.png" style="zoom:50%;" />
+<p><img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577507477227.png" alt=""></p>
 <p>对于访问打开文件表的索引：UNIX称之为file descriptor，Windows称之为file handle. 只要文件没有关闭，所有文件操作都是通过打开文件表来进行的</p>
 <h3 id="partitions-and-mounting-分区和安装">partitions and mounting 分区和安装</h3>
 <p>一个disk可以分为多个partition，一个partition可以横跨多个disk(作为RAID的一种形式比较合适)</p>
@@ -316,7 +1284,7 @@ onload='renderMathInElement(document.body);'></script>
 <p>每个文件在磁盘上占有一组连续的块</p>
 <p>访问连续分配文件所需寻道数最少</p>
 <p>用第一块的磁盘地址和连续块的数量来定义</p>
-<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577509061560.png" style="zoom:50%;" />
+<p><img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577509061560.png" alt=""></p>
 <p>sequential and direct access</p>
 <p>Best performance in most cases</p>
 <p>问题</p>
@@ -329,19 +1297,19 @@ onload='renderMathInElement(document.body);'></script>
 <h3 id="linked-allocation-链接分配">Linked Allocation 链接分配</h3>
 <p>每个文件是磁盘块的链表</p>
 <p>目录包括文件第一块的指针和最后一块的指针。每一块都有下一块的指针。</p>
-<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577509383605.png" style="zoom:50%;" />
+<p><img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577509383605.png" alt=""></p>
 <p>没有外部碎片</p>
 <p>只要有空闲块，文件就可以增大</p>
 <p>Disadvantages: 不能随机访问，指针需要空间，不可靠</p>
 <p>对于指针需要空间，解决办法是将多个块组成簇(cluster)，代价是增加了内部碎片</p>
 <h4 id="fatfile-allocation-table文件分配表">FAT(file-allocation table)文件分配表</h4>
 <p>used by MS-DOS and OS/2</p>
-<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577510977781.png" style="zoom:50%;" />
+<p><img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577510977781.png" alt=""></p>
 <p>对FAT采用缓存</p>
 <p>支持直接访问</p>
 <h3 id="indexed-allocation-索引分配">Indexed Allocation 索引分配</h3>
 <p>每个文件都有索引块，是一个磁盘块地址的数组</p>
-<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577511076567.png" style="zoom:50%;" />
+<p><img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577511076567.png" alt=""></p>
 <p>目录条目包括索引块的地址</p>
 <p>支持直接访问</p>
 <p>没有外部碎片</p>
@@ -377,167 +1345,63 @@ onload='renderMathInElement(document.body);'></script>
 <h4 id="grouping">grouping</h4>
 <p>将n个空闲块的地址存在第一个空闲块里。(前n-1确实为空，最后一块包含另外n个空闲块的地址)</p>
 <p>可以找到大量空闲块</p>
-<img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577512314875.png" style="zoom:33%;" />
+<p><img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577512314875.png" alt=""></p>
 <h4 id="counting">counting</h4>
 <p>记录第一块的地址和紧跟第一块的连续的空闲块的数量n</p>
 <p>can be stored in a balanced tree for efficiency</p>
-</div>
-	</section>
+
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;">最后修改于 2020-02-28</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <a class="newer-posts" href="/post/os12/">
+			下回<br>操作系统笔记 CH12 Mass-Storage Structure
+                </a>
+                
+                
+                
+                <a class="older-posts" href="/post/os10/">
+			上回<br>操作系统笔记 CH10 File-System Interface
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
 
 
-</article>
 
-		</main>
-		<div class="w-full h-0 flex-none order-3"></div>
-		<aside role="contentinfo"
-			class="w-full md:w-2/5 xl:w-1/2 md:pr-12 lg:pr-20 xl:pr-24 order-4 md:order-3 md:sticky md:bottom-0 self-end max-w-2xl">
-			<div class="md:float-right md:text-right leading-loose tracking-tight md:mb-2">
-				
-	<div class="md:max-w-xs  flex flex-col md:items-end">
-	<ul class="font-serif flex-grow-0 flex justify-between flex-wrap md:flex-col">
-	
-	
-	<li class="px-1 md:px-0">
-		<a href="/post/" title="归档 page" 
-			class="font-medium text-medium-red-violet-600 hover:text-medium-red-violet-400" >
-			归档
-		</a>
-	</li>
-	
-	<li class="px-1 md:px-0">
-		<a href="/categories/" title="分类 page" >
-			分类
-		</a>
-	</li>
-	
-	<li class="px-1 md:px-0">
-		<a href="/tags/" title="标签 page" >
-			标签
-		</a>
-	</li>
-	
-	<li class="px-1 md:px-0">
-		<a href="/about/" title="关于 page" >
-			关于
-		</a>
-	</li>
-	
-	
-	
-	
-	<div id="fastSearch" class="m-0">
-		<input id="searchInput" type="text" size=10 
-			class="bg-gray-100 focus:outline-none border-b border-gray-100 focus:border-eucalyptus-300 md:text-right
-			placeholder-java-500 min-w-0 max-w-xxxs"
-			placeholder="search" />
-		<ul id="searchResults" class="bg-gray-200 px-2 divide-y divide-gray-400">
-		</ul>
-	</div>
-	
-</ul>
-	
 
-<div class="flex flex-wrap-reverse md:justify-end content-end md:content-start justify-start items-start   max-h-16">
+
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+                    </div>
+            </div><div id="single-column-footer">
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+移植自 <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	Faye
 	
 </div>
-	<div class="text-sm text-gray-500 leading-tight a-gray">
-		© Faye
-		<br />
-		Built with Hugo and theme <a href="https://github.com/heyeshuang/hugo-theme-tokiwa">Tokiwa</a>. 1944 words in this page.
-	</div>
-</div>
-
-			</div>
-		</aside>
-		<footer class="w-full md:w-3/5 xl:w-1/2 order-3 max-w-3xl md:order-4 pt-2">
-			
-<hr class="double-line" />
-<div class="flex flex-wrap justify-between pb-2 leading-loose font-serif">
+            </div>
     
-    <a class="flex-grow-0" href="/post/os10/">
-        <svg class="fill-current inline-block h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24"
-            height="24">
-            <path fill="none" d="M0 0h24v24H0z" />
-            <path d="M7.828 11H20v2H7.828l5.364 5.364-1.414 1.414L4 12l7.778-7.778 1.414 1.414z" /></svg>
-        操作系统笔记 CH10 File-System Interface
-    </a>
-    
-    
-    <a class="flex-grow-0" href="/post/os12/">
-        操作系统笔记 CH12 Mass-Storage Structure
-        <svg class="fill-current inline-block h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24"
-            height="24">
-            <path fill="none" d="M0 0h24v24H0z" />
-            <path d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z" /></svg></a>
-    
-</div>
-<div >
-
-
-
-<div class="font-serif pb-2 flex align-start leading-loose">
-	<span class="heading pr-6 leading-loose">Related</span>
-	<span >
-		
-			<a href="/post/os10/">操作系统笔记 CH10 File-System Interface</a>&nbsp;&nbsp;&#47;&nbsp;
-		
-			<a href="/post/os9/">操作系统笔记 CH9 Virtual Memory</a>&nbsp;&nbsp;&#47;&nbsp;
-		
-			<a href="/post/os8/">操作系统笔记 CH8 Main Memory</a>&nbsp;&nbsp;&#47;&nbsp;
-		
-			<a href="/post/os7/">操作系统笔记 CH7 Deadlocks</a>&nbsp;&nbsp;&#47;&nbsp;
-		
-			<a href="/post/os6/">操作系统笔记 CH6 Process Synchronization</a>&nbsp;&nbsp;&#47;&nbsp;
-		
-			<a href="/post/os5/">操作系统笔记 CH5 CPU Scheduling</a>&nbsp;&nbsp;&#47;&nbsp;
-		
-			<a href="/post/os4/">操作系统笔记 CH4 Threads</a>&nbsp;&nbsp;&#47;&nbsp;
-		
-			<a href="/post/os3/">操作系统笔记 CH3 Process</a>&nbsp;&nbsp;&#47;&nbsp;
-		
-			<a href="/post/os2/">操作系统笔记 CH2 OS structures</a>&nbsp;&nbsp;&#47;&nbsp;
-		
-			<a href="/post/os1/">操作系统笔记 CH1 Intro</a>
-		
-</span>
-</div>
-
-</div>
-<hr />
-<div class="pb-2">
-    <div id="disqus_thread"></div>
-<script type="application/javascript">
-    window.disqus_config = function () {
-    
-    
-    
-    };
-    (function() {
-        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
-            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
-            return;
-        }
-        var d = document, s = d.createElement('script'); s.async = true;
-        s.src = '//' + "faye" + '.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-    })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-</div>
-<hr />
-
-		</footer>
-		
-
-<script src="/dist/app.js"></script>
-
-
-<script src="/lib/fuse.min.js"></script> 
-<script src="/lib/fastsearch.js"></script>
-
-	</div>
-</body>
-
+    <script src="/js/journal.js"></script></body>
 </html>

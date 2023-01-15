@@ -1,16 +1,21 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Categories on Play Back End Roll</title>
+    <title>Categories on PIKA☆NCHI</title>
     <link>https://imfaye.me/categories/</link>
-    <description>Recent content in Categories on Play Back End Roll</description>
+    <description>Recent content in Categories on PIKA☆NCHI</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>cn</language>
-    <copyright>© Faye</copyright>
-    <lastBuildDate>Thu, 10 Feb 2022 23:43:59 +0000</lastBuildDate>
-    
-	<atom:link href="https://imfaye.me/categories/index.xml" rel="self" type="application/rss+xml" />
-    
+    <language>en-us</language>
+    <copyright>Faye</copyright>
+    <lastBuildDate>Sun, 15 Jan 2023 15:04:21 +0800</lastBuildDate><atom:link href="https://imfaye.me/categories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>感官</title>
+      <link>https://imfaye.me/categories/%E6%84%9F%E5%AE%98/</link>
+      <pubDate>Sun, 15 Jan 2023 15:04:21 +0800</pubDate>
+      
+      <guid>https://imfaye.me/categories/%E6%84%9F%E5%AE%98/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>有情笔记</title>

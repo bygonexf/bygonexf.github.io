@@ -1,0 +1,952 @@
+<?xml-stylesheet href="/rss.xsl" type="text/xsl"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>PIKA☆NCHI</title>
+    <link>https://imfaye.me/</link>
+    <description>Recent content on PIKA☆NCHI</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>Faye</copyright>
+    <lastBuildDate>Sun, 15 Jan 2023 15:04:21 +0800</lastBuildDate>
+    
+        <atom:link href="https://imfaye.me/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>操作系统笔记 CH6 Process Synchronization</title>
+        <link>https://imfaye.me/post/os6/</link>
+        <pubDate>Fri, 28 Feb 2020 13:06:24 +0000</pubDate>
+        
+        <guid>https://imfaye.me/post/os6/</guid>
+        <description>PIKA☆NCHI https://imfaye.me/post/os6/ -&lt;p&gt;race condition: 多个进程并发访问和操作同一数据，结果与访问顺序有关&lt;/p&gt;
+&lt;h2 id=&#34;critical-section&#34;&gt;critical section&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573274792092.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;critical section: 进程可能改变共同变量，更新表，写文件的代码段&lt;/p&gt;
+&lt;p&gt;entry section: 实现请求进入其临界区的代码段&lt;/p&gt;
+&lt;p&gt;临界区问题三要求：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;mutual exclusion 同一时间临界区存在一个进程&lt;/li&gt;
+&lt;li&gt;progress 如果一个进程想进入临界区，它终将成功&lt;/li&gt;
+&lt;li&gt;bounded waiting 从一个进程做出进入临界区的请求，到该请求被允许，其他进程允许进入临界区的次数有限&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;kernel code可能会出现race condition&lt;/p&gt;
+&lt;p&gt;两种方法: 1.preemptive kernel 2.non-preemptive kernel 抢占内核更适合real-time programming,且更responsive&lt;/p&gt;
+&lt;h2 id=&#34;petersons-solution&#34;&gt;Peterson&amp;rsquo;s solution&lt;/h2&gt;
+&lt;p&gt;software-based solution to the critical section problem 基于软件&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573283076982.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;synchronization-hardware&#34;&gt;synchronization hardware&lt;/h2&gt;
+&lt;p&gt;基于硬件&lt;/p&gt;
+&lt;p&gt;特殊硬件指令 原子地(不可中断)检查、修改、交换字内容&lt;/p&gt;
+&lt;p&gt;disable interrupt, a lock&lt;/p&gt;
+&lt;p&gt;TestAndSet()&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573283946058.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;返回的是原来的值，进入过testandset，之后就变成true&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573284042418.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;实现有限等待互斥：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573284642763.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+- https://imfaye.me/post/os6/ - Faye</description>
+        </item>
+    
+    
+    
+        <item>
+        <title>操作系统笔记 CH5 CPU Scheduling</title>
+        <link>https://imfaye.me/post/os5/</link>
+        <pubDate>Fri, 28 Feb 2020 13:05:24 +0000</pubDate>
+        
+        <guid>https://imfaye.me/post/os5/</guid>
+        <description>PIKA☆NCHI https://imfaye.me/post/os5/ -&lt;p&gt;dispatcher: gives control of the CPU to the process selected by the short-term scheduler;&lt;/p&gt;
+&lt;p&gt;dispatch latency&lt;/p&gt;
+&lt;h2 id=&#34;scheduling-criteria&#34;&gt;scheduling criteria&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;CPU utilization,&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;throughput:&lt;/p&gt;
+&lt;p&gt;单位时间完成进程数量&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;turnaround time:&lt;/p&gt;
+&lt;p&gt;submission to completion&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;waiting time:&lt;/p&gt;
+&lt;p&gt;sum of time spent in the ready queue就绪队列&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;response time:&lt;/p&gt;
+&lt;p&gt;submission to first response(time it takes to start responding, not the time it takes to output the response)&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;scheduling-algorithm&#34;&gt;scheduling algorithm&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;FCFS first-come, first-served&lt;/p&gt;
+&lt;p&gt;non-preemptive&lt;/p&gt;
+&lt;p&gt;等待时间较长&lt;/p&gt;
+&lt;p&gt;convoy effect(短进程跟在长进程后面)&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;SJF shortest-job-first&lt;/p&gt;
+&lt;p&gt;shortest next CPU burst&lt;/p&gt;
+&lt;p&gt;常用于长期调度，短期调度可预测next CPU burst&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;exponential average&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573266645043.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573266662578.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;preemptive/non-preemptive&lt;/p&gt;
+&lt;p&gt;preemptive SJF : shortest-remaining-time-first scheduling&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;priority scheduling algorithm&lt;/p&gt;
+&lt;p&gt;SJF is a special case of it&lt;/p&gt;
+&lt;p&gt;priority can be defined internally or externally&lt;/p&gt;
+&lt;p&gt;preemptive/non-preemptive(非抢占优先级调度只是将优先级高的新进程加到ready queue的头部)&lt;/p&gt;
+&lt;p&gt;主要问题是indefinite blocking/starvation&lt;/p&gt;
+&lt;p&gt;低优先级无穷等待问题解决方法: aging(逐渐增加等待很久进程的优先级)&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;RR round-robin&lt;/p&gt;
+&lt;p&gt;especially for time-sharing system&lt;/p&gt;
+&lt;p&gt;时间片(time quantum/time slice)&lt;/p&gt;
+&lt;p&gt;所需时间小，自动释放CPU，所需时间大，时间片到timer会产生中断&lt;/p&gt;
+&lt;p&gt;平均等待时间较长&lt;/p&gt;
+&lt;p&gt;preemptive&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573267188671.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;时间片很大：FCFS；时间片很小：&lt;!-- raw HTML omitted --&gt;processor sharing&lt;!-- raw HTML omitted --&gt;(仿佛都有自己的处理器，速度为1/n)&lt;/p&gt;
+&lt;p&gt;时间片应比context-switch time大，也不应太大&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;multilevel queue scheduling algorithm&lt;/p&gt;
+&lt;p&gt;foreground(interactive); background(batch) 前台进程更高优先级。前台可能RR，后台可能FCFS&lt;/p&gt;
+&lt;p&gt;ready queue划分成多个队列，一个进程被永久分配到一个队列，每个队列有自己的调度算法&lt;/p&gt;
+&lt;p&gt;队列间常采用fixed-priority preemptive scheduling, 或在队列间划分时间片，每个队列有一定CPU时间&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;multilevel feedback queue schedling algorithm&lt;/p&gt;
+&lt;p&gt;允许进程在队列之间移动&lt;/p&gt;
+&lt;p&gt;使用过多CPU时间，移到低优先级队列。所以&lt;strong&gt;IO bound&lt;/strong&gt; &amp;amp; &lt;strong&gt;interactive&lt;/strong&gt; processes(使用CPU时间少)会被留在高优先级队列&lt;/p&gt;
+&lt;p&gt;较低优先级队列等待时间过长的进程也会被转移到更高优先级队列，prevent starvation&lt;/p&gt;
+&lt;p&gt;&lt;del&gt;看例子P172&lt;/del&gt;&lt;/p&gt;
+&lt;p&gt;最通用的CPU调度算法&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;HRRN highest response-ratio next 高响应比优先&lt;/p&gt;
+&lt;p&gt;non-preemptive&lt;/p&gt;
+&lt;p&gt;PPT  P51&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;multi-processor-scheduling&#34;&gt;multi-processor scheduling&lt;/h2&gt;
+&lt;p&gt;非对称多处理(asymmetric multiprocessing),一个处理器处理调度，IO，其他系统活动；其余处理器处理用户代码&lt;/p&gt;
+&lt;p&gt;SMP symmetric multiprocessing 对称多处理：每个处理器自我调度，许多OS支持SMP&lt;/p&gt;
+&lt;p&gt;processor affinity: 使缓存无效或重构的代价太高，所以尽量使一个进程在同一个处理器上允许。不能保证进程不移动:soft affinity，否则hard affinity&lt;/p&gt;
+&lt;p&gt;load balancing: 将工作负载平均地分配到SMP所有处理器上。load balancing只对拥有自己私有可执行进程的处理器必要(大部分时候都有私有)&lt;/p&gt;
+&lt;p&gt;​	push migration: a specific task周期检查每个处理器上的负载，如果不平衡，push processes from 									overloaded to idle processor&lt;/p&gt;
+&lt;p&gt;​	pull migration: an idle processor pulls a waiting task from a busy processor&lt;/p&gt;
+&lt;p&gt;multicore processors: PPT P61&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573270374874.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;SMT: symmetric multithreading 提供多个逻辑处理器实现多线程并发 hyperthreading. 每个逻辑处理器负责自己的中断处理。&lt;/p&gt;
+&lt;h2 id=&#34;thread-scheduling&#34;&gt;thread scheduling&lt;/h2&gt;
+&lt;p&gt;对在内核级支持线程的系统而言，系统调度的是内核线程而不是进程。用户线程由线程库管理。&lt;/p&gt;
+&lt;p&gt;PCS: process-contention-scope 线程库调度用户级线程到一个有效的LWP上(CPU竞争发生在属于相同进程的线程之间) ,local scheduling&lt;/p&gt;
+&lt;p&gt;SCS: system-contention-scope 调度哪个内核线程到CPU(CPU竞争发生在系统的所有线程中)。一对一模型只用使用SCS ,global scheduling&lt;/p&gt;
+&lt;p&gt;实例 书P178&lt;/p&gt;
+&lt;h2 id=&#34;algorithm-evaluation&#34;&gt;algorithm evaluation&lt;/h2&gt;
+&lt;p&gt;analytic evaluation: 产生一个公式或数字&lt;/p&gt;
+&lt;p&gt;deterministic evaluation: 计算在给定负荷下算法的性能&lt;/p&gt;
+&lt;p&gt;queueing-network-analysis:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573271651221.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;simulation模拟 trace tape&lt;/p&gt;
+- https://imfaye.me/post/os5/ - Faye</description>
+        </item>
+    
+    
+    
+        <item>
+        <title>操作系统笔记 CH4 Threads</title>
+        <link>https://imfaye.me/post/os4/</link>
+        <pubDate>Fri, 28 Feb 2020 13:04:24 +0000</pubDate>
+        
+        <guid>https://imfaye.me/post/os4/</guid>
+        <description>PIKA☆NCHI https://imfaye.me/post/os4/ -&lt;p&gt;Dispatching is referred to as a thread. Resource of ownership is referred to as a process or
+task.&lt;/p&gt;
+&lt;p&gt;对进程的swapping和termination都牵扯它所有线程&lt;/p&gt;
+&lt;p&gt;线程是CPU使用的基本单位。由thread ID, program counter, register set, stack组成&lt;/p&gt;
+&lt;h2 id=&#34;multithreading-models&#34;&gt;multithreading models&lt;/h2&gt;
+&lt;p&gt;User threads, supported above the kernel and are managed without kernel support.&lt;/p&gt;
+&lt;p&gt;Kernel threads, supported and managed directly by the operating system.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;many-to-one&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573189948482.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;one-to-one&lt;/p&gt;
+&lt;p&gt;一个线程阻塞，另一个还能运行&lt;/p&gt;
+&lt;p&gt;并发。开销大。&lt;/p&gt;
+&lt;p&gt;windows, linux, solaris 9&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;many-to-many&lt;/p&gt;
+&lt;p&gt;用户线程映射到数量相同或更少的内核线程&lt;/p&gt;
+&lt;p&gt;When a thread performs a blocking system call, the kernel can schedule another thread for execution.&lt;/p&gt;
+&lt;p&gt;two-level model:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573562767512.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;thread-libraries&#34;&gt;thread libraries&lt;/h2&gt;
+&lt;p&gt;两种方法实现：1 在用户空间提供一个没有内核支持的库 2 由OS直接支持的内核级的库&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;POSIX Pthreads&lt;/p&gt;
+&lt;p&gt;Portable Operating System Interface of UNIX&lt;/p&gt;
+&lt;p&gt;Referred to user-level library&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Win32 threads&lt;/p&gt;
+&lt;p&gt;kernel-level threads library&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Java threads&lt;/p&gt;
+&lt;p&gt;provides support at the language level for the creation and management of threads.&lt;/p&gt;
+&lt;p&gt;两种创建线程的方法&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;extending thread class&lt;/li&gt;
+&lt;li&gt;define a class that implements the Runnable interface&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;thread-issues&#34;&gt;thread issues&lt;/h2&gt;
+&lt;h3 id=&#34;the-fork-and-exec-system-calls&#34;&gt;The fork() and exec() system calls&lt;/h3&gt;
+&lt;h3 id=&#34;thread-cancellation&#34;&gt;thread cancellation&lt;/h3&gt;
+&lt;p&gt;Asynchronous cancellation 异步取消：立即取消&lt;/p&gt;
+&lt;p&gt;Deferred cancellation 延迟取消：不断检查是否该终止&lt;/p&gt;
+&lt;h3 id=&#34;signal-handling&#34;&gt;signal handling&lt;/h3&gt;
+&lt;p&gt;A signal is used in UNIX systems to notify a process that a particular event has occurred.&lt;/p&gt;
+&lt;p&gt;Synchronous signal: illegal memory access, division by 0.&lt;/p&gt;
+&lt;p&gt;Asynchronously signal: terminating a process with specific keystrokes, Ctrl+C ，由运行进程之外的事产生&lt;/p&gt;
+&lt;p&gt;two possible handlers:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;a user-defined signal handler&lt;/li&gt;
+&lt;li&gt;a default signal handler, which is run by the kernel&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;同步信号送到需要发到产生它的线程&lt;/p&gt;
+&lt;h3 id=&#34;thread-pools&#34;&gt;thread pools&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573563518826.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;优点：1 快 2 限制可用线程数量&lt;/p&gt;
+&lt;h3 id=&#34;thread-specific-data&#34;&gt;thread-specific data&lt;/h3&gt;
+&lt;p&gt;Thread-specific data allows each thread to have its own copy of data (Thread-local storage (TLS) ).&lt;/p&gt;
+&lt;p&gt;TLS visible across function invocations&lt;/p&gt;
+&lt;h3 id=&#34;scheduler-activation&#34;&gt;scheduler activation&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573563717238.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;Scheduler activation &amp;ndash; one scheme for communication between the user-thread library and the kernel.&lt;/p&gt;
+&lt;p&gt;provides upcalls, the kernel inform an application about certain events.&lt;/p&gt;
+&lt;p&gt;upcall handlers must run on a LWP.&lt;/p&gt;
+&lt;p&gt;当一个应用线程要阻塞，内核向应用程序发upcall，分配一个新LWP给应用线程，应用线程在这个LWP上运行upcall handler&lt;/p&gt;
+&lt;p&gt;当阻塞线程等待事件发生，内核向线程库发另一个upcall， kernel allocates a new LWP or preempt one of the user threads to run the upcall handler for this event.&lt;/p&gt;
+&lt;h2 id=&#34;os-examples&#34;&gt;OS examples&lt;/h2&gt;
+&lt;h2 id=&#34;windows-xp-threads&#34;&gt;windows XP threads&lt;/h2&gt;
+&lt;p&gt;one-to-one&lt;/p&gt;
+&lt;p&gt;ETHREAD (in kernel space), KTHREAD (in kernel space), TEB (in user space)&lt;/p&gt;
+&lt;h2 id=&#34;linux-threads---tasks&#34;&gt;Linux threads - tasks&lt;/h2&gt;
+&lt;p&gt;clone() system call&lt;/p&gt;
+- https://imfaye.me/post/os4/ - Faye</description>
+        </item>
+    
+    
+    
+        <item>
+        <title>操作系统笔记 CH3 Process</title>
+        <link>https://imfaye.me/post/os3/</link>
+        <pubDate>Fri, 28 Feb 2020 13:03:24 +0000</pubDate>
+        
+        <guid>https://imfaye.me/post/os3/</guid>
+        <description>PIKA☆NCHI https://imfaye.me/post/os3/ -&lt;h2 id=&#34;process-concepts&#34;&gt;process concepts&lt;/h2&gt;
+&lt;p&gt;batch system: job; time-sharing system: program/task&lt;/p&gt;
+&lt;p&gt;Program is passive entity stored on disk (executable file), process is active.&lt;/p&gt;
+&lt;p&gt;a process includes&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;text section(program code)&lt;/li&gt;
+&lt;li&gt;data section(global variables)&lt;/li&gt;
+&lt;li&gt;heap(动态分配的内存)&lt;/li&gt;
+&lt;li&gt;process stack(临时数据)
+&lt;ul&gt;
+&lt;li&gt;function parameters, return value&lt;/li&gt;
+&lt;li&gt;return addresses&lt;/li&gt;
+&lt;li&gt;local variables&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;current activity(represented by program counter and registers)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;process state&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;new: being created&lt;/li&gt;
+&lt;li&gt;running: instructions are being executed&lt;/li&gt;
+&lt;li&gt;waiting/limiting: waiting for some event&lt;/li&gt;
+&lt;li&gt;ready: waiting to be assigned to a processor&lt;/li&gt;
+&lt;li&gt;terminated/halted: finished execution&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573013564594.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;一次只有一个进程可以在一个处理器上运行，但多个进程可处于就绪或等待状态。&lt;/p&gt;
+&lt;p&gt;**PCB(**process control block): process state &amp;amp; program counter &amp;amp; CPU registers(中断时要保存程序计数器和CPU寄存器) &amp;amp; CPU-scheduling information &amp;amp; memory-management information &amp;amp; accounting information &amp;amp; I/O status information&lt;/p&gt;
+&lt;p&gt;栈是运行时的单位，而堆是存储时的单位。  堆中存的是对象。栈中存的是基本数据类型和堆中对象的引用。&lt;/p&gt;
+&lt;p&gt;a program becomes a process when an executable file is loaded into memory&lt;/p&gt;
+&lt;p&gt;两个进程可以和同一个程序相关，虽然text section一样，但data,heap,stack sections不同。&lt;/p&gt;
+&lt;h2 id=&#34;process-scheduling&#34;&gt;process scheduling&lt;/h2&gt;
+&lt;p&gt;process scheduler selects an available process for program execution on CPU&lt;/p&gt;
+&lt;h3 id=&#34;scheduling-queues&#34;&gt;scheduling queues&lt;/h3&gt;
+&lt;p&gt;job queue作业队列：进程进入系统时，被加入作业队列，该队列包括系统中的所有进程&lt;/p&gt;
+&lt;p&gt;ready queue就绪队列：驻留在内存的ready或waiting进程&lt;/p&gt;
+&lt;p&gt;device queue设备队列：等待特点I/O设备的进程列表。每个设备都有自己的设备队列&lt;/p&gt;
+&lt;p&gt;queueing diagram&lt;/p&gt;
+&lt;h3 id=&#34;schedulers&#34;&gt;schedulers&lt;/h3&gt;
+&lt;p&gt;long-term / job scheduler: select processes from the pool and load them into memory&lt;/p&gt;
+&lt;p&gt;short-term / CPU scheduler: select processes that are ready and allocates CPU to one of them&lt;/p&gt;
+&lt;p&gt;短期调度频繁，长期调度（和新进程创建时间间隔有关）控制degree of multiprogramming(内存中的进程数量)&lt;/p&gt;
+&lt;p&gt;长期调度需仔细选择，一个包含I/O bound process和CPU bound process的组合。全是IO bound, 就绪队列几乎为空，短期调度无事可做；全是CPU bound，IO等待队列几乎为空。&lt;/p&gt;
+&lt;p&gt;有些系统可能没有长期调度。有些OS如分时系统，引入medium-term scheduler, 将进程从内存（CPU竞争）中移出，降低multiprogramming设计难度。 swapping . The process is swapped out, and is later swapped in, by the medium-term scheduler.&lt;/p&gt;
+&lt;p&gt;swapped/suspended processes；2 new states: swapped waiting, swapped ready&lt;/p&gt;
+&lt;h3 id=&#34;context-switch&#34;&gt;context switch&lt;/h3&gt;
+&lt;p&gt;context is represented in PCB&lt;/p&gt;
+&lt;p&gt;context switch(上下文切换): performing a state save of the current process and a state restore of a different process&lt;/p&gt;
+&lt;p&gt;发生中断时，系统需要保存当前运行在CPU中进程的上下文，上下文通过PCB表示。state save; state restore&lt;/p&gt;
+&lt;p&gt;Context-switch time is pure overhead&lt;/p&gt;
+&lt;p&gt;Context-switch times dependent on hardware support&lt;/p&gt;
+&lt;h2 id=&#34;operations-on-process&#34;&gt;operations on process&lt;/h2&gt;
+&lt;h3 id=&#34;process-creation&#34;&gt;process creation:&lt;/h3&gt;
+&lt;p&gt;reasons: Submission of a batch job, User logs on, provide a service, Process creates another process assign a PID, allocate space, initialize PCB, resource sharing.&lt;/p&gt;
+&lt;p&gt;When a process is created, it obtains initialization data that may be passed along from the parent process to the child process.&lt;/p&gt;
+&lt;p&gt;UNIX examples&lt;/p&gt;
+&lt;p&gt;​	system call fork creates new process&lt;/p&gt;
+&lt;p&gt;​	system call exec used after a fork to replace the child process’ memory space with a new program.&lt;/p&gt;
+&lt;p&gt;create-process system call&lt;/p&gt;
+&lt;p&gt;process identifier PID&lt;/p&gt;
+&lt;p&gt;创建子进程时，可能从操作系统直接获得资源，也可能只从其父进程那获得资源&lt;/p&gt;
+&lt;h3 id=&#34;process-termination&#34;&gt;process termination&lt;/h3&gt;
+&lt;p&gt;Process executes last statement and asks the operating system to delete it (via exit).&lt;/p&gt;
+&lt;p&gt;Parent may terminate execution of its children processes (via abort). cascading termination&lt;/p&gt;
+&lt;h2 id=&#34;interprocess-communicationipc&#34;&gt;interprocess communication(IPC)&lt;/h2&gt;
+&lt;p&gt;independent / cooperating processes&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;shared memory&lt;/p&gt;
+&lt;p&gt;速度快 memory speed&lt;/p&gt;
+&lt;p&gt;unbounded/bounded buffer&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;message passing&lt;/p&gt;
+&lt;p&gt;交换少量数据， 不必避免冲突，易于实现。通常通过system call实现，内核介入的时间消耗。&lt;/p&gt;
+&lt;p&gt;分布式环境中有用&lt;/p&gt;
+&lt;p&gt;communication link&lt;/p&gt;
+&lt;p&gt;直接通信(direct communication-naming): 每个进程必须明确地命名通信的接收者或发送者。每对进程之间只有一个线路，一个线路只与两个进程有关。symmetry/asymmetry in addressing&lt;/p&gt;
+&lt;p&gt;间接通信(indirect): 通过mailbox或port。两个进程共享一个邮箱时，建立通信线路。一个线路可以与多个进程关联。每个线路对应一个邮箱。进程/OS可以拥有邮箱。拥有邮箱的进程只能收。&lt;/p&gt;
+&lt;p&gt;blocking or unblocking(synchronous or asynchronous)&lt;/p&gt;
+&lt;p&gt;当send和receive都阻塞时，发送者和接收者之间有一个集合点(rendezvous)&lt;/p&gt;
+&lt;p&gt;buffering: zero/bounded/unbounded capacity&lt;/p&gt;
+&lt;p&gt;message system with no/automatic buffering&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;examples-of-ipc&#34;&gt;examples of IPC&lt;/h2&gt;
+&lt;p&gt;实例&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;POSIX&lt;/p&gt;
+&lt;p&gt;shmget,shmat,shmdt,&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Mach&lt;/p&gt;
+&lt;p&gt;Microkernel OS&lt;/p&gt;
+&lt;p&gt;Mach communication is message based&lt;/p&gt;
+&lt;p&gt;mailbox , called port in Mach&lt;/p&gt;
+&lt;p&gt;Each task gets two mailboxes at creation&amp;ndash; Kernel and Notify&lt;/p&gt;
+&lt;p&gt;Kernel uses the kernel mailbox to communicate with task, and sends notification of event occurrences to the Notify port.&lt;/p&gt;
+&lt;p&gt;kernel mailbox, notify mailbox&lt;/p&gt;
+&lt;p&gt;msg_send, msg_receive, msg_rpc(remote procedure call远程过程调用)&lt;/p&gt;
+&lt;p&gt;为分布式系统设计&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;LPC(local procedure call) in windows&lt;/p&gt;
+&lt;p&gt;位于同一机器的两进程通信&lt;/p&gt;
+&lt;p&gt;port object&lt;/p&gt;
+&lt;p&gt;2 types of ports&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;connection ports&lt;/p&gt;
+&lt;p&gt;为所有进程可见&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;communication ports&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;两种端口消息传递技术&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;小消息：&lt;/p&gt;
+&lt;p&gt;端口队列(message queue)作为中间存储，将消息从一个进程复制到另一个进程&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;大消息：&lt;/p&gt;
+&lt;p&gt;section object&lt;/p&gt;
+&lt;p&gt;不能马上响应: callback mechanism 允许异步消息传递&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;communication-in-client-server-systems&#34;&gt;communication in client-server systems&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;socket&lt;/p&gt;
+&lt;p&gt;A socket is defined as an endpoint for communication.&lt;/p&gt;
+&lt;p&gt;All ports below 1024 are considered well known;When a client process initiates a request for a
+connection, it is assigned a port (greater than 1024) by its host computer.&lt;/p&gt;
+&lt;p&gt;一对通信进程需使用一对socket，一个进程一个&lt;/p&gt;
+&lt;p&gt;socket由IP+端口号组成&lt;/p&gt;
+&lt;p&gt;所有连接必须唯一&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;远程过程调用RPC remote procedure call&lt;/p&gt;
+&lt;p&gt;用于通过网络连接系统&lt;/p&gt;
+&lt;p&gt;Each message is addressed to an RPC daemon listening to a port on the remote system.&lt;/p&gt;
+&lt;p&gt;Stubs – client-side proxy for the actual procedure on the server.&lt;/p&gt;
+&lt;p&gt;The client-side stub locates port on the server and marshals the parameters, transmits a message to the server.&lt;/p&gt;
+&lt;p&gt;The server-side stub receives this message, unpacks the marshaled parameters, and performs the procedure on the server. Return values are passed back to the client.&lt;/p&gt;
+&lt;p&gt;machine-independent representation of data, external data representation (XDR).&lt;/p&gt;
+&lt;p&gt;客户端提供存根(stub)，对每个独立的远程过程都有一个stub。存根位于服务器的端口，编组(marshal)参数。XDR&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;远程方法调用RMI remote method invocation&lt;/p&gt;
+&lt;p&gt;RPC的java版&lt;/p&gt;
+&lt;p&gt;RMI allows a Java program on one machine to invoke a method on a remote object.&lt;/p&gt;
+&lt;p&gt;对象位于不同JVM上，就认为是远程的&lt;/p&gt;
+&lt;p&gt;存根(stub)和骨干(skeleton).存根为远程对象的代理，驻留在客户机上，存根将包发给服务器，远程对象的骨干会接受它&lt;/p&gt;
+&lt;p&gt;参数传递规则：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;编排参数是本地对象：对象串行化(object serialization) 复制传递；&lt;/li&gt;
+&lt;li&gt;编排参数是远程对象：引用传递 reference&lt;/li&gt;
+&lt;li&gt;本地对象作为参数传给远程对象：实现接口 java.io.Serialization&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+- https://imfaye.me/post/os3/ - Faye</description>
+        </item>
+    
+    
+    
+        <item>
+        <title>操作系统笔记 CH2 OS structures</title>
+        <link>https://imfaye.me/post/os2/</link>
+        <pubDate>Fri, 28 Feb 2020 13:01:24 +0000</pubDate>
+        
+        <guid>https://imfaye.me/post/os2/</guid>
+        <description>PIKA☆NCHI https://imfaye.me/post/os2/ -&lt;h2 id=&#34;ui&#34;&gt;UI&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;CLI command-line / command interpreter&lt;/p&gt;
+&lt;p&gt;implemented in kernel (MS-DOS)&lt;/p&gt;
+&lt;p&gt;by systems program (Windows / UNIX)&lt;/p&gt;
+&lt;p&gt;multiple flavors implemented – shells UNIX / Linux&lt;/p&gt;
+&lt;p&gt;linux shell : shell: 带形参的批命令文件&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;batch interface&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;GUI graphical user interface&lt;/p&gt;
+&lt;p&gt;desktop, icon, Xerox PARC&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;system-calls&#34;&gt;system calls&lt;/h2&gt;
+&lt;p&gt;&lt;!-- raw HTML omitted --&gt;Programming interface to the services provided by the OS&lt;!-- raw HTML omitted --&gt;&lt;/p&gt;
+&lt;p&gt;written in high-level language&lt;/p&gt;
+&lt;p&gt;Mostly accessed by programs via a high-level Application Program Interface (&lt;!-- raw HTML omitted --&gt;API&lt;!-- raw HTML omitted --&gt;) rather than direct system call use.&lt;/p&gt;
+&lt;p&gt;most common API:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Win32 API&lt;/li&gt;
+&lt;li&gt;POSIX API: for UNIX, Linux, and Mac OS X&lt;/li&gt;
+&lt;li&gt;Java API: for JVM&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;A programmer accesses an API via a library of code provided by the operating system. (e.g. libc )&lt;/p&gt;
+&lt;p&gt;the &lt;!-- raw HTML omitted --&gt;run-time support system&lt;!-- raw HTML omitted --&gt; provides a system-call interface that serves as the link to system calls.&lt;/p&gt;
+&lt;h4 id=&#34;system-call-parameter-passing&#34;&gt;system call parameter passing&lt;/h4&gt;
+&lt;p&gt;3 methods:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573537965310.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573537985715.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;h3 id=&#34;types-of-system-call&#34;&gt;types of system call&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;process control&lt;/p&gt;
+&lt;p&gt;dump memory if error, Debugger for determining bugs, single step execution, Locks for managing access to shared data between processes&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;file manipulation&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;device manipulation&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;information maintenance&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;communications&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;message passing model&lt;/p&gt;
+&lt;p&gt;through an interprocess-communication facility (IPC) provided by OS&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;shared memory passing&lt;/p&gt;
+&lt;p&gt;process use &lt;em&gt;map&lt;/em&gt; memory system call to gain access to regions of memory owned by other processes.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;system-prorams&#34;&gt;system prorams&lt;/h2&gt;
+&lt;p&gt;file management&lt;/p&gt;
+&lt;p&gt;status information: Some systems implement a registry, used to store and retrieve configuration information.&lt;/p&gt;
+&lt;p&gt;file modification&lt;/p&gt;
+&lt;p&gt;programming-language support&lt;/p&gt;
+&lt;p&gt;program loading and execution&lt;/p&gt;
+&lt;p&gt;communications&lt;/p&gt;
+&lt;p&gt;system utilities/application programs:&lt;/p&gt;
+&lt;p&gt;background services: Launch at boot time. Run in user context not kernel context.  Known as services, subsystems, daemons&lt;/p&gt;
+&lt;h2 id=&#34;os-design-and-implementation&#34;&gt;OS design and implementation&lt;/h2&gt;
+&lt;p&gt;策略policy: 决定做什么，可能随时间位置改变，对资源分配很重要&lt;/p&gt;
+&lt;p&gt;机制mechanism: 决定怎么做，系统更需要通用机制&lt;/p&gt;
+&lt;p&gt;The separation of policy from mechanism allows maximum &lt;!-- raw HTML omitted --&gt;flexibility&lt;!-- raw HTML omitted --&gt; if policy decisions are to be changed later. 微内核把机制与策略的区分利用到极致。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Emulation&lt;/strong&gt; can allow an OS to run on non-native hardware.&lt;/p&gt;
+&lt;p&gt;用高级语言编写， OS更易移植，降低速度，增加存储要求&lt;/p&gt;
+&lt;p&gt;bottleneck routines can be identified. replaced with assembly-language equivalents.&lt;/p&gt;
+&lt;h2 id=&#34;os-structure&#34;&gt;OS structure&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;simple structure&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;MS-DOS&lt;/p&gt;
+&lt;p&gt;没被仔细划分成模块，没有很好区分接口和层次&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;UNIX&lt;/p&gt;
+&lt;p&gt;由内核和系统程序组成&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;layered approach&lt;/p&gt;
+&lt;p&gt;the bottom layer (layer 0) is the hardware, the highest (layer N) is the user interface&lt;/p&gt;
+&lt;p&gt;每层利用低层提供功能实现&lt;/p&gt;
+&lt;p&gt;advantage: contruction, debugging, design, implementation&lt;/p&gt;
+&lt;p&gt;difficulty: disk driver &amp;amp; memory-management routines, disk driver &amp;amp; CPU scheduler&lt;/p&gt;
+&lt;p&gt;less efficient&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;microkernels&lt;/p&gt;
+&lt;p&gt;Mach&lt;/p&gt;
+&lt;p&gt;microkernel contains only essential functions&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;memory management&lt;/li&gt;
+&lt;li&gt;CPU scheduling&lt;/li&gt;
+&lt;li&gt;communications&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;微内核主要功能：使 客户程序 和 运行在用户空间的各种服务 之间进行通信 message passing&lt;/p&gt;
+&lt;p&gt;Mach, Tru64 UNIX, Mac OS X kernel, QNX&lt;/p&gt;
+&lt;p&gt;由于系统功能总开销增加而导致系统性能下降&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;modules&lt;/p&gt;
+&lt;p&gt;Many modern operating systems implement loadable kernel modules.&lt;/p&gt;
+&lt;p&gt;The kernel has a set of core components and dynamically links in additional services via modules, either at boot time or during run time.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573542431080.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;允许内核提供核心服务，也能动态地实现特定功能&lt;/p&gt;
+&lt;p&gt;类似分层，但更灵活，任一模块可调用其他任何模块。&lt;/p&gt;
+&lt;p&gt;类似微内核，核心模块只有核心功能及其他模块加载和通信的相关信息。更高效，因为模块无需调用消息传递来通信。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;hybrid systems:&lt;/p&gt;
+&lt;p&gt;​	linux &amp;amp; solaris: monolithic, modular&lt;/p&gt;
+&lt;p&gt;​	windows: monolithic, plus microkernel for different subsystem personalities, run as user-mode 					processes, dynamically loadable kernel modules&lt;/p&gt;
+&lt;p&gt;Mac OS X: 分层，其中一层包括Mach微内核&lt;/p&gt;
+&lt;h2 id=&#34;virtual-machines&#34;&gt;virtual machines&lt;/h2&gt;
+&lt;p&gt;takes the &lt;strong&gt;layered&lt;/strong&gt; approach to its logical conclusion&lt;/p&gt;
+&lt;p&gt;It treats hardware and the operating system kernel as though they were all hardware.&lt;/p&gt;
+&lt;p&gt;The operating system creates the illusion of multiple processes, each executing on its own processor with its own (virtual) memory.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;by CPU scheduling&lt;/li&gt;
+&lt;li&gt;by virtual memory&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;virtualization: a technology that allows operating systems to run as applications within other operating systems. VMM(virtual machine Manager)&lt;/p&gt;
+&lt;p&gt;Emulation used when source CPU type different from target type.  When computer language not compiled to native code – Interpretation&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573543236416.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;advantage: protection of system resources, solving system compatibility problem.&lt;/p&gt;
+&lt;p&gt;虚拟机软件允许在kernel mode(因为它自己就是操作系统)，但虚拟机自身只能允许在user mode&lt;/p&gt;
+&lt;p&gt;virtual kernel mode 和 virtual user mode 都允许在 physical user mode&lt;/p&gt;
+&lt;p&gt;真正机器上user mode到kernel mode的切换，也必须在虚拟机上引起从virtual user mode到virtual kernel mode的切换&lt;/p&gt;
+&lt;h3 id=&#34;jvm&#34;&gt;JVM&lt;/h3&gt;
+&lt;p&gt;consists of&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;class loader&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;class verifier&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Java interpreter&lt;/p&gt;
+&lt;p&gt;software module that interprets the bytecodes one at a time&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Just-In-Time (JIT) compilers turns the architecture-neutral bytecodes into native machine language for the host computer.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;JVM automatically manages memory by performing garbage collection.&lt;/p&gt;
+&lt;h2 id=&#34;os-generation&#34;&gt;OS generation&lt;/h2&gt;
+&lt;p&gt;对于某个特定的计算场所，必须配置configure和生成generate系统：SYSGEN&lt;/p&gt;
+&lt;p&gt;generation methods:&lt;/p&gt;
+&lt;p&gt;​	可完全重新编译&lt;/p&gt;
+&lt;p&gt;​	或系统描述可用来创建表&lt;/p&gt;
+&lt;p&gt;​	或完全table-driven(绝大多数现代OS是这样),选择发生在执行时而不是编译连接时。&lt;/p&gt;
+&lt;h2 id=&#34;system-boot&#34;&gt;system boot&lt;/h2&gt;
+&lt;p&gt;booting: starting a computer by loading the kernel&lt;/p&gt;
+&lt;p&gt;Bootstrap program (bootstrap loader): small piece of code stored in ROM.  locates the kernel, loads it into memory, and starts its execution.&lt;/p&gt;
+&lt;p&gt;two step:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;bootstrap loader&lt;/p&gt;
+&lt;p&gt;fetches the boot program from boot block into memory to execute.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;boot program&lt;/p&gt;
+&lt;p&gt;loads the entire OS into memory and begin its execution&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+- https://imfaye.me/post/os2/ - Faye</description>
+        </item>
+    
+    
+    
+        <item>
+        <title>操作系统笔记 CH1 Intro</title>
+        <link>https://imfaye.me/post/os1/</link>
+        <pubDate>Fri, 28 Feb 2020 13:00:24 +0000</pubDate>
+        
+        <guid>https://imfaye.me/post/os1/</guid>
+        <description>PIKA☆NCHI https://imfaye.me/post/os1/ -&lt;h2 id=&#34;what-os-do&#34;&gt;What OS do&lt;/h2&gt;
+&lt;p&gt;操作系统是管理计算机硬件的程序&lt;/p&gt;
+&lt;p&gt;computer system: hardware, operating system, application programs, users&lt;/p&gt;
+&lt;p&gt;​	hardware: CPU, memory, I/O devices&lt;/p&gt;
+&lt;h3 id=&#34;user-view&#34;&gt;user view&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573524547711.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;services provided by OS:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;program development (editors and debuggers)&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;program execution&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;access to IO devices&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;controlled access to files&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;system access&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;error detection and response&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;internal and external hardware errors&lt;/p&gt;
+&lt;p&gt;memory error, device failure&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;software errors&lt;/p&gt;
+&lt;p&gt;arithmetic overflow, accesss forbidden memory locations&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;外中断: interruption 与当前运行程序无关的事件&lt;/p&gt;
+&lt;p&gt;内中断: exception / trap  非法操作码，地址越界，算术溢出，缺页，专门陷入指令&amp;hellip;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;accounting&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;collect statistics&lt;/li&gt;
+&lt;li&gt;monitor performance&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;system-view&#34;&gt;system view&lt;/h3&gt;
+&lt;p&gt;resource allocator, control program&lt;/p&gt;
+&lt;h3 id=&#34;defining-os&#34;&gt;defining OS&lt;/h3&gt;
+&lt;p&gt;kernel, one program running at all times&lt;/p&gt;
+&lt;p&gt;系统软件。程序模块的集合。组织和管理计算机的软硬件资源。&lt;/p&gt;
+&lt;h2 id=&#34;computer-system-organization&#34;&gt;computer-system organization&lt;/h2&gt;
+&lt;p&gt;computer startup:
+bootsrap program: stored in ROM/EEPROM, AKA firmware&lt;/p&gt;
+&lt;p&gt;硬件&amp;amp;固件：&lt;/p&gt;
+&lt;p&gt;​	A hardware has a physical entity&lt;/p&gt;
+&lt;p&gt;​	A hardware needs a program to run. A firmware is a program itself.&lt;/p&gt;
+&lt;p&gt;​	A hardware cannot operate without a firmware. A firmware operates on a hardware.&lt;/p&gt;
+&lt;p&gt;OS starts executing the first process, and waits for some event to occur:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;an interrupt from the hardware&lt;/p&gt;
+&lt;p&gt;sending a signal to CPU by way of the system bus&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;an interrupt from the software&lt;/p&gt;
+&lt;p&gt;executing a system call&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;computer-system-operation&#34;&gt;computer-system operation&lt;/h3&gt;
+&lt;p&gt;device controller informs CPU that it has finishd its operation by causing an interrupt&lt;/p&gt;
+&lt;p&gt;&lt;!-- raw HTML omitted --&gt;interrupt&lt;!-- raw HTML omitted --&gt;:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573526982292.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;​	interrupt vector(中断向量): the staring address of all the interrupt service routines(中断服务程序).&lt;/p&gt;
+&lt;p&gt;a &lt;!-- raw HTML omitted --&gt;trap&lt;!-- raw HTML omitted --&gt; is a software-generated interrupt caused either by an error or a user request&lt;/p&gt;
+&lt;p&gt;OS is interrupt-driven&lt;/p&gt;
+&lt;h3 id=&#34;storage-structure&#34;&gt;storage structure&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573527305908.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;storage hierarchy&lt;/p&gt;
+&lt;p&gt;​	speed, cost, volatility&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573527537071.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;h3 id=&#34;io-structure&#34;&gt;IO structure&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;programmed IO&lt;/p&gt;
+&lt;p&gt;IO module performs the action&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;interrupt-driven IO&lt;/p&gt;
+&lt;p&gt;processor is interrupted when IO module ready to exchange data&lt;/p&gt;
+&lt;p&gt;processor is free to do other work&lt;/p&gt;
+&lt;p&gt;consume a lot of processor time&lt;/p&gt;
+&lt;p&gt;we need system call &amp;amp; device-status table&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;synchronous IO&lt;/p&gt;
+&lt;p&gt;After I/O starts, control returns to user program only upon I/O completion.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;asychronous IO&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;DMA&lt;/p&gt;
+&lt;p&gt;Transfers a block of data directly to / from memory.&lt;/p&gt;
+&lt;p&gt;device controller transfers blocks of data from buffer storage directly to main memory without CPU intervention.&lt;/p&gt;
+&lt;p&gt;Only one interrupt is generated per block. The processor is only involved at the beginning and the end of the transfer.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;IO channel&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573528354725.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;一个CPU和多个device controller通过总线连接。每个dvice controller可负责多个特定类型设备。&lt;/p&gt;
+&lt;p&gt;OS为每个device controller提供一个device driver, driver presents a uniform interface to the device&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573527989496.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;computer-system-architecture&#34;&gt;computer-system architecture&lt;/h2&gt;
+&lt;h3 id=&#34;single-processor-system&#34;&gt;single-processor system&lt;/h3&gt;
+&lt;h3 id=&#34;multiprocessor-system--parallel-system--tightly-coupled&#34;&gt;multiprocessor system / parallel system / tightly coupled&lt;/h3&gt;
+&lt;p&gt;增加吞吐量、规模经济、增加可靠性&lt;/p&gt;
+&lt;p&gt;graceful degradation: 提供与正常工作的硬件成正比服务的能力&lt;/p&gt;
+&lt;p&gt;fault tolerant: 超出适度退化的能力 容错&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;asymmetric multiprocessing&lt;/p&gt;
+&lt;p&gt;主从&lt;/p&gt;
+&lt;p&gt;each processor is assigned a specific task. a master processor controls the system, allocates work to the slave processors.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;symmetric multiprocessing SMP&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;multicore-CPUs&lt;/p&gt;
+&lt;p&gt;Multiple compute cores on a single chip 多个内核 单个芯片&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;blade servers 刀片服务器&lt;/p&gt;
+&lt;p&gt;每个刀片处理器独立启动并运行各自的OS&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;clustered-system&#34;&gt;clustered system&lt;/h2&gt;
+&lt;p&gt;与多处理器系统不同：多个独立系统耦合&lt;/p&gt;
+&lt;p&gt;共享存储并通过LAN/更快内部连接&lt;/p&gt;
+&lt;p&gt;asymmetric clustering: one machine is in hot-stand-by mode(热备份)&lt;/p&gt;
+&lt;p&gt;symmetric clustering: monitor each other&lt;/p&gt;
+&lt;h2 id=&#34;os-structure&#34;&gt;OS structure&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;time-sharing system(multitasking)&lt;/p&gt;
+&lt;p&gt;interactive&lt;/p&gt;
+&lt;p&gt;response time short&lt;/p&gt;
+&lt;p&gt;允许多用户同时共享计算机&lt;/p&gt;
+&lt;p&gt;&lt;!-- raw HTML omitted --&gt;CPU scheduling &amp;amp; multiprogramming&lt;!-- raw HTML omitted --&gt; : 以提供用户分时计算机的一部分&lt;/p&gt;
+&lt;p&gt;为保证合理响应时间，通过swapping得到，使用virtual memory&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573530369578.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;os-operations&#34;&gt;OS operations&lt;/h2&gt;
+&lt;p&gt;dual mode: user mode &amp;amp; monitor mode&lt;/p&gt;
+&lt;p&gt;mode bit provided by hardware&lt;/p&gt;
+&lt;p&gt;Some instructions are designated as privileged, only executable in kernel mode.&lt;/p&gt;
+&lt;p&gt;System call changes mode to kernel mode, return from call resets it to user mode.&lt;/p&gt;
+&lt;p&gt;特权指令包括转换到用户模式，IO控制，定时器管理，中断管理等&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573530628171.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573530670239.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;h3 id=&#34;process-management&#34;&gt;process management&lt;/h3&gt;
+&lt;p&gt;Single-threaded process has one program counter specifying location of next instruction to execute.&lt;/p&gt;
+&lt;p&gt;Multi-threaded process has one program counter per thread.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573530891037.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;h3 id=&#34;memory-management&#34;&gt;memory management&lt;/h3&gt;
+&lt;p&gt;determines what is in memory&lt;/p&gt;
+&lt;p&gt;Central to the operation of a modern computer system.
+ All data should be in memory before and after processing.
+ All instructions should be in memory in order to execute.&lt;/p&gt;
+&lt;p&gt;virtual memory:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573531043445.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;h3 id=&#34;storage-management&#34;&gt;storage management&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;file-system management&lt;/p&gt;
+&lt;p&gt;Access control on most systems to determine who can access what.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;mass-storage management&lt;/p&gt;
+&lt;p&gt;secondary storage, tertiary storage&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;caching&lt;/p&gt;
+&lt;p&gt;copying information into faster storage system&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;disk cache&lt;/p&gt;
+&lt;p&gt;A portion of main memory used as a buffer to temporarily to hold data for the disk.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;cache memory 高速缓存&lt;/p&gt;
+&lt;p&gt;invisible to OS&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;coherency &amp;amp; consistency&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;IO subsystem&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573531626180.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;protection-and-security&#34;&gt;protection and security&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;protection&lt;/p&gt;
+&lt;p&gt;控制进程或用户对计算机系统资源的访问的机制&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;security&lt;/p&gt;
+&lt;p&gt;防止系统不受外部或内部攻击&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;access control&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;information flow control&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;certification&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;保护和安全需要系统能区分用户，user ID(UID); 需要区分用户集，group ID&lt;/p&gt;
+&lt;p&gt;privilege escalation: 有时用户需要升级特权来获取对一个活动的额外特权&lt;/p&gt;
+&lt;h3 id=&#34;distributed-systems&#34;&gt;distributed systems&lt;/h3&gt;
+&lt;p&gt;loosely coupled&lt;/p&gt;
+&lt;p&gt;network: communication path TCP/IP协议常用&lt;/p&gt;
+&lt;p&gt;network operating system: 更自治 提供信息交换的通信 file sharing, communication, runs independently&lt;/p&gt;
+&lt;p&gt;分布式系统更少自治，不同的草作系统紧密连接，好像是一个操作系统控制网络 &lt;strong&gt;process migration&lt;/strong&gt;&lt;/p&gt;
+&lt;h3 id=&#34;special-purpose-systems&#34;&gt;special-purpose systems&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;real-time system&lt;/p&gt;
+&lt;p&gt;Often used as a control device in a dedicated application&lt;/p&gt;
+&lt;p&gt;hard/soft&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;real-time embedded system 实时嵌入式系统&lt;/p&gt;
+&lt;p&gt;OS很limited&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;multimedia system 多媒体系统&lt;/p&gt;
+&lt;p&gt;将多媒体数据加入到计算机系统(audio and video files)&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;handheld system 手持系统&lt;/p&gt;
+&lt;p&gt;PDA: personal digital assistants 专门的嵌入式系统&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;computing-environments&#34;&gt;computing environments&lt;/h3&gt;
+&lt;p&gt;traditional computing&lt;/p&gt;
+&lt;p&gt;client-server computing: computer-server, file-server&lt;/p&gt;
+&lt;p&gt;peer-to-peer computing: centralized lookupservice, discovery protocol, voice over IP&lt;/p&gt;
+&lt;p&gt;cloud computing&lt;/p&gt;
+&lt;p&gt;Operating System Concepts 7th edition&lt;/p&gt;
+&lt;p&gt;Operating System Concepts 7th edition&lt;/p&gt;
+&lt;p&gt;Operating System Concepts 7th&lt;/p&gt;
+- https://imfaye.me/post/os1/ - Faye</description>
+        </item>
+    
+    
+    
+        <item>
+        <title>关于我</title>
+        <link>https://imfaye.me/about/</link>
+        <pubDate>Sun, 08 Sep 2019 00:00:00 +0000</pubDate>
+        
+        <guid>https://imfaye.me/about/</guid>
+        <description>PIKA☆NCHI https://imfaye.me/about/ -&lt;p&gt;博客什么的，像对着充满未知的可能性的黑洞在倾诉在记录在整理自己。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;他迫切地需要表达自己，复述他读过的东西，表达自己观察到的事物。这是他整理自己的思想的方式——谈话，谈话，谈话，但我想这也是他寂寞的一种表现。我觉得自己和他很像，这让我觉得很自豪，我和他一样都想塑造自己作为读书人的形象，并且让别人承认这一点，就像在说：这就是我所知道的事情，这就是我要成为的人。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;我们的卑劣和我们的坦诚在这点上和莱农和尼诺也是类似的吧。&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;如果我说自己的天赋在于感受，也太狡猾了。能感受不能输出，怎么看也像是程度不够的借口。我想记录，各个方面的，以各种形式。没有超8mm胶片，有文字也不错。&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;最后留个邮箱：faye#stu.pku.edu.cn (请将#替换为@)&lt;/p&gt;
+- https://imfaye.me/about/ - Faye</description>
+        </item>
+    
+    
+    
+        <item>
+        <title>也许是什么的开始...</title>
+        <link>https://imfaye.me/post/beginning/</link>
+        <pubDate>Sat, 07 Sep 2019 00:23:06 +0000</pubDate>
+        
+        <guid>https://imfaye.me/post/beginning/</guid>
+        <description>PIKA☆NCHI https://imfaye.me/post/beginning/ -&lt;p&gt;最近很迷茫呢&amp;hellip;&lt;/p&gt;
+&lt;p&gt;感觉自己不学无术&amp;hellip;&lt;/p&gt;
+&lt;p&gt;夜里12点了，在宿舍床上的电脑桌上敲我的第一篇博客。&lt;/p&gt;
+&lt;p&gt;如题，希望是什么的开始。&lt;/p&gt;
+&lt;p&gt;TBC&lt;/p&gt;
+- https://imfaye.me/post/beginning/ - Faye</description>
+        </item>
+    
+    
+    
+        <item>
+        <title></title>
+        <link>https://imfaye.me/archives/</link>
+        <pubDate>Tue, 28 May 2019 00:00:00 +0000</pubDate>
+        
+        <guid>https://imfaye.me/archives/</guid>
+        <description>PIKA☆NCHI https://imfaye.me/archives/ -- https://imfaye.me/archives/ - Faye</description>
+        </item>
+    
+    
+  </channel>
+</rss> 

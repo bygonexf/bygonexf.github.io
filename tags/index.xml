@@ -1,16 +1,21 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Tags on Play Back End Roll</title>
+    <title>Tags on PIKA☆NCHI</title>
     <link>https://imfaye.me/tags/</link>
-    <description>Recent content in Tags on Play Back End Roll</description>
+    <description>Recent content in Tags on PIKA☆NCHI</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>cn</language>
-    <copyright>© Faye</copyright>
-    <lastBuildDate>Sun, 05 Dec 2021 13:09:24 +0000</lastBuildDate>
-    
-	<atom:link href="https://imfaye.me/tags/index.xml" rel="self" type="application/rss+xml" />
-    
+    <language>en-us</language>
+    <copyright>Faye</copyright>
+    <lastBuildDate>Sun, 15 Jan 2023 15:04:21 +0800</lastBuildDate><atom:link href="https://imfaye.me/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>电影</title>
+      <link>https://imfaye.me/tags/%E7%94%B5%E5%BD%B1/</link>
+      <pubDate>Sun, 15 Jan 2023 15:04:21 +0800</pubDate>
+      
+      <guid>https://imfaye.me/tags/%E7%94%B5%E5%BD%B1/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>视频编码</title>
@@ -94,20 +99,20 @@
     </item>
     
     <item>
-      <title>大明湖畔的专业课</title>
-      <link>https://imfaye.me/tags/%E5%A4%A7%E6%98%8E%E6%B9%96%E7%95%94%E7%9A%84%E4%B8%93%E4%B8%9A%E8%AF%BE/</link>
-      <pubDate>Fri, 28 Feb 2020 13:13:24 +0000</pubDate>
-      
-      <guid>https://imfaye.me/tags/%E5%A4%A7%E6%98%8E%E6%B9%96%E7%95%94%E7%9A%84%E4%B8%93%E4%B8%9A%E8%AF%BE/</guid>
-      <description></description>
-    </item>
-    
-    <item>
       <title>操作系统</title>
       <link>https://imfaye.me/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/</link>
       <pubDate>Fri, 28 Feb 2020 13:13:24 +0000</pubDate>
       
       <guid>https://imfaye.me/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>大明湖畔的专业课</title>
+      <link>https://imfaye.me/tags/%E5%A4%A7%E6%98%8E%E6%B9%96%E7%95%94%E7%9A%84%E4%B8%93%E4%B8%9A%E8%AF%BE/</link>
+      <pubDate>Fri, 28 Feb 2020 13:13:24 +0000</pubDate>
+      
+      <guid>https://imfaye.me/tags/%E5%A4%A7%E6%98%8E%E6%B9%96%E7%95%94%E7%9A%84%E4%B8%93%E4%B8%9A%E8%AF%BE/</guid>
       <description></description>
     </item>
     

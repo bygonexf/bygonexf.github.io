@@ -1,451 +1,537 @@
 <!DOCTYPE html>
-<html lang="cn">
-
-<head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-	
-	<title>Play Back End Roll  | PAT刷题记录 1033 To Fill or Not to Fill</title>
-	<meta name="viewport" content="width=device-width,minimum-scale=1">
-	<meta name="generator" content="Hugo 0.105.0">
-	
-	
-	<META NAME="ROBOTS" CONTENT="INDEX, FOLLOW">
-	
-
-	
-	
-	<link href="/dist/app.css" rel="stylesheet">
-	
-
-	
-
-	
-	
-<link rel="shortcut icon" href="img/wind.png" type="image/png" />
-
-	
-
-	
-	
-	
-<script type="application/javascript">
-var doNotTrack = false;
-if (!doNotTrack) {
-	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-	ga('create', 'UA-FAKE', 'auto');
-	
-	ga('send', 'pageview');
-}
-</script>
-	
-	
-	
+<html><head>
+<title>PAT刷题记录 1033 To Fill or Not to Fill</title>
 
 
 
-<link rel="stylesheet" href='https://imfaye.me/lib/katex.min.css' crossorigin="anonymous">
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
 
 
-<script defer src='https://imfaye.me/lib/katex.min.js' crossorigin="anonymous"></script>
+
+<meta property="og:title" content="PAT刷题记录 1033 To Fill or Not to Fill" />
+<meta property="og:description" content="很有意思的一道贪心
+#include &lt;iostream&gt; #include &lt;string.h&gt; #include &lt;algorithm&gt; using namespace std; double cmax, davg, dall; int n; struct Node { double price; double dis; }sta[505]; bool cmp1(Node a, Node b) { return a.dis &lt; b.dis; } int main() { scanf(&#34;%lf%lf%lf%d&#34;, &amp;cmax, &amp;dall, &amp;davg, &amp;n); for (int i = 0; i &lt; n; &#43;&#43;i) { scanf(&#34;%lf%lf&#34;, &amp;sta[i].price, &amp;sta[i].dis); } sort(sta, sta &#43; n, cmp1); bool flag = false; double far = 0; int ns = 0; int i1 = 0; double min1 = 9999999; double cost = 0; double cnow = 0; double bestprice; while (sta[i1]." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://imfaye.me/post/pat-1033/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2020-04-19T18:03:34+00:00" />
+<meta property="article:modified_time" content="2020-04-19T18:03:34+00:00" /><meta property="og:site_name" content="My Blog" />
 
 
-<script defer src='https://imfaye.me/lib/contrib/auto-render.min.js'
-crossorigin="anonymous"
-onload='renderMathInElement(document.body);'></script>
 
 
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="PAT刷题记录 1033 To Fill or Not to Fill"/>
+<meta name="twitter:description" content="很有意思的一道贪心
+#include &lt;iostream&gt; #include &lt;string.h&gt; #include &lt;algorithm&gt; using namespace std; double cmax, davg, dall; int n; struct Node { double price; double dis; }sta[505]; bool cmp1(Node a, Node b) { return a.dis &lt; b.dis; } int main() { scanf(&#34;%lf%lf%lf%d&#34;, &amp;cmax, &amp;dall, &amp;davg, &amp;n); for (int i = 0; i &lt; n; &#43;&#43;i) { scanf(&#34;%lf%lf&#34;, &amp;sta[i].price, &amp;sta[i].dis); } sort(sta, sta &#43; n, cmp1); bool flag = false; double far = 0; int ns = 0; int i1 = 0; double min1 = 9999999; double cost = 0; double cnow = 0; double bestprice; while (sta[i1]."/>
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+<link rel="icon" href="https://imfaye.me/img/wind.png">
+
+
+
+      <script src="/js/toc.js"></script>
+    
+    <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
+<link rel="stylesheet" href="/scss/journal.min.d4c42cc03dd5885ad6a856f72cdc8991e948d78f13915e5ad7a9ea75041f0501.css" integrity="sha256-1MQswD3ViFrWqFb3LNyJkelI148TkV5a16nqdQQfBQE=" media="screen">
+
+
+
+<link rel="stylesheet" href="/scss/dark-mode.min.b063970adbc0451db461a3b3a99c3ac07ae784200123238e4bc8fc340e6b69ce.css" integrity="sha256-sGOXCtvARR20YaOzqZw6wHrnhCABIyOOS8j8NA5rac4=" media="screen">
+
+
+<link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Material+Icons">
+
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.css" integrity="sha384-RZU/ijkSsFbcmivfdRBQDtwuwVqK7GMOw6IMvKyeWL2K5UAlyp6WonmB8m7Jd0Hn" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.js" integrity="sha384-pK1WpvzWVBQiP0/GjnvRxV4mOb0oxFuyRxJlk6vVw146n3egcN5C925NCP7a7BY8" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/contrib/auto-render.min.js" integrity="sha384-vZTG03m+2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl" crossorigin="anonymous"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         renderMathInElement(document.body, {
-            delimiters: [
-                {left: "$$", right: "$$", display: true},
-                {left: "$", right: "$", display: false}
-            ]
+          
+          
+          delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false},
+              {left: '\\(', right: '\\)', display: false},
+              {left: '\\[', right: '\\]', display: true}
+          ],
+          
+          throwOnError : false
         });
     });
 </script>
 
-	
-	
-	
-	<script>
-		(function (u, c) {
-			var d = document,
-				t = 'script',
-				o = d.createElement(t),
-				s = d.getElementsByTagName(t)[0];
-			o.src = u;
-			if (c) {
-				o.addEventListener('load', function (e) {
-					c(e);
-				});
-			}
-			s.parentNode.insertBefore(o, s);
-		})('https:\/\/imfaye.me\/lib\/pangu.min.js', function () {
-			pangu.spacingPage();
-		});
-	</script>
-	
-	
-	
-	<style type="text/css" media="screen, print">
-		@font-face {
-			font-family: "FancyTitleFont";
-			font-style: normal;
-			font-display: swap;
-			src: url('https://imfaye.me/fonts/exampleFont.woff2') format('woff2'),
-				url('https://imfaye.me/fonts/exampleFont.woff') format('woff');
-		}
-		 
-		  
-		 
-		@font-face {
-			font-family: 'Noto Serif CJK SC';
-			font-style: normal;
-			font-weight: 300;
-			font-display: swap;
-			src: local('Noto Serif CJK SC Light'), local('NotoSerifCJK-Light'),
-				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-300.woff2') format('woff2'),
-				 
-				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-300.woff') format('woff');
-			 
-		}
 
-		 
-		@font-face {
-			font-family: 'Noto Serif CJK SC';
-			font-style: normal;
-			font-weight: 400;
-			font-display: swap;
-			src: local('Noto Serif CJK SC'), local('NotoSerifCJK-Regular'),
-				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-regular.woff2') format('woff2'),
-				 
-				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-regular.woff') format('woff');
-			 
-		}
 
-		 
-		@font-face {
-			font-family: 'Noto Serif CJK SC';
-			font-style: normal;
-			font-weight: 500;
-			font-display: swap;
-			src: local('Noto Serif CJK SC Medium'), local('NotoSerifCJK-Medium'),
-				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-500.woff2') format('woff2'),
-				 
-				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-500.woff') format('woff');
-			 
-		}
-	</style>
-	
+
+
+
+
+
+
+
+
+
+
+
+
+
 </head>
+<body>
+    	<div id="app"><div id="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="https://imfaye.me/">
+    
+        <div class="nav-title">
+            PIKA☆NCHI
+        </div>
+        
+        <div class="nav-subtitle">
+            Faye&#39;s Blog
+        </div>
+        
+    </a>
 
-<body class="bg-gray-100 text-gray-700 font-sans">
-	<div class="p-6 sm:p-10 md:p-16 flex flex-wrap">
-		<header class="w-full md:w-2/5 xl:w-1/2 md:pr-12 lg:pr-20 xl:pr-24 order-1 md:order-1 max-w-2xl">
-			<div
-				class="z-50 bg-gray-100 bg-opacity-75 bg-opacity-custom lg:min-w-0.7 max-w-xl md:float-right md:text-right leading-loose tracking-tight md:sticky md:top-0 pt-2">
-				
-<div>
-	<h2>
-		<a href="https://imfaye.me/" title="Play Back End Roll" class="heading font-cursive icon">Play Back End Roll</a>
-	</h2>
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/posts">
+                归档
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/categories">
+                分类
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/tags">
+                标签
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/about">
+                关于
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/index.xml">
+                RSS
+            </a>
+            
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
+        
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+移植自 <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	Faye
+	
+
+    </div>
+    
+</div><div id="extraContainer" class="extra-container">
+    
+    
+    <div class="toc animated-visibility" :class="{ invisible: scrollY <= 140 }">
+
+
 </div>
-<h1 class="pt-2">PAT刷题记录 1033 To Fill or Not to Fill</h1>
+    
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+                dark_mode
+            </span>
+        </a>
+        
+        
+    </div>
+</div>
+<div class="single-column-drawer-container" id="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/posts">
+                    归档
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/categories">
+                    分类
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/tags">
+                    标签
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/about">
+                    关于
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/index.xml">
+                    RSS
+                </a>
+                
+            
+            
+            <div class="toc">
 
-<div class="flex flex-wrap justify-end pt-2 "><div class="md:flex-grow-0 font-light">
-	
-	
-	
-	
-	<a class="post-taxonomy-category text-medium-red-violet-600 hover:text-medium-red-violet-400"
-		href='/categories/%E6%96%AD%E6%9B%B4'>断更</a>
-	
-	
-	
 
-	
-	&nbsp;&nbsp;
-	
+</div>
+            
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div id="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a id="navTitle" class="navbar-brand" href="https://imfaye.me/">
+            PIKA☆NCHI
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
+            <i class="material-icons" id="darkModeToggleIcon2">
+                dark_mode
+            </i>
+        </button>
+        
+    </div>
+</nav>
+<div class="single-column-header-container" id="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="https://imfaye.me/">
+        <div class="single-column-header-title">PIKA☆NCHI</div>
+        
+        <div class="single-column-header-subtitle">Faye&#39;s Blog</div>
+        
 
-	
-	
-	
-	
-	<a class="post-taxonomy-tag text-eucalyptus-500"
-		href='/tags/pat'>PAT</a>&nbsp;&#47;
-	
-	<a class="post-taxonomy-tag text-eucalyptus-500"
-		href='/tags/%E7%AE%97%E6%B3%95'>算法</a>
-	
-	
-	
-</div><time class="text-eucalyptus-500 md:text-right md:flex-grow font-light pl-4"
-		datetime="2020-04-19T18:03:34Z">2020-4-19</time>
+    </a>
 </div>
 
-<hr />
+            <div id="content">
+                <div id="streamContainer" class="stream-container">
 
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
 
-			</div>
-		</header>
-		<main role="main" class="w-full md:w-3/5 xl:w-1/2 max-w-3xl order-2 md:order-2 min-h-70vh pt-2 pb-4">
-			
+            <div class="post-head-wrapper-text-only"
+                
+            >
+                <div class="post-title">
+                    PAT刷题记录 1033 To Fill or Not to Fill
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2020-04-19 18:03
+                        </time>
+                        
 
-<article>
-	<section class="mx-auto content">
-		<div class="c-rich-text"><p>很有意思的一道贪心</p>
- <!-- less --> 
-<div class="highlight"><pre tabindex="0" style="color:#272822;background-color:#fafafa;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;iostream&gt;</span><span style="color:#75715e">
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;string.h&gt;</span><span style="color:#75715e">
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;algorithm&gt;</span><span style="color:#75715e">
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#00a8c8">using</span> <span style="color:#00a8c8">namespace</span> <span style="color:#111">std</span><span style="color:#111">;</span>
+                        
+                            <i class="material-icons" style="">folder</i>
+                                <a href="/categories/">[断更]</a>
+                                &nbsp;
+                        
+
+                        
+                            <i class="material-icons" style="">label</i>
+                            
+                                <a href="/tags/pat">PAT</a>
+                                &nbsp;
+                            
+                                <a href="/tags/%E7%AE%97%E6%B3%95">算法</a>
+                                &nbsp;
+                            
+                        
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <p>很有意思的一道贪心</p>
+<!-- raw HTML omitted -->
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#1e889b">#include</span> <span style="color:#1e889b">&lt;iostream&gt;</span><span style="color:#1e889b">
+</span></span></span><span style="display:flex;"><span><span style="color:#1e889b">#include</span> <span style="color:#1e889b">&lt;string.h&gt;</span><span style="color:#1e889b">
+</span></span></span><span style="display:flex;"><span><span style="color:#1e889b">#include</span> <span style="color:#1e889b">&lt;algorithm&gt;</span><span style="color:#1e889b">
+</span></span></span><span style="display:flex;"><span><span style="color:#1e889b"></span><span style="color:#8b008b;font-weight:bold">using</span> <span style="color:#8b008b;font-weight:bold">namespace</span> std;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#00a8c8">double</span> <span style="color:#111">cmax</span><span style="color:#111">,</span> <span style="color:#111">davg</span><span style="color:#111">,</span> <span style="color:#111">dall</span><span style="color:#111">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#00a8c8">int</span> <span style="color:#111">n</span><span style="color:#111">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#00a8c8">struct</span> <span style="color:#75af00">Node</span>
-</span></span><span style="display:flex;"><span><span style="color:#111">{</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#00a8c8">double</span> <span style="color:#111">price</span><span style="color:#111">;</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#00a8c8">double</span> <span style="color:#111">dis</span><span style="color:#111">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#111">}</span><span style="color:#111">sta</span><span style="color:#111">[</span><span style="color:#ae81ff">505</span><span style="color:#111">];</span>
+</span></span><span style="display:flex;"><span><span style="color:#00688b;font-weight:bold">double</span> cmax, davg, dall;
+</span></span><span style="display:flex;"><span><span style="color:#00688b;font-weight:bold">int</span> n;
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">struct</span> <span style="color:#008b45;font-weight:bold">Node</span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	<span style="color:#00688b;font-weight:bold">double</span> price;
+</span></span><span style="display:flex;"><span>	<span style="color:#00688b;font-weight:bold">double</span> dis;
+</span></span><span style="display:flex;"><span>}sta[<span style="color:#b452cd">505</span>];
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#00a8c8">bool</span> <span style="color:#75af00">cmp1</span><span style="color:#111">(</span><span style="color:#111">Node</span> <span style="color:#111">a</span><span style="color:#111">,</span> <span style="color:#111">Node</span> <span style="color:#111">b</span><span style="color:#111">)</span>
-</span></span><span style="display:flex;"><span><span style="color:#111">{</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#00a8c8">return</span> <span style="color:#111">a</span><span style="color:#111">.</span><span style="color:#111">dis</span> <span style="color:#f92672">&lt;</span> <span style="color:#111">b</span><span style="color:#111">.</span><span style="color:#111">dis</span><span style="color:#111">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#111">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#00688b;font-weight:bold">bool</span> <span style="color:#008b45">cmp1</span>(Node a, Node b)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	<span style="color:#8b008b;font-weight:bold">return</span> a.dis &lt; b.dis;
+</span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#00a8c8">int</span> <span style="color:#75af00">main</span><span style="color:#111">()</span>
-</span></span><span style="display:flex;"><span><span style="color:#111">{</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#111">scanf</span><span style="color:#111">(</span><span style="color:#d88200">&#34;%lf%lf%lf%d&#34;</span><span style="color:#111">,</span> <span style="color:#f92672">&amp;</span><span style="color:#111">cmax</span><span style="color:#111">,</span> <span style="color:#f92672">&amp;</span><span style="color:#111">dall</span><span style="color:#111">,</span> <span style="color:#f92672">&amp;</span><span style="color:#111">davg</span><span style="color:#111">,</span> <span style="color:#f92672">&amp;</span><span style="color:#111">n</span><span style="color:#111">);</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#00a8c8">for</span> <span style="color:#111">(</span><span style="color:#00a8c8">int</span> <span style="color:#111">i</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span><span style="color:#111">;</span> <span style="color:#111">i</span> <span style="color:#f92672">&lt;</span> <span style="color:#111">n</span><span style="color:#111">;</span> <span style="color:#f92672">++</span><span style="color:#111">i</span><span style="color:#111">)</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#111">{</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#111">scanf</span><span style="color:#111">(</span><span style="color:#d88200">&#34;%lf%lf&#34;</span><span style="color:#111">,</span> <span style="color:#f92672">&amp;</span><span style="color:#111">sta</span><span style="color:#111">[</span><span style="color:#111">i</span><span style="color:#111">].</span><span style="color:#111">price</span><span style="color:#111">,</span> <span style="color:#f92672">&amp;</span><span style="color:#111">sta</span><span style="color:#111">[</span><span style="color:#111">i</span><span style="color:#111">].</span><span style="color:#111">dis</span><span style="color:#111">);</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#111">}</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#111">sort</span><span style="color:#111">(</span><span style="color:#111">sta</span><span style="color:#111">,</span> <span style="color:#111">sta</span> <span style="color:#f92672">+</span> <span style="color:#111">n</span><span style="color:#111">,</span> <span style="color:#111">cmp1</span><span style="color:#111">);</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#00a8c8">bool</span> <span style="color:#111">flag</span> <span style="color:#f92672">=</span> <span style="color:#111">false</span><span style="color:#111">;</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#00a8c8">double</span> <span style="color:#111">far</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span><span style="color:#111">;</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#00a8c8">int</span> <span style="color:#111">ns</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span><span style="color:#111">;</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#00a8c8">int</span> <span style="color:#111">i1</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span><span style="color:#111">;</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#00a8c8">double</span> <span style="color:#111">min1</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">9999999</span><span style="color:#111">;</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#00a8c8">double</span> <span style="color:#111">cost</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span><span style="color:#111">;</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#00a8c8">double</span> <span style="color:#111">cnow</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span><span style="color:#111">;</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#00a8c8">double</span> <span style="color:#111">bestprice</span><span style="color:#111">;</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#00a8c8">while</span> <span style="color:#111">(</span><span style="color:#111">sta</span><span style="color:#111">[</span><span style="color:#111">i1</span><span style="color:#111">].</span><span style="color:#111">dis</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span><span style="color:#111">)</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#111">{</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#00a8c8">if</span> <span style="color:#111">(</span><span style="color:#111">sta</span><span style="color:#111">[</span><span style="color:#111">i1</span><span style="color:#111">].</span><span style="color:#111">price</span> <span style="color:#f92672">&lt;</span> <span style="color:#111">min1</span><span style="color:#111">)</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#111">{</span>
-</span></span><span style="display:flex;"><span>			<span style="color:#111">min1</span> <span style="color:#f92672">=</span> <span style="color:#111">sta</span><span style="color:#111">[</span><span style="color:#111">i1</span><span style="color:#111">].</span><span style="color:#111">price</span><span style="color:#111">;</span>
-</span></span><span style="display:flex;"><span>			<span style="color:#111">ns</span> <span style="color:#f92672">=</span> <span style="color:#111">i1</span><span style="color:#111">;</span>
-</span></span><span style="display:flex;"><span>			<span style="color:#111">far</span> <span style="color:#f92672">=</span> <span style="color:#111">cmax</span> <span style="color:#f92672">*</span> <span style="color:#111">davg</span><span style="color:#111">;</span>
-</span></span><span style="display:flex;"><span>			<span style="color:#111">bestprice</span> <span style="color:#f92672">=</span> <span style="color:#111">sta</span><span style="color:#111">[</span><span style="color:#111">i1</span><span style="color:#111">].</span><span style="color:#111">price</span><span style="color:#111">;</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#111">}</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#111">i1</span><span style="color:#f92672">++</span><span style="color:#111">;</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#111">}</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#00a8c8">if</span> <span style="color:#111">(</span><span style="color:#111">min1</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">9999999</span><span style="color:#111">)</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#111">{</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#111">printf</span><span style="color:#111">(</span><span style="color:#d88200">&#34;The maximum travel distance = 0.00&#34;</span><span style="color:#111">);</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#00a8c8">return</span> <span style="color:#ae81ff">0</span><span style="color:#111">;</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#111">}</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#00a8c8">while</span> <span style="color:#111">(</span><span style="color:#111">ns</span> <span style="color:#f92672">&lt;</span> <span style="color:#111">n</span><span style="color:#111">)</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#111">{</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#00a8c8">int</span> <span style="color:#111">i</span><span style="color:#111">;</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#00a8c8">int</span> <span style="color:#111">u</span> <span style="color:#f92672">=</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span><span style="color:#111">;</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#00a8c8">double</span> <span style="color:#111">min</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">9999999</span><span style="color:#111">;</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#00a8c8">for</span> <span style="color:#111">(</span><span style="color:#111">i</span> <span style="color:#f92672">=</span> <span style="color:#111">ns</span> <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span><span style="color:#111">;</span> <span style="color:#111">sta</span><span style="color:#111">[</span><span style="color:#111">i</span><span style="color:#111">].</span><span style="color:#111">dis</span> <span style="color:#f92672">&lt;=</span> <span style="color:#111">far</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#111">i</span> <span style="color:#f92672">&lt;</span> <span style="color:#111">n</span><span style="color:#111">;</span> <span style="color:#f92672">++</span><span style="color:#111">i</span><span style="color:#111">)</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#111">{</span>
-</span></span><span style="display:flex;"><span>			<span style="color:#00a8c8">if</span> <span style="color:#111">(</span><span style="color:#111">sta</span><span style="color:#111">[</span><span style="color:#111">i</span><span style="color:#111">].</span><span style="color:#111">price</span> <span style="color:#f92672">&lt;</span> <span style="color:#111">min</span><span style="color:#111">)</span>
-</span></span><span style="display:flex;"><span>			<span style="color:#111">{</span>
-</span></span><span style="display:flex;"><span>				<span style="color:#111">min</span> <span style="color:#f92672">=</span> <span style="color:#111">sta</span><span style="color:#111">[</span><span style="color:#111">i</span><span style="color:#111">].</span><span style="color:#111">price</span><span style="color:#111">;</span>
-</span></span><span style="display:flex;"><span>				<span style="color:#111">u</span> <span style="color:#f92672">=</span> <span style="color:#111">i</span><span style="color:#111">;</span>
-</span></span><span style="display:flex;"><span>				<span style="color:#00a8c8">if</span> <span style="color:#111">(</span><span style="color:#111">min</span> <span style="color:#f92672">&lt;</span> <span style="color:#111">sta</span><span style="color:#111">[</span><span style="color:#111">ns</span><span style="color:#111">].</span><span style="color:#111">price</span><span style="color:#111">)</span> <span style="color:#75715e">//这一步超级重要！！！第一个比当前小的，就可以停了！后面有更小的，用现在贵的油跑更多也是浪费！
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>					<span style="color:#00a8c8">break</span><span style="color:#111">;</span>
-</span></span><span style="display:flex;"><span>			<span style="color:#111">}</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#111">}</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#00a8c8">if</span> <span style="color:#111">(</span><span style="color:#111">u</span> <span style="color:#f92672">&gt;=</span> <span style="color:#ae81ff">0</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#111">min</span> <span style="color:#f92672">&lt;</span> <span style="color:#111">sta</span><span style="color:#111">[</span><span style="color:#111">ns</span><span style="color:#111">].</span><span style="color:#111">price</span><span style="color:#111">)</span> <span style="color:#75715e">//如果下一个比当前便宜，只用加到够跑到下一站的油就够了
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#111">{</span>
-</span></span><span style="display:flex;"><span>			<span style="color:#00a8c8">if</span> <span style="color:#111">(</span><span style="color:#111">cnow</span> <span style="color:#f92672">&lt;</span> <span style="color:#111">((</span><span style="color:#111">sta</span><span style="color:#111">[</span><span style="color:#111">u</span><span style="color:#111">].</span><span style="color:#111">dis</span> <span style="color:#f92672">-</span> <span style="color:#111">sta</span><span style="color:#111">[</span><span style="color:#111">ns</span><span style="color:#111">].</span><span style="color:#111">dis</span><span style="color:#111">)</span> <span style="color:#f92672">/</span> <span style="color:#111">davg</span><span style="color:#111">))</span> <span style="color:#75715e">//因为之前会存在多加油的情况，要判断在那个基础上再加油，解释一下:cnow是当前油量(这里是在更新)
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>			<span style="color:#111">{</span>
-</span></span><span style="display:flex;"><span>				<span style="color:#111">cost</span> <span style="color:#f92672">+=</span> <span style="color:#111">((</span><span style="color:#111">sta</span><span style="color:#111">[</span><span style="color:#111">u</span><span style="color:#111">].</span><span style="color:#111">dis</span> <span style="color:#f92672">-</span> <span style="color:#111">sta</span><span style="color:#111">[</span><span style="color:#111">ns</span><span style="color:#111">].</span><span style="color:#111">dis</span><span style="color:#111">)</span> <span style="color:#f92672">/</span> <span style="color:#111">davg</span> <span style="color:#f92672">-</span> <span style="color:#111">cnow</span><span style="color:#111">)</span> <span style="color:#f92672">*</span> <span style="color:#111">sta</span><span style="color:#111">[</span><span style="color:#111">ns</span><span style="color:#111">].</span><span style="color:#111">price</span><span style="color:#111">;</span>
-</span></span><span style="display:flex;"><span>				<span style="color:#111">cnow</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span><span style="color:#111">;</span>
-</span></span><span style="display:flex;"><span>			<span style="color:#111">}</span>
-</span></span><span style="display:flex;"><span>			<span style="color:#00a8c8">else</span>
-</span></span><span style="display:flex;"><span>			<span style="color:#111">{</span>
-</span></span><span style="display:flex;"><span>				<span style="color:#111">cnow</span> <span style="color:#f92672">-=</span> <span style="color:#111">(</span><span style="color:#111">sta</span><span style="color:#111">[</span><span style="color:#111">u</span><span style="color:#111">].</span><span style="color:#111">dis</span> <span style="color:#f92672">-</span> <span style="color:#111">sta</span><span style="color:#111">[</span><span style="color:#111">ns</span><span style="color:#111">].</span><span style="color:#111">dis</span><span style="color:#111">)</span> <span style="color:#f92672">/</span> <span style="color:#111">davg</span><span style="color:#111">;</span>
-</span></span><span style="display:flex;"><span>			<span style="color:#111">}</span>
-</span></span><span style="display:flex;"><span>			<span style="color:#111">far</span> <span style="color:#f92672">=</span> <span style="color:#111">sta</span><span style="color:#111">[</span><span style="color:#111">u</span><span style="color:#111">].</span><span style="color:#111">dis</span> <span style="color:#f92672">+</span> <span style="color:#111">cmax</span> <span style="color:#f92672">*</span> <span style="color:#111">davg</span><span style="color:#111">;</span>
-</span></span><span style="display:flex;"><span>			<span style="color:#111">ns</span> <span style="color:#f92672">=</span> <span style="color:#111">u</span><span style="color:#111">;</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#111">}</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#00a8c8">else</span> <span style="color:#00a8c8">if</span> <span style="color:#111">(</span><span style="color:#111">u</span> <span style="color:#f92672">&gt;=</span> <span style="color:#ae81ff">0</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#111">min</span> <span style="color:#f92672">&gt;=</span> <span style="color:#111">sta</span><span style="color:#111">[</span><span style="color:#111">ns</span><span style="color:#111">].</span><span style="color:#111">price</span><span style="color:#111">)</span> <span style="color:#75715e">//如果下一个反而贵，在当前就加满！
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#111">{</span>
-</span></span><span style="display:flex;"><span>			<span style="color:#00a8c8">if</span> <span style="color:#111">(</span><span style="color:#111">far</span> <span style="color:#f92672">&gt;=</span> <span style="color:#111">dall</span><span style="color:#111">)</span> <span style="color:#75715e">//事实证明这一步也很重要，结束的条件并不一定都是u==-1(也就是找不到下一个了)，现在就能去终点，且下一站的油费比现在贵，现在就应该停
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>			<span style="color:#111">{</span>
-</span></span><span style="display:flex;"><span>				<span style="color:#00a8c8">if</span> <span style="color:#111">(</span><span style="color:#111">cnow</span> <span style="color:#f92672">&lt;</span> <span style="color:#111">((</span><span style="color:#111">dall</span> <span style="color:#f92672">-</span> <span style="color:#111">sta</span><span style="color:#111">[</span><span style="color:#111">ns</span><span style="color:#111">].</span><span style="color:#111">dis</span><span style="color:#111">)</span> <span style="color:#f92672">/</span> <span style="color:#111">davg</span><span style="color:#111">))</span>
-</span></span><span style="display:flex;"><span>				<span style="color:#111">{</span>
-</span></span><span style="display:flex;"><span>					<span style="color:#111">cost</span> <span style="color:#f92672">+=</span> <span style="color:#111">((</span><span style="color:#111">dall</span> <span style="color:#f92672">-</span> <span style="color:#111">sta</span><span style="color:#111">[</span><span style="color:#111">ns</span><span style="color:#111">].</span><span style="color:#111">dis</span><span style="color:#111">)</span> <span style="color:#f92672">/</span> <span style="color:#111">davg</span> <span style="color:#f92672">-</span> <span style="color:#111">cnow</span><span style="color:#111">)</span> <span style="color:#f92672">*</span> <span style="color:#111">sta</span><span style="color:#111">[</span><span style="color:#111">ns</span><span style="color:#111">].</span><span style="color:#111">price</span><span style="color:#111">;</span>
-</span></span><span style="display:flex;"><span>				<span style="color:#111">}</span>
-</span></span><span style="display:flex;"><span>				<span style="color:#111">printf</span><span style="color:#111">(</span><span style="color:#d88200">&#34;%.2f&#34;</span><span style="color:#111">,</span> <span style="color:#111">cost</span><span style="color:#111">);</span>
-</span></span><span style="display:flex;"><span>				<span style="color:#00a8c8">break</span><span style="color:#111">;</span>
-</span></span><span style="display:flex;"><span>			<span style="color:#111">}</span>
-</span></span><span style="display:flex;"><span>			<span style="color:#111">cost</span> <span style="color:#f92672">+=</span> <span style="color:#111">(</span><span style="color:#111">cmax</span> <span style="color:#f92672">-</span> <span style="color:#111">cnow</span><span style="color:#111">)</span> <span style="color:#f92672">*</span> <span style="color:#111">sta</span><span style="color:#111">[</span><span style="color:#111">ns</span><span style="color:#111">].</span><span style="color:#111">price</span><span style="color:#111">;</span>
-</span></span><span style="display:flex;"><span>			<span style="color:#111">cnow</span> <span style="color:#f92672">=</span> <span style="color:#111">cmax</span> <span style="color:#f92672">-</span> <span style="color:#111">(</span><span style="color:#111">sta</span><span style="color:#111">[</span><span style="color:#111">u</span><span style="color:#111">].</span><span style="color:#111">dis</span> <span style="color:#f92672">-</span> <span style="color:#111">sta</span><span style="color:#111">[</span><span style="color:#111">ns</span><span style="color:#111">].</span><span style="color:#111">dis</span><span style="color:#111">)</span> <span style="color:#f92672">/</span> <span style="color:#111">davg</span><span style="color:#111">;</span>
-</span></span><span style="display:flex;"><span>			<span style="color:#111">far</span> <span style="color:#f92672">=</span> <span style="color:#111">sta</span><span style="color:#111">[</span><span style="color:#111">u</span><span style="color:#111">].</span><span style="color:#111">dis</span> <span style="color:#f92672">+</span> <span style="color:#111">cmax</span> <span style="color:#f92672">*</span> <span style="color:#111">davg</span><span style="color:#111">;</span>
-</span></span><span style="display:flex;"><span>			<span style="color:#111">ns</span> <span style="color:#f92672">=</span> <span style="color:#111">u</span><span style="color:#111">;</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#111">}</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#00a8c8">else</span> <span style="color:#00a8c8">if</span> <span style="color:#111">(</span><span style="color:#111">u</span> <span style="color:#f92672">==</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#111">far</span> <span style="color:#f92672">&gt;=</span> <span style="color:#111">dall</span><span style="color:#111">)</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#111">{</span>
-</span></span><span style="display:flex;"><span>			<span style="color:#00a8c8">if</span> <span style="color:#111">(</span><span style="color:#111">cnow</span> <span style="color:#f92672">&lt;</span> <span style="color:#111">((</span><span style="color:#111">dall</span> <span style="color:#f92672">-</span> <span style="color:#111">sta</span><span style="color:#111">[</span><span style="color:#111">ns</span><span style="color:#111">].</span><span style="color:#111">dis</span><span style="color:#111">)</span> <span style="color:#f92672">/</span> <span style="color:#111">davg</span><span style="color:#111">))</span>
-</span></span><span style="display:flex;"><span>			<span style="color:#111">{</span>
-</span></span><span style="display:flex;"><span>				<span style="color:#111">cost</span> <span style="color:#f92672">+=</span> <span style="color:#111">((</span><span style="color:#111">dall</span> <span style="color:#f92672">-</span> <span style="color:#111">sta</span><span style="color:#111">[</span><span style="color:#111">ns</span><span style="color:#111">].</span><span style="color:#111">dis</span><span style="color:#111">)</span> <span style="color:#f92672">/</span> <span style="color:#111">davg</span> <span style="color:#f92672">-</span> <span style="color:#111">cnow</span><span style="color:#111">)</span> <span style="color:#f92672">*</span> <span style="color:#111">sta</span><span style="color:#111">[</span><span style="color:#111">ns</span><span style="color:#111">].</span><span style="color:#111">price</span><span style="color:#111">;</span>
-</span></span><span style="display:flex;"><span>			<span style="color:#111">}</span>
-</span></span><span style="display:flex;"><span>			<span style="color:#111">printf</span><span style="color:#111">(</span><span style="color:#d88200">&#34;%.2f&#34;</span><span style="color:#111">,</span> <span style="color:#111">cost</span><span style="color:#111">);</span>
-</span></span><span style="display:flex;"><span>			<span style="color:#00a8c8">break</span><span style="color:#111">;</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#111">}</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#00a8c8">else</span> <span style="color:#00a8c8">if</span> <span style="color:#111">(</span><span style="color:#111">u</span> <span style="color:#f92672">==</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#111">far</span> <span style="color:#f92672">&lt;</span> <span style="color:#111">dall</span><span style="color:#111">)</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#111">{</span>
-</span></span><span style="display:flex;"><span>			<span style="color:#111">printf</span><span style="color:#111">(</span><span style="color:#d88200">&#34;The maximum travel distance = %.2f&#34;</span><span style="color:#111">,</span> <span style="color:#111">far</span><span style="color:#111">);</span>
-</span></span><span style="display:flex;"><span>			<span style="color:#00a8c8">break</span><span style="color:#111">;</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#111">}</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#111">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">main</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	scanf(<span style="color:#cd5555">&#34;%lf%lf%lf%d&#34;</span>, &amp;cmax, &amp;dall, &amp;davg, &amp;n);
+</span></span><span style="display:flex;"><span>	<span style="color:#8b008b;font-weight:bold">for</span> (<span style="color:#00688b;font-weight:bold">int</span> i = <span style="color:#b452cd">0</span>; i &lt; n; ++i)
+</span></span><span style="display:flex;"><span>	{
+</span></span><span style="display:flex;"><span>		scanf(<span style="color:#cd5555">&#34;%lf%lf&#34;</span>, &amp;sta[i].price, &amp;sta[i].dis);
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	sort(sta, sta + n, cmp1);
+</span></span><span style="display:flex;"><span>	<span style="color:#00688b;font-weight:bold">bool</span> flag = <span style="color:#658b00">false</span>;
+</span></span><span style="display:flex;"><span>	<span style="color:#00688b;font-weight:bold">double</span> far = <span style="color:#b452cd">0</span>;
+</span></span><span style="display:flex;"><span>	<span style="color:#00688b;font-weight:bold">int</span> ns = <span style="color:#b452cd">0</span>;
+</span></span><span style="display:flex;"><span>	<span style="color:#00688b;font-weight:bold">int</span> i1 = <span style="color:#b452cd">0</span>;
+</span></span><span style="display:flex;"><span>	<span style="color:#00688b;font-weight:bold">double</span> min1 = <span style="color:#b452cd">9999999</span>;
+</span></span><span style="display:flex;"><span>	<span style="color:#00688b;font-weight:bold">double</span> cost = <span style="color:#b452cd">0</span>;
+</span></span><span style="display:flex;"><span>	<span style="color:#00688b;font-weight:bold">double</span> cnow = <span style="color:#b452cd">0</span>;
+</span></span><span style="display:flex;"><span>	<span style="color:#00688b;font-weight:bold">double</span> bestprice;
+</span></span><span style="display:flex;"><span>	<span style="color:#8b008b;font-weight:bold">while</span> (sta[i1].dis == <span style="color:#b452cd">0</span>)
+</span></span><span style="display:flex;"><span>	{
+</span></span><span style="display:flex;"><span>		<span style="color:#8b008b;font-weight:bold">if</span> (sta[i1].price &lt; min1)
+</span></span><span style="display:flex;"><span>		{
+</span></span><span style="display:flex;"><span>			min1 = sta[i1].price;
+</span></span><span style="display:flex;"><span>			ns = i1;
+</span></span><span style="display:flex;"><span>			far = cmax * davg;
+</span></span><span style="display:flex;"><span>			bestprice = sta[i1].price;
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		i1++;
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#8b008b;font-weight:bold">if</span> (min1 == <span style="color:#b452cd">9999999</span>)
+</span></span><span style="display:flex;"><span>	{
+</span></span><span style="display:flex;"><span>		printf(<span style="color:#cd5555">&#34;The maximum travel distance = 0.00&#34;</span>);
+</span></span><span style="display:flex;"><span>		<span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#b452cd">0</span>;
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#8b008b;font-weight:bold">while</span> (ns &lt; n)
+</span></span><span style="display:flex;"><span>	{
+</span></span><span style="display:flex;"><span>		<span style="color:#00688b;font-weight:bold">int</span> i;
+</span></span><span style="display:flex;"><span>		<span style="color:#00688b;font-weight:bold">int</span> u = -<span style="color:#b452cd">1</span>;
+</span></span><span style="display:flex;"><span>		<span style="color:#00688b;font-weight:bold">double</span> min = <span style="color:#b452cd">9999999</span>;
+</span></span><span style="display:flex;"><span>		<span style="color:#8b008b;font-weight:bold">for</span> (i = ns + <span style="color:#b452cd">1</span>; sta[i].dis &lt;= far &amp;&amp; i &lt; n; ++i)
+</span></span><span style="display:flex;"><span>		{
+</span></span><span style="display:flex;"><span>			<span style="color:#8b008b;font-weight:bold">if</span> (sta[i].price &lt; min)
+</span></span><span style="display:flex;"><span>			{
+</span></span><span style="display:flex;"><span>				min = sta[i].price;
+</span></span><span style="display:flex;"><span>				u = i;
+</span></span><span style="display:flex;"><span>				<span style="color:#8b008b;font-weight:bold">if</span> (min &lt; sta[ns].price) <span style="color:#228b22">//这一步超级重要！！！第一个比当前小的，就可以停了！后面有更小的，用现在贵的油跑更多也是浪费！
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>					<span style="color:#8b008b;font-weight:bold">break</span>;
+</span></span><span style="display:flex;"><span>			}
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		<span style="color:#8b008b;font-weight:bold">if</span> (u &gt;= <span style="color:#b452cd">0</span> &amp;&amp; min &lt; sta[ns].price) <span style="color:#228b22">//如果下一个比当前便宜，只用加到够跑到下一站的油就够了
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>		{
+</span></span><span style="display:flex;"><span>			<span style="color:#8b008b;font-weight:bold">if</span> (cnow &lt; ((sta[u].dis - sta[ns].dis) / davg)) <span style="color:#228b22">//因为之前会存在多加油的情况，要判断在那个基础上再加油，解释一下:cnow是当前油量(这里是在更新)
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>			{
+</span></span><span style="display:flex;"><span>				cost += ((sta[u].dis - sta[ns].dis) / davg - cnow) * sta[ns].price;
+</span></span><span style="display:flex;"><span>				cnow = <span style="color:#b452cd">0</span>;
+</span></span><span style="display:flex;"><span>			}
+</span></span><span style="display:flex;"><span>			<span style="color:#8b008b;font-weight:bold">else</span>
+</span></span><span style="display:flex;"><span>			{
+</span></span><span style="display:flex;"><span>				cnow -= (sta[u].dis - sta[ns].dis) / davg;
+</span></span><span style="display:flex;"><span>			}
+</span></span><span style="display:flex;"><span>			far = sta[u].dis + cmax * davg;
+</span></span><span style="display:flex;"><span>			ns = u;
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		<span style="color:#8b008b;font-weight:bold">else</span> <span style="color:#8b008b;font-weight:bold">if</span> (u &gt;= <span style="color:#b452cd">0</span> &amp;&amp; min &gt;= sta[ns].price) <span style="color:#228b22">//如果下一个反而贵，在当前就加满！
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>		{
+</span></span><span style="display:flex;"><span>			<span style="color:#8b008b;font-weight:bold">if</span> (far &gt;= dall) <span style="color:#228b22">//事实证明这一步也很重要，结束的条件并不一定都是u==-1(也就是找不到下一个了)，现在就能去终点，且下一站的油费比现在贵，现在就应该停
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>			{
+</span></span><span style="display:flex;"><span>				<span style="color:#8b008b;font-weight:bold">if</span> (cnow &lt; ((dall - sta[ns].dis) / davg))
+</span></span><span style="display:flex;"><span>				{
+</span></span><span style="display:flex;"><span>					cost += ((dall - sta[ns].dis) / davg - cnow) * sta[ns].price;
+</span></span><span style="display:flex;"><span>				}
+</span></span><span style="display:flex;"><span>				printf(<span style="color:#cd5555">&#34;%.2f&#34;</span>, cost);
+</span></span><span style="display:flex;"><span>				<span style="color:#8b008b;font-weight:bold">break</span>;
+</span></span><span style="display:flex;"><span>			}
+</span></span><span style="display:flex;"><span>			cost += (cmax - cnow) * sta[ns].price;
+</span></span><span style="display:flex;"><span>			cnow = cmax - (sta[u].dis - sta[ns].dis) / davg;
+</span></span><span style="display:flex;"><span>			far = sta[u].dis + cmax * davg;
+</span></span><span style="display:flex;"><span>			ns = u;
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		<span style="color:#8b008b;font-weight:bold">else</span> <span style="color:#8b008b;font-weight:bold">if</span> (u == -<span style="color:#b452cd">1</span> &amp;&amp; far &gt;= dall)
+</span></span><span style="display:flex;"><span>		{
+</span></span><span style="display:flex;"><span>			<span style="color:#8b008b;font-weight:bold">if</span> (cnow &lt; ((dall - sta[ns].dis) / davg))
+</span></span><span style="display:flex;"><span>			{
+</span></span><span style="display:flex;"><span>				cost += ((dall - sta[ns].dis) / davg - cnow) * sta[ns].price;
+</span></span><span style="display:flex;"><span>			}
+</span></span><span style="display:flex;"><span>			printf(<span style="color:#cd5555">&#34;%.2f&#34;</span>, cost);
+</span></span><span style="display:flex;"><span>			<span style="color:#8b008b;font-weight:bold">break</span>;
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		<span style="color:#8b008b;font-weight:bold">else</span> <span style="color:#8b008b;font-weight:bold">if</span> (u == -<span style="color:#b452cd">1</span> &amp;&amp; far &lt; dall)
+</span></span><span style="display:flex;"><span>		{
+</span></span><span style="display:flex;"><span>			printf(<span style="color:#cd5555">&#34;The maximum travel distance = %.2f&#34;</span>, far);
+</span></span><span style="display:flex;"><span>			<span style="color:#8b008b;font-weight:bold">break</span>;
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>	}
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>	<span style="color:#00a8c8">return</span> <span style="color:#ae81ff">0</span><span style="color:#111">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#111">}</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#b452cd">0</span>;
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>下一个加油站的选择，不是可到达范围里油费最便宜的，而是第一个比当前加油站油费便宜的！这一步自己刚开始一直是错的orz，典型的想当然</p>
 <p>如果不能找到更便宜的下一站，这一站要加满。</p>
 <p>还有一个点是判断结束的条件，现在可到达终点且之后的都贵，就可以停了。</p>
-</div>
-	</section>
+
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;">最后修改于 2020-04-19</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <a class="newer-posts" href="/post/pat-1038/">
+			下回<br>PAT刷题记录 1038 Recover the Smallest Number
+                </a>
+                
+                
+                
+                <a class="older-posts" href="/post/linguistics/">
+			上回<br>语言学概论 笔记
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
 
 
-</article>
 
-		</main>
-		<div class="w-full h-0 flex-none order-3"></div>
-		<aside role="contentinfo"
-			class="w-full md:w-2/5 xl:w-1/2 md:pr-12 lg:pr-20 xl:pr-24 order-4 md:order-3 md:sticky md:bottom-0 self-end max-w-2xl">
-			<div class="md:float-right md:text-right leading-loose tracking-tight md:mb-2">
-				
-	<div class="md:max-w-xs  flex flex-col md:items-end">
-	<ul class="font-serif flex-grow-0 flex justify-between flex-wrap md:flex-col">
-	
-	
-	<li class="px-1 md:px-0">
-		<a href="/post/" title="归档 page" 
-			class="font-medium text-medium-red-violet-600 hover:text-medium-red-violet-400" >
-			归档
-		</a>
-	</li>
-	
-	<li class="px-1 md:px-0">
-		<a href="/categories/" title="分类 page" >
-			分类
-		</a>
-	</li>
-	
-	<li class="px-1 md:px-0">
-		<a href="/tags/" title="标签 page" >
-			标签
-		</a>
-	</li>
-	
-	<li class="px-1 md:px-0">
-		<a href="/about/" title="关于 page" >
-			关于
-		</a>
-	</li>
-	
-	
-	
-	
-	<div id="fastSearch" class="m-0">
-		<input id="searchInput" type="text" size=10 
-			class="bg-gray-100 focus:outline-none border-b border-gray-100 focus:border-eucalyptus-300 md:text-right
-			placeholder-java-500 min-w-0 max-w-xxxs"
-			placeholder="search" />
-		<ul id="searchResults" class="bg-gray-200 px-2 divide-y divide-gray-400">
-		</ul>
-	</div>
-	
-</ul>
-	
 
-<div class="flex flex-wrap-reverse md:justify-end content-end md:content-start justify-start items-start   max-h-16">
+
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+                    </div>
+            </div><div id="single-column-footer">
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+移植自 <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	Faye
 	
 </div>
-	<div class="text-sm text-gray-500 leading-tight a-gray">
-		© Faye
-		<br />
-		Built with Hugo and theme <a href="https://github.com/heyeshuang/hugo-theme-tokiwa">Tokiwa</a>. 702 words in this page.
-	</div>
-</div>
-
-			</div>
-		</aside>
-		<footer class="w-full md:w-3/5 xl:w-1/2 order-3 max-w-3xl md:order-4 pt-2">
-			
-<hr class="double-line" />
-<div class="flex flex-wrap justify-between pb-2 leading-loose font-serif">
+            </div>
     
-    <a class="flex-grow-0" href="/post/linguistics/">
-        <svg class="fill-current inline-block h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24"
-            height="24">
-            <path fill="none" d="M0 0h24v24H0z" />
-            <path d="M7.828 11H20v2H7.828l5.364 5.364-1.414 1.414L4 12l7.778-7.778 1.414 1.414z" /></svg>
-        语言学概论 笔记
-    </a>
-    
-    
-    <a class="flex-grow-0" href="/post/pat-1038/">
-        PAT刷题记录 1038 Recover the Smallest Number
-        <svg class="fill-current inline-block h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24"
-            height="24">
-            <path fill="none" d="M0 0h24v24H0z" />
-            <path d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z" /></svg></a>
-    
-</div>
-<div >
-
-
-
-</div>
-<hr />
-<div class="pb-2">
-    <div id="disqus_thread"></div>
-<script type="application/javascript">
-    window.disqus_config = function () {
-    
-    
-    
-    };
-    (function() {
-        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
-            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
-            return;
-        }
-        var d = document, s = d.createElement('script'); s.async = true;
-        s.src = '//' + "faye" + '.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-    })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-</div>
-<hr />
-
-		</footer>
-		
-
-<script src="/dist/app.js"></script>
-
-
-<script src="/lib/fuse.min.js"></script> 
-<script src="/lib/fastsearch.js"></script>
-
-	</div>
-</body>
-
+    <script src="/js/journal.js"></script></body>
 </html>

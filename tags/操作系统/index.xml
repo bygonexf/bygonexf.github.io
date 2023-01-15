@@ -1,139 +1,33 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>操作系统 on Play Back End Roll</title>
+    <title>操作系统 on PIKA☆NCHI</title>
     <link>https://imfaye.me/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/</link>
-    <description>Recent content in 操作系统 on Play Back End Roll</description>
+    <description>Recent content in 操作系统 on PIKA☆NCHI</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>cn</language>
-    <copyright>© Faye</copyright>
-    <lastBuildDate>Fri, 28 Feb 2020 13:13:24 +0000</lastBuildDate>
-    
-	<atom:link href="https://imfaye.me/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <language>en-us</language>
+    <copyright>Faye</copyright>
+    <lastBuildDate>Fri, 28 Feb 2020 13:13:24 +0000</lastBuildDate><atom:link href="https://imfaye.me/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>操作系统笔记 CH13 I/O Systems</title>
       <link>https://imfaye.me/post/os13/</link>
       <pubDate>Fri, 28 Feb 2020 13:13:24 +0000</pubDate>
       
       <guid>https://imfaye.me/post/os13/</guid>
-      <description>&lt;p&gt;the kernel is structured to use device-driver modules.&lt;/p&gt;
-&lt;p&gt;device driver为IO子系统提供了统一设备访问接口&lt;/p&gt;
-&lt;p&gt;两个趋势：接口日益标准化，设备多样性&lt;/p&gt;
-&lt;h2 id=&#34;io-硬件&#34;&gt;IO 硬件&lt;/h2&gt;
-&lt;p&gt;port&lt;/p&gt;
-&lt;p&gt;bus&lt;/p&gt;
-&lt;p&gt;controller&lt;/p&gt;
-&lt;p&gt;Controller usually have registers, where device driver places commands, addresses, and data to write, or read data from registers after command execution. Data-in register, data-out register, status register, control register&lt;/p&gt;
-&lt;p&gt;设备有地址&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;Direct I/O instructions&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;Memory-mapped I/O 内存映射IO&lt;/p&gt;
-&lt;p&gt;设备控制寄存器 被映射到 处理器的地址空间&lt;/p&gt;
-&lt;p&gt;Especially for large address spaces (graphics)&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;IO端口有4种寄存器：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;status&lt;/li&gt;
-&lt;li&gt;control&lt;/li&gt;
-&lt;li&gt;data-in&lt;/li&gt;
-&lt;li&gt;data-out&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Techniques for Performing I/O&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Programmed I/O&lt;/li&gt;
-&lt;li&gt;Interrupt-driven I/O&lt;/li&gt;
-&lt;li&gt;Direct Memory Access (DMA)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;polling-轮询&#34;&gt;polling 轮询&lt;/h3&gt;
-&lt;p&gt;控制器通过状态寄存器的busy bit显示其状态&lt;/p&gt;
-&lt;p&gt;主机通过命令寄存器中的command-ready bit表示其意愿&lt;/p&gt;
-&lt;p&gt;busy-waiting / polling 主机不断读状态寄存器直到忙位被清除&lt;/p&gt;
-&lt;p&gt;Polling can happen in 3 instruction cycles, Read status, logical-and to extract status bit, branch if not zero&lt;/p&gt;
-&lt;h3 id=&#34;interrupts&#34;&gt;interrupts&lt;/h3&gt;
-&lt;p&gt;Interrupt-request line&lt;/p&gt;
-&lt;p&gt;Interrupt handler receives interrupts. Maskable to ignore or delay some interrupts&lt;/p&gt;
-&lt;p&gt;Interrupt vector to dispatch interrupt to correct handler&lt;/p&gt;
-&lt;p&gt;中断向量：中断处理程序的内存地址&lt;/p&gt;
-&lt;p&gt;计算机设备比向量内地址多。interrupt chaining 中断向量内的每个元素都指向中断处理程序列表的头&lt;/p&gt;
-&lt;p&gt;实现了中断优先级&lt;/p&gt;
-&lt;p&gt;Interrupt mechanism also used for exceptions&lt;/p&gt;
-&lt;p&gt;Good uses: system calls, page fault&lt;/p&gt;
-&lt;p&gt;Used for time-sensitive processing, frequent, must be fast.&lt;/p&gt;
-&lt;h3 id=&#34;dma&#34;&gt;DMA&lt;/h3&gt;
-&lt;p&gt;Requires DMA controller, a special-purpose processor.&lt;/p&gt;
-&lt;p&gt;Bypasses CPU to transfer data directly between I/O device and memory.&lt;/p&gt;
-&lt;p&gt;Host writes a DMA command block into memory.&lt;/p&gt;
-&lt;p&gt;CPU writes the address of this command block to the DMA controller.&lt;/p&gt;
-&lt;p&gt;DMA controller operates the memory bus directly, placing address on the bus to perform transfers.&lt;/p&gt;
-&lt;p&gt;When the entire transfer is finished, the DMA controller interrupts the CPU.&lt;/p&gt;
-&lt;p&gt;Handshaking between the DMA controller and the device controller:&lt;/p&gt;
-&lt;p&gt;​	performed via a pair of wires called DMA-request and DMA-acknowledge.&lt;/p&gt;
-&lt;p&gt;DMA控制器抓住内存总线时，CPU暂时不能访问主存，但可以访问一级或二级高速缓存中的数据项。&lt;/p&gt;
-&lt;p&gt;周期挪用cycle stealing可能放慢CPU计算，但数据传输工作交给DMA控制器改善整体性能&lt;/p&gt;
-&lt;p&gt;DVMA (direct virtual memory access) can perform a transfer between two memory-mapped devices
-without the intervention of the CPU or the use of main memory. 直接实现两个内存映射设备之间的传输，无需CPU的干涉或使用主存&lt;/p&gt;
-&lt;h2 id=&#34;io应用接口&#34;&gt;IO应用接口&lt;/h2&gt;
-&lt;p&gt;设备驱动程序层device-driver layer为内核IO子系统隐藏设备控制器之间的差异&lt;/p&gt;
-&lt;p&gt;Broadly I/O devices can be grouped by the OS into&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;block IO&lt;/li&gt;
-&lt;li&gt;character-stream IO&lt;/li&gt;
-&lt;li&gt;memory-mapped file access&lt;/li&gt;
-&lt;li&gt;network sockets&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;OS存在后门(escape / back door)，允许应用程序将任何命令透明地传输到设备控制器&lt;/p&gt;
-&lt;p&gt;Unix ioctl()&lt;/p&gt;
-&lt;h3 id=&#34;块与字符设备&#34;&gt;块与字符设备&lt;/h3&gt;
-&lt;h4 id=&#34;block-devices&#34;&gt;Block devices&lt;/h4&gt;
-&lt;p&gt;include disk drives&lt;/p&gt;
-&lt;p&gt;Commands include read(), write(), seek()&lt;/p&gt;
-&lt;p&gt;Raw I/O, direct I/O, or file-system access&lt;/p&gt;
-&lt;p&gt;Memory-mapped file access possible&lt;/p&gt;
-&lt;p&gt;DMA&lt;/p&gt;
-&lt;h4 id=&#34;character-devices&#34;&gt;Character devices&lt;/h4&gt;
-&lt;p&gt;include keyboards, mice, serial ports&lt;/p&gt;
-&lt;p&gt;Commands include get(), put()&lt;/p&gt;
-&lt;h3 id=&#34;网络设备&#34;&gt;网络设备&lt;/h3&gt;
-&lt;p&gt;The socket interface, Linux, Unix and Windows&lt;/p&gt;
-&lt;p&gt;Includes select functionality: manages a set of sockets&lt;/p&gt;
-&lt;h3 id=&#34;clocks-and-timers&#34;&gt;clocks and timers&lt;/h3&gt;
-&lt;p&gt;Provide current time, elapsed time, timer&lt;/p&gt;
-&lt;p&gt;Programmable interval timer used for timings, periodic interrupts.&lt;/p&gt;
-&lt;h3 id=&#34;blocking-io-and-nonblocking-io&#34;&gt;Blocking I/O and Nonblocking I/O&lt;/h3&gt;
-&lt;p&gt;Blocking - process suspended until I/O completed&lt;/p&gt;
-&lt;p&gt;Nonblocking - I/O call returns as much as available&lt;/p&gt;
-&lt;p&gt;Asynchronous - process runs while I/O executes 不必等待IO完成就可立即返回&lt;/p&gt;
-&lt;h2 id=&#34;kernel-io-subsystem&#34;&gt;Kernel I/O Subsystem&lt;/h2&gt;
-&lt;h3 id=&#34;io-scheduling&#34;&gt;IO scheduling&lt;/h3&gt;
-&lt;p&gt;为每个设备维护一个请求队列&lt;/p&gt;
-&lt;h3 id=&#34;buffering&#34;&gt;buffering&lt;/h3&gt;
-&lt;p&gt;保存两个设备之间 或 设备和应用程序之间 所传输数据的内存区域&lt;/p&gt;
-&lt;h3 id=&#34;caching&#34;&gt;caching&lt;/h3&gt;
-&lt;p&gt;高速缓存是可以保留数据副本的高速存储器&lt;/p&gt;
-&lt;p&gt;buffer可能是数据的唯一副本，而cache只是提供了一个 驻留在其他地方的数据 在高速存储上的一个副本&lt;/p&gt;
-&lt;p&gt;有时同一内存区域可同时用作cache和buffer&lt;/p&gt;
-&lt;h3 id=&#34;spooling假脱机--device-reservation&#34;&gt;Spooling假脱机 &amp;amp; Device reservation&lt;/h3&gt;
-&lt;p&gt;Spooling - hold output for a device&lt;/p&gt;
-&lt;p&gt;Device reservation( 预约) - provides exclusive access to a device&lt;/p&gt;
-&lt;h3 id=&#34;error-handling&#34;&gt;error handling&lt;/h3&gt;
-&lt;p&gt;Most return an error number or code when I/O request fails.&lt;/p&gt;
-&lt;p&gt;System error logs hold problem reports&lt;/p&gt;
-&lt;h3 id=&#34;io-protection&#34;&gt;IO protection&lt;/h3&gt;
-&lt;p&gt;所有IO指令为特权指令&lt;/p&gt;
-&lt;p&gt;IO必须通过system call执行&lt;/p&gt;
-&lt;h3 id=&#34;内核数据结构&#34;&gt;内核数据结构&lt;/h3&gt;
-&lt;p&gt;Kernel keeps state information for I/O components, including open file tables, network connections, character device state.&lt;/p&gt;
-&lt;p&gt;Many complex data structures to track buffers, memory allocation, “dirty” blocks.&lt;/p&gt;
-&lt;p&gt;Some use object-oriented methods and message passing to implement I/O.&lt;/p&gt;
-&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577522127902.png&#34; style=&#34;zoom:50%;&#34; /&gt;
-&lt;h2 id=&#34;把io操作转换成硬件操作&#34;&gt;把IO操作转换成硬件操作&lt;/h2&gt;
-&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577522223439.png&#34; style=&#34;zoom:50%;&#34; /&gt;</description>
+      <description>the kernel is structured to use device-driver modules.
+device driver为IO子系统提供了统一设备访问接口
+两个趋势：接口日益标准化，设备多样性
+IO 硬件 port
+bus
+controller
+Controller usually have registers, where device driver places commands, addresses, and data to write, or read data from registers after command execution. Data-in register, data-out register, status register, control register
+设备有地址
+Direct I/O instructions
+Memory-mapped I/O 内存映射IO
+设备控制寄存器 被映射到 处理器的地址空间
+Especially for large address spaces (graphics)
+IO端口有4种寄存器：
+status control data-in data-out Techniques for Performing I/O</description>
     </item>
     
     <item>
@@ -142,115 +36,12 @@ without the intervention of the CPU or the use of main memory. 直接实现两�
       <pubDate>Fri, 28 Feb 2020 13:12:24 +0000</pubDate>
       
       <guid>https://imfaye.me/post/os12/</guid>
-      <description>&lt;h3 id=&#34;磁盘&#34;&gt;磁盘&lt;/h3&gt;
-&lt;p&gt;扇区0是最外面柱面的第一个磁道的第一个扇区。映射先按磁道内扇区顺序，再按柱面内磁道顺序，最后按从外到内的柱面顺序来排序的。&lt;/p&gt;
-&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577512929633.png&#34; style=&#34;zoom: 50%;&#34; /&gt;
-&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577513031964.png&#34; style=&#34;zoom:67%;&#34; /&gt;
-&lt;p&gt;Head crash results from disk head making contact with the disk surface. Cannot be repaired, the entire disk must be replaced.&lt;/p&gt;
-&lt;p&gt;Disks can be removable&lt;/p&gt;
-&lt;p&gt;Host controller in computer uses bus to talk to disk controller built into drive or storage array.&lt;/p&gt;
-&lt;p&gt;The disk controller operates the disk-drive hardware to carry out the command.&lt;/p&gt;
-&lt;p&gt;Disk controllers have a built-in cache. Data transfer at the disk drive happens between the
-cache and the disk surface. Data transfer to the host, at fast electronic speeds, occurs between the cache and the host controller.&lt;/p&gt;
-&lt;h3 id=&#34;磁带&#34;&gt;磁带&lt;/h3&gt;
-&lt;p&gt;长久，存储大量数据。慢&lt;/p&gt;
-&lt;h2 id=&#34;磁盘结构&#34;&gt;磁盘结构&lt;/h2&gt;
-&lt;p&gt;Disk drives are addressed as large 1-dimensional arrays of logical blocks, where the logical block is the smallest unit of transfer.&lt;/p&gt;
-&lt;p&gt;Low-level formatting(低级格式化) creates logical blocks on physical media.&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;Constant Linear Velocity ( 常数线性周转率)&lt;/p&gt;
-&lt;p&gt;the density of bits per track is uniform&lt;/p&gt;
-&lt;p&gt;CD-ROM, DVD-ROM&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;Constant Angular Velocity ( 常数角周转率)&lt;/p&gt;
-&lt;p&gt;the density of bits decreases from inner tracks to outer tracks&lt;/p&gt;
-&lt;p&gt;hard disk&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;disk-attachment&#34;&gt;disk attachment&lt;/h2&gt;
-&lt;p&gt;计算机访问磁盘存储两种方式&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;通过IO端口(或主机附属存储)&lt;/p&gt;
-&lt;p&gt;小系统采用这种方法&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;通过分布式文件系统DFS的远程主机，称为网络附属存储&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;host-attached-storage&#34;&gt;Host-attached storage&lt;/h3&gt;
-&lt;p&gt;Is accessed through I/O ports talking to I/O busses&lt;/p&gt;
-&lt;p&gt;I/O directed to bus ID, device ID, logical unit (LUN)&lt;/p&gt;
-&lt;h3 id=&#34;network-attached-storage-nas&#34;&gt;Network-Attached Storage (NAS)&lt;/h3&gt;
-&lt;p&gt;客户通过远程进程调用接口访问NAS&lt;/p&gt;
-&lt;p&gt;UNIX中的NFS，windows中的CIFS(Common Internet File System)&lt;/p&gt;
-&lt;p&gt;RPCs are carried via TCP or UDP on IP network.&lt;/p&gt;
-&lt;p&gt;The NAS unit is usually implemented as a RAID array with software that implements the RPC interface.&lt;/p&gt;
-&lt;p&gt;New iSCSI protocol uses IP network protocol to carry the SCSI protocol. Remotely attaching to devices (blocks)&lt;/p&gt;
-&lt;h3 id=&#34;storage-area-network-san&#34;&gt;Storage Area Network (SAN)&lt;/h3&gt;
-&lt;p&gt;服务器与存储单元之间的私有网络(采用存储协议而非网络协议)&lt;/p&gt;
-&lt;p&gt;灵活&lt;/p&gt;
-&lt;p&gt;Common in large storage environments.&lt;/p&gt;
-&lt;p&gt;Multiple hosts attached to multiple storage arrays – flexible&lt;/p&gt;
-&lt;p&gt;SAN is one or more storage arrays Connected to one or more Fiber Channel switches&lt;/p&gt;
-&lt;p&gt;Hosts also attach to the switches.&lt;/p&gt;
-&lt;p&gt;Storage made available via LUN Masking from specific arrays to specific servers.&lt;/p&gt;
-&lt;h2 id=&#34;disk-scheduling&#34;&gt;disk scheduling&lt;/h2&gt;
-&lt;p&gt;Minimize seek time&lt;/p&gt;
-&lt;p&gt;OS maintains queue of requests, per disk or device.&lt;/p&gt;
-&lt;p&gt;controllers have small buffers and can manage a queue of I/O requests.&lt;/p&gt;
-&lt;h3 id=&#34;fsfc&#34;&gt;FSFC&lt;/h3&gt;
-&lt;h3 id=&#34;sstf-shortest-seek-time-first&#34;&gt;SSTF Shortest Seek Time First&lt;/h3&gt;
-&lt;p&gt;starvation&lt;/p&gt;
-&lt;h3 id=&#34;scan--elevator&#34;&gt;SCAN / elevator&lt;/h3&gt;
-&lt;p&gt;到达另一端时，磁头改变方向&lt;/p&gt;
-&lt;h3 id=&#34;c-scan&#34;&gt;C-SCAN&lt;/h3&gt;
-&lt;p&gt;当磁头移到另一端时，会马上返回磁盘开始。将柱面当成环链&lt;/p&gt;
-&lt;h3 id=&#34;look&#34;&gt;LOOK&lt;/h3&gt;
-&lt;p&gt;磁头只移动到一个方向上最远的请求为止&lt;/p&gt;
-&lt;h3 id=&#34;c-look&#34;&gt;C-LOOK&lt;/h3&gt;
-&lt;h3 id=&#34;磁盘调度算法的选择&#34;&gt;磁盘调度算法的选择&lt;/h3&gt;
-&lt;p&gt;SSTF is common and has a natural appeal&lt;/p&gt;
-&lt;p&gt;SCAN and C-SCAN对磁盘负荷大的系统执行较好，不会有starvation&lt;/p&gt;
-&lt;p&gt;Requests for disk service can be influenced by the file-allocation method.&lt;/p&gt;
-&lt;p&gt;The disk-scheduling algorithm should be written as a separate module of the operating system, allowing it to be replaced with a different algorithm if necessary.&lt;/p&gt;
-&lt;p&gt;Either SSTF or LOOK is a reasonable choice for the default algorithm.&lt;/p&gt;
-&lt;h2 id=&#34;磁盘管理&#34;&gt;磁盘管理&lt;/h2&gt;
-&lt;h3 id=&#34;磁盘格式化-disk-formatting&#34;&gt;磁盘格式化 disk formatting&lt;/h3&gt;
-&lt;p&gt;低级格式化/物理格式化：将磁盘分成扇区以便磁盘控制器能读能写。为每个扇区采用特殊的数据结构。The data structure typically consists of a header(sector #), a data area, and a trailer(ECC, error correction code) 扇区通常512B，但可选&lt;/p&gt;
-&lt;p&gt;OS需要将自己的数据结构记录在磁盘上&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;
-&lt;p&gt;将磁盘分为由一个或多个柱面组成的分区。将每个分区作为一个逻辑磁盘。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;Logical formatting逻辑格式化&lt;/p&gt;
-&lt;p&gt;创建文件系统&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;为了提高效率，大多数OS将块集中到一大块，称作簇(cluster)。磁盘IO通过块完成，文件系统IO通过簇完成&lt;/p&gt;
-&lt;p&gt;raw disk生磁盘：将磁盘分区作为一个逻辑块的大顺序数组，没有任何文件系统数据结构&lt;/p&gt;
-&lt;p&gt;raw disk可用作swap space&lt;/p&gt;
-&lt;p&gt;对该数组的IO称作raw IO&lt;/p&gt;
-&lt;p&gt;有些数据库系统比较喜欢raw IO&lt;/p&gt;
-&lt;h3 id=&#34;boot-block-引导块&#34;&gt;boot block 引导块&lt;/h3&gt;
-&lt;p&gt;bootstrap程序应找到磁盘上的操作系统内核，装入内存，并转到起始地址，从而开始OS的执行&lt;/p&gt;
-&lt;p&gt;bootstrap保存在ROM中。不过大多数OS只在ROM中保留bootstrap loader: 进一步从磁盘上调入更完整的bootstrap程序&lt;/p&gt;
-&lt;p&gt;完整的bootstrap程序在磁盘的启动块(boot block)上，启动块位于磁盘的固定位置。&lt;/p&gt;
-&lt;p&gt;拥有启动分区的磁盘称为boot disk或system disk&lt;/p&gt;
-&lt;p&gt;启动扇区 MBR master boot record . Besides boot code, the MBR contains a partition table listing the partitions for the hard disk and a flag indicating which partition the system is to be booted from.&lt;/p&gt;
-&lt;p&gt;启动ROM中的代码引导磁盘控制器将启动块读入到内存(此时尚未装入设备驱动程序)&lt;/p&gt;
-&lt;p&gt;硬盘分为一个或多个分区，一个分区为boot partition，包含OS和设备驱动程序。该分区的第一个扇区既是boot sector&lt;/p&gt;
-&lt;h3 id=&#34;bad-blocks&#34;&gt;bad blocks&lt;/h3&gt;
-&lt;p&gt;Controller calculates the ECC and finds the sector is bad. 控制器计算ECC&lt;/p&gt;
-&lt;p&gt;An unrecoverable hard error results in lost data.&lt;/p&gt;
-&lt;p&gt;对于简单磁盘：坏块可手工处理&lt;/p&gt;
-&lt;p&gt;对于复杂磁盘：&lt;/p&gt;
-&lt;p&gt;​	控制器维护一个磁盘坏块链表，控制器可用备用块来逻辑地替换坏块 sector sparing(forwarding)&lt;/p&gt;
-&lt;p&gt;​	sector slipping&lt;/p&gt;
-</description>
+      <description>磁盘 扇区0是最外面柱面的第一个磁道的第一个扇区。映射先按磁道内扇区顺序，再按柱面内磁道顺序，最后按从外到内的柱面顺序来排序的。
+Head crash results from disk head making contact with the disk surface. Cannot be repaired, the entire disk must be replaced.
+Disks can be removable
+Host controller in computer uses bus to talk to disk controller built into drive or storage array.
+The disk controller operates the disk-drive hardware to carry out the command.
+Disk controllers have a built-in cache. Data transfer at the disk drive happens between the cache and the disk surface.</description>
     </item>
     
     <item>
@@ -259,155 +50,25 @@ cache and the disk surface. Data transfer to the host, at fast electronic speeds
       <pubDate>Fri, 28 Feb 2020 13:11:24 +0000</pubDate>
       
       <guid>https://imfaye.me/post/os11/</guid>
-      <description>&lt;h2 id=&#34;文件系统结构&#34;&gt;文件系统结构&lt;/h2&gt;
-&lt;p&gt;磁盘特点：可以原地重写，可以直接访问任意一块。&lt;/p&gt;
-&lt;p&gt;内存和磁盘之间的IO以块为单位。每块为一个或多个扇区。扇区通常为512B&lt;/p&gt;
-&lt;p&gt;File system resides on secondary storage (disks) OS通过文件系统存储、定位、提取数据&lt;/p&gt;
-&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577502786991.png&#34; style=&#34;zoom: 50%;&#34; /&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;IO control 最底层&lt;/p&gt;
-&lt;p&gt;由device driver 和 Interrupt handlers组成&lt;/p&gt;
-&lt;p&gt;实现内存和磁盘之间的信息传输。&lt;/p&gt;
-&lt;p&gt;device driver可作为翻译器。输入是高层命令，输出是底层的、硬件特定的命令。命令用于控制hardware controller&lt;/p&gt;
-&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577503036078.png&#34; style=&#34;zoom:50%;&#34; /&gt;
-&lt;p&gt;device driver控制一类设备&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;basic file system&lt;/p&gt;
-&lt;p&gt;Issue generic commands to the appropriate device driver to read and write physical blocks on the disk.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;file-organization module&lt;/p&gt;
-&lt;p&gt;将逻辑块地址 转换成 物理块地址&lt;/p&gt;
-&lt;p&gt;也包括空闲空间管理器&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;logical file system&lt;/p&gt;
-&lt;p&gt;管理metadata，元数据包括文件系统所有结构数据，而不包括实际数据&lt;/p&gt;
-&lt;p&gt;管理目录结构&lt;/p&gt;
-&lt;p&gt;通过FCB((inodes in UNIX))维护文件结构&lt;/p&gt;
-&lt;p&gt;负责保护和安全&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Layering useful for reducing complexity and redundancy, but adds overhead and can decrease performance.&lt;/p&gt;
-&lt;p&gt;绝大多数OS支持多个文件系统&lt;/p&gt;
-&lt;p&gt;UNIX使用UFS&lt;/p&gt;
-&lt;p&gt;标准的Linux文件系统是extende file system&lt;/p&gt;
-&lt;h2 id=&#34;文件系统实现&#34;&gt;文件系统实现&lt;/h2&gt;
-&lt;p&gt;每个卷的boot control block：从该卷引导OS需要的信息。如果没有OS，该块为空，通常为卷的第一块。UFS称之为boot block，NTFS称之为partition boot sector&lt;/p&gt;
-&lt;p&gt;每个卷的volume control blcok：包括卷(或分区)的详细信息，如分区的块数，块的大小&amp;hellip;UFS称之为superblock，NTFS中它存在master file table中&lt;/p&gt;
-&lt;p&gt;每个文件系统的目录结构用来组织文件。UFS中包含文件名和相关的inode号，NTFS中它存储在master file table中&lt;/p&gt;
-&lt;p&gt;每个文件的FCB。UFS中是inode，NTFS存在master file table中，每个文件占一行&lt;/p&gt;
-&lt;h3 id=&#34;in-memory-file-system-structures&#34;&gt;In-Memory File System Structures&lt;/h3&gt;
-&lt;p&gt;一个内存中的mount table(partition table)&lt;/p&gt;
-&lt;p&gt;一个内存中的director structure cache&lt;/p&gt;
-&lt;p&gt;system-wide open-file table: 包括每个打开文件的FCB副本&lt;/p&gt;
-&lt;p&gt;per-process open-file table: Contains a pointer to the appropriate entry in the system-wide open-file table.&lt;/p&gt;
-&lt;p&gt;buffers hold data blocks from secondary storage.&lt;/p&gt;
-&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577507477227.png&#34; style=&#34;zoom:50%;&#34; /&gt;
-&lt;p&gt;对于访问打开文件表的索引：UNIX称之为file descriptor，Windows称之为file handle. 只要文件没有关闭，所有文件操作都是通过打开文件表来进行的&lt;/p&gt;
-&lt;h3 id=&#34;partitions-and-mounting-分区和安装&#34;&gt;partitions and mounting 分区和安装&lt;/h3&gt;
-&lt;p&gt;一个disk可以分为多个partition，一个partition可以横跨多个disk(作为RAID的一种形式比较合适)&lt;/p&gt;
-&lt;p&gt;分区可以是&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;raw 没有文件系统&lt;/li&gt;
-&lt;li&gt;cooked 含有文件系统&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;引导信息能保存在多个分区中，通常为一组有序块，并作为镜像文件读入内存&lt;/p&gt;
-&lt;p&gt;boot loader知道位于引导区的多个文件系统和多个操作系统，一旦装入，它可以引导位于磁盘上的一个操作系统。磁盘可以有多个分区，每个分区包含不同类型的文件系统和不同的操作系统。&lt;/p&gt;
-&lt;p&gt;root partiton包括操作系统内核或其他系统文件，在引导时装入内存。&lt;/p&gt;
-&lt;p&gt;内存中有Mount table – containing information about file systems that has been mounted.&lt;/p&gt;
-&lt;h3 id=&#34;virtual-file-system-vfs&#34;&gt;virtual file system (VFS)&lt;/h3&gt;
-&lt;p&gt;Virtual file system (VFS) on most OSes, including Unix, use object-oriented techniques to implement the file system. 用户甚至可以访问位于网络上的操作系统&lt;/p&gt;
-&lt;p&gt;VFS allows the same system call interface (the API) to be used for different types of file systems.&lt;/p&gt;
-&lt;p&gt;Implements vnodes which hold inodes or network file details.&lt;/p&gt;
-&lt;p&gt;The API is to the VFS interface, rather than any specific type of file system.&lt;/p&gt;
-&lt;p&gt;多个VFS接口的实现可以共存在同一台机器上&lt;/p&gt;
-&lt;p&gt;vnode表示位于整个网络范围内唯一的文件&lt;/p&gt;
-&lt;p&gt;Linux has four object types: inode, file, superblock, dentry&lt;/p&gt;
-&lt;p&gt;VFS defines a set of operations on the objects that must be implemented.&lt;/p&gt;
-&lt;h2 id=&#34;目录实现&#34;&gt;目录实现&lt;/h2&gt;
-&lt;h3 id=&#34;linear-list-线性列表&#34;&gt;linear list 线性列表&lt;/h3&gt;
-&lt;p&gt;linear search time费时&lt;/p&gt;
-&lt;p&gt;sorted list允许binary search&lt;/p&gt;
-&lt;p&gt;a balanced tree&lt;/p&gt;
-&lt;h3 id=&#34;hash-table&#34;&gt;hash table&lt;/h3&gt;
-&lt;p&gt;decreases directory search time&lt;/p&gt;
-&lt;p&gt;需要处理collision(两个文件名哈希到相同的位置)：chained-overflow&lt;/p&gt;
-&lt;p&gt;Difficulties: fixed size, hash function&lt;/p&gt;
-&lt;h2 id=&#34;分配方法&#34;&gt;分配方法&lt;/h2&gt;
-&lt;p&gt;how disk blocks are allocated for files&lt;/p&gt;
-&lt;h3 id=&#34;contiguous-allocation-连续分配&#34;&gt;Contiguous Allocation 连续分配&lt;/h3&gt;
-&lt;p&gt;每个文件在磁盘上占有一组连续的块&lt;/p&gt;
-&lt;p&gt;访问连续分配文件所需寻道数最少&lt;/p&gt;
-&lt;p&gt;用第一块的磁盘地址和连续块的数量来定义&lt;/p&gt;
-&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577509061560.png&#34; style=&#34;zoom:50%;&#34; /&gt;
-&lt;p&gt;sequential and direct access&lt;/p&gt;
-&lt;p&gt;Best performance in most cases&lt;/p&gt;
-&lt;p&gt;问题&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Difficult to find space for a new file: First-fit, best-fit&lt;/li&gt;
-&lt;li&gt;External fragmentation&lt;/li&gt;
-&lt;li&gt;compaction off-line (downtime) or on-line&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Extent-Based Systems, a modified contiguous allocation scheme 当空间不够时，另一块被称为扩展的连续空间会添加到原来的文件分配中&lt;/p&gt;
-&lt;h3 id=&#34;linked-allocation-链接分配&#34;&gt;Linked Allocation 链接分配&lt;/h3&gt;
-&lt;p&gt;每个文件是磁盘块的链表&lt;/p&gt;
-&lt;p&gt;目录包括文件第一块的指针和最后一块的指针。每一块都有下一块的指针。&lt;/p&gt;
-&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577509383605.png&#34; style=&#34;zoom:50%;&#34; /&gt;
-&lt;p&gt;没有外部碎片&lt;/p&gt;
-&lt;p&gt;只要有空闲块，文件就可以增大&lt;/p&gt;
-&lt;p&gt;Disadvantages: 不能随机访问，指针需要空间，不可靠&lt;/p&gt;
-&lt;p&gt;对于指针需要空间，解决办法是将多个块组成簇(cluster)，代价是增加了内部碎片&lt;/p&gt;
-&lt;h4 id=&#34;fatfile-allocation-table文件分配表&#34;&gt;FAT(file-allocation table)文件分配表&lt;/h4&gt;
-&lt;p&gt;used by MS-DOS and OS/2&lt;/p&gt;
-&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577510977781.png&#34; style=&#34;zoom:50%;&#34; /&gt;
-&lt;p&gt;对FAT采用缓存&lt;/p&gt;
-&lt;p&gt;支持直接访问&lt;/p&gt;
-&lt;h3 id=&#34;indexed-allocation-索引分配&#34;&gt;Indexed Allocation 索引分配&lt;/h3&gt;
-&lt;p&gt;每个文件都有索引块，是一个磁盘块地址的数组&lt;/p&gt;
-&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577511076567.png&#34; style=&#34;zoom:50%;&#34; /&gt;
-&lt;p&gt;目录条目包括索引块的地址&lt;/p&gt;
-&lt;p&gt;支持直接访问&lt;/p&gt;
-&lt;p&gt;没有外部碎片&lt;/p&gt;
-&lt;p&gt;索引块应该多大&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;linked scheme&lt;/p&gt;
-&lt;p&gt;将多个索引块链接起来&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;two-level index&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;combined scheme&lt;/p&gt;
-&lt;p&gt;UNIX采用&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;性能&#34;&gt;性能&lt;/h3&gt;
-&lt;p&gt;contiguous great for sequential and random&lt;/p&gt;
-&lt;p&gt;linked good for sequential, not random&lt;/p&gt;
-&lt;p&gt;combine contiguous allocation with indexed allocation by using contiguous allocation for small files (up to three or four blocks), automatically switching to an indexed allocation if the file grows large.&lt;/p&gt;
-&lt;h3 id=&#34;free-space-management&#34;&gt;free-space management&lt;/h3&gt;
-&lt;p&gt;文件系统需要维护free-space list记录空闲磁盘空间(不一定是链表)&lt;/p&gt;
-&lt;h4 id=&#34;bit-map--bit-vector&#34;&gt;bit map / bit vector&lt;/h4&gt;
-&lt;p&gt;每块用一位表示。空闲-1，已分配-0&lt;/p&gt;
-&lt;p&gt;查找第一个和n个连续空闲块简单高效&lt;/p&gt;
-&lt;p&gt;Bit map requires extra space.&lt;/p&gt;
-&lt;p&gt;Easy to get contiguous files space.&lt;/p&gt;
-&lt;h4 id=&#34;linked-list-链表&#34;&gt;linked list 链表&lt;/h4&gt;
-&lt;p&gt;将所有空闲块用链表链接&lt;/p&gt;
-&lt;p&gt;将指向第一空闲块的指针缓存在内存&lt;/p&gt;
-&lt;p&gt;Cannot get contiguous space easily.&lt;/p&gt;
-&lt;h4 id=&#34;grouping&#34;&gt;grouping&lt;/h4&gt;
-&lt;p&gt;将n个空闲块的地址存在第一个空闲块里。(前n-1确实为空，最后一块包含另外n个空闲块的地址)&lt;/p&gt;
-&lt;p&gt;可以找到大量空闲块&lt;/p&gt;
-&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577512314875.png&#34; style=&#34;zoom:33%;&#34; /&gt;
-&lt;h4 id=&#34;counting&#34;&gt;counting&lt;/h4&gt;
-&lt;p&gt;记录第一块的地址和紧跟第一块的连续的空闲块的数量n&lt;/p&gt;
-&lt;p&gt;can be stored in a balanced tree for efficiency&lt;/p&gt;
-</description>
+      <description>文件系统结构 磁盘特点：可以原地重写，可以直接访问任意一块。
+内存和磁盘之间的IO以块为单位。每块为一个或多个扇区。扇区通常为512B
+File system resides on secondary storage (disks) OS通过文件系统存储、定位、提取数据
+IO control 最底层
+由device driver 和 Interrupt handlers组成
+实现内存和磁盘之间的信息传输。
+device driver可作为翻译器。输入是高层命令，输出是底层的、硬件特定的命令。命令用于控制hardware controller
+device driver控制一类设备
+basic file system
+Issue generic commands to the appropriate device driver to read and write physical blocks on the disk.
+file-organization module
+将逻辑块地址 转换成 物理块地址
+也包括空闲空间管理器
+logical file system
+管理metadata，元数据包括文件系统所有结构数据，而不包括实际数据
+管理目录结构
+通过FCB((inodes in UNIX))维护文件结构
+负责保护和安全
+Layering useful for reducing complexity and redundancy, but adds overhead and can decrease performance.</description>
     </item>
     
     <item>
@@ -416,243 +77,19 @@ cache and the disk surface. Data transfer to the host, at fast electronic speeds
       <pubDate>Fri, 28 Feb 2020 13:10:24 +0000</pubDate>
       
       <guid>https://imfaye.me/post/os10/</guid>
-      <description>&lt;h2 id=&#34;file-concept&#34;&gt;file concept&lt;/h2&gt;
-&lt;p&gt;文件：记录在外存上的 相关信息的 具有名称的 集合，逻辑内存的最小分配单元&lt;/p&gt;
-&lt;p&gt;通常，文件表示程序和数据&lt;/p&gt;
-&lt;p&gt;free form or may be formatted rigidly&lt;/p&gt;
-&lt;h3 id=&#34;file-attributes&#34;&gt;file attributes&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;name: human-readable&lt;/li&gt;
-&lt;li&gt;identifier: a unique number, non-human-readable name&lt;/li&gt;
-&lt;li&gt;type&lt;/li&gt;
-&lt;li&gt;location&lt;/li&gt;
-&lt;li&gt;size&lt;/li&gt;
-&lt;li&gt;protection&lt;/li&gt;
-&lt;li&gt;time, date and user identification&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;文件的信息存在directory中，directory也存在外存上&lt;/p&gt;
-&lt;p&gt;A directory entry consists of the file&amp;rsquo;s name and its unique id. The id in turn locates the other file attributes.&lt;/p&gt;
-&lt;h3 id=&#34;file-operations&#34;&gt;file operations&lt;/h3&gt;
-&lt;p&gt;6个基本文件操作：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;create&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;write&lt;/p&gt;
-&lt;p&gt;write pointer&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;read&lt;/p&gt;
-&lt;p&gt;read pointer&lt;/p&gt;
-&lt;p&gt;A per-process current-file-position pointer&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;reposition&lt;/p&gt;
-&lt;p&gt;file seek, not need I/O&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;delete&lt;/p&gt;
-&lt;p&gt;release file space, erase directory entry&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;truncate&lt;/p&gt;
-&lt;p&gt;reset length to 0, release file space&lt;/p&gt;
-&lt;p&gt;只删除内容，保留属性&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;基本操作可以组合成其他操作&lt;/p&gt;
-&lt;p&gt;Most file operations involve searching the directory for the entry associated with the named file&lt;/p&gt;
-&lt;p&gt;首次使用文件时，使用系统调用open()&lt;/p&gt;
-&lt;p&gt;OS维护一个包含所有打开文件的信息表(open-file table)。当需要一个文件操作时，通过该表的一个索引指定文件，无需搜索。文件不再使用时，进程可关闭它，OS从open-file table删除这一条目。系统调用create和delete操作的是关闭文件，而不是打开文件。&lt;/p&gt;
-&lt;p&gt;系统调用open()返回一个指向open-file table中一个条目的指针。通过使用该指针，而不是真实文件名称，进行所有IO操作。also accept access mode information, such as create, read-only, read-write, append-only, etc.&lt;/p&gt;
-&lt;p&gt;close(Fi), move the content of entry Fi in open-file table to directory structure on disk.&lt;/p&gt;
-&lt;p&gt;多进程可能同时打开同一文件。OS采用两级内部表。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;Process open-file table, a per-process table&lt;/p&gt;
-&lt;p&gt;该进程所使用的文件信息&lt;/p&gt;
-&lt;p&gt;单个进程表的每个条目相应地指向整个系统的打开文件表&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;System open-file table, a system-wide table&lt;/p&gt;
-&lt;p&gt;包含进程无关信息(如文件在磁盘上的位置，访问日期和文件大小)&lt;/p&gt;
-&lt;p&gt;一旦一个进程打开文件，System open-file table会增加相应条目，当另一个进程执行调用open()，在其Process open-file table增加一个条目，并指向System open-file table相应条目&lt;/p&gt;
-&lt;p&gt;每个文件有一个open count，记录多少进程打开了该文件。当open count=0，该文件条目可删除。&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;每个打开文件有如下信息：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;file pointer&lt;/p&gt;
-&lt;p&gt;pointer to last read/write location&lt;/p&gt;
-&lt;p&gt;对每个进程唯一&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;file-open count&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;disk location of file&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;access rights&lt;/p&gt;
-&lt;p&gt;每个进程用一个访问模式打开文件&lt;/p&gt;
-&lt;p&gt;保存在单个进程打开文件表中&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h4 id=&#34;文件锁file-locks&#34;&gt;文件锁(file locks)&lt;/h4&gt;
-&lt;p&gt;shared lock: 多个进程并发获取&lt;/p&gt;
-&lt;p&gt;exclusive lock: 只有一个进程可以获取&lt;/p&gt;
-&lt;p&gt;加锁机制：&lt;/p&gt;
-&lt;p&gt;mandatory强制：一个进程获得锁，阻止其他进程访问已加锁的文件。access is denied depending on locks held and requested. &amp;ndash; Windows OS.&lt;/p&gt;
-&lt;p&gt;advisory建议：processes can find status of locks and decide what to do. &amp;ndash; Unix OS.&lt;/p&gt;
-&lt;h3 id=&#34;file-types&#34;&gt;file types&lt;/h3&gt;
-&lt;p&gt;实现文件类型的常用技术：在文件名称内包含类型。名称可分为两部分：name , extension&lt;/p&gt;
-&lt;p&gt;Some OS, each file has a type, and a creator attribute containing the name of the program that created it.&lt;/p&gt;
-&lt;p&gt;UNIX, a magic number stored at the beginning of some files to indicate roughly the type of the file.&lt;/p&gt;
-&lt;h2 id=&#34;access-methods&#34;&gt;access methods&lt;/h2&gt;
-&lt;p&gt;Criteria for File Organization: Rapid access, Ease of update, Economy of storage, Simple maintenance, Reliability&lt;/p&gt;
-&lt;h3 id=&#34;sequential-access-顺序访问&#34;&gt;sequential access 顺序访问&lt;/h3&gt;
-&lt;p&gt;基于文件的磁带模型。不仅适用于顺序访问设备，也适用于随机访问设备&lt;/p&gt;
-&lt;h3 id=&#34;direct-access-直接访问&#34;&gt;direct access 直接访问&lt;/h3&gt;
-&lt;p&gt;文件由固定长度的逻辑记录组成。基于文件的磁盘模型。可立即访问大量信息。数据库常采用这种类型的文件。&lt;/p&gt;
-&lt;p&gt;提供的是相对块号。&lt;/p&gt;
-&lt;p&gt;对直接访问文件，可容易地模拟顺序访问。反过来很低效。&lt;/p&gt;
-&lt;h3 id=&#34;其他访问方式&#34;&gt;其他访问方式&lt;/h3&gt;
-&lt;p&gt;通常涉及创建索引&lt;/p&gt;
-&lt;h2 id=&#34;directory-structure&#34;&gt;directory structure&lt;/h2&gt;
-&lt;p&gt;有时需要在一个磁盘上装多种文件系统&lt;/p&gt;
-&lt;p&gt;Disk can be subdivided into partitions.&lt;/p&gt;
-&lt;p&gt;Disk or partition can be used：&lt;/p&gt;
-&lt;p&gt;​	raw, without a file system, e.g. swap space&lt;/p&gt;
-&lt;p&gt;​	formatted with a file system&lt;/p&gt;
-&lt;p&gt;Volume: Entity containing file system&lt;/p&gt;
-&lt;p&gt;Each volume containing file system also tracks that file system&amp;rsquo;s info in device directory or volume table of contents.&lt;/p&gt;
-&lt;p&gt;Disks or partitions can be RAID protected against failure.&lt;/p&gt;
-&lt;p&gt;directory可看作符号表，将 文件名 转换成 目录条目&lt;/p&gt;
-&lt;p&gt;Both the directory structure and the files reside on disk.&lt;/p&gt;
-&lt;h3 id=&#34;single-level-directory&#34;&gt;Single-Level Directory&lt;/h3&gt;
-&lt;p&gt;所有文件包含在同一目录中&lt;/p&gt;
-&lt;p&gt;必须有唯一名称&lt;/p&gt;
-&lt;p&gt;naming problem , grouping problem&lt;/p&gt;
-&lt;h3 id=&#34;two-level-directory&#34;&gt;Two-Level Directory&lt;/h3&gt;
-&lt;p&gt;为每个用户创建独立目录&lt;/p&gt;
-&lt;p&gt;A master file directory(主文件目录MFD) and one user file directory(用户文件目录UFD) for each user.&lt;/p&gt;
-&lt;p&gt;UFD内文件名唯一即可&lt;/p&gt;
-&lt;p&gt;No grouping capability&lt;/p&gt;
-&lt;p&gt;File sharing怎么解决&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Path name. defined by a user name and a file name.&lt;/li&gt;
-&lt;li&gt;Special user directory, containing system files.&lt;/li&gt;
-&lt;li&gt;Search path, the sequence of directories searched.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;tree-structured-directories&#34;&gt;Tree-Structured Directories&lt;/h3&gt;
-&lt;p&gt;树有根目录，系统内的每个文件都有唯一路径名&lt;/p&gt;
-&lt;p&gt;One bit in each entry defines the entry as a file(0) or as a subdirectory(1).&lt;/p&gt;
-&lt;p&gt;Grouping Capability&lt;/p&gt;
-&lt;p&gt;每个进程有 Current directory (working directory) 当前目录 In accounting file, a pointer/the name of the user&amp;rsquo;s initial directory. Copied to a local variable for this user.&lt;/p&gt;
-&lt;p&gt;Absolute path name: 从根开始&lt;/p&gt;
-&lt;p&gt;relative path name: 从当前目录开始&lt;/p&gt;
-&lt;p&gt;创建子目录/新文件在当前目录下完成&lt;/p&gt;
-&lt;p&gt;Deleting a subdirectory&lt;/p&gt;
-&lt;p&gt;​	deleting a empty directory. &amp;ndash; MS-DOS 目录不为空不能删除&lt;/p&gt;
-&lt;p&gt;​	deleting all files and subdirectories that it contains.&amp;ndash; UNIX 所有该目录的文件和子目录可删除&lt;/p&gt;
-&lt;h3 id=&#34;acyclic-graph-directories-无环图&#34;&gt;Acyclic-Graph Directories 无环图&lt;/h3&gt;
-&lt;p&gt;树状结构禁止共享文件和目录&lt;/p&gt;
-&lt;p&gt;注意这里是共享文件而不是文件复制，共享文件任何改变为其他用户可见&lt;/p&gt;
-&lt;p&gt;Ways implementing shared files and subdirectories:&lt;/p&gt;
-&lt;p&gt;​	Create a new directory entry, called a link. &amp;ndash; UNIX  link, a pointer to another file or subdirectory. Resolve the link – follow pointer to locate the file.&lt;/p&gt;
-&lt;p&gt;​	duplicate all information about shared files in all sharing directories. 问题：维护一致性&lt;/p&gt;
-&lt;p&gt;当用户删除文件时就删除，会留下dangling pointer&lt;/p&gt;
-&lt;p&gt;​	对于link: Deletion of a link need not affectt he original file. Deletion of the file entry, leaving the links dangling.&lt;/p&gt;
-&lt;p&gt;​	对于duplication: File-reference list, Backpointers. 为每个文件保留一个引用列表或引用计数Backpointers, so we can delete all pointers.&lt;/p&gt;
-&lt;h3 id=&#34;general-graph-directory&#34;&gt;General Graph Directory&lt;/h3&gt;
-&lt;p&gt;允许环存在&lt;/p&gt;
-&lt;p&gt;为避免无限循环：强制限制在搜索时所访问目录的次数&lt;/p&gt;
-&lt;p&gt;何时可删除？因为有环，就算不存在引用，其引用计数也可能不为0，可能存在自我引用。解决办法：Garbage collection: The first pass, traversing the entire file system, marking everything that can be accessed.  The second pass, collects everything that is not marked onto a list of free space.&lt;/p&gt;
-&lt;p&gt;How to avoid cycles? Allow only links to file not subdirectories. Every time a new link is added use a cycle detection algorithm. A simpler algorithm, bypass links during directory traversal.&lt;/p&gt;
-&lt;h2 id=&#34;file-system-mounting-文件系统安装&#34;&gt;file system mounting 文件系统安装&lt;/h2&gt;
-&lt;ol&gt;
-&lt;li&gt;
-&lt;p&gt;OS需要知道 设备名称 和 安装点(mount point)&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;OS验证设备是否包含一个有效文件系统(通过device driver读入设备目录，验证目录是否具有期望格式)&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;OS在其目录结构记录下：一个文件系统已安装在给定安装点上&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;Systems impose semantics to clarify functionality.&lt;/p&gt;
-&lt;h2 id=&#34;file-sharing&#34;&gt;file sharing&lt;/h2&gt;
-&lt;p&gt;多用户需要共享文件&lt;/p&gt;
-&lt;p&gt;Sharing may be done through a protection scheme.&lt;/p&gt;
-&lt;p&gt;More file and directory attributes are needed: File / directory owner; File / directory user, access rights; File / directory user groups, access rights&lt;/p&gt;
-&lt;p&gt;User IDs identify users, allowing permissions and protections to be per-user. Group IDs allow users to be in groups, permitting group access rights.&lt;/p&gt;
-&lt;h3 id=&#34;remote-file-system-远程文件系统&#34;&gt;remote file system 远程文件系统&lt;/h3&gt;
-&lt;ol&gt;
-&lt;li&gt;
-&lt;p&gt;通过程序(如ftp)在机器之间进行文件的人工传输&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;distributed file systems (DFS)&lt;/p&gt;
-&lt;p&gt;远程目录可从本机上直接访问&lt;/p&gt;
-&lt;p&gt;much tighter integration&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;via the World Wide Web(WWW)&lt;/p&gt;
-&lt;p&gt;A browser is needed. uses anonymous file exchange.&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h4 id=&#34;client-server-model&#34;&gt;Client-server model&lt;/h4&gt;
-&lt;p&gt;allows clients to mount remote file systems from servers.&lt;/p&gt;
-&lt;p&gt;Client and user-on-client identification is insecure or complicated.&lt;/p&gt;
-&lt;p&gt;​	client can be specified by a network name or other identifier, such as an IP address, Can be spoofed or imitated.&lt;/p&gt;
-&lt;p&gt;​	Secure authentication via encrypted keys. Ensuring compatibility of the client and server.&lt;/p&gt;
-&lt;p&gt;NFS: standard UNIX client-server file sharing protocol&lt;/p&gt;
-&lt;p&gt;CIFS(Common Internet File System): standard Windows protocol, uses active directory&lt;/p&gt;
-&lt;p&gt;Standard operating system file calls are translated into remote calls远程调用&lt;/p&gt;
-&lt;h4 id=&#34;distributed-information-systems&#34;&gt;Distributed Information Systems&lt;/h4&gt;
-&lt;p&gt;Providing unified access to the information needed for remote computing.&lt;/p&gt;
-&lt;p&gt;DNS (domain name system) provides host-name-to-network-address translations for entire internet.&lt;/p&gt;
-&lt;p&gt;NIS (network information service), yellow pages黄页, centralizes storage of user names, host names, printer information, and the like.&lt;/p&gt;
-&lt;p&gt;LDAP (lightweight directory-access protocol), used by industry as a secure distributed naming mechanism. secure single sign-on&lt;/p&gt;
-&lt;h4 id=&#34;failure-modes-故障模式&#34;&gt;Failure Modes 故障模式&lt;/h4&gt;
-&lt;p&gt;Remote file systems add new failure modes, due to network failure, server failure.&lt;/p&gt;
-&lt;p&gt;Recovery from failure can involve state information about status状态信息 of each remote request.&lt;/p&gt;
-&lt;p&gt;Stateless protocols such as NFS V3 include all information in each request, allowing easy recovery but less security.&lt;/p&gt;
-&lt;p&gt;In NFS V4, it is made stateful&lt;/p&gt;
-&lt;h3 id=&#34;consistency-semantics-一致性语义&#34;&gt;Consistency Semantics 一致性语义&lt;/h3&gt;
-&lt;p&gt;描述多用户同时访问共享文件时的语义。规定了一个用户所修改的数据何时对另一用户可见。&lt;/p&gt;
-&lt;p&gt;由于延迟，不适合类似进程同步那些复杂算法&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;AFS (Andrew File System) implemented complex remote file sharing semantics&lt;/p&gt;
-&lt;p&gt;server记录client的动作&lt;/p&gt;
-&lt;p&gt;When a client changes a file, the server notifies other clients with a call back promise technique&lt;/p&gt;
-&lt;p&gt;一个用户对打开文件的写不能立即被打开同一文件的其他用户看见。一旦文件关闭，其修改只能被以后打开的会话所见。&lt;/p&gt;
-&lt;p&gt;多个用户允许对自己的映像进行并发(没有延迟)的读写操作&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;UFS (Unix file system) implements&lt;/p&gt;
-&lt;p&gt;一个文件与单个物理映射相关联，该映射作为互斥资源访问。修改立即可见。竞争导致用户进程延迟。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;Immutable shared files, declared by its creator. Read-only. 不可修改&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;protection&#34;&gt;protection&lt;/h2&gt;
-&lt;p&gt;高层功能可以用系统程序调用低层系统调用实现。保护可以只在低层提供。&lt;/p&gt;
-&lt;p&gt;Mode of access: read, write, execute&lt;/p&gt;
-&lt;p&gt;为每个文件和目录增加一个访问控制列表ACL(Access-control list)，给定每个用户名及其允许访问的类型&lt;/p&gt;
-&lt;p&gt;三种用户类型:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;owner&lt;/li&gt;
-&lt;li&gt;group&lt;/li&gt;
-&lt;li&gt;universe(public): all other users in the system&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;每个域三个位:RWX. 需要9个位&lt;/p&gt;
-</description>
+      <description>file concept 文件：记录在外存上的 相关信息的 具有名称的 集合，逻辑内存的最小分配单元
+通常，文件表示程序和数据
+free form or may be formatted rigidly
+file attributes name: human-readable identifier: a unique number, non-human-readable name type location size protection time, date and user identification 文件的信息存在directory中，directory也存在外存上
+A directory entry consists of the file&amp;rsquo;s name and its unique id. The id in turn locates the other file attributes.
+file operations 6个基本文件操作：
+create
+write
+write pointer
+read
+read pointer
+A per-process current-file-position pointer
+reposition</description>
     </item>
     
     <item>
@@ -661,162 +98,15 @@ cache and the disk surface. Data transfer to the host, at fast electronic speeds
       <pubDate>Fri, 28 Feb 2020 13:09:24 +0000</pubDate>
       
       <guid>https://imfaye.me/post/os9/</guid>
-      <description>&lt;h2 id=&#34;background&#34;&gt;background&lt;/h2&gt;
-&lt;p&gt;CH8的内存管理方案需要将整个进程放入内存，动态载入只能减轻这一限制&lt;/p&gt;
-&lt;p&gt;Code needs to be in memory to execute, but entire program rarely used.&lt;/p&gt;
-&lt;p&gt;execute partially-loaded program&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;程序不受现有物理内存大小限制，可以为virtual address space编写程序&lt;/li&gt;
-&lt;li&gt;更多程序可以同时执行，CPU利用率增加，而响应时间、周转时间不增加&lt;/li&gt;
-&lt;li&gt;载入或交换程序所需IO变少，用户程序运行更快&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Virtual memory – separation of user logical memory from physical memory.&lt;/p&gt;
-&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577436249080.png&#34; style=&#34;zoom:50%;&#34; /&gt;
-&lt;p&gt;动态内存分配，堆向上增长；子程序调用，栈向下增长。包括洞的虚拟地址空间是稀地址空间。&lt;/p&gt;
-&lt;p&gt;Enables sparse address spaces with holes left for growth, dynamically linked libraries, etc.&lt;/p&gt;
-&lt;p&gt;Virtual memory allows files and memory to be shared by two or more processes through page sharing.&lt;/p&gt;
-&lt;p&gt;虚拟内存实现：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;demand paging&lt;/li&gt;
-&lt;li&gt;demand segmentation&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;demand-paging-按需调页&#34;&gt;demand paging 按需调页&lt;/h2&gt;
-&lt;p&gt;Lazy swapper: never swaps a page into memory unless that page will be needed.&lt;/p&gt;
-&lt;p&gt;swapper对整个进程进行操作，pager只对进程的单个页进行操作&lt;/p&gt;
-&lt;p&gt;页表条目，valid-invalid bit: valid-合法也在内存 invalid-无效(不在逻辑地址空间) 或 有效但在磁盘&lt;/p&gt;
-&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577443877399.png&#34; style=&#34;zoom:50%;&#34; /&gt;
-&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577444151280.png&#34; style=&#34;zoom:50%;&#34; /&gt;
-&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577444186893.png&#34; style=&#34;zoom:50%;&#34; /&gt;
-&lt;p&gt;pure demand paging: 只有在需要时才将页调入内存&lt;/p&gt;
-&lt;p&gt;单个指令可能访问多个页的内存(一页指令，其他页数据)，一个指令可能产生多个page fault. 不过由于locality of reference, 按需调页的性能还算合理。&lt;/p&gt;
-&lt;p&gt;按需调页的硬件支持：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Page table with valid-Invalid bit&lt;/li&gt;
-&lt;li&gt;Secondary memory (swap device with swap space)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;请求调页的关键要求是能够在页错误后instruction restart&lt;/p&gt;
-&lt;p&gt;如果页错误在获取操作数时，再次获取指令，再次译码指令，再次获取操作数。&lt;/p&gt;
-&lt;p&gt;一个指令可能改变多个不同位置。若源和目的块有重叠，源块可能已修改，不能简单地再次执行。(微码计算试图访问两块的两端；临时寄存器保存覆盖位置的值)&lt;/p&gt;
-&lt;p&gt;EAT = (1– p) * memory access time + p * page fault service time&lt;/p&gt;
-&lt;p&gt;page fault service time = page fault overhead+[ swap page out ]+swap page in+restart overhead&lt;/p&gt;
-&lt;p&gt;处理页错误中断和重新启动进程可以通过仔细编码降低开销&lt;/p&gt;
-&lt;p&gt;EAT与页错误率直接相关&lt;/p&gt;
-&lt;p&gt;与文件无关的页需要使用交换空间&lt;/p&gt;
-&lt;h2 id=&#34;copy-on-write-写时复制&#34;&gt;Copy-on-Write 写时复制&lt;/h2&gt;
-&lt;p&gt;fork()使用写时复制技术&lt;/p&gt;
-&lt;p&gt;父子进程开始时共享同一页面。这些页面标记为写时复制页(只有可能修改的页需要标记)。如果任一进程对页进行写，创建一个共享页的副本。&lt;/p&gt;
-&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577445363016.png&#34; style=&#34;zoom:50%;&#34; /&gt;
-&lt;p&gt;COW allows more efficient process creation as only modified pages are copied.&lt;/p&gt;
-&lt;p&gt;free pages are allocated from a pool of free pages. 采用按需填零(zero-fill-on-demand)技术分配这些页，需要分配前先填零，因此清除了以前的内容。&lt;/p&gt;
-&lt;p&gt;vfork()，不采用copy-on-write，vfork()将父进程挂起，子进程使用父进程的地址空间。如果子进程修改父进程地址空间的任何页， 父进程重启时可见。主要用于子进程被创建后立即调用exec()的情况。比较高效。用于实现UNIX命令行shell的接口。&lt;/p&gt;
-&lt;h2 id=&#34;page-replacement&#34;&gt;page replacement&lt;/h2&gt;
-&lt;p&gt;Use modify bit (dirty bit) to reduce overhead of page transfers. 不修改的话不需要写回磁盘&lt;/p&gt;
-&lt;p&gt;Page replacement completes separation between logical memory and physical memory.&lt;/p&gt;
-&lt;p&gt;frame-allocation algorithm&lt;/p&gt;
-&lt;p&gt;page replacement algorithm&lt;/p&gt;
-&lt;p&gt;reference string: 内存的引用序列&lt;/p&gt;
-&lt;h3 id=&#34;fifo&#34;&gt;FIFO&lt;/h3&gt;
-&lt;p&gt;Belady&amp;rsquo;s anomaly: 页错误率可能会随着所分配的帧数的增加而增加&lt;/p&gt;
-&lt;h3 id=&#34;optmin&#34;&gt;OPT/MIN&lt;/h3&gt;
-&lt;p&gt;置换最长时间不会使用的页&lt;/p&gt;
-&lt;p&gt;未来知识&lt;/p&gt;
-&lt;h3 id=&#34;lru&#34;&gt;LRU&lt;/h3&gt;
-&lt;p&gt;最长时间没有使用的页&lt;/p&gt;
-&lt;p&gt;By the principle of locality, this should be the page least likely to be referenced in the near future.&lt;/p&gt;
-&lt;p&gt;Associates with each page the time of that page’s last use.&lt;/p&gt;
-&lt;p&gt;两种可行实现：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;counter&lt;/p&gt;
-&lt;p&gt;每个页表项关联一个使用时间域。对每次引用，计数器增加。置换具有最小时间的页。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;stack&lt;/p&gt;
-&lt;p&gt;没引用一个页，页就从栈中删除并放在顶部&lt;/p&gt;
-&lt;p&gt;No search for replacement, LRU page is at the bottom.&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;lru-approximation-algorithms&#34;&gt;LRU Approximation Algorithms&lt;/h3&gt;
-&lt;p&gt;LRU needs special hardware and still slow.所以用近似算法&lt;/p&gt;
-&lt;p&gt;页表每项都关联一个reference bit, 每引用一个页(读or写)，引用位被硬件置1&lt;/p&gt;
-&lt;h4 id=&#34;reference-bit-algorithm&#34;&gt;Reference bit algorithm&lt;/h4&gt;
-&lt;p&gt;When page is referenced, the bit is set to 1 by the hardware.&lt;/p&gt;
-&lt;p&gt;Replace the one which is 0 (if one exists).&lt;/p&gt;
-&lt;p&gt;Problem ：We do not know the order.&lt;/p&gt;
-&lt;h4 id=&#34;additional-reference-bits-algorithm&#34;&gt;Additional-reference-bits algorithm&lt;/h4&gt;
-&lt;p&gt;Keep an 8-bit byte for each page in a table in memory.&lt;/p&gt;
-&lt;p&gt;规定时间间隔里记录引用位&lt;/p&gt;
-&lt;p&gt;At regular intervals, a timer interrupts, OS shifts the reference bit for each page into the high-order bit of its 8- bit byte, shifting the other bits right by 1 bit and discarding the low-order bit.&lt;/p&gt;
-&lt;p&gt;将这8位看作无符号整数，置换具有最小值的页&lt;/p&gt;
-&lt;h4 id=&#34;second-chance--clock&#34;&gt;Second chance / Clock&lt;/h4&gt;
-&lt;p&gt;Basic algorithm: FIFO&lt;/p&gt;
-&lt;p&gt;循环队列，指针向前移动直到找到一个引用位为0的页，在向前移动时，清除引用位。&lt;/p&gt;
-&lt;p&gt;如果所有位均已设置，会遍历整个队列。成了FIFO&lt;/p&gt;
-&lt;h4 id=&#34;enhanced-second-chance-algorithm&#34;&gt;Enhanced Second-Chance Algorithm&lt;/h4&gt;
-&lt;p&gt;(reference bit, modify bit)&lt;/p&gt;
-&lt;p&gt;(0,0)最好 (0,1) (1,0) (1,1)&lt;/p&gt;
-&lt;p&gt;降低IO&lt;/p&gt;
-&lt;h3 id=&#34;counting-based-page-replacement&#34;&gt;Counting-based page replacement&lt;/h3&gt;
-&lt;p&gt;每个页保留一个用于记录引用次数的计数器。&lt;/p&gt;
-&lt;p&gt;LFU: replaces page with the smallest count&lt;/p&gt;
-&lt;p&gt;MFU: page with the smallest count was probably just brought in and has yet to be used.&lt;/p&gt;
-&lt;h2 id=&#34;page-allocation-帧分配&#34;&gt;page allocation 帧分配&lt;/h2&gt;
-&lt;p&gt;分配至少最少数量的帧。必须有足够的帧容纳所有单个指令所引用的页。&lt;/p&gt;
-&lt;p&gt;每个进程的帧的最少数量由体系结构决定，最大数量由可用物理内存的数量决定。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;fixed allocation&lt;/p&gt;
-&lt;p&gt;高低优先级一样处理&lt;/p&gt;
-&lt;p&gt;when a page fault occurs, one of the pages of that process must be replaced. &amp;ndash; Local replacement&lt;/p&gt;
-&lt;p&gt;固定分配必须局部置换(置换自己进程里的页)&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;equal allocation&lt;/p&gt;
-&lt;p&gt;n个进程之间分配m个帧，每个m/n帧&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;proportional allocation&lt;/p&gt;
-&lt;p&gt;根据进程大小比例地分配内存&lt;/p&gt;
-&lt;p&gt;进程pi的虚拟内存大小si&lt;/p&gt;
-&lt;p&gt;a i = s i /S * m&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;priority allocation&lt;/p&gt;
-&lt;p&gt;Use a proportional allocation scheme using priorities rather than size, or on a combination of size and priority.&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Local replacement:  select for replacement one of its frames&lt;/p&gt;
-&lt;p&gt;​	分配每个进程的帧的数量不变&lt;/p&gt;
-&lt;p&gt;Global replacement:  select for replacement a frame from a process with lower priority number&lt;/p&gt;
-&lt;p&gt;​	易于实现。更好的系统吞吐量，常用。&lt;/p&gt;
-&lt;p&gt;​	OS keeps list of free frames.&lt;/p&gt;
-&lt;p&gt;​	进程不能控制其页错误率(受其他进程调页行为影响)&lt;/p&gt;
-&lt;h2 id=&#34;thrashing-系统颠簸&#34;&gt;thrashing 系统颠簸&lt;/h2&gt;
-&lt;p&gt;thrashing: 频繁的页调度行为&lt;/p&gt;
-&lt;p&gt;如果一个进程在换页上用的时间多于执行时间，这个进程就在颠簸&lt;/p&gt;
-&lt;p&gt;CPU调度程序发现CPU使用率降低，增加多道程序程度&amp;hellip;更多页错误，CPU使用率更低&lt;/p&gt;
-&lt;p&gt;颠簸时，为了增加CPU使用率和降低系统颠簸，必须降低多道程序的程度&lt;/p&gt;
-&lt;p&gt;采用局部置换，一个进程颠簸不会使其他进程颠簸&lt;/p&gt;
-&lt;p&gt;Why does thrashing occur? Σ locality size &amp;gt; total memory size&lt;/p&gt;
-&lt;p&gt;using a local (or priority) replacement algorithm, Can limit the effect of thrashing.&lt;/p&gt;
-&lt;p&gt;为了防止颠簸，必须提供进程所需的足够多的帧。&lt;/p&gt;
-&lt;p&gt;Locality: a set of pages that are actively used together. Process migrates from one locality to another. Localities may overlap.&lt;/p&gt;
-&lt;h3 id=&#34;working-set-model-工作集合模型&#34;&gt;Working-Set Model 工作集合模型&lt;/h3&gt;
-&lt;p&gt;基于局部性假设&lt;/p&gt;
-&lt;p&gt;参数Δ定义working-set window：a fixed number of page references&lt;/p&gt;
-&lt;p&gt;Working Set: the set of pages in the most recent Δ page references.&lt;/p&gt;
-&lt;p&gt;WSS i (working set size of Process P i ) : (varies in time) the number of pages in Working Set of process P i .&lt;/p&gt;
-&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577453374315.png&#34; style=&#34;zoom:50%;&#34; /&gt;
-&lt;p&gt;工作集合的精度与Δ的选择有关，太小不能包含整个局部，太大包含多个局部&lt;/p&gt;
-&lt;p&gt;总的帧需求量 D =Σ WSS i  总的需求大于帧的数量，会出现颠簸&lt;/p&gt;
-&lt;p&gt;OS跟踪每个进程的工作集合，如果D &amp;gt; m，暂停一个进程，该进程的页被写出，且其帧可分配给其他进程&lt;/p&gt;
-&lt;p&gt;通过固定定时中断(interval timer)和引用位(reference bit)可以近似模拟工作集合模型&lt;/p&gt;
-&lt;h3 id=&#34;page-fault-frequency-schemeppf-页错误频率&#34;&gt;Page-Fault Frequency Scheme(PPF) 页错误频率&lt;/h3&gt;
-&lt;p&gt;为所期望的页错误率设置上限和下限。超过上限，为进程分配更多的帧；低于下限，从该进程中移走帧。&lt;/p&gt;
-&lt;p&gt;如果页错误率增加且没有可用帧，必须选择一个进程暂停，可将释放的帧分配给具有高页错误率的进程&lt;/p&gt;
-</description>
+      <description>background CH8的内存管理方案需要将整个进程放入内存，动态载入只能减轻这一限制
+Code needs to be in memory to execute, but entire program rarely used.
+execute partially-loaded program
+程序不受现有物理内存大小限制，可以为virtual address space编写程序 更多程序可以同时执行，CPU利用率增加，而响应时间、周转时间不增加 载入或交换程序所需IO变少，用户程序运行更快 Virtual memory – separation of user logical memory from physical memory.
+动态内存分配，堆向上增长；子程序调用，栈向下增长。包括洞的虚拟地址空间是稀地址空间。
+Enables sparse address spaces with holes left for growth, dynamically linked libraries, etc.
+Virtual memory allows files and memory to be shared by two or more processes through page sharing.
+虚拟内存实现：
+demand paging demand segmentation demand paging 按需调页 Lazy swapper: never swaps a page into memory unless that page will be needed.</description>
     </item>
     
     <item>
@@ -825,212 +115,31 @@ cache and the disk surface. Data transfer to the host, at fast electronic speeds
       <pubDate>Fri, 28 Feb 2020 13:08:24 +0000</pubDate>
       
       <guid>https://imfaye.me/post/os8/</guid>
-      <description>&lt;h2 id=&#34;background&#34;&gt;background&lt;/h2&gt;
-&lt;h3 id=&#34;基本硬件&#34;&gt;基本硬件&lt;/h3&gt;
-&lt;p&gt;CPU可直接访问的存储器只有 内存 和  处理器内的寄存器&lt;/p&gt;
-&lt;p&gt;​	CPU内置寄存器可在一个CPU时钟周期内完成访问，对于寄存器中的内容，CPU可以在一个周期内解析并执行多个指令&lt;/p&gt;
-&lt;p&gt;​	对于内存，访存可能需要多个时钟周期。没有数据时，要暂停(stall)&lt;/p&gt;
-&lt;p&gt;协调速度差异，在CPU和内存之间，增加高速缓存cache&lt;/p&gt;
-&lt;p&gt;instruction-execution cycle: Fetch an instruction, decode instruction, fetch operands, execute, store results back into memory&lt;/p&gt;
-&lt;p&gt;为了确保正确操作，需要保护内存。&lt;/p&gt;
-&lt;p&gt;每个进程有独立空间。两个寄存器：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;base register: 最小的合法物理地址&lt;/li&gt;
-&lt;li&gt;limit register: 范围的大小&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;CPU硬件对user mode产生的每一个地址与寄存器的地址进行比较，实现内存空间的保护。&lt;/p&gt;
-&lt;p&gt;只有OS可以通过特殊的特权指令加载base register和limit register&lt;/p&gt;
-&lt;h3 id=&#34;地址绑定-address-binding&#34;&gt;地址绑定 address binding&lt;/h3&gt;
-&lt;p&gt;进程在执行时可以在磁盘和内存之间移动，在磁盘上等待调入内存以便执行的进程形成input queue&lt;/p&gt;
-&lt;p&gt;许多系统允许用户进程放在物理内存的任意位置，用户进程开始地址不必为0&lt;/p&gt;
-&lt;p&gt;源程序中的地址用符号表示，compiler将symbolic address绑定到relocatable address(如从本模块开始的第14字节)，linker或loader将可重定位地址绑定成absolute address。每次绑定都是从一个地址空间到另一个的映射。&lt;/p&gt;
-&lt;p&gt;将指令与数据绑定到内存地址有几种情况：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;compile time&lt;/p&gt;
-&lt;p&gt;编译时就知道进程将在内存中的驻留地址，可以生成absolute code&lt;/p&gt;
-&lt;p&gt;如果将来地址发生变化，必须重新编译代码&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;load time&lt;/p&gt;
-&lt;p&gt;编译时不知道。编译器生成relocatable code&lt;/p&gt;
-&lt;p&gt;绑定延迟到加载时&lt;/p&gt;
-&lt;p&gt;如果开始地址发生变化，只需重新加载用户代码引入改变值&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;execution time&lt;/p&gt;
-&lt;p&gt;进程在执行时可以从一个内存段移到另一个内存段&lt;/p&gt;
-&lt;p&gt;绑定延迟到执行时&lt;/p&gt;
-&lt;p&gt;需要硬件(如base and limit registers)&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577411832987.png&#34; style=&#34;zoom:33%;&#34; /&gt;
-&lt;h3 id=&#34;logical-vs-physical-address-space&#34;&gt;logical vs. physical address space&lt;/h3&gt;
-&lt;p&gt;logical address: CPU生成的地址，virtual adderss&lt;/p&gt;
-&lt;p&gt;physical address: 内存单元看到的地址，即加载到memory-address register的地址&lt;/p&gt;
-&lt;p&gt;compile-time和load-time的address binding生成相同的逻辑地址和物理地址，但execution-time生成不同的，这种情况称逻辑地址为virtual address&lt;/p&gt;
-&lt;p&gt;logical address space: 程序所生成的所有逻辑地址的集合&lt;/p&gt;
-&lt;p&gt;physical address space: 与这些逻辑地址相对应的物理地址的集合&lt;/p&gt;
-&lt;p&gt;运行时完成从虚拟到物理的地址映射的硬件：MMU(memory-management unit)&lt;/p&gt;
-&lt;p&gt;relocation register: 用户进程所生成的地址送交内存前，加上relocation register的值&lt;/p&gt;
-&lt;p&gt;用户程序绝不会看到真正的物理地址(execution-binding只发生在它作为内存地址引用时(比如间接加载和存储时))&lt;/p&gt;
-&lt;p&gt;用户程序处理逻辑地址，内存映射硬件将逻辑地址映射为物理地址&lt;/p&gt;
-&lt;h2 id=&#34;swapping&#34;&gt;swapping&lt;/h2&gt;
-&lt;p&gt;进程可以暂时从内存swap到backing store上，需要再次执行时再调入内存&lt;/p&gt;
-&lt;p&gt;backing store通常是fast disk，容纳所有用户的memory images，提供对这些内存镜像的直接访问。&lt;/p&gt;
-&lt;p&gt;ready queue包括在backing store和在内存中准备运行的所有进程&lt;/p&gt;
-&lt;p&gt;如果绑定是在汇编时或加载时所定的，一个交换出的进程必须交换回原来的内存空间，如果绑定是在运行是所定，可以移到不同的位置&lt;/p&gt;
-&lt;p&gt;roll in, roll out: 交换策略的变种被用在基于优先级的调度算法中&lt;/p&gt;
-&lt;p&gt;Dispatcher is called whenever the CPU scheduler decides to execute a process&lt;/p&gt;
-&lt;p&gt;交换系统的context switch time比较长&lt;/p&gt;
-&lt;p&gt;为了有效使用CPU，需要每个进程的执行时间比交换时间长&lt;/p&gt;
-&lt;p&gt;交换时间主要是transfer time, 和所交换的内存空间成正比(进程10MB，备份存储是40MBps的硬盘，传入或传出：10MB/40MBps)&lt;/p&gt;
-&lt;p&gt;如果要换出进程，必须确保该进程完全处于空闲状态&lt;/p&gt;
-&lt;p&gt;solution to 待处理IO(pending IO)&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;不能换出有待处理IO的进程&lt;/li&gt;
-&lt;li&gt;IO操作的执行只能使用OS buffers. double buffering&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;交换空间通常作为磁盘的一整块，且独立于文件系统。&lt;/p&gt;
-&lt;p&gt;标准交换使用不多，一些交换的变种得到应用。(不如通常不执行交换，许多进程运行且内存吃紧，开始交换，若系统负荷降低，停止交换)&lt;/p&gt;
-&lt;h2 id=&#34;contiguous-memory-allocation&#34;&gt;contiguous memory allocation&lt;/h2&gt;
-&lt;p&gt;内存通常分为两部分，一部分驻留OS，一部分用于用户进程。操作系统通常位于低内存。&lt;/p&gt;
-&lt;p&gt;连续内存分配：每个进程位于一个连续的内存区域&lt;/p&gt;
-&lt;h3 id=&#34;内存映射和保护&#34;&gt;内存映射和保护&lt;/h3&gt;
-&lt;p&gt;relocation-register scheme:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;relocatio/base register&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;limit register&lt;/p&gt;
-&lt;p&gt;每个逻辑地址必须小于limit register&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;MMU动态地将逻辑地址加上relocation register的值后映射成物理地址&lt;/p&gt;
-&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577415727527.png&#34; style=&#34;zoom: 50%;&#34; /&gt;
-&lt;p&gt;relocation-register scheme允许OS动态改变。如果某驱动程序不常用，不必再内存保存数据和代码，transient kernel code根据需要调入或调出，使用这类代码可以在程序运行时动态改变OS大小&lt;/p&gt;
-&lt;h3 id=&#34;memory-allocation&#34;&gt;memory allocation&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;fixed partitioning (MFT)&lt;/p&gt;
-&lt;p&gt;多道程序的程度受分区数限制&lt;/p&gt;
-&lt;p&gt;internal fragmentation: 进程所分配的内存比所需要大&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;equal-size partitions&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;unequal-size partitions&lt;/p&gt;
-&lt;p&gt;queue for each partition&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;variable partitioning (MVT)&lt;/p&gt;
-&lt;p&gt;variable length and number&lt;/p&gt;
-&lt;p&gt;hole: a block of available memory&lt;/p&gt;
-&lt;p&gt;OS维护一个表，记录哪些内存可用/已被占用&lt;/p&gt;
-&lt;p&gt;recaim的时候如果新孔与其他孔相邻，将这些孔合并成大孔&lt;/p&gt;
-&lt;p&gt;从一组可用孔选择一个：fisrst-fit, best-fit, worst-fit&lt;/p&gt;
-&lt;p&gt;fisrt fit: 50% rule N个可分配快，0.5N个块为外部碎片，1/3内存不可用&lt;/p&gt;
-&lt;p&gt;first和best在时间和利用空间好于worst，first和best利用空间差不多，first更快。&lt;/p&gt;
-&lt;p&gt;external fragmentation: 所有可用内存之和可以满足要求，但并不连续&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;解决外部碎片：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;紧缩(compaction)&lt;/p&gt;
-&lt;p&gt;把所有空闲空间合并成一整块&lt;/p&gt;
-&lt;p&gt;紧缩仅在重定位是动态并在运行时可采用&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;允许物理地址空间非连续&lt;/p&gt;
-&lt;p&gt;分页/分段&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;paging-分页&#34;&gt;paging 分页&lt;/h2&gt;
-&lt;p&gt;允许进程物理地址空间非连续&lt;/p&gt;
-&lt;p&gt;帧(frame): 物理内存划分为固定大小的块&lt;/p&gt;
-&lt;p&gt;页(page): 逻辑内存分为同样大小的块&lt;/p&gt;
-&lt;p&gt;backing store也划分为固定大小的块(block)&lt;/p&gt;
-&lt;p&gt;页大小由硬件决定，通常为2的幂(power of 2)，512B~16MB&lt;/p&gt;
-&lt;p&gt;When a process is to be executed, its pages are loaded into any available memory frames from the blocks.&lt;/p&gt;
-&lt;p&gt;OS为每个进程维护一个page table, contains the frame location for each page in the process, page table used to translate logical to physical addresse&lt;/p&gt;
-&lt;p&gt;有internal fragmentation(进程要求内存大小不是页大小的整数倍)&lt;/p&gt;
-&lt;p&gt;由CPU生成的地址分为两部分：page number(used as an index into a page table), page offset&lt;/p&gt;
-&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577426080611.png&#34; style=&#34;zoom:50%;&#34; /&gt;
-&lt;p&gt;逻辑地址页号位数：进程可以有多少页决定&lt;/p&gt;
-&lt;p&gt;物理地址页号位数：帧数决定&lt;/p&gt;
-&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577426108848.png&#34; style=&#34;zoom:50%;&#34; /&gt;
-&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577426371002.png&#34; style=&#34;zoom:50%;&#34; /&gt;
-&lt;p&gt;分页特定：用户视角的内存与物理内存分离。用户程序将内存作为一整块处理，只包括这一个进程。逻辑地址到物理地址的映射由硬件完成，用户不知道。&lt;/p&gt;
-&lt;h3 id=&#34;分页的硬件支持&#34;&gt;分页的硬件支持&lt;/h3&gt;
-&lt;p&gt;每个进程一个页表。页表的指针与其他寄存器的值存入PCB。启动进程时，首先装入用户寄存器。&lt;/p&gt;
-&lt;p&gt;&amp;lt;256 entries, 页表可作为一组专用寄存器实现；大的页表存在内存中。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;PTBR(Page-table base register)&lt;/li&gt;
-&lt;li&gt;PTLR(Page-table length register)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;装入或修改页表寄存器的指令是特权级的&lt;/p&gt;
-&lt;p&gt;访问一个字节需要2次访存(一次页表条目，一次字节)&lt;/p&gt;
-&lt;h4 id=&#34;tlb&#34;&gt;TLB&lt;/h4&gt;
-&lt;p&gt;解决这个问题：TLB(translation look-aside buffer / associative memory)&lt;/p&gt;
-&lt;p&gt;The given page number is compared with all keys simultaneously.&lt;/p&gt;
-&lt;p&gt;page # 和 frame #&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;a hit&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;a miss&lt;/p&gt;
-&lt;p&gt;the page number is used to index the process page table&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577427134596.png&#34; style=&#34;zoom:50%;&#34; /&gt;
-&lt;p&gt;有的TLB允许有些条目固定下来 wired down(e.g. entries for kernel code)&lt;/p&gt;
-&lt;p&gt;有的TLB在在每个TLB条目中保存ASID(address-space identifier)，可唯一地标识进程，为进程提供地址空间保护，允许TLB同时包含多个不同进程的条目&lt;/p&gt;
-&lt;h4 id=&#34;eateffective-access-time&#34;&gt;EAT(Effective Access Time)&lt;/h4&gt;
-&lt;p&gt;hit ratio: 页号在TLB中被查找到的百分比率&lt;/p&gt;
-&lt;h3 id=&#34;内存保护&#34;&gt;内存保护&lt;/h3&gt;
-&lt;p&gt;分页环境下，内存保护通过与每个帧相关联的保护位实现。这些位保存在页表里。&lt;/p&gt;
-&lt;p&gt;RW bit: read-write or read-only&lt;/p&gt;
-&lt;p&gt;valid-invalid bit: 在不在进程的逻辑地址空间中。有点浪费，所以有时用PTLR看页表长度&lt;/p&gt;
-&lt;p&gt;Any violations result in a trap to the kernel.&lt;/p&gt;
-&lt;h2 id=&#34;页表结构&#34;&gt;页表结构&lt;/h2&gt;
-&lt;h3 id=&#34;层次页表-hierarchical&#34;&gt;层次页表 Hierarchical&lt;/h3&gt;
-&lt;p&gt;forward-mapped page table&lt;/p&gt;
-&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577427835376.png&#34; style=&#34;zoom:67%;&#34; /&gt;
-&lt;p&gt;e.g. VAX(virtual address extension)体系结构支持一种两层分页的变种&lt;/p&gt;
-&lt;p&gt;页表项长度是页面的地址。页表大小=页面个数*页表项长度 。&lt;/p&gt;
-&lt;h3 id=&#34;哈希页表-hashed-page-tables&#34;&gt;哈希页表 Hashed Page Tables&lt;/h3&gt;
-&lt;p&gt;Common in address spaces &amp;gt; 32 bits&lt;/p&gt;
-&lt;p&gt;哈希页表每一条目包括一个链表的元素，每个元素3个域：1虚拟页码  2所映射的帧号 3指向链表中下一元素的指针&lt;/p&gt;
-&lt;p&gt;群集页表(clustered page table)类似于哈希页表，不过每一条目包括多页，对于稀疏地址空间有用&lt;/p&gt;
-&lt;h3 id=&#34;反向页表-inverted-page-table&#34;&gt;反向页表 Inverted Page Table&lt;/h3&gt;
-&lt;p&gt;Rather than each process having a page table and keeping track of all possible logical pages, track all physical pages.&lt;/p&gt;
-&lt;p&gt;One entry for each real frame of memory.&lt;/p&gt;
-&lt;p&gt;每个条目包含 保存在真正内存位置的页的虚拟地址 和 拥有该页的进程的信息&lt;/p&gt;
-&lt;p&gt;整个系统只有一个页表。&lt;/p&gt;
-&lt;p&gt;Often requires an address-space identifier (ASID) stored in each entry of the page table.&lt;/p&gt;
-&lt;p&gt;Ensures the mapping of a logical page for a particular process to the corresponding physical page frame.&lt;/p&gt;
-&lt;p&gt;&amp;lt; process-id, page-number, offset &amp;gt;&lt;/p&gt;
-&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577428523948.png&#34; style=&#34;zoom:50%;&#34; /&gt;
-&lt;p&gt;减少存储空间，但增加了查找时间。&lt;/p&gt;
-&lt;p&gt;可以通过哈希页表将查找限制在较少的条目中。访问哈希表时先访问TLB&lt;/p&gt;
-&lt;p&gt;反向页表实现共享内存困难。共享内存通常作为被映射到一个物理地址的多虚拟地址实现。而反向页表，每个物理页只有一个虚拟页条目。&lt;/p&gt;
-&lt;p&gt;解决办法：允许页表包含one mapping of a virtual address to the shared physical address&lt;/p&gt;
-&lt;h2 id=&#34;分段-segmentation&#34;&gt;分段 segmentation&lt;/h2&gt;
-&lt;p&gt;用户视角的内存管理方案&lt;/p&gt;
-&lt;p&gt;每个段有名称和长度。地址指定了段名称和段偏移。&lt;/p&gt;
-&lt;p&gt;分段：用户通过两个量指定地址，段名称和段偏移；分页：用户只指定一个地址，该地址通过硬件分为页码和偏移，对用户透明&lt;/p&gt;
-&lt;p&gt;&amp;lt;segment-number, offset&amp;gt;&lt;/p&gt;
-&lt;p&gt;二维用户定义地址映射为一维物理地址，通过段表(segment table)实现，段表每个条目有segment base和segment limit&lt;/p&gt;
-&lt;p&gt;STBR(segment-table base register): points to the segment table’s location in memory&lt;/p&gt;
-&lt;p&gt;STLR(segment-table limit register): indicates number of segments used by a program&lt;/p&gt;
-&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577429459185.png&#34; style=&#34;zoom: 50%;&#34; /&gt;
-&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577429477972.png&#34; style=&#34;zoom:50%;&#34; /&gt;</description>
+      <description>background 基本硬件 CPU可直接访问的存储器只有 内存 和 处理器内的寄存器
+​	CPU内置寄存器可在一个CPU时钟周期内完成访问，对于寄存器中的内容，CPU可以在一个周期内解析并执行多个指令
+​	对于内存，访存可能需要多个时钟周期。没有数据时，要暂停(stall)
+协调速度差异，在CPU和内存之间，增加高速缓存cache
+instruction-execution cycle: Fetch an instruction, decode instruction, fetch operands, execute, store results back into memory
+为了确保正确操作，需要保护内存。
+每个进程有独立空间。两个寄存器：
+base register: 最小的合法物理地址 limit register: 范围的大小 CPU硬件对user mode产生的每一个地址与寄存器的地址进行比较，实现内存空间的保护。
+只有OS可以通过特殊的特权指令加载base register和limit register
+地址绑定 address binding 进程在执行时可以在磁盘和内存之间移动，在磁盘上等待调入内存以便执行的进程形成input queue
+许多系统允许用户进程放在物理内存的任意位置，用户进程开始地址不必为0
+源程序中的地址用符号表示，compiler将symbolic address绑定到relocatable address(如从本模块开始的第14字节)，linker或loader将可重定位地址绑定成absolute address。每次绑定都是从一个地址空间到另一个的映射。
+将指令与数据绑定到内存地址有几种情况：
+compile time
+编译时就知道进程将在内存中的驻留地址，可以生成absolute code
+如果将来地址发生变化，必须重新编译代码
+load time
+编译时不知道。编译器生成relocatable code
+绑定延迟到加载时
+如果开始地址发生变化，只需重新加载用户代码引入改变值
+execution time
+进程在执行时可以从一个内存段移到另一个内存段
+绑定延迟到执行时
+需要硬件(如base and limit registers)
+logical vs.</description>
     </item>
     
     <item>
@@ -1039,105 +148,39 @@ cache and the disk surface. Data transfer to the host, at fast electronic speeds
       <pubDate>Fri, 28 Feb 2020 13:07:24 +0000</pubDate>
       
       <guid>https://imfaye.me/post/os7/</guid>
-      <description>&lt;h2 id=&#34;deadlock-characteristics&#34;&gt;deadlock characteristics&lt;/h2&gt;
-&lt;h3 id=&#34;necessary-conditions&#34;&gt;necessary conditions&lt;/h3&gt;
-&lt;p&gt;4个条件同时满足，引起死锁：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;mutual exclusion&lt;/p&gt;
-&lt;p&gt;至少有一个资源处于非共享模式，一次只能有一个进程使用&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;hold and wait&lt;/p&gt;
-&lt;p&gt;占有至少一个资源，等待另一为其他进程所占资源&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;no preemption&lt;/p&gt;
-&lt;p&gt;资源不能被抢占&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;circular wait&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;resource-allocation-graph&#34;&gt;resource-allocation graph&lt;/h3&gt;
-&lt;p&gt;request edge : Pi-&amp;gt;Rj&lt;/p&gt;
-&lt;p&gt;assignment edge : Rj-&amp;gt;Pi&lt;/p&gt;
-&lt;p&gt;申请边只用指向矩形，但分配边必须从某个原点开始&lt;/p&gt;
-&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573293211940.png&#34; style=&#34;zoom:67%;&#34; /&gt;
-&lt;p&gt;资源分配图有环是死锁的必要条件。若每类资源只有一个实例，含环是充分必要条件。若同类资源数&amp;gt;1,不一定有死锁。&lt;/p&gt;
-&lt;h2 id=&#34;methods-for-handling-deadlocks&#34;&gt;methods for handling deadlocks&lt;/h2&gt;
-&lt;p&gt;1.预防或避免死锁&lt;/p&gt;
-&lt;p&gt;2.允许进入死锁，检测并恢复&lt;/p&gt;
-&lt;p&gt;3.忽视这个问题(为多数OS所用)&lt;/p&gt;
-&lt;p&gt;deadlock prevention: 确保至少一个必要条件不成立，通过限制如何申请资源&lt;/p&gt;
-&lt;p&gt;deadlock avoidance: 事先得到进程申请和使用资源的额外信息，系统可确定对于一个申请，进程是否等待(申请允许还是延迟)，考虑可用、已分配、进程将来申请和释放的资源&lt;/p&gt;
-&lt;h2 id=&#34;deadlock-prevention&#34;&gt;deadlock prevention&lt;/h2&gt;
-&lt;p&gt;确保4个必要条件至少1个不成立&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;mutual exclusion&lt;/p&gt;
-&lt;p&gt;通常不通过这个条件&amp;hellip;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;hold and wait&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;每个进程在执行前申请并获得所有资源&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;进程在没有资源时才可申请资源(申请更多资源前，先释放已分配的资源)&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;缺点:1.资源利用率低 2.starvation&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;no preemption&lt;/p&gt;
-&lt;p&gt;如果一个进程占有资源并申请另一个不能立即分配的资源，其现在已分配的资源都可被抢占(被隐式释放)。&lt;/p&gt;
-&lt;p&gt;进程申请资源时，不可用也不被其他等待进程占有时，等待&lt;/p&gt;
-&lt;p&gt;常应用于状态可以保存恢复的资源，如CPU寄存器和内存，不适用于打印机和磁带驱动器等。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;circular wait&lt;/p&gt;
-&lt;p&gt;对所有资源类型进行完全排序。每个进程只按递增顺序申请资源。(只能申请编号比它大的)&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;deadlock-avoidance&#34;&gt;deadlock avoidance&lt;/h2&gt;
-&lt;p&gt;死锁避免比死锁预防要求低&lt;/p&gt;
-&lt;p&gt;deadlock prevention 低设备使用率和吞吐率&lt;/p&gt;
-&lt;p&gt;a system is in a safe state only if there exists a safe sequence&lt;/p&gt;
-&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573295674796.png&#34; style=&#34;zoom:50%;&#34; /&gt;
-&lt;h3 id=&#34;resource-allocation-graph-algorithm&#34;&gt;resource-allocation-graph algorithm&lt;/h3&gt;
-&lt;p&gt;增加claim edge(需求边)，虚线&lt;/p&gt;
-&lt;p&gt;当进程Pi开始执行时，所有需求边必须先处于资源分配图。(可放宽为只要与Pi有关的需求边)&lt;/p&gt;
-&lt;p&gt;只有在申请边Pi-&amp;gt;Rj变成分配边Rj-&amp;gt;Pi，而不会出现环时，才允许申请。环存在是unsafe state&lt;/p&gt;
-&lt;p&gt;cycle-detection algorithm&lt;/p&gt;
-&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573296280721.png&#34; style=&#34;zoom:50%;&#34; /&gt;
-&lt;h3 id=&#34;bankers-algorithm&#34;&gt;banker&amp;rsquo;s algorithm&lt;/h3&gt;
-&lt;p&gt;自己看书做题去 P247&lt;/p&gt;
-&lt;h2 id=&#34;deadlock-detection&#34;&gt;deadlock detection&lt;/h2&gt;
-&lt;p&gt;不采用prevention和avoidance，应提供检查是否出现死锁&amp;amp;恢复算法。&lt;/p&gt;
-&lt;h3 id=&#34;每种资源类型单个实例&#34;&gt;每种资源类型单个实例&lt;/h3&gt;
-&lt;p&gt;wait-for graph: Pi等待Pj释放一个Pi需要的资源&lt;/p&gt;
-&lt;p&gt;Pi-&amp;gt;Pj iff 资源分配图中 Pi-&amp;gt;Rq, Rq-&amp;gt;Pj&lt;/p&gt;
-&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573296978952.png&#34; style=&#34;zoom:33%;&#34; /&gt;
-&lt;p&gt;图中有环 &amp;lt;-&amp;gt; 死锁&lt;/p&gt;
-&lt;h3 id=&#34;每种资源类型多个实例&#34;&gt;每种资源类型多个实例&lt;/h3&gt;
-&lt;p&gt;detection algorithm&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573297606742.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
-&lt;h3 id=&#34;资源图消边法&#34;&gt;资源图消边法&lt;/h3&gt;
-&lt;p&gt;PPT P45 + 看橘&lt;/p&gt;
-&lt;h2 id=&#34;recovery-from-deadlock&#34;&gt;recovery from deadlock&lt;/h2&gt;
-&lt;h3 id=&#34;process-termination&#34;&gt;process termination&lt;/h3&gt;
-&lt;p&gt;不管哪种进程终止方法，系统都会收回分配给终止进程的所有资源&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;终止所有死锁进程&lt;/li&gt;
-&lt;li&gt;一次终止一个，调用死锁检测，直到取消死锁循环&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;resource-preemption&#34;&gt;resource preemption&lt;/h3&gt;
-&lt;p&gt;select a victim: which resources and which processes are to be preempted 代价因素 cost factors&lt;/p&gt;
-&lt;p&gt;rollback: 抢占资源后对进程做什么安排 roll back to some safe state. simplest: total rollback&lt;/p&gt;
-&lt;p&gt;starvation: 如何保证资源总是从一个进程抢占 在代价因素中加上回滚次数&lt;/p&gt;
-</description>
+      <description>deadlock characteristics necessary conditions 4个条件同时满足，引起死锁：
+mutual exclusion
+至少有一个资源处于非共享模式，一次只能有一个进程使用
+hold and wait
+占有至少一个资源，等待另一为其他进程所占资源
+no preemption
+资源不能被抢占
+circular wait
+resource-allocation graph request edge : Pi-&amp;gt;Rj
+assignment edge : Rj-&amp;gt;Pi
+申请边只用指向矩形，但分配边必须从某个原点开始
+资源分配图有环是死锁的必要条件。若每类资源只有一个实例，含环是充分必要条件。若同类资源数&amp;gt;1,不一定有死锁。
+methods for handling deadlocks 1.预防或避免死锁
+2.允许进入死锁，检测并恢复
+3.忽视这个问题(为多数OS所用)
+deadlock prevention: 确保至少一个必要条件不成立，通过限制如何申请资源
+deadlock avoidance: 事先得到进程申请和使用资源的额外信息，系统可确定对于一个申请，进程是否等待(申请允许还是延迟)，考虑可用、已分配、进程将来申请和释放的资源
+deadlock prevention 确保4个必要条件至少1个不成立
+mutual exclusion
+通常不通过这个条件&amp;hellip;
+hold and wait
+每个进程在执行前申请并获得所有资源
+进程在没有资源时才可申请资源(申请更多资源前，先释放已分配的资源)
+缺点:1.资源利用率低 2.starvation
+no preemption
+如果一个进程占有资源并申请另一个不能立即分配的资源，其现在已分配的资源都可被抢占(被隐式释放)。
+进程申请资源时，不可用也不被其他等待进程占有时，等待
+常应用于状态可以保存恢复的资源，如CPU寄存器和内存，不适用于打印机和磁带驱动器等。
+circular wait
+对所有资源类型进行完全排序。每个进程只按递增顺序申请资源。(只能申请编号比它大的)
+deadlock avoidance 死锁避免比死锁预防要求低
+deadlock prevention 低设备使用率和吞吐率
+a system is in a safe state only if there exists a safe sequence</description>
     </item>
     
     <item>
@@ -1146,33 +189,19 @@ cache and the disk surface. Data transfer to the host, at fast electronic speeds
       <pubDate>Fri, 28 Feb 2020 13:06:24 +0000</pubDate>
       
       <guid>https://imfaye.me/post/os6/</guid>
-      <description>&lt;p&gt;race condition: 多个进程并发访问和操作同一数据，结果与访问顺序有关&lt;/p&gt;
-&lt;h2 id=&#34;critical-section&#34;&gt;critical section&lt;/h2&gt;
-&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573274792092.png&#34; style=&#34;zoom:50%;&#34; /&gt;
-&lt;p&gt;critical section: 进程可能改变共同变量，更新表，写文件的代码段&lt;/p&gt;
-&lt;p&gt;entry section: 实现请求进入其临界区的代码段&lt;/p&gt;
-&lt;p&gt;临界区问题三要求：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;mutual exclusion 同一时间临界区存在一个进程&lt;/li&gt;
-&lt;li&gt;progress 如果一个进程想进入临界区，它终将成功&lt;/li&gt;
-&lt;li&gt;bounded waiting 从一个进程做出进入临界区的请求，到该请求被允许，其他进程允许进入临界区的次数有限&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;kernel code可能会出现race condition&lt;/p&gt;
-&lt;p&gt;两种方法: 1.preemptive kernel 2.non-preemptive kernel 抢占内核更适合real-time programming,且更responsive&lt;/p&gt;
-&lt;h2 id=&#34;petersons-solution&#34;&gt;Peterson&amp;rsquo;s solution&lt;/h2&gt;
-&lt;p&gt;software-based solution to the critical section problem 基于软件&lt;/p&gt;
-&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573283076982.png&#34; style=&#34;zoom:50%;&#34; /&gt;
-&lt;h2 id=&#34;synchronization-hardware&#34;&gt;synchronization hardware&lt;/h2&gt;
-&lt;p&gt;基于硬件&lt;/p&gt;
-&lt;p&gt;特殊硬件指令 原子地(不可中断)检查、修改、交换字内容&lt;/p&gt;
-&lt;p&gt;disable interrupt, a lock&lt;/p&gt;
-&lt;p&gt;TestAndSet()&lt;/p&gt;
-&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573283946058.png&#34; style=&#34;zoom:67%;&#34; /&gt;
-&lt;p&gt;返回的是原来的值，进入过testandset，之后就变成true&lt;/p&gt;
-&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573284042418.png&#34; style=&#34;zoom:67%;&#34; /&gt;
-&lt;p&gt;实现有限等待互斥：&lt;/p&gt;
-&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573284642763.png&#34; style=&#34;zoom:67%;&#34; /&gt;
-</description>
+      <description>race condition: 多个进程并发访问和操作同一数据，结果与访问顺序有关
+critical section critical section: 进程可能改变共同变量，更新表，写文件的代码段
+entry section: 实现请求进入其临界区的代码段
+临界区问题三要求：
+mutual exclusion 同一时间临界区存在一个进程 progress 如果一个进程想进入临界区，它终将成功 bounded waiting 从一个进程做出进入临界区的请求，到该请求被允许，其他进程允许进入临界区的次数有限 kernel code可能会出现race condition
+两种方法: 1.preemptive kernel 2.non-preemptive kernel 抢占内核更适合real-time programming,且更responsive
+Peterson&amp;rsquo;s solution software-based solution to the critical section problem 基于软件
+synchronization hardware 基于硬件
+特殊硬件指令 原子地(不可中断)检查、修改、交换字内容
+disable interrupt, a lock
+TestAndSet()
+返回的是原来的值，进入过testandset，之后就变成true
+实现有限等待互斥：</description>
     </item>
     
     <item>
@@ -1181,113 +210,23 @@ cache and the disk surface. Data transfer to the host, at fast electronic speeds
       <pubDate>Fri, 28 Feb 2020 13:05:24 +0000</pubDate>
       
       <guid>https://imfaye.me/post/os5/</guid>
-      <description>&lt;p&gt;dispatcher: gives control of the CPU to the process selected by the short-term scheduler;&lt;/p&gt;
-&lt;p&gt;dispatch latency&lt;/p&gt;
-&lt;h2 id=&#34;scheduling-criteria&#34;&gt;scheduling criteria&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;CPU utilization,&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;throughput:&lt;/p&gt;
-&lt;p&gt;单位时间完成进程数量&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;turnaround time:&lt;/p&gt;
-&lt;p&gt;submission to completion&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;waiting time:&lt;/p&gt;
-&lt;p&gt;sum of time spent in the ready queue就绪队列&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;response time:&lt;/p&gt;
-&lt;p&gt;submission to first response(time it takes to start responding, not the time it takes to output the response)&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;scheduling-algorithm&#34;&gt;scheduling algorithm&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;FCFS first-come, first-served&lt;/p&gt;
-&lt;p&gt;non-preemptive&lt;/p&gt;
-&lt;p&gt;等待时间较长&lt;/p&gt;
-&lt;p&gt;convoy effect(短进程跟在长进程后面)&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;SJF shortest-job-first&lt;/p&gt;
-&lt;p&gt;shortest next CPU burst&lt;/p&gt;
-&lt;p&gt;常用于长期调度，短期调度可预测next CPU burst&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;exponential average&lt;/p&gt;
-&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573266645043.png&#34; style=&#34;zoom:50%;&#34; /&gt;
-&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573266662578.png&#34; style=&#34;zoom:50%;&#34; /&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;preemptive/non-preemptive&lt;/p&gt;
-&lt;p&gt;preemptive SJF : shortest-remaining-time-first scheduling&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;priority scheduling algorithm&lt;/p&gt;
-&lt;p&gt;SJF is a special case of it&lt;/p&gt;
-&lt;p&gt;priority can be defined internally or externally&lt;/p&gt;
-&lt;p&gt;preemptive/non-preemptive(非抢占优先级调度只是将优先级高的新进程加到ready queue的头部)&lt;/p&gt;
-&lt;p&gt;主要问题是indefinite blocking/starvation&lt;/p&gt;
-&lt;p&gt;低优先级无穷等待问题解决方法: aging(逐渐增加等待很久进程的优先级)&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;RR round-robin&lt;/p&gt;
-&lt;p&gt;especially for time-sharing system&lt;/p&gt;
-&lt;p&gt;时间片(time quantum/time slice)&lt;/p&gt;
-&lt;p&gt;所需时间小，自动释放CPU，所需时间大，时间片到timer会产生中断&lt;/p&gt;
-&lt;p&gt;平均等待时间较长&lt;/p&gt;
-&lt;p&gt;preemptive&lt;/p&gt;
-&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573267188671.png&#34; style=&#34;zoom:50%;&#34; /&gt;
-&lt;p&gt;时间片很大：FCFS；时间片很小：&lt;u&gt;processor sharing&lt;/u&gt;(仿佛都有自己的处理器，速度为1/n)&lt;/p&gt;
-&lt;p&gt;时间片应比context-switch time大，也不应太大&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;multilevel queue scheduling algorithm&lt;/p&gt;
-&lt;p&gt;foreground(interactive); background(batch) 前台进程更高优先级。前台可能RR，后台可能FCFS&lt;/p&gt;
-&lt;p&gt;ready queue划分成多个队列，一个进程被永久分配到一个队列，每个队列有自己的调度算法&lt;/p&gt;
-&lt;p&gt;队列间常采用fixed-priority preemptive scheduling, 或在队列间划分时间片，每个队列有一定CPU时间&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;multilevel feedback queue schedling algorithm&lt;/p&gt;
-&lt;p&gt;允许进程在队列之间移动&lt;/p&gt;
-&lt;p&gt;使用过多CPU时间，移到低优先级队列。所以&lt;strong&gt;IO bound&lt;/strong&gt; &amp;amp; &lt;strong&gt;interactive&lt;/strong&gt; processes(使用CPU时间少)会被留在高优先级队列&lt;/p&gt;
-&lt;p&gt;较低优先级队列等待时间过长的进程也会被转移到更高优先级队列，prevent starvation&lt;/p&gt;
-&lt;p&gt;&lt;del&gt;看例子P172&lt;/del&gt;&lt;/p&gt;
-&lt;p&gt;最通用的CPU调度算法&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;HRRN highest response-ratio next 高响应比优先&lt;/p&gt;
-&lt;p&gt;non-preemptive&lt;/p&gt;
-&lt;p&gt;PPT  P51&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;multi-processor-scheduling&#34;&gt;multi-processor scheduling&lt;/h2&gt;
-&lt;p&gt;非对称多处理(asymmetric multiprocessing),一个处理器处理调度，IO，其他系统活动；其余处理器处理用户代码&lt;/p&gt;
-&lt;p&gt;SMP symmetric multiprocessing 对称多处理：每个处理器自我调度，许多OS支持SMP&lt;/p&gt;
-&lt;p&gt;processor affinity: 使缓存无效或重构的代价太高，所以尽量使一个进程在同一个处理器上允许。不能保证进程不移动:soft affinity，否则hard affinity&lt;/p&gt;
-&lt;p&gt;load balancing: 将工作负载平均地分配到SMP所有处理器上。load balancing只对拥有自己私有可执行进程的处理器必要(大部分时候都有私有)&lt;/p&gt;
-&lt;p&gt;​	push migration: a specific task周期检查每个处理器上的负载，如果不平衡，push processes from 									overloaded to idle processor&lt;/p&gt;
-&lt;p&gt;​	pull migration: an idle processor pulls a waiting task from a busy processor&lt;/p&gt;
-&lt;p&gt;multicore processors: PPT P61&lt;/p&gt;
-&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573270374874.png&#34; style=&#34;zoom:50%;&#34; /&gt;
-&lt;p&gt;SMT: symmetric multithreading 提供多个逻辑处理器实现多线程并发 hyperthreading. 每个逻辑处理器负责自己的中断处理。&lt;/p&gt;
-&lt;h2 id=&#34;thread-scheduling&#34;&gt;thread scheduling&lt;/h2&gt;
-&lt;p&gt;对在内核级支持线程的系统而言，系统调度的是内核线程而不是进程。用户线程由线程库管理。&lt;/p&gt;
-&lt;p&gt;PCS: process-contention-scope 线程库调度用户级线程到一个有效的LWP上(CPU竞争发生在属于相同进程的线程之间) ,local scheduling&lt;/p&gt;
-&lt;p&gt;SCS: system-contention-scope 调度哪个内核线程到CPU(CPU竞争发生在系统的所有线程中)。一对一模型只用使用SCS ,global scheduling&lt;/p&gt;
-&lt;p&gt;实例 书P178&lt;/p&gt;
-&lt;h2 id=&#34;algorithm-evaluation&#34;&gt;algorithm evaluation&lt;/h2&gt;
-&lt;p&gt;analytic evaluation: 产生一个公式或数字&lt;/p&gt;
-&lt;p&gt;deterministic evaluation: 计算在给定负荷下算法的性能&lt;/p&gt;
-&lt;p&gt;queueing-network-analysis:&lt;/p&gt;
-&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573271651221.png&#34; style=&#34;zoom:50%;&#34; /&gt;
-&lt;p&gt;simulation模拟 trace tape&lt;/p&gt;
-</description>
+      <description>dispatcher: gives control of the CPU to the process selected by the short-term scheduler;
+dispatch latency
+scheduling criteria CPU utilization,
+throughput:
+单位时间完成进程数量
+turnaround time:
+submission to completion
+waiting time:
+sum of time spent in the ready queue就绪队列
+response time:
+submission to first response(time it takes to start responding, not the time it takes to output the response)
+scheduling algorithm FCFS first-come, first-served
+non-preemptive
+等待时间较长
+convoy effect(短进程跟在长进程后面)
+SJF shortest-job-first
+shortest next CPU burst</description>
     </item>
     
     <item>
@@ -1296,89 +235,19 @@ cache and the disk surface. Data transfer to the host, at fast electronic speeds
       <pubDate>Fri, 28 Feb 2020 13:04:24 +0000</pubDate>
       
       <guid>https://imfaye.me/post/os4/</guid>
-      <description>&lt;p&gt;Dispatching is referred to as a thread. Resource of ownership is referred to as a process or
-task.&lt;/p&gt;
-&lt;p&gt;对进程的swapping和termination都牵扯它所有线程&lt;/p&gt;
-&lt;p&gt;线程是CPU使用的基本单位。由thread ID, program counter, register set, stack组成&lt;/p&gt;
-&lt;h2 id=&#34;multithreading-models&#34;&gt;multithreading models&lt;/h2&gt;
-&lt;p&gt;User threads, supported above the kernel and are managed without kernel support.&lt;/p&gt;
-&lt;p&gt;Kernel threads, supported and managed directly by the operating system.&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;many-to-one&lt;/p&gt;
-&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573189948482.png&#34; style=&#34;zoom:50%;&#34; /&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;one-to-one&lt;/p&gt;
-&lt;p&gt;一个线程阻塞，另一个还能运行&lt;/p&gt;
-&lt;p&gt;并发。开销大。&lt;/p&gt;
-&lt;p&gt;windows, linux, solaris 9&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;many-to-many&lt;/p&gt;
-&lt;p&gt;用户线程映射到数量相同或更少的内核线程&lt;/p&gt;
-&lt;p&gt;When a thread performs a blocking system call, the kernel can schedule another thread for execution.&lt;/p&gt;
-&lt;p&gt;two-level model:&lt;/p&gt;
-&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573562767512.png&#34; style=&#34;zoom:50%;&#34; /&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;thread-libraries&#34;&gt;thread libraries&lt;/h2&gt;
-&lt;p&gt;两种方法实现：1 在用户空间提供一个没有内核支持的库 2 由OS直接支持的内核级的库&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;
-&lt;p&gt;POSIX Pthreads&lt;/p&gt;
-&lt;p&gt;Portable Operating System Interface of UNIX&lt;/p&gt;
-&lt;p&gt;Referred to user-level library&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;Win32 threads&lt;/p&gt;
-&lt;p&gt;kernel-level threads library&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;Java threads&lt;/p&gt;
-&lt;p&gt;provides support at the language level for the creation and management of threads.&lt;/p&gt;
-&lt;p&gt;两种创建线程的方法&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;extending thread class&lt;/li&gt;
-&lt;li&gt;define a class that implements the Runnable interface&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h2 id=&#34;thread-issues&#34;&gt;thread issues&lt;/h2&gt;
-&lt;h3 id=&#34;the-fork-and-exec-system-calls&#34;&gt;The fork() and exec() system calls&lt;/h3&gt;
-&lt;h3 id=&#34;thread-cancellation&#34;&gt;thread cancellation&lt;/h3&gt;
-&lt;p&gt;Asynchronous cancellation 异步取消：立即取消&lt;/p&gt;
-&lt;p&gt;Deferred cancellation 延迟取消：不断检查是否该终止&lt;/p&gt;
-&lt;h3 id=&#34;signal-handling&#34;&gt;signal handling&lt;/h3&gt;
-&lt;p&gt;A signal is used in UNIX systems to notify a process that a particular event has occurred.&lt;/p&gt;
-&lt;p&gt;Synchronous signal: illegal memory access, division by 0.&lt;/p&gt;
-&lt;p&gt;Asynchronously signal: terminating a process with specific keystrokes, Ctrl+C ，由运行进程之外的事产生&lt;/p&gt;
-&lt;p&gt;two possible handlers:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;a user-defined signal handler&lt;/li&gt;
-&lt;li&gt;a default signal handler, which is run by the kernel&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;同步信号送到需要发到产生它的线程&lt;/p&gt;
-&lt;h3 id=&#34;thread-pools&#34;&gt;thread pools&lt;/h3&gt;
-&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573563518826.png&#34; style=&#34;zoom:50%;&#34; /&gt;
-&lt;p&gt;优点：1 快 2 限制可用线程数量&lt;/p&gt;
-&lt;h3 id=&#34;thread-specific-data&#34;&gt;thread-specific data&lt;/h3&gt;
-&lt;p&gt;Thread-specific data allows each thread to have its own copy of data (Thread-local storage (TLS) ).&lt;/p&gt;
-&lt;p&gt;TLS visible across function invocations&lt;/p&gt;
-&lt;h3 id=&#34;scheduler-activation&#34;&gt;scheduler activation&lt;/h3&gt;
-&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573563717238.png&#34; style=&#34;zoom:50%;&#34; /&gt;
-&lt;p&gt;Scheduler activation &amp;ndash; one scheme for communication between the user-thread library and the kernel.&lt;/p&gt;
-&lt;p&gt;provides upcalls, the kernel inform an application about certain events.&lt;/p&gt;
-&lt;p&gt;upcall handlers must run on a LWP.&lt;/p&gt;
-&lt;p&gt;当一个应用线程要阻塞，内核向应用程序发upcall，分配一个新LWP给应用线程，应用线程在这个LWP上运行upcall handler&lt;/p&gt;
-&lt;p&gt;当阻塞线程等待事件发生，内核向线程库发另一个upcall， kernel allocates a new LWP or preempt one of the user threads to run the upcall handler for this event.&lt;/p&gt;
-&lt;h2 id=&#34;os-examples&#34;&gt;OS examples&lt;/h2&gt;
-&lt;h2 id=&#34;windows-xp-threads&#34;&gt;windows XP threads&lt;/h2&gt;
-&lt;p&gt;one-to-one&lt;/p&gt;
-&lt;p&gt;ETHREAD (in kernel space), KTHREAD (in kernel space), TEB (in user space)&lt;/p&gt;
-&lt;h2 id=&#34;linux-threads---tasks&#34;&gt;Linux threads - tasks&lt;/h2&gt;
-&lt;p&gt;clone() system call&lt;/p&gt;
-</description>
+      <description>Dispatching is referred to as a thread. Resource of ownership is referred to as a process or task.
+对进程的swapping和termination都牵扯它所有线程
+线程是CPU使用的基本单位。由thread ID, program counter, register set, stack组成
+multithreading models User threads, supported above the kernel and are managed without kernel support.
+Kernel threads, supported and managed directly by the operating system.
+many-to-one
+one-to-one
+一个线程阻塞，另一个还能运行
+并发。开销大。
+windows, linux, solaris 9
+many-to-many
+用户线程映射到数量相同或更少的内核线程
+When a thread performs a blocking system call, the kernel can schedule another thread for execution.</description>
     </item>
     
     <item>
@@ -1387,173 +256,11 @@ task.&lt;/p&gt;
       <pubDate>Fri, 28 Feb 2020 13:03:24 +0000</pubDate>
       
       <guid>https://imfaye.me/post/os3/</guid>
-      <description>&lt;h2 id=&#34;process-concepts&#34;&gt;process concepts&lt;/h2&gt;
-&lt;p&gt;batch system: job; time-sharing system: program/task&lt;/p&gt;
-&lt;p&gt;Program is passive entity stored on disk (executable file), process is active.&lt;/p&gt;
-&lt;p&gt;a process includes&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;text section(program code)&lt;/li&gt;
-&lt;li&gt;data section(global variables)&lt;/li&gt;
-&lt;li&gt;heap(动态分配的内存)&lt;/li&gt;
-&lt;li&gt;process stack(临时数据)
-&lt;ul&gt;
-&lt;li&gt;function parameters, return value&lt;/li&gt;
-&lt;li&gt;return addresses&lt;/li&gt;
-&lt;li&gt;local variables&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;current activity(represented by program counter and registers)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;process state&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;new: being created&lt;/li&gt;
-&lt;li&gt;running: instructions are being executed&lt;/li&gt;
-&lt;li&gt;waiting/limiting: waiting for some event&lt;/li&gt;
-&lt;li&gt;ready: waiting to be assigned to a processor&lt;/li&gt;
-&lt;li&gt;terminated/halted: finished execution&lt;/li&gt;
-&lt;/ul&gt;
-&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573013564594.png&#34; style=&#34;zoom: 67%;&#34; /&gt;
-&lt;p&gt;一次只有一个进程可以在一个处理器上运行，但多个进程可处于就绪或等待状态。&lt;/p&gt;
-&lt;p&gt;**PCB(**process control block): process state &amp;amp; program counter &amp;amp; CPU registers(中断时要保存程序计数器和CPU寄存器) &amp;amp; CPU-scheduling information &amp;amp; memory-management information &amp;amp; accounting information &amp;amp; I/O status information&lt;/p&gt;
-&lt;p&gt;栈是运行时的单位，而堆是存储时的单位。  堆中存的是对象。栈中存的是基本数据类型和堆中对象的引用。&lt;/p&gt;
-&lt;p&gt;a program becomes a process when an executable file is loaded into memory&lt;/p&gt;
-&lt;p&gt;两个进程可以和同一个程序相关，虽然text section一样，但data,heap,stack sections不同。&lt;/p&gt;
-&lt;h2 id=&#34;process-scheduling&#34;&gt;process scheduling&lt;/h2&gt;
-&lt;p&gt;process scheduler selects an available process for program execution on CPU&lt;/p&gt;
-&lt;h3 id=&#34;scheduling-queues&#34;&gt;scheduling queues&lt;/h3&gt;
-&lt;p&gt;job queue作业队列：进程进入系统时，被加入作业队列，该队列包括系统中的所有进程&lt;/p&gt;
-&lt;p&gt;ready queue就绪队列：驻留在内存的ready或waiting进程&lt;/p&gt;
-&lt;p&gt;device queue设备队列：等待特点I/O设备的进程列表。每个设备都有自己的设备队列&lt;/p&gt;
-&lt;p&gt;queueing diagram&lt;/p&gt;
-&lt;h3 id=&#34;schedulers&#34;&gt;schedulers&lt;/h3&gt;
-&lt;p&gt;long-term / job scheduler: select processes from the pool and load them into memory&lt;/p&gt;
-&lt;p&gt;short-term / CPU scheduler: select processes that are ready and allocates CPU to one of them&lt;/p&gt;
-&lt;p&gt;短期调度频繁，长期调度（和新进程创建时间间隔有关）控制degree of multiprogramming(内存中的进程数量)&lt;/p&gt;
-&lt;p&gt;长期调度需仔细选择，一个包含I/O bound process和CPU bound process的组合。全是IO bound, 就绪队列几乎为空，短期调度无事可做；全是CPU bound，IO等待队列几乎为空。&lt;/p&gt;
-&lt;p&gt;有些系统可能没有长期调度。有些OS如分时系统，引入medium-term scheduler, 将进程从内存（CPU竞争）中移出，降低multiprogramming设计难度。 swapping . The process is swapped out, and is later swapped in, by the medium-term scheduler.&lt;/p&gt;
-&lt;p&gt;swapped/suspended processes；2 new states: swapped waiting, swapped ready&lt;/p&gt;
-&lt;h3 id=&#34;context-switch&#34;&gt;context switch&lt;/h3&gt;
-&lt;p&gt;context is represented in PCB&lt;/p&gt;
-&lt;p&gt;context switch(上下文切换): performing a state save of the current process and a state restore of a different process&lt;/p&gt;
-&lt;p&gt;发生中断时，系统需要保存当前运行在CPU中进程的上下文，上下文通过PCB表示。state save; state restore&lt;/p&gt;
-&lt;p&gt;Context-switch time is pure overhead&lt;/p&gt;
-&lt;p&gt;Context-switch times dependent on hardware support&lt;/p&gt;
-&lt;h2 id=&#34;operations-on-process&#34;&gt;operations on process&lt;/h2&gt;
-&lt;h3 id=&#34;process-creation&#34;&gt;process creation:&lt;/h3&gt;
-&lt;p&gt;reasons: Submission of a batch job, User logs on, provide a service, Process creates another process assign a PID, allocate space, initialize PCB, resource sharing.&lt;/p&gt;
-&lt;p&gt;When a process is created, it obtains initialization data that may be passed along from the parent process to the child process.&lt;/p&gt;
-&lt;p&gt;UNIX examples&lt;/p&gt;
-&lt;p&gt;​	system call fork creates new process&lt;/p&gt;
-&lt;p&gt;​	system call exec used after a fork to replace the child process’ memory space with a new program.&lt;/p&gt;
-&lt;p&gt;create-process system call&lt;/p&gt;
-&lt;p&gt;process identifier PID&lt;/p&gt;
-&lt;p&gt;创建子进程时，可能从操作系统直接获得资源，也可能只从其父进程那获得资源&lt;/p&gt;
-&lt;h3 id=&#34;process-termination&#34;&gt;process termination&lt;/h3&gt;
-&lt;p&gt;Process executes last statement and asks the operating system to delete it (via exit).&lt;/p&gt;
-&lt;p&gt;Parent may terminate execution of its children processes (via abort). cascading termination&lt;/p&gt;
-&lt;h2 id=&#34;interprocess-communicationipc&#34;&gt;interprocess communication(IPC)&lt;/h2&gt;
-&lt;p&gt;independent / cooperating processes&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;shared memory&lt;/p&gt;
-&lt;p&gt;速度快 memory speed&lt;/p&gt;
-&lt;p&gt;unbounded/bounded buffer&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;message passing&lt;/p&gt;
-&lt;p&gt;交换少量数据， 不必避免冲突，易于实现。通常通过system call实现，内核介入的时间消耗。&lt;/p&gt;
-&lt;p&gt;分布式环境中有用&lt;/p&gt;
-&lt;p&gt;communication link&lt;/p&gt;
-&lt;p&gt;直接通信(direct communication-naming): 每个进程必须明确地命名通信的接收者或发送者。每对进程之间只有一个线路，一个线路只与两个进程有关。symmetry/asymmetry in addressing&lt;/p&gt;
-&lt;p&gt;间接通信(indirect): 通过mailbox或port。两个进程共享一个邮箱时，建立通信线路。一个线路可以与多个进程关联。每个线路对应一个邮箱。进程/OS可以拥有邮箱。拥有邮箱的进程只能收。&lt;/p&gt;
-&lt;p&gt;blocking or unblocking(synchronous or asynchronous)&lt;/p&gt;
-&lt;p&gt;当send和receive都阻塞时，发送者和接收者之间有一个集合点(rendezvous)&lt;/p&gt;
-&lt;p&gt;buffering: zero/bounded/unbounded capacity&lt;/p&gt;
-&lt;p&gt;message system with no/automatic buffering&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;examples-of-ipc&#34;&gt;examples of IPC&lt;/h2&gt;
-&lt;p&gt;实例&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;POSIX&lt;/p&gt;
-&lt;p&gt;shmget,shmat,shmdt,&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;Mach&lt;/p&gt;
-&lt;p&gt;Microkernel OS&lt;/p&gt;
-&lt;p&gt;Mach communication is message based&lt;/p&gt;
-&lt;p&gt;mailbox , called port in Mach&lt;/p&gt;
-&lt;p&gt;Each task gets two mailboxes at creation&amp;ndash; Kernel and Notify&lt;/p&gt;
-&lt;p&gt;Kernel uses the kernel mailbox to communicate with task, and sends notification of event occurrences to the Notify port.&lt;/p&gt;
-&lt;p&gt;kernel mailbox, notify mailbox&lt;/p&gt;
-&lt;p&gt;msg_send, msg_receive, msg_rpc(remote procedure call远程过程调用)&lt;/p&gt;
-&lt;p&gt;为分布式系统设计&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;LPC(local procedure call) in windows&lt;/p&gt;
-&lt;p&gt;位于同一机器的两进程通信&lt;/p&gt;
-&lt;p&gt;port object&lt;/p&gt;
-&lt;p&gt;2 types of ports&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;connection ports&lt;/p&gt;
-&lt;p&gt;为所有进程可见&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;communication ports&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;两种端口消息传递技术&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;小消息：&lt;/p&gt;
-&lt;p&gt;端口队列(message queue)作为中间存储，将消息从一个进程复制到另一个进程&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;大消息：&lt;/p&gt;
-&lt;p&gt;section object&lt;/p&gt;
-&lt;p&gt;不能马上响应: callback mechanism 允许异步消息传递&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;communication-in-client-server-systems&#34;&gt;communication in client-server systems&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;socket&lt;/p&gt;
-&lt;p&gt;A socket is defined as an endpoint for communication.&lt;/p&gt;
-&lt;p&gt;All ports below 1024 are considered well known;When a client process initiates a request for a
-connection, it is assigned a port (greater than 1024) by its host computer.&lt;/p&gt;
-&lt;p&gt;一对通信进程需使用一对socket，一个进程一个&lt;/p&gt;
-&lt;p&gt;socket由IP+端口号组成&lt;/p&gt;
-&lt;p&gt;所有连接必须唯一&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;远程过程调用RPC remote procedure call&lt;/p&gt;
-&lt;p&gt;用于通过网络连接系统&lt;/p&gt;
-&lt;p&gt;Each message is addressed to an RPC daemon listening to a port on the remote system.&lt;/p&gt;
-&lt;p&gt;Stubs – client-side proxy for the actual procedure on the server.&lt;/p&gt;
-&lt;p&gt;The client-side stub locates port on the server and marshals the parameters, transmits a message to the server.&lt;/p&gt;
-&lt;p&gt;The server-side stub receives this message, unpacks the marshaled parameters, and performs the procedure on the server. Return values are passed back to the client.&lt;/p&gt;
-&lt;p&gt;machine-independent representation of data, external data representation (XDR).&lt;/p&gt;
-&lt;p&gt;客户端提供存根(stub)，对每个独立的远程过程都有一个stub。存根位于服务器的端口，编组(marshal)参数。XDR&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;远程方法调用RMI remote method invocation&lt;/p&gt;
-&lt;p&gt;RPC的java版&lt;/p&gt;
-&lt;p&gt;RMI allows a Java program on one machine to invoke a method on a remote object.&lt;/p&gt;
-&lt;p&gt;对象位于不同JVM上，就认为是远程的&lt;/p&gt;
-&lt;p&gt;存根(stub)和骨干(skeleton).存根为远程对象的代理，驻留在客户机上，存根将包发给服务器，远程对象的骨干会接受它&lt;/p&gt;
-&lt;p&gt;参数传递规则：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;编排参数是本地对象：对象串行化(object serialization) 复制传递；&lt;/li&gt;
-&lt;li&gt;编排参数是远程对象：引用传递 reference&lt;/li&gt;
-&lt;li&gt;本地对象作为参数传给远程对象：实现接口 java.io.Serialization&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-</description>
+      <description>process concepts batch system: job; time-sharing system: program/task
+Program is passive entity stored on disk (executable file), process is active.
+a process includes
+text section(program code) data section(global variables) heap(动态分配的内存) process stack(临时数据) function parameters, return value return addresses local variables current activity(represented by program counter and registers) process state
+new: being created running: instructions are being executed waiting/limiting: waiting for some event ready: waiting to be assigned to a processor terminated/halted: finished execution 一次只有一个进程可以在一个处理器上运行，但多个进程可处于就绪或等待状态。</description>
     </item>
     
     <item>
@@ -1562,188 +269,17 @@ connection, it is assigned a port (greater than 1024) by its host computer.&lt;/
       <pubDate>Fri, 28 Feb 2020 13:01:24 +0000</pubDate>
       
       <guid>https://imfaye.me/post/os2/</guid>
-      <description>&lt;h2 id=&#34;ui&#34;&gt;UI&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;CLI command-line / command interpreter&lt;/p&gt;
-&lt;p&gt;implemented in kernel (MS-DOS)&lt;/p&gt;
-&lt;p&gt;by systems program (Windows / UNIX)&lt;/p&gt;
-&lt;p&gt;multiple flavors implemented – shells UNIX / Linux&lt;/p&gt;
-&lt;p&gt;linux shell : shell: 带形参的批命令文件&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;batch interface&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;GUI graphical user interface&lt;/p&gt;
-&lt;p&gt;desktop, icon, Xerox PARC&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;system-calls&#34;&gt;system calls&lt;/h2&gt;
-&lt;p&gt;&lt;u&gt;Programming interface to the services provided by the OS&lt;/u&gt;&lt;/p&gt;
-&lt;p&gt;written in high-level language&lt;/p&gt;
-&lt;p&gt;Mostly accessed by programs via a high-level Application Program Interface (&lt;u&gt;API&lt;/u&gt;) rather than direct system call use.&lt;/p&gt;
-&lt;p&gt;most common API:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Win32 API&lt;/li&gt;
-&lt;li&gt;POSIX API: for UNIX, Linux, and Mac OS X&lt;/li&gt;
-&lt;li&gt;Java API: for JVM&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;A programmer accesses an API via a library of code provided by the operating system. (e.g. libc )&lt;/p&gt;
-&lt;p&gt;the &lt;u&gt;run-time support system&lt;/u&gt; provides a system-call interface that serves as the link to system calls.&lt;/p&gt;
-&lt;h4 id=&#34;system-call-parameter-passing&#34;&gt;system call parameter passing&lt;/h4&gt;
-&lt;p&gt;3 methods:&lt;/p&gt;
-&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573537965310.png&#34; style=&#34;zoom:50%;&#34; /&gt;
-&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573537985715.png&#34; style=&#34;zoom:50%;&#34; /&gt;
-&lt;h3 id=&#34;types-of-system-call&#34;&gt;types of system call&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;process control&lt;/p&gt;
-&lt;p&gt;dump memory if error, Debugger for determining bugs, single step execution, Locks for managing access to shared data between processes&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;file manipulation&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;device manipulation&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;information maintenance&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;communications&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;message passing model&lt;/p&gt;
-&lt;p&gt;through an interprocess-communication facility (IPC) provided by OS&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;shared memory passing&lt;/p&gt;
-&lt;p&gt;process use &lt;em&gt;map&lt;/em&gt; memory system call to gain access to regions of memory owned by other processes.&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;system-prorams&#34;&gt;system prorams&lt;/h2&gt;
-&lt;p&gt;file management&lt;/p&gt;
-&lt;p&gt;status information: Some systems implement a registry, used to store and retrieve configuration information.&lt;/p&gt;
-&lt;p&gt;file modification&lt;/p&gt;
-&lt;p&gt;programming-language support&lt;/p&gt;
-&lt;p&gt;program loading and execution&lt;/p&gt;
-&lt;p&gt;communications&lt;/p&gt;
-&lt;p&gt;system utilities/application programs:&lt;/p&gt;
-&lt;p&gt;background services: Launch at boot time. Run in user context not kernel context.  Known as services, subsystems, daemons&lt;/p&gt;
-&lt;h2 id=&#34;os-design-and-implementation&#34;&gt;OS design and implementation&lt;/h2&gt;
-&lt;p&gt;策略policy: 决定做什么，可能随时间位置改变，对资源分配很重要&lt;/p&gt;
-&lt;p&gt;机制mechanism: 决定怎么做，系统更需要通用机制&lt;/p&gt;
-&lt;p&gt;The separation of policy from mechanism allows maximum &lt;u&gt;flexibility&lt;/u&gt; if policy decisions are to be changed later. 微内核把机制与策略的区分利用到极致。&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Emulation&lt;/strong&gt; can allow an OS to run on non-native hardware.&lt;/p&gt;
-&lt;p&gt;用高级语言编写， OS更易移植，降低速度，增加存储要求&lt;/p&gt;
-&lt;p&gt;bottleneck routines can be identified. replaced with assembly-language equivalents.&lt;/p&gt;
-&lt;h2 id=&#34;os-structure&#34;&gt;OS structure&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;simple structure&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;MS-DOS&lt;/p&gt;
-&lt;p&gt;没被仔细划分成模块，没有很好区分接口和层次&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;UNIX&lt;/p&gt;
-&lt;p&gt;由内核和系统程序组成&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;layered approach&lt;/p&gt;
-&lt;p&gt;the bottom layer (layer 0) is the hardware, the highest (layer N) is the user interface&lt;/p&gt;
-&lt;p&gt;每层利用低层提供功能实现&lt;/p&gt;
-&lt;p&gt;advantage: contruction, debugging, design, implementation&lt;/p&gt;
-&lt;p&gt;difficulty: disk driver &amp;amp; memory-management routines, disk driver &amp;amp; CPU scheduler&lt;/p&gt;
-&lt;p&gt;less efficient&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;microkernels&lt;/p&gt;
-&lt;p&gt;Mach&lt;/p&gt;
-&lt;p&gt;microkernel contains only essential functions&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;memory management&lt;/li&gt;
-&lt;li&gt;CPU scheduling&lt;/li&gt;
-&lt;li&gt;communications&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;微内核主要功能：使 客户程序 和 运行在用户空间的各种服务 之间进行通信 message passing&lt;/p&gt;
-&lt;p&gt;Mach, Tru64 UNIX, Mac OS X kernel, QNX&lt;/p&gt;
-&lt;p&gt;由于系统功能总开销增加而导致系统性能下降&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;modules&lt;/p&gt;
-&lt;p&gt;Many modern operating systems implement loadable kernel modules.&lt;/p&gt;
-&lt;p&gt;The kernel has a set of core components and dynamically links in additional services via modules, either at boot time or during run time.&lt;/p&gt;
-&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573542431080.png&#34; style=&#34;zoom:33%;&#34; /&gt;
-&lt;p&gt;允许内核提供核心服务，也能动态地实现特定功能&lt;/p&gt;
-&lt;p&gt;类似分层，但更灵活，任一模块可调用其他任何模块。&lt;/p&gt;
-&lt;p&gt;类似微内核，核心模块只有核心功能及其他模块加载和通信的相关信息。更高效，因为模块无需调用消息传递来通信。&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;hybrid systems:&lt;/p&gt;
-&lt;p&gt;​	linux &amp;amp; solaris: monolithic, modular&lt;/p&gt;
-&lt;p&gt;​	windows: monolithic, plus microkernel for different subsystem personalities, run as user-mode 					processes, dynamically loadable kernel modules&lt;/p&gt;
-&lt;p&gt;Mac OS X: 分层，其中一层包括Mach微内核&lt;/p&gt;
-&lt;h2 id=&#34;virtual-machines&#34;&gt;virtual machines&lt;/h2&gt;
-&lt;p&gt;takes the &lt;strong&gt;layered&lt;/strong&gt; approach to its logical conclusion&lt;/p&gt;
-&lt;p&gt;It treats hardware and the operating system kernel as though they were all hardware.&lt;/p&gt;
-&lt;p&gt;The operating system creates the illusion of multiple processes, each executing on its own processor with its own (virtual) memory.&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;by CPU scheduling&lt;/li&gt;
-&lt;li&gt;by virtual memory&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;virtualization: a technology that allows operating systems to run as applications within other operating systems. VMM(virtual machine Manager)&lt;/p&gt;
-&lt;p&gt;Emulation used when source CPU type different from target type.  When computer language not compiled to native code – Interpretation&lt;/p&gt;
-&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573543236416.png&#34; style=&#34;zoom: 33%;&#34; /&gt;
-&lt;p&gt;advantage: protection of system resources, solving system compatibility problem.&lt;/p&gt;
-&lt;p&gt;虚拟机软件允许在kernel mode(因为它自己就是操作系统)，但虚拟机自身只能允许在user mode&lt;/p&gt;
-&lt;p&gt;virtual kernel mode 和 virtual user mode 都允许在 physical user mode&lt;/p&gt;
-&lt;p&gt;真正机器上user mode到kernel mode的切换，也必须在虚拟机上引起从virtual user mode到virtual kernel mode的切换&lt;/p&gt;
-&lt;h3 id=&#34;jvm&#34;&gt;JVM&lt;/h3&gt;
-&lt;p&gt;consists of&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;class loader&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;class verifier&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;Java interpreter&lt;/p&gt;
-&lt;p&gt;software module that interprets the bytecodes one at a time&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Just-In-Time (JIT) compilers turns the architecture-neutral bytecodes into native machine language for the host computer.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;JVM automatically manages memory by performing garbage collection.&lt;/p&gt;
-&lt;h2 id=&#34;os-generation&#34;&gt;OS generation&lt;/h2&gt;
-&lt;p&gt;对于某个特定的计算场所，必须配置configure和生成generate系统：SYSGEN&lt;/p&gt;
-&lt;p&gt;generation methods:&lt;/p&gt;
-&lt;p&gt;​	可完全重新编译&lt;/p&gt;
-&lt;p&gt;​	或系统描述可用来创建表&lt;/p&gt;
-&lt;p&gt;​	或完全table-driven(绝大多数现代OS是这样),选择发生在执行时而不是编译连接时。&lt;/p&gt;
-&lt;h2 id=&#34;system-boot&#34;&gt;system boot&lt;/h2&gt;
-&lt;p&gt;booting: starting a computer by loading the kernel&lt;/p&gt;
-&lt;p&gt;Bootstrap program (bootstrap loader): small piece of code stored in ROM.  locates the kernel, loads it into memory, and starts its execution.&lt;/p&gt;
-&lt;p&gt;two step:&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;
-&lt;p&gt;bootstrap loader&lt;/p&gt;
-&lt;p&gt;fetches the boot program from boot block into memory to execute.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;boot program&lt;/p&gt;
-&lt;p&gt;loads the entire OS into memory and begin its execution&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-</description>
+      <description>UI CLI command-line / command interpreter
+implemented in kernel (MS-DOS)
+by systems program (Windows / UNIX)
+multiple flavors implemented – shells UNIX / Linux
+linux shell : shell: 带形参的批命令文件
+batch interface
+GUI graphical user interface
+desktop, icon, Xerox PARC
+system calls Programming interface to the services provided by the OS
+written in high-level language
+Mostly accessed by programs via a high-level Application Program Interface (API) rather than direct system call use.</description>
     </item>
     
     <item>
@@ -1752,269 +288,22 @@ connection, it is assigned a port (greater than 1024) by its host computer.&lt;/
       <pubDate>Fri, 28 Feb 2020 13:00:24 +0000</pubDate>
       
       <guid>https://imfaye.me/post/os1/</guid>
-      <description>&lt;h2 id=&#34;what-os-do&#34;&gt;What OS do&lt;/h2&gt;
-&lt;p&gt;操作系统是管理计算机硬件的程序&lt;/p&gt;
-&lt;p&gt;computer system: hardware, operating system, application programs, users&lt;/p&gt;
-&lt;p&gt;​	hardware: CPU, memory, I/O devices&lt;/p&gt;
-&lt;h3 id=&#34;user-view&#34;&gt;user view&lt;/h3&gt;
-&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573524547711.png&#34; style=&#34;zoom:33%;&#34; /&gt;
-&lt;p&gt;services provided by OS:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;program development (editors and debuggers)&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;program execution&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;access to IO devices&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;controlled access to files&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;system access&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;error detection and response&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;internal and external hardware errors&lt;/p&gt;
-&lt;p&gt;memory error, device failure&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;software errors&lt;/p&gt;
-&lt;p&gt;arithmetic overflow, accesss forbidden memory locations&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;外中断: interruption 与当前运行程序无关的事件&lt;/p&gt;
-&lt;p&gt;内中断: exception / trap  非法操作码，地址越界，算术溢出，缺页，专门陷入指令&amp;hellip;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;accounting&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;collect statistics&lt;/li&gt;
-&lt;li&gt;monitor performance&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;system-view&#34;&gt;system view&lt;/h3&gt;
-&lt;p&gt;resource allocator, control program&lt;/p&gt;
-&lt;h3 id=&#34;defining-os&#34;&gt;defining OS&lt;/h3&gt;
-&lt;p&gt;kernel, one program running at all times&lt;/p&gt;
-&lt;p&gt;系统软件。程序模块的集合。组织和管理计算机的软硬件资源。&lt;/p&gt;
-&lt;h2 id=&#34;computer-system-organization&#34;&gt;computer-system organization&lt;/h2&gt;
-&lt;p&gt;computer startup:
-bootsrap program: stored in ROM/EEPROM, AKA firmware&lt;/p&gt;
-&lt;p&gt;硬件&amp;amp;固件：&lt;/p&gt;
-&lt;p&gt;​	A hardware has a physical entity&lt;/p&gt;
-&lt;p&gt;​	A hardware needs a program to run. A firmware is a program itself.&lt;/p&gt;
-&lt;p&gt;​	A hardware cannot operate without a firmware. A firmware operates on a hardware.&lt;/p&gt;
-&lt;p&gt;OS starts executing the first process, and waits for some event to occur:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;an interrupt from the hardware&lt;/p&gt;
-&lt;p&gt;sending a signal to CPU by way of the system bus&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;an interrupt from the software&lt;/p&gt;
-&lt;p&gt;executing a system call&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;computer-system-operation&#34;&gt;computer-system operation&lt;/h3&gt;
-&lt;p&gt;device controller informs CPU that it has finishd its operation by causing an interrupt&lt;/p&gt;
-&lt;p&gt;&lt;u&gt;interrupt&lt;/u&gt;:&lt;/p&gt;
-&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573526982292.png&#34; style=&#34;zoom:50%;&#34; /&gt;
-&lt;p&gt;​	interrupt vector(中断向量): the staring address of all the interrupt service routines(中断服务程序).&lt;/p&gt;
-&lt;p&gt;a &lt;u&gt;trap&lt;/u&gt; is a software-generated interrupt caused either by an error or a user request&lt;/p&gt;
-&lt;p&gt;OS is interrupt-driven&lt;/p&gt;
-&lt;h3 id=&#34;storage-structure&#34;&gt;storage structure&lt;/h3&gt;
-&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573527305908.png&#34; style=&#34;zoom:50%;&#34; /&gt;
-&lt;p&gt;storage hierarchy&lt;/p&gt;
-&lt;p&gt;​	speed, cost, volatility&lt;/p&gt;
-&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573527537071.png&#34; style=&#34;zoom:50%;&#34; /&gt;
-&lt;h3 id=&#34;io-structure&#34;&gt;IO structure&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;programmed IO&lt;/p&gt;
-&lt;p&gt;IO module performs the action&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;interrupt-driven IO&lt;/p&gt;
-&lt;p&gt;processor is interrupted when IO module ready to exchange data&lt;/p&gt;
-&lt;p&gt;processor is free to do other work&lt;/p&gt;
-&lt;p&gt;consume a lot of processor time&lt;/p&gt;
-&lt;p&gt;we need system call &amp;amp; device-status table&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;synchronous IO&lt;/p&gt;
-&lt;p&gt;After I/O starts, control returns to user program only upon I/O completion.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;asychronous IO&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;DMA&lt;/p&gt;
-&lt;p&gt;Transfers a block of data directly to / from memory.&lt;/p&gt;
-&lt;p&gt;device controller transfers blocks of data from buffer storage directly to main memory without CPU intervention.&lt;/p&gt;
-&lt;p&gt;Only one interrupt is generated per block. The processor is only involved at the beginning and the end of the transfer.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;IO channel&lt;/p&gt;
-&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573528354725.png&#34; style=&#34;zoom:33%;&#34; /&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;一个CPU和多个device controller通过总线连接。每个dvice controller可负责多个特定类型设备。&lt;/p&gt;
-&lt;p&gt;OS为每个device controller提供一个device driver, driver presents a uniform interface to the device&lt;/p&gt;
-&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573527989496.png&#34; style=&#34;zoom:50%;&#34; /&gt;
-&lt;h2 id=&#34;computer-system-architecture&#34;&gt;computer-system architecture&lt;/h2&gt;
-&lt;h3 id=&#34;single-processor-system&#34;&gt;single-processor system&lt;/h3&gt;
-&lt;h3 id=&#34;multiprocessor-system--parallel-system--tightly-coupled&#34;&gt;multiprocessor system / parallel system / tightly coupled&lt;/h3&gt;
-&lt;p&gt;增加吞吐量、规模经济、增加可靠性&lt;/p&gt;
-&lt;p&gt;graceful degradation: 提供与正常工作的硬件成正比服务的能力&lt;/p&gt;
-&lt;p&gt;fault tolerant: 超出适度退化的能力 容错&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;asymmetric multiprocessing&lt;/p&gt;
-&lt;p&gt;主从&lt;/p&gt;
-&lt;p&gt;each processor is assigned a specific task. a master processor controls the system, allocates work to the slave processors.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;symmetric multiprocessing SMP&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;multicore-CPUs&lt;/p&gt;
-&lt;p&gt;Multiple compute cores on a single chip 多个内核 单个芯片&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;blade servers 刀片服务器&lt;/p&gt;
-&lt;p&gt;每个刀片处理器独立启动并运行各自的OS&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;clustered-system&#34;&gt;clustered system&lt;/h2&gt;
-&lt;p&gt;与多处理器系统不同：多个独立系统耦合&lt;/p&gt;
-&lt;p&gt;共享存储并通过LAN/更快内部连接&lt;/p&gt;
-&lt;p&gt;asymmetric clustering: one machine is in hot-stand-by mode(热备份)&lt;/p&gt;
-&lt;p&gt;symmetric clustering: monitor each other&lt;/p&gt;
-&lt;h2 id=&#34;os-structure&#34;&gt;OS structure&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;time-sharing system(multitasking)&lt;/p&gt;
-&lt;p&gt;interactive&lt;/p&gt;
-&lt;p&gt;response time short&lt;/p&gt;
-&lt;p&gt;允许多用户同时共享计算机&lt;/p&gt;
-&lt;p&gt;&lt;u&gt;CPU scheduling &amp;amp; multiprogramming&lt;/u&gt; : 以提供用户分时计算机的一部分&lt;/p&gt;
-&lt;p&gt;为保证合理响应时间，通过swapping得到，使用virtual memory&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573530369578.png&#34; style=&#34;zoom: 33%;&#34; /&gt;
-&lt;h2 id=&#34;os-operations&#34;&gt;OS operations&lt;/h2&gt;
-&lt;p&gt;dual mode: user mode &amp;amp; monitor mode&lt;/p&gt;
-&lt;p&gt;mode bit provided by hardware&lt;/p&gt;
-&lt;p&gt;Some instructions are designated as privileged, only executable in kernel mode.&lt;/p&gt;
-&lt;p&gt;System call changes mode to kernel mode, return from call resets it to user mode.&lt;/p&gt;
-&lt;p&gt;特权指令包括转换到用户模式，IO控制，定时器管理，中断管理等&lt;/p&gt;
-&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573530628171.png&#34; style=&#34;zoom: 50%;&#34; /&gt;
-&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573530670239.png&#34; style=&#34;zoom:50%;&#34; /&gt;
-&lt;h3 id=&#34;process-management&#34;&gt;process management&lt;/h3&gt;
-&lt;p&gt;Single-threaded process has one program counter specifying location of next instruction to execute.&lt;/p&gt;
-&lt;p&gt;Multi-threaded process has one program counter per thread.&lt;/p&gt;
-&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573530891037.png&#34; style=&#34;zoom:50%;&#34; /&gt;
-&lt;h3 id=&#34;memory-management&#34;&gt;memory management&lt;/h3&gt;
-&lt;p&gt;determines what is in memory&lt;/p&gt;
-&lt;p&gt;Central to the operation of a modern computer system.
- All data should be in memory before and after processing.
- All instructions should be in memory in order to execute.&lt;/p&gt;
-&lt;p&gt;virtual memory:&lt;/p&gt;
-&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573531043445.png&#34; style=&#34;zoom:33%;&#34; /&gt;
-&lt;h3 id=&#34;storage-management&#34;&gt;storage management&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;file-system management&lt;/p&gt;
-&lt;p&gt;Access control on most systems to determine who can access what.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;mass-storage management&lt;/p&gt;
-&lt;p&gt;secondary storage, tertiary storage&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;caching&lt;/p&gt;
-&lt;p&gt;copying information into faster storage system&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;disk cache&lt;/p&gt;
-&lt;p&gt;A portion of main memory used as a buffer to temporarily to hold data for the disk.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;cache memory 高速缓存&lt;/p&gt;
-&lt;p&gt;invisible to OS&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;coherency &amp;amp; consistency&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;IO subsystem&lt;/p&gt;
-&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573531626180.png&#34; style=&#34;zoom:50%;&#34; /&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;protection-and-security&#34;&gt;protection and security&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;protection&lt;/p&gt;
-&lt;p&gt;控制进程或用户对计算机系统资源的访问的机制&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;security&lt;/p&gt;
-&lt;p&gt;防止系统不受外部或内部攻击&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;access control&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;information flow control&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;certification&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;保护和安全需要系统能区分用户，user ID(UID); 需要区分用户集，group ID&lt;/p&gt;
-&lt;p&gt;privilege escalation: 有时用户需要升级特权来获取对一个活动的额外特权&lt;/p&gt;
-&lt;h3 id=&#34;distributed-systems&#34;&gt;distributed systems&lt;/h3&gt;
-&lt;p&gt;loosely coupled&lt;/p&gt;
-&lt;p&gt;network: communication path TCP/IP协议常用&lt;/p&gt;
-&lt;p&gt;network operating system: 更自治 提供信息交换的通信 file sharing, communication, runs independently&lt;/p&gt;
-&lt;p&gt;分布式系统更少自治，不同的草作系统紧密连接，好像是一个操作系统控制网络 &lt;strong&gt;process migration&lt;/strong&gt;&lt;/p&gt;
-&lt;h3 id=&#34;special-purpose-systems&#34;&gt;special-purpose systems&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;real-time system&lt;/p&gt;
-&lt;p&gt;Often used as a control device in a dedicated application&lt;/p&gt;
-&lt;p&gt;hard/soft&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;real-time embedded system 实时嵌入式系统&lt;/p&gt;
-&lt;p&gt;OS很limited&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;multimedia system 多媒体系统&lt;/p&gt;
-&lt;p&gt;将多媒体数据加入到计算机系统(audio and video files)&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;handheld system 手持系统&lt;/p&gt;
-&lt;p&gt;PDA: personal digital assistants 专门的嵌入式系统&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;computing-environments&#34;&gt;computing environments&lt;/h3&gt;
-&lt;p&gt;traditional computing&lt;/p&gt;
-&lt;p&gt;client-server computing: computer-server, file-server&lt;/p&gt;
-&lt;p&gt;peer-to-peer computing: centralized lookupservice, discovery protocol, voice over IP&lt;/p&gt;
-&lt;p&gt;cloud computing&lt;/p&gt;
-&lt;p&gt;Operating System Concepts 7th edition&lt;/p&gt;
-&lt;p&gt;Operating System Concepts 7th edition&lt;/p&gt;
-&lt;p&gt;Operating System Concepts 7th&lt;/p&gt;
-</description>
+      <description>What OS do 操作系统是管理计算机硬件的程序
+computer system: hardware, operating system, application programs, users
+​	hardware: CPU, memory, I/O devices
+user view services provided by OS:
+program development (editors and debuggers)
+program execution
+access to IO devices
+controlled access to files
+system access
+error detection and response
+internal and external hardware errors
+memory error, device failure
+software errors
+arithmetic overflow, accesss forbidden memory locations
+外中断: interruption 与当前运行程序无关的事件
+内中断: exception / trap 非法操作码，地址越界，算术溢出，缺页，专门陷入指令&amp;hellip;</description>
     </item>
     
   </channel>

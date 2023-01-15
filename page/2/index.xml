@@ -1,0 +1,1452 @@
+<?xml-stylesheet href="/rss.xsl" type="text/xsl"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>PIKA☆NCHI</title>
+    <link>https://imfaye.me/</link>
+    <description>Recent content on PIKA☆NCHI</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>Faye</copyright>
+    <lastBuildDate>Sun, 15 Jan 2023 15:04:21 +0800</lastBuildDate>
+    
+        <atom:link href="https://imfaye.me/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>PAT刷题记录 1038 Recover the Smallest Number</title>
+        <link>https://imfaye.me/post/pat-1038/</link>
+        <pubDate>Sun, 19 Apr 2020 18:13:57 +0000</pubDate>
+        
+        <guid>https://imfaye.me/post/pat-1038/</guid>
+        <description>PIKA☆NCHI https://imfaye.me/post/pat-1038/ -&lt;p&gt;Recover the Smallest Number&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-c++&#34; data-lang=&#34;c++&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;iostream&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;string.h&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;algorithm&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;map&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;vector&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;namespace&lt;/span&gt; std;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;vector&amp;lt;string&amp;gt; num;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;bool&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;cmp1&lt;/span&gt;(string a, string b)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; la = a.length(), lb = b.length();
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	string temp;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (la == lb)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; a &amp;lt;= b;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (la &amp;lt; lb) &lt;span style=&#34;color:#228b22&#34;&gt;//自己重新定义字符串比较的定义
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;	{
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (a.compare(b.substr(&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;, la)) == &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		{
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;			temp = b.substr(la) + a;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;			&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (temp &amp;lt;= b)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;				&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;false&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;			&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;				&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;true&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;			&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; a &amp;lt;= b;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (la &amp;gt; lb)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	{
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (b.compare(a.substr(&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;, lb)) == &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		{
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;			temp = a.substr(lb) + b;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;			&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (temp &amp;lt;= a)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;				&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;true&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;			&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;				&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;false&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;			&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; a &amp;lt;= b;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;main&lt;/span&gt;()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; n;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	cin &amp;gt;&amp;gt; n;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	string s;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt; (&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i = &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;; i &amp;lt; n; ++i)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	{
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		cin &amp;gt;&amp;gt; s;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		num.push_back(s);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	sort(num.begin(), num.end(), cmp1);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; len = num.size();
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	string ans = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt; (&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i = &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;; i &amp;lt; len; ++i)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	{
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		ans += num[i];
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; pos = &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;bool&lt;/span&gt; flag = &lt;span style=&#34;color:#658b00&#34;&gt;false&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt; (&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i = &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;; i &amp;lt; ans.length(); ++i)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	{
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (ans[i] != &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;0&amp;#39;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		{
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;			pos = i;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;			flag = &lt;span style=&#34;color:#658b00&#34;&gt;true&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;			&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (flag == &lt;span style=&#34;color:#658b00&#34;&gt;false&lt;/span&gt;) &lt;span style=&#34;color:#228b22&#34;&gt;//要注意全是0的情况！
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;		cout &amp;lt;&amp;lt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;0&amp;#34;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		cout &amp;lt;&amp;lt; ans.substr(pos);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;若一长一短且短的那个是长的的前缀，重新定义比较的标准。cmp定义了何时a&amp;lt;b，所以自己根据需要的情况直接返回true或false&lt;/p&gt;
+&lt;p&gt;substr的用法：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;s.substr(5)&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;截取从s[5]到结尾&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;s.substr(0,5)&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;从s[0]开始截取5位&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;AC了之后看别人的代码，哭了，我好傻写那么长，直接把比较的标准定义成a+b&amp;lt;b+a就完了&amp;hellip;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-c++&#34; data-lang=&#34;c++&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;bool&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;cmp0&lt;/span&gt;(string a, string b) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; a + b &amp;lt; b + a;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;- https://imfaye.me/post/pat-1038/ - Faye</description>
+        </item>
+    
+    
+    
+        <item>
+        <title>PAT刷题记录 1033 To Fill or Not to Fill</title>
+        <link>https://imfaye.me/post/pat-1033/</link>
+        <pubDate>Sun, 19 Apr 2020 18:03:34 +0000</pubDate>
+        
+        <guid>https://imfaye.me/post/pat-1033/</guid>
+        <description>PIKA☆NCHI https://imfaye.me/post/pat-1033/ -&lt;p&gt;很有意思的一道贪心&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-c++&#34; data-lang=&#34;c++&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;iostream&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;string.h&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;algorithm&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;namespace&lt;/span&gt; std;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;double&lt;/span&gt; cmax, davg, dall;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; n;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;struct&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Node&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;double&lt;/span&gt; price;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;double&lt;/span&gt; dis;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}sta[&lt;span style=&#34;color:#b452cd&#34;&gt;505&lt;/span&gt;];
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;bool&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;cmp1&lt;/span&gt;(Node a, Node b)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; a.dis &amp;lt; b.dis;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;main&lt;/span&gt;()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	scanf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;%lf%lf%lf%d&amp;#34;&lt;/span&gt;, &amp;amp;cmax, &amp;amp;dall, &amp;amp;davg, &amp;amp;n);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt; (&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i = &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;; i &amp;lt; n; ++i)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	{
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		scanf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;%lf%lf&amp;#34;&lt;/span&gt;, &amp;amp;sta[i].price, &amp;amp;sta[i].dis);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	sort(sta, sta + n, cmp1);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;bool&lt;/span&gt; flag = &lt;span style=&#34;color:#658b00&#34;&gt;false&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;double&lt;/span&gt; far = &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; ns = &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i1 = &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;double&lt;/span&gt; min1 = &lt;span style=&#34;color:#b452cd&#34;&gt;9999999&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;double&lt;/span&gt; cost = &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;double&lt;/span&gt; cnow = &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;double&lt;/span&gt; bestprice;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;while&lt;/span&gt; (sta[i1].dis == &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	{
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (sta[i1].price &amp;lt; min1)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		{
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;			min1 = sta[i1].price;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;			ns = i1;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;			far = cmax * davg;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;			bestprice = sta[i1].price;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		i1++;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (min1 == &lt;span style=&#34;color:#b452cd&#34;&gt;9999999&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	{
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		printf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;The maximum travel distance = 0.00&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;while&lt;/span&gt; (ns &amp;lt; n)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	{
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; u = -&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;double&lt;/span&gt; min = &lt;span style=&#34;color:#b452cd&#34;&gt;9999999&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt; (i = ns + &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;; sta[i].dis &amp;lt;= far &amp;amp;&amp;amp; i &amp;lt; n; ++i)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		{
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;			&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (sta[i].price &amp;lt; min)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;			{
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;				min = sta[i].price;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;				u = i;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;				&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (min &amp;lt; sta[ns].price) &lt;span style=&#34;color:#228b22&#34;&gt;//这一步超级重要！！！第一个比当前小的，就可以停了！后面有更小的，用现在贵的油跑更多也是浪费！
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;					&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;			}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (u &amp;gt;= &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt; &amp;amp;&amp;amp; min &amp;lt; sta[ns].price) &lt;span style=&#34;color:#228b22&#34;&gt;//如果下一个比当前便宜，只用加到够跑到下一站的油就够了
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;		{
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;			&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (cnow &amp;lt; ((sta[u].dis - sta[ns].dis) / davg)) &lt;span style=&#34;color:#228b22&#34;&gt;//因为之前会存在多加油的情况，要判断在那个基础上再加油，解释一下:cnow是当前油量(这里是在更新)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;			{
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;				cost += ((sta[u].dis - sta[ns].dis) / davg - cnow) * sta[ns].price;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;				cnow = &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;			}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;			&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;			{
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;				cnow -= (sta[u].dis - sta[ns].dis) / davg;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;			}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;			far = sta[u].dis + cmax * davg;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;			ns = u;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (u &amp;gt;= &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt; &amp;amp;&amp;amp; min &amp;gt;= sta[ns].price) &lt;span style=&#34;color:#228b22&#34;&gt;//如果下一个反而贵，在当前就加满！
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;		{
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;			&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (far &amp;gt;= dall) &lt;span style=&#34;color:#228b22&#34;&gt;//事实证明这一步也很重要，结束的条件并不一定都是u==-1(也就是找不到下一个了)，现在就能去终点，且下一站的油费比现在贵，现在就应该停
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;			{
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;				&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (cnow &amp;lt; ((dall - sta[ns].dis) / davg))
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;				{
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;					cost += ((dall - sta[ns].dis) / davg - cnow) * sta[ns].price;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;				}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;				printf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;%.2f&amp;#34;&lt;/span&gt;, cost);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;				&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;			}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;			cost += (cmax - cnow) * sta[ns].price;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;			cnow = cmax - (sta[u].dis - sta[ns].dis) / davg;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;			far = sta[u].dis + cmax * davg;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;			ns = u;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (u == -&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt; &amp;amp;&amp;amp; far &amp;gt;= dall)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		{
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;			&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (cnow &amp;lt; ((dall - sta[ns].dis) / davg))
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;			{
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;				cost += ((dall - sta[ns].dis) / davg - cnow) * sta[ns].price;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;			}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;			printf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;%.2f&amp;#34;&lt;/span&gt;, cost);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;			&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (u == -&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt; &amp;amp;&amp;amp; far &amp;lt; dall)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		{
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;			printf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;The maximum travel distance = %.2f&amp;#34;&lt;/span&gt;, far);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;			&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;下一个加油站的选择，不是可到达范围里油费最便宜的，而是第一个比当前加油站油费便宜的！这一步自己刚开始一直是错的orz，典型的想当然&lt;/p&gt;
+&lt;p&gt;如果不能找到更便宜的下一站，这一站要加满。&lt;/p&gt;
+&lt;p&gt;还有一个点是判断结束的条件，现在可到达终点且之后的都贵，就可以停了。&lt;/p&gt;
+- https://imfaye.me/post/pat-1033/ - Faye</description>
+        </item>
+    
+    
+    
+        <item>
+        <title>语言学概论 笔记</title>
+        <link>https://imfaye.me/post/linguistics/</link>
+        <pubDate>Sun, 05 Apr 2020 16:44:14 +0000</pubDate>
+        
+        <guid>https://imfaye.me/post/linguistics/</guid>
+        <description>PIKA☆NCHI https://imfaye.me/post/linguistics/ -&lt;h1 id=&#34;ch1-语言能力与语言系统&#34;&gt;CH1 语言能力与语言系统&lt;/h1&gt;
+&lt;h2 id=&#34;易境性&#34;&gt;易境性&lt;/h2&gt;
+&lt;p&gt;动物交流的特点：在场。在场与直接经验。人类不必在场传递经验，关键在语言。通过语言传递知识与经验，不必在场。&lt;/p&gt;
+&lt;h2 id=&#34;还原生成性&#34;&gt;还原生成性&lt;/h2&gt;
+&lt;p&gt;基于类推原则的还原生成能力。从单词到句子，是一种创造性行为。乔姆斯基：语言是有限规则和单位生成无限的句子。&lt;/p&gt;
+&lt;p&gt;还原生成能力：通过有限的句子还原出有限的规则和单位，并通过这些单位生成无限的句子。&lt;/p&gt;
+&lt;p&gt;人类语言学习的自然还原能力。只要存在一定数量的句子，不需要人为切分，就可以还原出有限的规则和单位，生产无限的句子。(我们不必看过全部的句子，自然通过对比就实现切分)(小孩是如何自然学习语法的。成人所总结的语法未必是正确的。所以我们希望学习方法论。)&lt;/p&gt;
+&lt;p&gt;动物语言能力。呼叫或姿态大多是整体，句子有限。&lt;/p&gt;
+&lt;h2 id=&#34;任意性&#34;&gt;任意性&lt;/h2&gt;
+&lt;p&gt;语言能力在特定文化中的运用形成语言系统。核心部分：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;基于任意性的符号编码能力&lt;/li&gt;
+&lt;li&gt;基于类推性的还原生成能力&lt;/li&gt;
+&lt;li&gt;区分两种基本单位的能力(体现为符号的两层性)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;编码能力：能在任意性原则上把所指和能指结合成符号的能力&lt;/p&gt;
+&lt;p&gt;任意性：词的语音形式A和意义B的关系是任意的&lt;/p&gt;
+&lt;p&gt;动物语言的形式与意义之间任意性成分很少。&lt;/p&gt;
+&lt;p&gt;我们的符号系统里加入的非任意性的成分，不是语言学符号，是象征。&lt;/p&gt;
+&lt;p&gt;反对任意性原则的学说可以称为音义关联说。证据：拟声说，右文说。&lt;/p&gt;
+&lt;p&gt;拟声不是自然语音的必要条件。声音的临摹，语序的临摹，这两种临摹方式是有限的。&lt;/p&gt;
+&lt;p&gt;右文说的本质：引申&lt;/p&gt;
+&lt;p&gt;任意性，支持材料：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;同一个概念在不同的语言中声音不一样&lt;/li&gt;
+&lt;li&gt;语言中有大量的虚词、抽象词无法象声&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;两层性&#34;&gt;两层性&lt;/h2&gt;
+&lt;p&gt;自然语言有两种最基本的单位：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;音位&lt;/p&gt;
+&lt;p&gt;区别意义的单位&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;语素&lt;/p&gt;
+&lt;p&gt;表达意义的单位&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;两层性的文化功能在于用最少的区别性表达尽可能多的符号。&lt;/p&gt;
+&lt;p&gt;两层性意味着可以用有限的手段(主要是语音)产生无限的符号形式(和有限的符号产生无限的符号组合不一样)&lt;/p&gt;
+&lt;p&gt;人类自然语音从低到高有音位层、音节层、语素层、词汇层、词组层、句子层。音位系统是区别意义层，语素系统是表达意义层。&lt;/p&gt;
+&lt;p&gt;一般认为汉语中有27个音质音位。&lt;/p&gt;
+&lt;p&gt;语音是人类社会的一部分。是我们先天还是后天的能力。即使有先天的语言能力，必须有后天的交流环境，语言系统。语言学习关键期。&lt;/p&gt;
+&lt;h1 id=&#34;ch2-语言和思维&#34;&gt;CH2 语言和思维&lt;/h1&gt;
+- https://imfaye.me/post/linguistics/ - Faye</description>
+        </item>
+    
+    
+    
+        <item>
+        <title>操作系统笔记 CH13 I/O Systems</title>
+        <link>https://imfaye.me/post/os13/</link>
+        <pubDate>Fri, 28 Feb 2020 13:13:24 +0000</pubDate>
+        
+        <guid>https://imfaye.me/post/os13/</guid>
+        <description>PIKA☆NCHI https://imfaye.me/post/os13/ -&lt;p&gt;the kernel is structured to use device-driver modules.&lt;/p&gt;
+&lt;p&gt;device driver为IO子系统提供了统一设备访问接口&lt;/p&gt;
+&lt;p&gt;两个趋势：接口日益标准化，设备多样性&lt;/p&gt;
+&lt;h2 id=&#34;io-硬件&#34;&gt;IO 硬件&lt;/h2&gt;
+&lt;p&gt;port&lt;/p&gt;
+&lt;p&gt;bus&lt;/p&gt;
+&lt;p&gt;controller&lt;/p&gt;
+&lt;p&gt;Controller usually have registers, where device driver places commands, addresses, and data to write, or read data from registers after command execution. Data-in register, data-out register, status register, control register&lt;/p&gt;
+&lt;p&gt;设备有地址&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Direct I/O instructions&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Memory-mapped I/O 内存映射IO&lt;/p&gt;
+&lt;p&gt;设备控制寄存器 被映射到 处理器的地址空间&lt;/p&gt;
+&lt;p&gt;Especially for large address spaces (graphics)&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;IO端口有4种寄存器：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;status&lt;/li&gt;
+&lt;li&gt;control&lt;/li&gt;
+&lt;li&gt;data-in&lt;/li&gt;
+&lt;li&gt;data-out&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Techniques for Performing I/O&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Programmed I/O&lt;/li&gt;
+&lt;li&gt;Interrupt-driven I/O&lt;/li&gt;
+&lt;li&gt;Direct Memory Access (DMA)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;polling-轮询&#34;&gt;polling 轮询&lt;/h3&gt;
+&lt;p&gt;控制器通过状态寄存器的busy bit显示其状态&lt;/p&gt;
+&lt;p&gt;主机通过命令寄存器中的command-ready bit表示其意愿&lt;/p&gt;
+&lt;p&gt;busy-waiting / polling 主机不断读状态寄存器直到忙位被清除&lt;/p&gt;
+&lt;p&gt;Polling can happen in 3 instruction cycles, Read status, logical-and to extract status bit, branch if not zero&lt;/p&gt;
+&lt;h3 id=&#34;interrupts&#34;&gt;interrupts&lt;/h3&gt;
+&lt;p&gt;Interrupt-request line&lt;/p&gt;
+&lt;p&gt;Interrupt handler receives interrupts. Maskable to ignore or delay some interrupts&lt;/p&gt;
+&lt;p&gt;Interrupt vector to dispatch interrupt to correct handler&lt;/p&gt;
+&lt;p&gt;中断向量：中断处理程序的内存地址&lt;/p&gt;
+&lt;p&gt;计算机设备比向量内地址多。interrupt chaining 中断向量内的每个元素都指向中断处理程序列表的头&lt;/p&gt;
+&lt;p&gt;实现了中断优先级&lt;/p&gt;
+&lt;p&gt;Interrupt mechanism also used for exceptions&lt;/p&gt;
+&lt;p&gt;Good uses: system calls, page fault&lt;/p&gt;
+&lt;p&gt;Used for time-sensitive processing, frequent, must be fast.&lt;/p&gt;
+&lt;h3 id=&#34;dma&#34;&gt;DMA&lt;/h3&gt;
+&lt;p&gt;Requires DMA controller, a special-purpose processor.&lt;/p&gt;
+&lt;p&gt;Bypasses CPU to transfer data directly between I/O device and memory.&lt;/p&gt;
+&lt;p&gt;Host writes a DMA command block into memory.&lt;/p&gt;
+&lt;p&gt;CPU writes the address of this command block to the DMA controller.&lt;/p&gt;
+&lt;p&gt;DMA controller operates the memory bus directly, placing address on the bus to perform transfers.&lt;/p&gt;
+&lt;p&gt;When the entire transfer is finished, the DMA controller interrupts the CPU.&lt;/p&gt;
+&lt;p&gt;Handshaking between the DMA controller and the device controller:&lt;/p&gt;
+&lt;p&gt;​	performed via a pair of wires called DMA-request and DMA-acknowledge.&lt;/p&gt;
+&lt;p&gt;DMA控制器抓住内存总线时，CPU暂时不能访问主存，但可以访问一级或二级高速缓存中的数据项。&lt;/p&gt;
+&lt;p&gt;周期挪用cycle stealing可能放慢CPU计算，但数据传输工作交给DMA控制器改善整体性能&lt;/p&gt;
+&lt;p&gt;DVMA (direct virtual memory access) can perform a transfer between two memory-mapped devices
+without the intervention of the CPU or the use of main memory. 直接实现两个内存映射设备之间的传输，无需CPU的干涉或使用主存&lt;/p&gt;
+&lt;h2 id=&#34;io应用接口&#34;&gt;IO应用接口&lt;/h2&gt;
+&lt;p&gt;设备驱动程序层device-driver layer为内核IO子系统隐藏设备控制器之间的差异&lt;/p&gt;
+&lt;p&gt;Broadly I/O devices can be grouped by the OS into&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;block IO&lt;/li&gt;
+&lt;li&gt;character-stream IO&lt;/li&gt;
+&lt;li&gt;memory-mapped file access&lt;/li&gt;
+&lt;li&gt;network sockets&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;OS存在后门(escape / back door)，允许应用程序将任何命令透明地传输到设备控制器&lt;/p&gt;
+&lt;p&gt;Unix ioctl()&lt;/p&gt;
+&lt;h3 id=&#34;块与字符设备&#34;&gt;块与字符设备&lt;/h3&gt;
+&lt;h4 id=&#34;block-devices&#34;&gt;Block devices&lt;/h4&gt;
+&lt;p&gt;include disk drives&lt;/p&gt;
+&lt;p&gt;Commands include read(), write(), seek()&lt;/p&gt;
+&lt;p&gt;Raw I/O, direct I/O, or file-system access&lt;/p&gt;
+&lt;p&gt;Memory-mapped file access possible&lt;/p&gt;
+&lt;p&gt;DMA&lt;/p&gt;
+&lt;h4 id=&#34;character-devices&#34;&gt;Character devices&lt;/h4&gt;
+&lt;p&gt;include keyboards, mice, serial ports&lt;/p&gt;
+&lt;p&gt;Commands include get(), put()&lt;/p&gt;
+&lt;h3 id=&#34;网络设备&#34;&gt;网络设备&lt;/h3&gt;
+&lt;p&gt;The socket interface, Linux, Unix and Windows&lt;/p&gt;
+&lt;p&gt;Includes select functionality: manages a set of sockets&lt;/p&gt;
+&lt;h3 id=&#34;clocks-and-timers&#34;&gt;clocks and timers&lt;/h3&gt;
+&lt;p&gt;Provide current time, elapsed time, timer&lt;/p&gt;
+&lt;p&gt;Programmable interval timer used for timings, periodic interrupts.&lt;/p&gt;
+&lt;h3 id=&#34;blocking-io-and-nonblocking-io&#34;&gt;Blocking I/O and Nonblocking I/O&lt;/h3&gt;
+&lt;p&gt;Blocking - process suspended until I/O completed&lt;/p&gt;
+&lt;p&gt;Nonblocking - I/O call returns as much as available&lt;/p&gt;
+&lt;p&gt;Asynchronous - process runs while I/O executes 不必等待IO完成就可立即返回&lt;/p&gt;
+&lt;h2 id=&#34;kernel-io-subsystem&#34;&gt;Kernel I/O Subsystem&lt;/h2&gt;
+&lt;h3 id=&#34;io-scheduling&#34;&gt;IO scheduling&lt;/h3&gt;
+&lt;p&gt;为每个设备维护一个请求队列&lt;/p&gt;
+&lt;h3 id=&#34;buffering&#34;&gt;buffering&lt;/h3&gt;
+&lt;p&gt;保存两个设备之间 或 设备和应用程序之间 所传输数据的内存区域&lt;/p&gt;
+&lt;h3 id=&#34;caching&#34;&gt;caching&lt;/h3&gt;
+&lt;p&gt;高速缓存是可以保留数据副本的高速存储器&lt;/p&gt;
+&lt;p&gt;buffer可能是数据的唯一副本，而cache只是提供了一个 驻留在其他地方的数据 在高速存储上的一个副本&lt;/p&gt;
+&lt;p&gt;有时同一内存区域可同时用作cache和buffer&lt;/p&gt;
+&lt;h3 id=&#34;spooling假脱机--device-reservation&#34;&gt;Spooling假脱机 &amp;amp; Device reservation&lt;/h3&gt;
+&lt;p&gt;Spooling - hold output for a device&lt;/p&gt;
+&lt;p&gt;Device reservation( 预约) - provides exclusive access to a device&lt;/p&gt;
+&lt;h3 id=&#34;error-handling&#34;&gt;error handling&lt;/h3&gt;
+&lt;p&gt;Most return an error number or code when I/O request fails.&lt;/p&gt;
+&lt;p&gt;System error logs hold problem reports&lt;/p&gt;
+&lt;h3 id=&#34;io-protection&#34;&gt;IO protection&lt;/h3&gt;
+&lt;p&gt;所有IO指令为特权指令&lt;/p&gt;
+&lt;p&gt;IO必须通过system call执行&lt;/p&gt;
+&lt;h3 id=&#34;内核数据结构&#34;&gt;内核数据结构&lt;/h3&gt;
+&lt;p&gt;Kernel keeps state information for I/O components, including open file tables, network connections, character device state.&lt;/p&gt;
+&lt;p&gt;Many complex data structures to track buffers, memory allocation, “dirty” blocks.&lt;/p&gt;
+&lt;p&gt;Some use object-oriented methods and message passing to implement I/O.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577522127902.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;把io操作转换成硬件操作&#34;&gt;把IO操作转换成硬件操作&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577522223439.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+- https://imfaye.me/post/os13/ - Faye</description>
+        </item>
+    
+    
+    
+        <item>
+        <title>操作系统笔记 CH12 Mass-Storage Structure</title>
+        <link>https://imfaye.me/post/os12/</link>
+        <pubDate>Fri, 28 Feb 2020 13:12:24 +0000</pubDate>
+        
+        <guid>https://imfaye.me/post/os12/</guid>
+        <description>PIKA☆NCHI https://imfaye.me/post/os12/ -&lt;h3 id=&#34;磁盘&#34;&gt;磁盘&lt;/h3&gt;
+&lt;p&gt;扇区0是最外面柱面的第一个磁道的第一个扇区。映射先按磁道内扇区顺序，再按柱面内磁道顺序，最后按从外到内的柱面顺序来排序的。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577512929633.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577513031964.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;Head crash results from disk head making contact with the disk surface. Cannot be repaired, the entire disk must be replaced.&lt;/p&gt;
+&lt;p&gt;Disks can be removable&lt;/p&gt;
+&lt;p&gt;Host controller in computer uses bus to talk to disk controller built into drive or storage array.&lt;/p&gt;
+&lt;p&gt;The disk controller operates the disk-drive hardware to carry out the command.&lt;/p&gt;
+&lt;p&gt;Disk controllers have a built-in cache. Data transfer at the disk drive happens between the
+cache and the disk surface. Data transfer to the host, at fast electronic speeds, occurs between the cache and the host controller.&lt;/p&gt;
+&lt;h3 id=&#34;磁带&#34;&gt;磁带&lt;/h3&gt;
+&lt;p&gt;长久，存储大量数据。慢&lt;/p&gt;
+&lt;h2 id=&#34;磁盘结构&#34;&gt;磁盘结构&lt;/h2&gt;
+&lt;p&gt;Disk drives are addressed as large 1-dimensional arrays of logical blocks, where the logical block is the smallest unit of transfer.&lt;/p&gt;
+&lt;p&gt;Low-level formatting(低级格式化) creates logical blocks on physical media.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Constant Linear Velocity ( 常数线性周转率)&lt;/p&gt;
+&lt;p&gt;the density of bits per track is uniform&lt;/p&gt;
+&lt;p&gt;CD-ROM, DVD-ROM&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Constant Angular Velocity ( 常数角周转率)&lt;/p&gt;
+&lt;p&gt;the density of bits decreases from inner tracks to outer tracks&lt;/p&gt;
+&lt;p&gt;hard disk&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;disk-attachment&#34;&gt;disk attachment&lt;/h2&gt;
+&lt;p&gt;计算机访问磁盘存储两种方式&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;通过IO端口(或主机附属存储)&lt;/p&gt;
+&lt;p&gt;小系统采用这种方法&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;通过分布式文件系统DFS的远程主机，称为网络附属存储&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;host-attached-storage&#34;&gt;Host-attached storage&lt;/h3&gt;
+&lt;p&gt;Is accessed through I/O ports talking to I/O busses&lt;/p&gt;
+&lt;p&gt;I/O directed to bus ID, device ID, logical unit (LUN)&lt;/p&gt;
+&lt;h3 id=&#34;network-attached-storage-nas&#34;&gt;Network-Attached Storage (NAS)&lt;/h3&gt;
+&lt;p&gt;客户通过远程进程调用接口访问NAS&lt;/p&gt;
+&lt;p&gt;UNIX中的NFS，windows中的CIFS(Common Internet File System)&lt;/p&gt;
+&lt;p&gt;RPCs are carried via TCP or UDP on IP network.&lt;/p&gt;
+&lt;p&gt;The NAS unit is usually implemented as a RAID array with software that implements the RPC interface.&lt;/p&gt;
+&lt;p&gt;New iSCSI protocol uses IP network protocol to carry the SCSI protocol. Remotely attaching to devices (blocks)&lt;/p&gt;
+&lt;h3 id=&#34;storage-area-network-san&#34;&gt;Storage Area Network (SAN)&lt;/h3&gt;
+&lt;p&gt;服务器与存储单元之间的私有网络(采用存储协议而非网络协议)&lt;/p&gt;
+&lt;p&gt;灵活&lt;/p&gt;
+&lt;p&gt;Common in large storage environments.&lt;/p&gt;
+&lt;p&gt;Multiple hosts attached to multiple storage arrays – flexible&lt;/p&gt;
+&lt;p&gt;SAN is one or more storage arrays Connected to one or more Fiber Channel switches&lt;/p&gt;
+&lt;p&gt;Hosts also attach to the switches.&lt;/p&gt;
+&lt;p&gt;Storage made available via LUN Masking from specific arrays to specific servers.&lt;/p&gt;
+&lt;h2 id=&#34;disk-scheduling&#34;&gt;disk scheduling&lt;/h2&gt;
+&lt;p&gt;Minimize seek time&lt;/p&gt;
+&lt;p&gt;OS maintains queue of requests, per disk or device.&lt;/p&gt;
+&lt;p&gt;controllers have small buffers and can manage a queue of I/O requests.&lt;/p&gt;
+&lt;h3 id=&#34;fsfc&#34;&gt;FSFC&lt;/h3&gt;
+&lt;h3 id=&#34;sstf-shortest-seek-time-first&#34;&gt;SSTF Shortest Seek Time First&lt;/h3&gt;
+&lt;p&gt;starvation&lt;/p&gt;
+&lt;h3 id=&#34;scan--elevator&#34;&gt;SCAN / elevator&lt;/h3&gt;
+&lt;p&gt;到达另一端时，磁头改变方向&lt;/p&gt;
+&lt;h3 id=&#34;c-scan&#34;&gt;C-SCAN&lt;/h3&gt;
+&lt;p&gt;当磁头移到另一端时，会马上返回磁盘开始。将柱面当成环链&lt;/p&gt;
+&lt;h3 id=&#34;look&#34;&gt;LOOK&lt;/h3&gt;
+&lt;p&gt;磁头只移动到一个方向上最远的请求为止&lt;/p&gt;
+&lt;h3 id=&#34;c-look&#34;&gt;C-LOOK&lt;/h3&gt;
+&lt;h3 id=&#34;磁盘调度算法的选择&#34;&gt;磁盘调度算法的选择&lt;/h3&gt;
+&lt;p&gt;SSTF is common and has a natural appeal&lt;/p&gt;
+&lt;p&gt;SCAN and C-SCAN对磁盘负荷大的系统执行较好，不会有starvation&lt;/p&gt;
+&lt;p&gt;Requests for disk service can be influenced by the file-allocation method.&lt;/p&gt;
+&lt;p&gt;The disk-scheduling algorithm should be written as a separate module of the operating system, allowing it to be replaced with a different algorithm if necessary.&lt;/p&gt;
+&lt;p&gt;Either SSTF or LOOK is a reasonable choice for the default algorithm.&lt;/p&gt;
+&lt;h2 id=&#34;磁盘管理&#34;&gt;磁盘管理&lt;/h2&gt;
+&lt;h3 id=&#34;磁盘格式化-disk-formatting&#34;&gt;磁盘格式化 disk formatting&lt;/h3&gt;
+&lt;p&gt;低级格式化/物理格式化：将磁盘分成扇区以便磁盘控制器能读能写。为每个扇区采用特殊的数据结构。The data structure typically consists of a header(sector #), a data area, and a trailer(ECC, error correction code) 扇区通常512B，但可选&lt;/p&gt;
+&lt;p&gt;OS需要将自己的数据结构记录在磁盘上&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;将磁盘分为由一个或多个柱面组成的分区。将每个分区作为一个逻辑磁盘。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Logical formatting逻辑格式化&lt;/p&gt;
+&lt;p&gt;创建文件系统&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;为了提高效率，大多数OS将块集中到一大块，称作簇(cluster)。磁盘IO通过块完成，文件系统IO通过簇完成&lt;/p&gt;
+&lt;p&gt;raw disk生磁盘：将磁盘分区作为一个逻辑块的大顺序数组，没有任何文件系统数据结构&lt;/p&gt;
+&lt;p&gt;raw disk可用作swap space&lt;/p&gt;
+&lt;p&gt;对该数组的IO称作raw IO&lt;/p&gt;
+&lt;p&gt;有些数据库系统比较喜欢raw IO&lt;/p&gt;
+&lt;h3 id=&#34;boot-block-引导块&#34;&gt;boot block 引导块&lt;/h3&gt;
+&lt;p&gt;bootstrap程序应找到磁盘上的操作系统内核，装入内存，并转到起始地址，从而开始OS的执行&lt;/p&gt;
+&lt;p&gt;bootstrap保存在ROM中。不过大多数OS只在ROM中保留bootstrap loader: 进一步从磁盘上调入更完整的bootstrap程序&lt;/p&gt;
+&lt;p&gt;完整的bootstrap程序在磁盘的启动块(boot block)上，启动块位于磁盘的固定位置。&lt;/p&gt;
+&lt;p&gt;拥有启动分区的磁盘称为boot disk或system disk&lt;/p&gt;
+&lt;p&gt;启动扇区 MBR master boot record . Besides boot code, the MBR contains a partition table listing the partitions for the hard disk and a flag indicating which partition the system is to be booted from.&lt;/p&gt;
+&lt;p&gt;启动ROM中的代码引导磁盘控制器将启动块读入到内存(此时尚未装入设备驱动程序)&lt;/p&gt;
+&lt;p&gt;硬盘分为一个或多个分区，一个分区为boot partition，包含OS和设备驱动程序。该分区的第一个扇区既是boot sector&lt;/p&gt;
+&lt;h3 id=&#34;bad-blocks&#34;&gt;bad blocks&lt;/h3&gt;
+&lt;p&gt;Controller calculates the ECC and finds the sector is bad. 控制器计算ECC&lt;/p&gt;
+&lt;p&gt;An unrecoverable hard error results in lost data.&lt;/p&gt;
+&lt;p&gt;对于简单磁盘：坏块可手工处理&lt;/p&gt;
+&lt;p&gt;对于复杂磁盘：&lt;/p&gt;
+&lt;p&gt;​	控制器维护一个磁盘坏块链表，控制器可用备用块来逻辑地替换坏块 sector sparing(forwarding)&lt;/p&gt;
+&lt;p&gt;​	sector slipping&lt;/p&gt;
+- https://imfaye.me/post/os12/ - Faye</description>
+        </item>
+    
+    
+    
+        <item>
+        <title>操作系统笔记 CH11 File-System Implementation</title>
+        <link>https://imfaye.me/post/os11/</link>
+        <pubDate>Fri, 28 Feb 2020 13:11:24 +0000</pubDate>
+        
+        <guid>https://imfaye.me/post/os11/</guid>
+        <description>PIKA☆NCHI https://imfaye.me/post/os11/ -&lt;h2 id=&#34;文件系统结构&#34;&gt;文件系统结构&lt;/h2&gt;
+&lt;p&gt;磁盘特点：可以原地重写，可以直接访问任意一块。&lt;/p&gt;
+&lt;p&gt;内存和磁盘之间的IO以块为单位。每块为一个或多个扇区。扇区通常为512B&lt;/p&gt;
+&lt;p&gt;File system resides on secondary storage (disks) OS通过文件系统存储、定位、提取数据&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577502786991.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;IO control 最底层&lt;/p&gt;
+&lt;p&gt;由device driver 和 Interrupt handlers组成&lt;/p&gt;
+&lt;p&gt;实现内存和磁盘之间的信息传输。&lt;/p&gt;
+&lt;p&gt;device driver可作为翻译器。输入是高层命令，输出是底层的、硬件特定的命令。命令用于控制hardware controller&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577503036078.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;device driver控制一类设备&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;basic file system&lt;/p&gt;
+&lt;p&gt;Issue generic commands to the appropriate device driver to read and write physical blocks on the disk.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;file-organization module&lt;/p&gt;
+&lt;p&gt;将逻辑块地址 转换成 物理块地址&lt;/p&gt;
+&lt;p&gt;也包括空闲空间管理器&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;logical file system&lt;/p&gt;
+&lt;p&gt;管理metadata，元数据包括文件系统所有结构数据，而不包括实际数据&lt;/p&gt;
+&lt;p&gt;管理目录结构&lt;/p&gt;
+&lt;p&gt;通过FCB((inodes in UNIX))维护文件结构&lt;/p&gt;
+&lt;p&gt;负责保护和安全&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Layering useful for reducing complexity and redundancy, but adds overhead and can decrease performance.&lt;/p&gt;
+&lt;p&gt;绝大多数OS支持多个文件系统&lt;/p&gt;
+&lt;p&gt;UNIX使用UFS&lt;/p&gt;
+&lt;p&gt;标准的Linux文件系统是extende file system&lt;/p&gt;
+&lt;h2 id=&#34;文件系统实现&#34;&gt;文件系统实现&lt;/h2&gt;
+&lt;p&gt;每个卷的boot control block：从该卷引导OS需要的信息。如果没有OS，该块为空，通常为卷的第一块。UFS称之为boot block，NTFS称之为partition boot sector&lt;/p&gt;
+&lt;p&gt;每个卷的volume control blcok：包括卷(或分区)的详细信息，如分区的块数，块的大小&amp;hellip;UFS称之为superblock，NTFS中它存在master file table中&lt;/p&gt;
+&lt;p&gt;每个文件系统的目录结构用来组织文件。UFS中包含文件名和相关的inode号，NTFS中它存储在master file table中&lt;/p&gt;
+&lt;p&gt;每个文件的FCB。UFS中是inode，NTFS存在master file table中，每个文件占一行&lt;/p&gt;
+&lt;h3 id=&#34;in-memory-file-system-structures&#34;&gt;In-Memory File System Structures&lt;/h3&gt;
+&lt;p&gt;一个内存中的mount table(partition table)&lt;/p&gt;
+&lt;p&gt;一个内存中的director structure cache&lt;/p&gt;
+&lt;p&gt;system-wide open-file table: 包括每个打开文件的FCB副本&lt;/p&gt;
+&lt;p&gt;per-process open-file table: Contains a pointer to the appropriate entry in the system-wide open-file table.&lt;/p&gt;
+&lt;p&gt;buffers hold data blocks from secondary storage.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577507477227.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;对于访问打开文件表的索引：UNIX称之为file descriptor，Windows称之为file handle. 只要文件没有关闭，所有文件操作都是通过打开文件表来进行的&lt;/p&gt;
+&lt;h3 id=&#34;partitions-and-mounting-分区和安装&#34;&gt;partitions and mounting 分区和安装&lt;/h3&gt;
+&lt;p&gt;一个disk可以分为多个partition，一个partition可以横跨多个disk(作为RAID的一种形式比较合适)&lt;/p&gt;
+&lt;p&gt;分区可以是&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;raw 没有文件系统&lt;/li&gt;
+&lt;li&gt;cooked 含有文件系统&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;引导信息能保存在多个分区中，通常为一组有序块，并作为镜像文件读入内存&lt;/p&gt;
+&lt;p&gt;boot loader知道位于引导区的多个文件系统和多个操作系统，一旦装入，它可以引导位于磁盘上的一个操作系统。磁盘可以有多个分区，每个分区包含不同类型的文件系统和不同的操作系统。&lt;/p&gt;
+&lt;p&gt;root partiton包括操作系统内核或其他系统文件，在引导时装入内存。&lt;/p&gt;
+&lt;p&gt;内存中有Mount table – containing information about file systems that has been mounted.&lt;/p&gt;
+&lt;h3 id=&#34;virtual-file-system-vfs&#34;&gt;virtual file system (VFS)&lt;/h3&gt;
+&lt;p&gt;Virtual file system (VFS) on most OSes, including Unix, use object-oriented techniques to implement the file system. 用户甚至可以访问位于网络上的操作系统&lt;/p&gt;
+&lt;p&gt;VFS allows the same system call interface (the API) to be used for different types of file systems.&lt;/p&gt;
+&lt;p&gt;Implements vnodes which hold inodes or network file details.&lt;/p&gt;
+&lt;p&gt;The API is to the VFS interface, rather than any specific type of file system.&lt;/p&gt;
+&lt;p&gt;多个VFS接口的实现可以共存在同一台机器上&lt;/p&gt;
+&lt;p&gt;vnode表示位于整个网络范围内唯一的文件&lt;/p&gt;
+&lt;p&gt;Linux has four object types: inode, file, superblock, dentry&lt;/p&gt;
+&lt;p&gt;VFS defines a set of operations on the objects that must be implemented.&lt;/p&gt;
+&lt;h2 id=&#34;目录实现&#34;&gt;目录实现&lt;/h2&gt;
+&lt;h3 id=&#34;linear-list-线性列表&#34;&gt;linear list 线性列表&lt;/h3&gt;
+&lt;p&gt;linear search time费时&lt;/p&gt;
+&lt;p&gt;sorted list允许binary search&lt;/p&gt;
+&lt;p&gt;a balanced tree&lt;/p&gt;
+&lt;h3 id=&#34;hash-table&#34;&gt;hash table&lt;/h3&gt;
+&lt;p&gt;decreases directory search time&lt;/p&gt;
+&lt;p&gt;需要处理collision(两个文件名哈希到相同的位置)：chained-overflow&lt;/p&gt;
+&lt;p&gt;Difficulties: fixed size, hash function&lt;/p&gt;
+&lt;h2 id=&#34;分配方法&#34;&gt;分配方法&lt;/h2&gt;
+&lt;p&gt;how disk blocks are allocated for files&lt;/p&gt;
+&lt;h3 id=&#34;contiguous-allocation-连续分配&#34;&gt;Contiguous Allocation 连续分配&lt;/h3&gt;
+&lt;p&gt;每个文件在磁盘上占有一组连续的块&lt;/p&gt;
+&lt;p&gt;访问连续分配文件所需寻道数最少&lt;/p&gt;
+&lt;p&gt;用第一块的磁盘地址和连续块的数量来定义&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577509061560.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;sequential and direct access&lt;/p&gt;
+&lt;p&gt;Best performance in most cases&lt;/p&gt;
+&lt;p&gt;问题&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Difficult to find space for a new file: First-fit, best-fit&lt;/li&gt;
+&lt;li&gt;External fragmentation&lt;/li&gt;
+&lt;li&gt;compaction off-line (downtime) or on-line&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Extent-Based Systems, a modified contiguous allocation scheme 当空间不够时，另一块被称为扩展的连续空间会添加到原来的文件分配中&lt;/p&gt;
+&lt;h3 id=&#34;linked-allocation-链接分配&#34;&gt;Linked Allocation 链接分配&lt;/h3&gt;
+&lt;p&gt;每个文件是磁盘块的链表&lt;/p&gt;
+&lt;p&gt;目录包括文件第一块的指针和最后一块的指针。每一块都有下一块的指针。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577509383605.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;没有外部碎片&lt;/p&gt;
+&lt;p&gt;只要有空闲块，文件就可以增大&lt;/p&gt;
+&lt;p&gt;Disadvantages: 不能随机访问，指针需要空间，不可靠&lt;/p&gt;
+&lt;p&gt;对于指针需要空间，解决办法是将多个块组成簇(cluster)，代价是增加了内部碎片&lt;/p&gt;
+&lt;h4 id=&#34;fatfile-allocation-table文件分配表&#34;&gt;FAT(file-allocation table)文件分配表&lt;/h4&gt;
+&lt;p&gt;used by MS-DOS and OS/2&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577510977781.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;对FAT采用缓存&lt;/p&gt;
+&lt;p&gt;支持直接访问&lt;/p&gt;
+&lt;h3 id=&#34;indexed-allocation-索引分配&#34;&gt;Indexed Allocation 索引分配&lt;/h3&gt;
+&lt;p&gt;每个文件都有索引块，是一个磁盘块地址的数组&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577511076567.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;目录条目包括索引块的地址&lt;/p&gt;
+&lt;p&gt;支持直接访问&lt;/p&gt;
+&lt;p&gt;没有外部碎片&lt;/p&gt;
+&lt;p&gt;索引块应该多大&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;linked scheme&lt;/p&gt;
+&lt;p&gt;将多个索引块链接起来&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;two-level index&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;combined scheme&lt;/p&gt;
+&lt;p&gt;UNIX采用&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;性能&#34;&gt;性能&lt;/h3&gt;
+&lt;p&gt;contiguous great for sequential and random&lt;/p&gt;
+&lt;p&gt;linked good for sequential, not random&lt;/p&gt;
+&lt;p&gt;combine contiguous allocation with indexed allocation by using contiguous allocation for small files (up to three or four blocks), automatically switching to an indexed allocation if the file grows large.&lt;/p&gt;
+&lt;h3 id=&#34;free-space-management&#34;&gt;free-space management&lt;/h3&gt;
+&lt;p&gt;文件系统需要维护free-space list记录空闲磁盘空间(不一定是链表)&lt;/p&gt;
+&lt;h4 id=&#34;bit-map--bit-vector&#34;&gt;bit map / bit vector&lt;/h4&gt;
+&lt;p&gt;每块用一位表示。空闲-1，已分配-0&lt;/p&gt;
+&lt;p&gt;查找第一个和n个连续空闲块简单高效&lt;/p&gt;
+&lt;p&gt;Bit map requires extra space.&lt;/p&gt;
+&lt;p&gt;Easy to get contiguous files space.&lt;/p&gt;
+&lt;h4 id=&#34;linked-list-链表&#34;&gt;linked list 链表&lt;/h4&gt;
+&lt;p&gt;将所有空闲块用链表链接&lt;/p&gt;
+&lt;p&gt;将指向第一空闲块的指针缓存在内存&lt;/p&gt;
+&lt;p&gt;Cannot get contiguous space easily.&lt;/p&gt;
+&lt;h4 id=&#34;grouping&#34;&gt;grouping&lt;/h4&gt;
+&lt;p&gt;将n个空闲块的地址存在第一个空闲块里。(前n-1确实为空，最后一块包含另外n个空闲块的地址)&lt;/p&gt;
+&lt;p&gt;可以找到大量空闲块&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577512314875.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;h4 id=&#34;counting&#34;&gt;counting&lt;/h4&gt;
+&lt;p&gt;记录第一块的地址和紧跟第一块的连续的空闲块的数量n&lt;/p&gt;
+&lt;p&gt;can be stored in a balanced tree for efficiency&lt;/p&gt;
+- https://imfaye.me/post/os11/ - Faye</description>
+        </item>
+    
+    
+    
+        <item>
+        <title>操作系统笔记 CH10 File-System Interface</title>
+        <link>https://imfaye.me/post/os10/</link>
+        <pubDate>Fri, 28 Feb 2020 13:10:24 +0000</pubDate>
+        
+        <guid>https://imfaye.me/post/os10/</guid>
+        <description>PIKA☆NCHI https://imfaye.me/post/os10/ -&lt;h2 id=&#34;file-concept&#34;&gt;file concept&lt;/h2&gt;
+&lt;p&gt;文件：记录在外存上的 相关信息的 具有名称的 集合，逻辑内存的最小分配单元&lt;/p&gt;
+&lt;p&gt;通常，文件表示程序和数据&lt;/p&gt;
+&lt;p&gt;free form or may be formatted rigidly&lt;/p&gt;
+&lt;h3 id=&#34;file-attributes&#34;&gt;file attributes&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;name: human-readable&lt;/li&gt;
+&lt;li&gt;identifier: a unique number, non-human-readable name&lt;/li&gt;
+&lt;li&gt;type&lt;/li&gt;
+&lt;li&gt;location&lt;/li&gt;
+&lt;li&gt;size&lt;/li&gt;
+&lt;li&gt;protection&lt;/li&gt;
+&lt;li&gt;time, date and user identification&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;文件的信息存在directory中，directory也存在外存上&lt;/p&gt;
+&lt;p&gt;A directory entry consists of the file&amp;rsquo;s name and its unique id. The id in turn locates the other file attributes.&lt;/p&gt;
+&lt;h3 id=&#34;file-operations&#34;&gt;file operations&lt;/h3&gt;
+&lt;p&gt;6个基本文件操作：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;create&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;write&lt;/p&gt;
+&lt;p&gt;write pointer&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;read&lt;/p&gt;
+&lt;p&gt;read pointer&lt;/p&gt;
+&lt;p&gt;A per-process current-file-position pointer&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;reposition&lt;/p&gt;
+&lt;p&gt;file seek, not need I/O&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;delete&lt;/p&gt;
+&lt;p&gt;release file space, erase directory entry&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;truncate&lt;/p&gt;
+&lt;p&gt;reset length to 0, release file space&lt;/p&gt;
+&lt;p&gt;只删除内容，保留属性&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;基本操作可以组合成其他操作&lt;/p&gt;
+&lt;p&gt;Most file operations involve searching the directory for the entry associated with the named file&lt;/p&gt;
+&lt;p&gt;首次使用文件时，使用系统调用open()&lt;/p&gt;
+&lt;p&gt;OS维护一个包含所有打开文件的信息表(open-file table)。当需要一个文件操作时，通过该表的一个索引指定文件，无需搜索。文件不再使用时，进程可关闭它，OS从open-file table删除这一条目。系统调用create和delete操作的是关闭文件，而不是打开文件。&lt;/p&gt;
+&lt;p&gt;系统调用open()返回一个指向open-file table中一个条目的指针。通过使用该指针，而不是真实文件名称，进行所有IO操作。also accept access mode information, such as create, read-only, read-write, append-only, etc.&lt;/p&gt;
+&lt;p&gt;close(Fi), move the content of entry Fi in open-file table to directory structure on disk.&lt;/p&gt;
+&lt;p&gt;多进程可能同时打开同一文件。OS采用两级内部表。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Process open-file table, a per-process table&lt;/p&gt;
+&lt;p&gt;该进程所使用的文件信息&lt;/p&gt;
+&lt;p&gt;单个进程表的每个条目相应地指向整个系统的打开文件表&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;System open-file table, a system-wide table&lt;/p&gt;
+&lt;p&gt;包含进程无关信息(如文件在磁盘上的位置，访问日期和文件大小)&lt;/p&gt;
+&lt;p&gt;一旦一个进程打开文件，System open-file table会增加相应条目，当另一个进程执行调用open()，在其Process open-file table增加一个条目，并指向System open-file table相应条目&lt;/p&gt;
+&lt;p&gt;每个文件有一个open count，记录多少进程打开了该文件。当open count=0，该文件条目可删除。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;每个打开文件有如下信息：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;file pointer&lt;/p&gt;
+&lt;p&gt;pointer to last read/write location&lt;/p&gt;
+&lt;p&gt;对每个进程唯一&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;file-open count&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;disk location of file&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;access rights&lt;/p&gt;
+&lt;p&gt;每个进程用一个访问模式打开文件&lt;/p&gt;
+&lt;p&gt;保存在单个进程打开文件表中&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;文件锁file-locks&#34;&gt;文件锁(file locks)&lt;/h4&gt;
+&lt;p&gt;shared lock: 多个进程并发获取&lt;/p&gt;
+&lt;p&gt;exclusive lock: 只有一个进程可以获取&lt;/p&gt;
+&lt;p&gt;加锁机制：&lt;/p&gt;
+&lt;p&gt;mandatory强制：一个进程获得锁，阻止其他进程访问已加锁的文件。access is denied depending on locks held and requested. &amp;ndash; Windows OS.&lt;/p&gt;
+&lt;p&gt;advisory建议：processes can find status of locks and decide what to do. &amp;ndash; Unix OS.&lt;/p&gt;
+&lt;h3 id=&#34;file-types&#34;&gt;file types&lt;/h3&gt;
+&lt;p&gt;实现文件类型的常用技术：在文件名称内包含类型。名称可分为两部分：name , extension&lt;/p&gt;
+&lt;p&gt;Some OS, each file has a type, and a creator attribute containing the name of the program that created it.&lt;/p&gt;
+&lt;p&gt;UNIX, a magic number stored at the beginning of some files to indicate roughly the type of the file.&lt;/p&gt;
+&lt;h2 id=&#34;access-methods&#34;&gt;access methods&lt;/h2&gt;
+&lt;p&gt;Criteria for File Organization: Rapid access, Ease of update, Economy of storage, Simple maintenance, Reliability&lt;/p&gt;
+&lt;h3 id=&#34;sequential-access-顺序访问&#34;&gt;sequential access 顺序访问&lt;/h3&gt;
+&lt;p&gt;基于文件的磁带模型。不仅适用于顺序访问设备，也适用于随机访问设备&lt;/p&gt;
+&lt;h3 id=&#34;direct-access-直接访问&#34;&gt;direct access 直接访问&lt;/h3&gt;
+&lt;p&gt;文件由固定长度的逻辑记录组成。基于文件的磁盘模型。可立即访问大量信息。数据库常采用这种类型的文件。&lt;/p&gt;
+&lt;p&gt;提供的是相对块号。&lt;/p&gt;
+&lt;p&gt;对直接访问文件，可容易地模拟顺序访问。反过来很低效。&lt;/p&gt;
+&lt;h3 id=&#34;其他访问方式&#34;&gt;其他访问方式&lt;/h3&gt;
+&lt;p&gt;通常涉及创建索引&lt;/p&gt;
+&lt;h2 id=&#34;directory-structure&#34;&gt;directory structure&lt;/h2&gt;
+&lt;p&gt;有时需要在一个磁盘上装多种文件系统&lt;/p&gt;
+&lt;p&gt;Disk can be subdivided into partitions.&lt;/p&gt;
+&lt;p&gt;Disk or partition can be used：&lt;/p&gt;
+&lt;p&gt;​	raw, without a file system, e.g. swap space&lt;/p&gt;
+&lt;p&gt;​	formatted with a file system&lt;/p&gt;
+&lt;p&gt;Volume: Entity containing file system&lt;/p&gt;
+&lt;p&gt;Each volume containing file system also tracks that file system&amp;rsquo;s info in device directory or volume table of contents.&lt;/p&gt;
+&lt;p&gt;Disks or partitions can be RAID protected against failure.&lt;/p&gt;
+&lt;p&gt;directory可看作符号表，将 文件名 转换成 目录条目&lt;/p&gt;
+&lt;p&gt;Both the directory structure and the files reside on disk.&lt;/p&gt;
+&lt;h3 id=&#34;single-level-directory&#34;&gt;Single-Level Directory&lt;/h3&gt;
+&lt;p&gt;所有文件包含在同一目录中&lt;/p&gt;
+&lt;p&gt;必须有唯一名称&lt;/p&gt;
+&lt;p&gt;naming problem , grouping problem&lt;/p&gt;
+&lt;h3 id=&#34;two-level-directory&#34;&gt;Two-Level Directory&lt;/h3&gt;
+&lt;p&gt;为每个用户创建独立目录&lt;/p&gt;
+&lt;p&gt;A master file directory(主文件目录MFD) and one user file directory(用户文件目录UFD) for each user.&lt;/p&gt;
+&lt;p&gt;UFD内文件名唯一即可&lt;/p&gt;
+&lt;p&gt;No grouping capability&lt;/p&gt;
+&lt;p&gt;File sharing怎么解决&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Path name. defined by a user name and a file name.&lt;/li&gt;
+&lt;li&gt;Special user directory, containing system files.&lt;/li&gt;
+&lt;li&gt;Search path, the sequence of directories searched.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;tree-structured-directories&#34;&gt;Tree-Structured Directories&lt;/h3&gt;
+&lt;p&gt;树有根目录，系统内的每个文件都有唯一路径名&lt;/p&gt;
+&lt;p&gt;One bit in each entry defines the entry as a file(0) or as a subdirectory(1).&lt;/p&gt;
+&lt;p&gt;Grouping Capability&lt;/p&gt;
+&lt;p&gt;每个进程有 Current directory (working directory) 当前目录 In accounting file, a pointer/the name of the user&amp;rsquo;s initial directory. Copied to a local variable for this user.&lt;/p&gt;
+&lt;p&gt;Absolute path name: 从根开始&lt;/p&gt;
+&lt;p&gt;relative path name: 从当前目录开始&lt;/p&gt;
+&lt;p&gt;创建子目录/新文件在当前目录下完成&lt;/p&gt;
+&lt;p&gt;Deleting a subdirectory&lt;/p&gt;
+&lt;p&gt;​	deleting a empty directory. &amp;ndash; MS-DOS 目录不为空不能删除&lt;/p&gt;
+&lt;p&gt;​	deleting all files and subdirectories that it contains.&amp;ndash; UNIX 所有该目录的文件和子目录可删除&lt;/p&gt;
+&lt;h3 id=&#34;acyclic-graph-directories-无环图&#34;&gt;Acyclic-Graph Directories 无环图&lt;/h3&gt;
+&lt;p&gt;树状结构禁止共享文件和目录&lt;/p&gt;
+&lt;p&gt;注意这里是共享文件而不是文件复制，共享文件任何改变为其他用户可见&lt;/p&gt;
+&lt;p&gt;Ways implementing shared files and subdirectories:&lt;/p&gt;
+&lt;p&gt;​	Create a new directory entry, called a link. &amp;ndash; UNIX  link, a pointer to another file or subdirectory. Resolve the link – follow pointer to locate the file.&lt;/p&gt;
+&lt;p&gt;​	duplicate all information about shared files in all sharing directories. 问题：维护一致性&lt;/p&gt;
+&lt;p&gt;当用户删除文件时就删除，会留下dangling pointer&lt;/p&gt;
+&lt;p&gt;​	对于link: Deletion of a link need not affectt he original file. Deletion of the file entry, leaving the links dangling.&lt;/p&gt;
+&lt;p&gt;​	对于duplication: File-reference list, Backpointers. 为每个文件保留一个引用列表或引用计数Backpointers, so we can delete all pointers.&lt;/p&gt;
+&lt;h3 id=&#34;general-graph-directory&#34;&gt;General Graph Directory&lt;/h3&gt;
+&lt;p&gt;允许环存在&lt;/p&gt;
+&lt;p&gt;为避免无限循环：强制限制在搜索时所访问目录的次数&lt;/p&gt;
+&lt;p&gt;何时可删除？因为有环，就算不存在引用，其引用计数也可能不为0，可能存在自我引用。解决办法：Garbage collection: The first pass, traversing the entire file system, marking everything that can be accessed.  The second pass, collects everything that is not marked onto a list of free space.&lt;/p&gt;
+&lt;p&gt;How to avoid cycles? Allow only links to file not subdirectories. Every time a new link is added use a cycle detection algorithm. A simpler algorithm, bypass links during directory traversal.&lt;/p&gt;
+&lt;h2 id=&#34;file-system-mounting-文件系统安装&#34;&gt;file system mounting 文件系统安装&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;OS需要知道 设备名称 和 安装点(mount point)&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;OS验证设备是否包含一个有效文件系统(通过device driver读入设备目录，验证目录是否具有期望格式)&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;OS在其目录结构记录下：一个文件系统已安装在给定安装点上&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Systems impose semantics to clarify functionality.&lt;/p&gt;
+&lt;h2 id=&#34;file-sharing&#34;&gt;file sharing&lt;/h2&gt;
+&lt;p&gt;多用户需要共享文件&lt;/p&gt;
+&lt;p&gt;Sharing may be done through a protection scheme.&lt;/p&gt;
+&lt;p&gt;More file and directory attributes are needed: File / directory owner; File / directory user, access rights; File / directory user groups, access rights&lt;/p&gt;
+&lt;p&gt;User IDs identify users, allowing permissions and protections to be per-user. Group IDs allow users to be in groups, permitting group access rights.&lt;/p&gt;
+&lt;h3 id=&#34;remote-file-system-远程文件系统&#34;&gt;remote file system 远程文件系统&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;通过程序(如ftp)在机器之间进行文件的人工传输&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;distributed file systems (DFS)&lt;/p&gt;
+&lt;p&gt;远程目录可从本机上直接访问&lt;/p&gt;
+&lt;p&gt;much tighter integration&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;via the World Wide Web(WWW)&lt;/p&gt;
+&lt;p&gt;A browser is needed. uses anonymous file exchange.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4 id=&#34;client-server-model&#34;&gt;Client-server model&lt;/h4&gt;
+&lt;p&gt;allows clients to mount remote file systems from servers.&lt;/p&gt;
+&lt;p&gt;Client and user-on-client identification is insecure or complicated.&lt;/p&gt;
+&lt;p&gt;​	client can be specified by a network name or other identifier, such as an IP address, Can be spoofed or imitated.&lt;/p&gt;
+&lt;p&gt;​	Secure authentication via encrypted keys. Ensuring compatibility of the client and server.&lt;/p&gt;
+&lt;p&gt;NFS: standard UNIX client-server file sharing protocol&lt;/p&gt;
+&lt;p&gt;CIFS(Common Internet File System): standard Windows protocol, uses active directory&lt;/p&gt;
+&lt;p&gt;Standard operating system file calls are translated into remote calls远程调用&lt;/p&gt;
+&lt;h4 id=&#34;distributed-information-systems&#34;&gt;Distributed Information Systems&lt;/h4&gt;
+&lt;p&gt;Providing unified access to the information needed for remote computing.&lt;/p&gt;
+&lt;p&gt;DNS (domain name system) provides host-name-to-network-address translations for entire internet.&lt;/p&gt;
+&lt;p&gt;NIS (network information service), yellow pages黄页, centralizes storage of user names, host names, printer information, and the like.&lt;/p&gt;
+&lt;p&gt;LDAP (lightweight directory-access protocol), used by industry as a secure distributed naming mechanism. secure single sign-on&lt;/p&gt;
+&lt;h4 id=&#34;failure-modes-故障模式&#34;&gt;Failure Modes 故障模式&lt;/h4&gt;
+&lt;p&gt;Remote file systems add new failure modes, due to network failure, server failure.&lt;/p&gt;
+&lt;p&gt;Recovery from failure can involve state information about status状态信息 of each remote request.&lt;/p&gt;
+&lt;p&gt;Stateless protocols such as NFS V3 include all information in each request, allowing easy recovery but less security.&lt;/p&gt;
+&lt;p&gt;In NFS V4, it is made stateful&lt;/p&gt;
+&lt;h3 id=&#34;consistency-semantics-一致性语义&#34;&gt;Consistency Semantics 一致性语义&lt;/h3&gt;
+&lt;p&gt;描述多用户同时访问共享文件时的语义。规定了一个用户所修改的数据何时对另一用户可见。&lt;/p&gt;
+&lt;p&gt;由于延迟，不适合类似进程同步那些复杂算法&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;AFS (Andrew File System) implemented complex remote file sharing semantics&lt;/p&gt;
+&lt;p&gt;server记录client的动作&lt;/p&gt;
+&lt;p&gt;When a client changes a file, the server notifies other clients with a call back promise technique&lt;/p&gt;
+&lt;p&gt;一个用户对打开文件的写不能立即被打开同一文件的其他用户看见。一旦文件关闭，其修改只能被以后打开的会话所见。&lt;/p&gt;
+&lt;p&gt;多个用户允许对自己的映像进行并发(没有延迟)的读写操作&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;UFS (Unix file system) implements&lt;/p&gt;
+&lt;p&gt;一个文件与单个物理映射相关联，该映射作为互斥资源访问。修改立即可见。竞争导致用户进程延迟。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Immutable shared files, declared by its creator. Read-only. 不可修改&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;protection&#34;&gt;protection&lt;/h2&gt;
+&lt;p&gt;高层功能可以用系统程序调用低层系统调用实现。保护可以只在低层提供。&lt;/p&gt;
+&lt;p&gt;Mode of access: read, write, execute&lt;/p&gt;
+&lt;p&gt;为每个文件和目录增加一个访问控制列表ACL(Access-control list)，给定每个用户名及其允许访问的类型&lt;/p&gt;
+&lt;p&gt;三种用户类型:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;owner&lt;/li&gt;
+&lt;li&gt;group&lt;/li&gt;
+&lt;li&gt;universe(public): all other users in the system&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;每个域三个位:RWX. 需要9个位&lt;/p&gt;
+- https://imfaye.me/post/os10/ - Faye</description>
+        </item>
+    
+    
+    
+        <item>
+        <title>操作系统笔记 CH9 Virtual Memory</title>
+        <link>https://imfaye.me/post/os9/</link>
+        <pubDate>Fri, 28 Feb 2020 13:09:24 +0000</pubDate>
+        
+        <guid>https://imfaye.me/post/os9/</guid>
+        <description>PIKA☆NCHI https://imfaye.me/post/os9/ -&lt;h2 id=&#34;background&#34;&gt;background&lt;/h2&gt;
+&lt;p&gt;CH8的内存管理方案需要将整个进程放入内存，动态载入只能减轻这一限制&lt;/p&gt;
+&lt;p&gt;Code needs to be in memory to execute, but entire program rarely used.&lt;/p&gt;
+&lt;p&gt;execute partially-loaded program&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;程序不受现有物理内存大小限制，可以为virtual address space编写程序&lt;/li&gt;
+&lt;li&gt;更多程序可以同时执行，CPU利用率增加，而响应时间、周转时间不增加&lt;/li&gt;
+&lt;li&gt;载入或交换程序所需IO变少，用户程序运行更快&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Virtual memory – separation of user logical memory from physical memory.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577436249080.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;动态内存分配，堆向上增长；子程序调用，栈向下增长。包括洞的虚拟地址空间是稀地址空间。&lt;/p&gt;
+&lt;p&gt;Enables sparse address spaces with holes left for growth, dynamically linked libraries, etc.&lt;/p&gt;
+&lt;p&gt;Virtual memory allows files and memory to be shared by two or more processes through page sharing.&lt;/p&gt;
+&lt;p&gt;虚拟内存实现：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;demand paging&lt;/li&gt;
+&lt;li&gt;demand segmentation&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;demand-paging-按需调页&#34;&gt;demand paging 按需调页&lt;/h2&gt;
+&lt;p&gt;Lazy swapper: never swaps a page into memory unless that page will be needed.&lt;/p&gt;
+&lt;p&gt;swapper对整个进程进行操作，pager只对进程的单个页进行操作&lt;/p&gt;
+&lt;p&gt;页表条目，valid-invalid bit: valid-合法也在内存 invalid-无效(不在逻辑地址空间) 或 有效但在磁盘&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577443877399.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577444151280.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577444186893.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;pure demand paging: 只有在需要时才将页调入内存&lt;/p&gt;
+&lt;p&gt;单个指令可能访问多个页的内存(一页指令，其他页数据)，一个指令可能产生多个page fault. 不过由于locality of reference, 按需调页的性能还算合理。&lt;/p&gt;
+&lt;p&gt;按需调页的硬件支持：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Page table with valid-Invalid bit&lt;/li&gt;
+&lt;li&gt;Secondary memory (swap device with swap space)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;请求调页的关键要求是能够在页错误后instruction restart&lt;/p&gt;
+&lt;p&gt;如果页错误在获取操作数时，再次获取指令，再次译码指令，再次获取操作数。&lt;/p&gt;
+&lt;p&gt;一个指令可能改变多个不同位置。若源和目的块有重叠，源块可能已修改，不能简单地再次执行。(微码计算试图访问两块的两端；临时寄存器保存覆盖位置的值)&lt;/p&gt;
+&lt;p&gt;EAT = (1– p) * memory access time + p * page fault service time&lt;/p&gt;
+&lt;p&gt;page fault service time = page fault overhead+[ swap page out ]+swap page in+restart overhead&lt;/p&gt;
+&lt;p&gt;处理页错误中断和重新启动进程可以通过仔细编码降低开销&lt;/p&gt;
+&lt;p&gt;EAT与页错误率直接相关&lt;/p&gt;
+&lt;p&gt;与文件无关的页需要使用交换空间&lt;/p&gt;
+&lt;h2 id=&#34;copy-on-write-写时复制&#34;&gt;Copy-on-Write 写时复制&lt;/h2&gt;
+&lt;p&gt;fork()使用写时复制技术&lt;/p&gt;
+&lt;p&gt;父子进程开始时共享同一页面。这些页面标记为写时复制页(只有可能修改的页需要标记)。如果任一进程对页进行写，创建一个共享页的副本。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577445363016.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;COW allows more efficient process creation as only modified pages are copied.&lt;/p&gt;
+&lt;p&gt;free pages are allocated from a pool of free pages. 采用按需填零(zero-fill-on-demand)技术分配这些页，需要分配前先填零，因此清除了以前的内容。&lt;/p&gt;
+&lt;p&gt;vfork()，不采用copy-on-write，vfork()将父进程挂起，子进程使用父进程的地址空间。如果子进程修改父进程地址空间的任何页， 父进程重启时可见。主要用于子进程被创建后立即调用exec()的情况。比较高效。用于实现UNIX命令行shell的接口。&lt;/p&gt;
+&lt;h2 id=&#34;page-replacement&#34;&gt;page replacement&lt;/h2&gt;
+&lt;p&gt;Use modify bit (dirty bit) to reduce overhead of page transfers. 不修改的话不需要写回磁盘&lt;/p&gt;
+&lt;p&gt;Page replacement completes separation between logical memory and physical memory.&lt;/p&gt;
+&lt;p&gt;frame-allocation algorithm&lt;/p&gt;
+&lt;p&gt;page replacement algorithm&lt;/p&gt;
+&lt;p&gt;reference string: 内存的引用序列&lt;/p&gt;
+&lt;h3 id=&#34;fifo&#34;&gt;FIFO&lt;/h3&gt;
+&lt;p&gt;Belady&amp;rsquo;s anomaly: 页错误率可能会随着所分配的帧数的增加而增加&lt;/p&gt;
+&lt;h3 id=&#34;optmin&#34;&gt;OPT/MIN&lt;/h3&gt;
+&lt;p&gt;置换最长时间不会使用的页&lt;/p&gt;
+&lt;p&gt;未来知识&lt;/p&gt;
+&lt;h3 id=&#34;lru&#34;&gt;LRU&lt;/h3&gt;
+&lt;p&gt;最长时间没有使用的页&lt;/p&gt;
+&lt;p&gt;By the principle of locality, this should be the page least likely to be referenced in the near future.&lt;/p&gt;
+&lt;p&gt;Associates with each page the time of that page’s last use.&lt;/p&gt;
+&lt;p&gt;两种可行实现：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;counter&lt;/p&gt;
+&lt;p&gt;每个页表项关联一个使用时间域。对每次引用，计数器增加。置换具有最小时间的页。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;stack&lt;/p&gt;
+&lt;p&gt;没引用一个页，页就从栈中删除并放在顶部&lt;/p&gt;
+&lt;p&gt;No search for replacement, LRU page is at the bottom.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;lru-approximation-algorithms&#34;&gt;LRU Approximation Algorithms&lt;/h3&gt;
+&lt;p&gt;LRU needs special hardware and still slow.所以用近似算法&lt;/p&gt;
+&lt;p&gt;页表每项都关联一个reference bit, 每引用一个页(读or写)，引用位被硬件置1&lt;/p&gt;
+&lt;h4 id=&#34;reference-bit-algorithm&#34;&gt;Reference bit algorithm&lt;/h4&gt;
+&lt;p&gt;When page is referenced, the bit is set to 1 by the hardware.&lt;/p&gt;
+&lt;p&gt;Replace the one which is 0 (if one exists).&lt;/p&gt;
+&lt;p&gt;Problem ：We do not know the order.&lt;/p&gt;
+&lt;h4 id=&#34;additional-reference-bits-algorithm&#34;&gt;Additional-reference-bits algorithm&lt;/h4&gt;
+&lt;p&gt;Keep an 8-bit byte for each page in a table in memory.&lt;/p&gt;
+&lt;p&gt;规定时间间隔里记录引用位&lt;/p&gt;
+&lt;p&gt;At regular intervals, a timer interrupts, OS shifts the reference bit for each page into the high-order bit of its 8- bit byte, shifting the other bits right by 1 bit and discarding the low-order bit.&lt;/p&gt;
+&lt;p&gt;将这8位看作无符号整数，置换具有最小值的页&lt;/p&gt;
+&lt;h4 id=&#34;second-chance--clock&#34;&gt;Second chance / Clock&lt;/h4&gt;
+&lt;p&gt;Basic algorithm: FIFO&lt;/p&gt;
+&lt;p&gt;循环队列，指针向前移动直到找到一个引用位为0的页，在向前移动时，清除引用位。&lt;/p&gt;
+&lt;p&gt;如果所有位均已设置，会遍历整个队列。成了FIFO&lt;/p&gt;
+&lt;h4 id=&#34;enhanced-second-chance-algorithm&#34;&gt;Enhanced Second-Chance Algorithm&lt;/h4&gt;
+&lt;p&gt;(reference bit, modify bit)&lt;/p&gt;
+&lt;p&gt;(0,0)最好 (0,1) (1,0) (1,1)&lt;/p&gt;
+&lt;p&gt;降低IO&lt;/p&gt;
+&lt;h3 id=&#34;counting-based-page-replacement&#34;&gt;Counting-based page replacement&lt;/h3&gt;
+&lt;p&gt;每个页保留一个用于记录引用次数的计数器。&lt;/p&gt;
+&lt;p&gt;LFU: replaces page with the smallest count&lt;/p&gt;
+&lt;p&gt;MFU: page with the smallest count was probably just brought in and has yet to be used.&lt;/p&gt;
+&lt;h2 id=&#34;page-allocation-帧分配&#34;&gt;page allocation 帧分配&lt;/h2&gt;
+&lt;p&gt;分配至少最少数量的帧。必须有足够的帧容纳所有单个指令所引用的页。&lt;/p&gt;
+&lt;p&gt;每个进程的帧的最少数量由体系结构决定，最大数量由可用物理内存的数量决定。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;fixed allocation&lt;/p&gt;
+&lt;p&gt;高低优先级一样处理&lt;/p&gt;
+&lt;p&gt;when a page fault occurs, one of the pages of that process must be replaced. &amp;ndash; Local replacement&lt;/p&gt;
+&lt;p&gt;固定分配必须局部置换(置换自己进程里的页)&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;equal allocation&lt;/p&gt;
+&lt;p&gt;n个进程之间分配m个帧，每个m/n帧&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;proportional allocation&lt;/p&gt;
+&lt;p&gt;根据进程大小比例地分配内存&lt;/p&gt;
+&lt;p&gt;进程pi的虚拟内存大小si&lt;/p&gt;
+&lt;p&gt;a i = s i /S * m&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;priority allocation&lt;/p&gt;
+&lt;p&gt;Use a proportional allocation scheme using priorities rather than size, or on a combination of size and priority.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Local replacement:  select for replacement one of its frames&lt;/p&gt;
+&lt;p&gt;​	分配每个进程的帧的数量不变&lt;/p&gt;
+&lt;p&gt;Global replacement:  select for replacement a frame from a process with lower priority number&lt;/p&gt;
+&lt;p&gt;​	易于实现。更好的系统吞吐量，常用。&lt;/p&gt;
+&lt;p&gt;​	OS keeps list of free frames.&lt;/p&gt;
+&lt;p&gt;​	进程不能控制其页错误率(受其他进程调页行为影响)&lt;/p&gt;
+&lt;h2 id=&#34;thrashing-系统颠簸&#34;&gt;thrashing 系统颠簸&lt;/h2&gt;
+&lt;p&gt;thrashing: 频繁的页调度行为&lt;/p&gt;
+&lt;p&gt;如果一个进程在换页上用的时间多于执行时间，这个进程就在颠簸&lt;/p&gt;
+&lt;p&gt;CPU调度程序发现CPU使用率降低，增加多道程序程度&amp;hellip;更多页错误，CPU使用率更低&lt;/p&gt;
+&lt;p&gt;颠簸时，为了增加CPU使用率和降低系统颠簸，必须降低多道程序的程度&lt;/p&gt;
+&lt;p&gt;采用局部置换，一个进程颠簸不会使其他进程颠簸&lt;/p&gt;
+&lt;p&gt;Why does thrashing occur? Σ locality size &amp;gt; total memory size&lt;/p&gt;
+&lt;p&gt;using a local (or priority) replacement algorithm, Can limit the effect of thrashing.&lt;/p&gt;
+&lt;p&gt;为了防止颠簸，必须提供进程所需的足够多的帧。&lt;/p&gt;
+&lt;p&gt;Locality: a set of pages that are actively used together. Process migrates from one locality to another. Localities may overlap.&lt;/p&gt;
+&lt;h3 id=&#34;working-set-model-工作集合模型&#34;&gt;Working-Set Model 工作集合模型&lt;/h3&gt;
+&lt;p&gt;基于局部性假设&lt;/p&gt;
+&lt;p&gt;参数Δ定义working-set window：a fixed number of page references&lt;/p&gt;
+&lt;p&gt;Working Set: the set of pages in the most recent Δ page references.&lt;/p&gt;
+&lt;p&gt;WSS i (working set size of Process P i ) : (varies in time) the number of pages in Working Set of process P i .&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577453374315.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;工作集合的精度与Δ的选择有关，太小不能包含整个局部，太大包含多个局部&lt;/p&gt;
+&lt;p&gt;总的帧需求量 D =Σ WSS i  总的需求大于帧的数量，会出现颠簸&lt;/p&gt;
+&lt;p&gt;OS跟踪每个进程的工作集合，如果D &amp;gt; m，暂停一个进程，该进程的页被写出，且其帧可分配给其他进程&lt;/p&gt;
+&lt;p&gt;通过固定定时中断(interval timer)和引用位(reference bit)可以近似模拟工作集合模型&lt;/p&gt;
+&lt;h3 id=&#34;page-fault-frequency-schemeppf-页错误频率&#34;&gt;Page-Fault Frequency Scheme(PPF) 页错误频率&lt;/h3&gt;
+&lt;p&gt;为所期望的页错误率设置上限和下限。超过上限，为进程分配更多的帧；低于下限，从该进程中移走帧。&lt;/p&gt;
+&lt;p&gt;如果页错误率增加且没有可用帧，必须选择一个进程暂停，可将释放的帧分配给具有高页错误率的进程&lt;/p&gt;
+- https://imfaye.me/post/os9/ - Faye</description>
+        </item>
+    
+    
+    
+        <item>
+        <title>操作系统笔记 CH8 Main Memory</title>
+        <link>https://imfaye.me/post/os8/</link>
+        <pubDate>Fri, 28 Feb 2020 13:08:24 +0000</pubDate>
+        
+        <guid>https://imfaye.me/post/os8/</guid>
+        <description>PIKA☆NCHI https://imfaye.me/post/os8/ -&lt;h2 id=&#34;background&#34;&gt;background&lt;/h2&gt;
+&lt;h3 id=&#34;基本硬件&#34;&gt;基本硬件&lt;/h3&gt;
+&lt;p&gt;CPU可直接访问的存储器只有 内存 和  处理器内的寄存器&lt;/p&gt;
+&lt;p&gt;​	CPU内置寄存器可在一个CPU时钟周期内完成访问，对于寄存器中的内容，CPU可以在一个周期内解析并执行多个指令&lt;/p&gt;
+&lt;p&gt;​	对于内存，访存可能需要多个时钟周期。没有数据时，要暂停(stall)&lt;/p&gt;
+&lt;p&gt;协调速度差异，在CPU和内存之间，增加高速缓存cache&lt;/p&gt;
+&lt;p&gt;instruction-execution cycle: Fetch an instruction, decode instruction, fetch operands, execute, store results back into memory&lt;/p&gt;
+&lt;p&gt;为了确保正确操作，需要保护内存。&lt;/p&gt;
+&lt;p&gt;每个进程有独立空间。两个寄存器：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;base register: 最小的合法物理地址&lt;/li&gt;
+&lt;li&gt;limit register: 范围的大小&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;CPU硬件对user mode产生的每一个地址与寄存器的地址进行比较，实现内存空间的保护。&lt;/p&gt;
+&lt;p&gt;只有OS可以通过特殊的特权指令加载base register和limit register&lt;/p&gt;
+&lt;h3 id=&#34;地址绑定-address-binding&#34;&gt;地址绑定 address binding&lt;/h3&gt;
+&lt;p&gt;进程在执行时可以在磁盘和内存之间移动，在磁盘上等待调入内存以便执行的进程形成input queue&lt;/p&gt;
+&lt;p&gt;许多系统允许用户进程放在物理内存的任意位置，用户进程开始地址不必为0&lt;/p&gt;
+&lt;p&gt;源程序中的地址用符号表示，compiler将symbolic address绑定到relocatable address(如从本模块开始的第14字节)，linker或loader将可重定位地址绑定成absolute address。每次绑定都是从一个地址空间到另一个的映射。&lt;/p&gt;
+&lt;p&gt;将指令与数据绑定到内存地址有几种情况：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;compile time&lt;/p&gt;
+&lt;p&gt;编译时就知道进程将在内存中的驻留地址，可以生成absolute code&lt;/p&gt;
+&lt;p&gt;如果将来地址发生变化，必须重新编译代码&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;load time&lt;/p&gt;
+&lt;p&gt;编译时不知道。编译器生成relocatable code&lt;/p&gt;
+&lt;p&gt;绑定延迟到加载时&lt;/p&gt;
+&lt;p&gt;如果开始地址发生变化，只需重新加载用户代码引入改变值&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;execution time&lt;/p&gt;
+&lt;p&gt;进程在执行时可以从一个内存段移到另一个内存段&lt;/p&gt;
+&lt;p&gt;绑定延迟到执行时&lt;/p&gt;
+&lt;p&gt;需要硬件(如base and limit registers)&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577411832987.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;h3 id=&#34;logical-vs-physical-address-space&#34;&gt;logical vs. physical address space&lt;/h3&gt;
+&lt;p&gt;logical address: CPU生成的地址，virtual adderss&lt;/p&gt;
+&lt;p&gt;physical address: 内存单元看到的地址，即加载到memory-address register的地址&lt;/p&gt;
+&lt;p&gt;compile-time和load-time的address binding生成相同的逻辑地址和物理地址，但execution-time生成不同的，这种情况称逻辑地址为virtual address&lt;/p&gt;
+&lt;p&gt;logical address space: 程序所生成的所有逻辑地址的集合&lt;/p&gt;
+&lt;p&gt;physical address space: 与这些逻辑地址相对应的物理地址的集合&lt;/p&gt;
+&lt;p&gt;运行时完成从虚拟到物理的地址映射的硬件：MMU(memory-management unit)&lt;/p&gt;
+&lt;p&gt;relocation register: 用户进程所生成的地址送交内存前，加上relocation register的值&lt;/p&gt;
+&lt;p&gt;用户程序绝不会看到真正的物理地址(execution-binding只发生在它作为内存地址引用时(比如间接加载和存储时))&lt;/p&gt;
+&lt;p&gt;用户程序处理逻辑地址，内存映射硬件将逻辑地址映射为物理地址&lt;/p&gt;
+&lt;h2 id=&#34;swapping&#34;&gt;swapping&lt;/h2&gt;
+&lt;p&gt;进程可以暂时从内存swap到backing store上，需要再次执行时再调入内存&lt;/p&gt;
+&lt;p&gt;backing store通常是fast disk，容纳所有用户的memory images，提供对这些内存镜像的直接访问。&lt;/p&gt;
+&lt;p&gt;ready queue包括在backing store和在内存中准备运行的所有进程&lt;/p&gt;
+&lt;p&gt;如果绑定是在汇编时或加载时所定的，一个交换出的进程必须交换回原来的内存空间，如果绑定是在运行是所定，可以移到不同的位置&lt;/p&gt;
+&lt;p&gt;roll in, roll out: 交换策略的变种被用在基于优先级的调度算法中&lt;/p&gt;
+&lt;p&gt;Dispatcher is called whenever the CPU scheduler decides to execute a process&lt;/p&gt;
+&lt;p&gt;交换系统的context switch time比较长&lt;/p&gt;
+&lt;p&gt;为了有效使用CPU，需要每个进程的执行时间比交换时间长&lt;/p&gt;
+&lt;p&gt;交换时间主要是transfer time, 和所交换的内存空间成正比(进程10MB，备份存储是40MBps的硬盘，传入或传出：10MB/40MBps)&lt;/p&gt;
+&lt;p&gt;如果要换出进程，必须确保该进程完全处于空闲状态&lt;/p&gt;
+&lt;p&gt;solution to 待处理IO(pending IO)&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;不能换出有待处理IO的进程&lt;/li&gt;
+&lt;li&gt;IO操作的执行只能使用OS buffers. double buffering&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;交换空间通常作为磁盘的一整块，且独立于文件系统。&lt;/p&gt;
+&lt;p&gt;标准交换使用不多，一些交换的变种得到应用。(不如通常不执行交换，许多进程运行且内存吃紧，开始交换，若系统负荷降低，停止交换)&lt;/p&gt;
+&lt;h2 id=&#34;contiguous-memory-allocation&#34;&gt;contiguous memory allocation&lt;/h2&gt;
+&lt;p&gt;内存通常分为两部分，一部分驻留OS，一部分用于用户进程。操作系统通常位于低内存。&lt;/p&gt;
+&lt;p&gt;连续内存分配：每个进程位于一个连续的内存区域&lt;/p&gt;
+&lt;h3 id=&#34;内存映射和保护&#34;&gt;内存映射和保护&lt;/h3&gt;
+&lt;p&gt;relocation-register scheme:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;relocatio/base register&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;limit register&lt;/p&gt;
+&lt;p&gt;每个逻辑地址必须小于limit register&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;MMU动态地将逻辑地址加上relocation register的值后映射成物理地址&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577415727527.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;relocation-register scheme允许OS动态改变。如果某驱动程序不常用，不必再内存保存数据和代码，transient kernel code根据需要调入或调出，使用这类代码可以在程序运行时动态改变OS大小&lt;/p&gt;
+&lt;h3 id=&#34;memory-allocation&#34;&gt;memory allocation&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;fixed partitioning (MFT)&lt;/p&gt;
+&lt;p&gt;多道程序的程度受分区数限制&lt;/p&gt;
+&lt;p&gt;internal fragmentation: 进程所分配的内存比所需要大&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;equal-size partitions&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;unequal-size partitions&lt;/p&gt;
+&lt;p&gt;queue for each partition&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;variable partitioning (MVT)&lt;/p&gt;
+&lt;p&gt;variable length and number&lt;/p&gt;
+&lt;p&gt;hole: a block of available memory&lt;/p&gt;
+&lt;p&gt;OS维护一个表，记录哪些内存可用/已被占用&lt;/p&gt;
+&lt;p&gt;recaim的时候如果新孔与其他孔相邻，将这些孔合并成大孔&lt;/p&gt;
+&lt;p&gt;从一组可用孔选择一个：fisrst-fit, best-fit, worst-fit&lt;/p&gt;
+&lt;p&gt;fisrt fit: 50% rule N个可分配快，0.5N个块为外部碎片，1/3内存不可用&lt;/p&gt;
+&lt;p&gt;first和best在时间和利用空间好于worst，first和best利用空间差不多，first更快。&lt;/p&gt;
+&lt;p&gt;external fragmentation: 所有可用内存之和可以满足要求，但并不连续&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;解决外部碎片：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;紧缩(compaction)&lt;/p&gt;
+&lt;p&gt;把所有空闲空间合并成一整块&lt;/p&gt;
+&lt;p&gt;紧缩仅在重定位是动态并在运行时可采用&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;允许物理地址空间非连续&lt;/p&gt;
+&lt;p&gt;分页/分段&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;paging-分页&#34;&gt;paging 分页&lt;/h2&gt;
+&lt;p&gt;允许进程物理地址空间非连续&lt;/p&gt;
+&lt;p&gt;帧(frame): 物理内存划分为固定大小的块&lt;/p&gt;
+&lt;p&gt;页(page): 逻辑内存分为同样大小的块&lt;/p&gt;
+&lt;p&gt;backing store也划分为固定大小的块(block)&lt;/p&gt;
+&lt;p&gt;页大小由硬件决定，通常为2的幂(power of 2)，512B~16MB&lt;/p&gt;
+&lt;p&gt;When a process is to be executed, its pages are loaded into any available memory frames from the blocks.&lt;/p&gt;
+&lt;p&gt;OS为每个进程维护一个page table, contains the frame location for each page in the process, page table used to translate logical to physical addresse&lt;/p&gt;
+&lt;p&gt;有internal fragmentation(进程要求内存大小不是页大小的整数倍)&lt;/p&gt;
+&lt;p&gt;由CPU生成的地址分为两部分：page number(used as an index into a page table), page offset&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577426080611.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;逻辑地址页号位数：进程可以有多少页决定&lt;/p&gt;
+&lt;p&gt;物理地址页号位数：帧数决定&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577426108848.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577426371002.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;分页特定：用户视角的内存与物理内存分离。用户程序将内存作为一整块处理，只包括这一个进程。逻辑地址到物理地址的映射由硬件完成，用户不知道。&lt;/p&gt;
+&lt;h3 id=&#34;分页的硬件支持&#34;&gt;分页的硬件支持&lt;/h3&gt;
+&lt;p&gt;每个进程一个页表。页表的指针与其他寄存器的值存入PCB。启动进程时，首先装入用户寄存器。&lt;/p&gt;
+&lt;p&gt;&amp;lt;256 entries, 页表可作为一组专用寄存器实现；大的页表存在内存中。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;PTBR(Page-table base register)&lt;/li&gt;
+&lt;li&gt;PTLR(Page-table length register)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;装入或修改页表寄存器的指令是特权级的&lt;/p&gt;
+&lt;p&gt;访问一个字节需要2次访存(一次页表条目，一次字节)&lt;/p&gt;
+&lt;h4 id=&#34;tlb&#34;&gt;TLB&lt;/h4&gt;
+&lt;p&gt;解决这个问题：TLB(translation look-aside buffer / associative memory)&lt;/p&gt;
+&lt;p&gt;The given page number is compared with all keys simultaneously.&lt;/p&gt;
+&lt;p&gt;page # 和 frame #&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;a hit&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;a miss&lt;/p&gt;
+&lt;p&gt;the page number is used to index the process page table&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577427134596.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;有的TLB允许有些条目固定下来 wired down(e.g. entries for kernel code)&lt;/p&gt;
+&lt;p&gt;有的TLB在在每个TLB条目中保存ASID(address-space identifier)，可唯一地标识进程，为进程提供地址空间保护，允许TLB同时包含多个不同进程的条目&lt;/p&gt;
+&lt;h4 id=&#34;eateffective-access-time&#34;&gt;EAT(Effective Access Time)&lt;/h4&gt;
+&lt;p&gt;hit ratio: 页号在TLB中被查找到的百分比率&lt;/p&gt;
+&lt;h3 id=&#34;内存保护&#34;&gt;内存保护&lt;/h3&gt;
+&lt;p&gt;分页环境下，内存保护通过与每个帧相关联的保护位实现。这些位保存在页表里。&lt;/p&gt;
+&lt;p&gt;RW bit: read-write or read-only&lt;/p&gt;
+&lt;p&gt;valid-invalid bit: 在不在进程的逻辑地址空间中。有点浪费，所以有时用PTLR看页表长度&lt;/p&gt;
+&lt;p&gt;Any violations result in a trap to the kernel.&lt;/p&gt;
+&lt;h2 id=&#34;页表结构&#34;&gt;页表结构&lt;/h2&gt;
+&lt;h3 id=&#34;层次页表-hierarchical&#34;&gt;层次页表 Hierarchical&lt;/h3&gt;
+&lt;p&gt;forward-mapped page table&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577427835376.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;e.g. VAX(virtual address extension)体系结构支持一种两层分页的变种&lt;/p&gt;
+&lt;p&gt;页表项长度是页面的地址。页表大小=页面个数*页表项长度 。&lt;/p&gt;
+&lt;h3 id=&#34;哈希页表-hashed-page-tables&#34;&gt;哈希页表 Hashed Page Tables&lt;/h3&gt;
+&lt;p&gt;Common in address spaces &amp;gt; 32 bits&lt;/p&gt;
+&lt;p&gt;哈希页表每一条目包括一个链表的元素，每个元素3个域：1虚拟页码  2所映射的帧号 3指向链表中下一元素的指针&lt;/p&gt;
+&lt;p&gt;群集页表(clustered page table)类似于哈希页表，不过每一条目包括多页，对于稀疏地址空间有用&lt;/p&gt;
+&lt;h3 id=&#34;反向页表-inverted-page-table&#34;&gt;反向页表 Inverted Page Table&lt;/h3&gt;
+&lt;p&gt;Rather than each process having a page table and keeping track of all possible logical pages, track all physical pages.&lt;/p&gt;
+&lt;p&gt;One entry for each real frame of memory.&lt;/p&gt;
+&lt;p&gt;每个条目包含 保存在真正内存位置的页的虚拟地址 和 拥有该页的进程的信息&lt;/p&gt;
+&lt;p&gt;整个系统只有一个页表。&lt;/p&gt;
+&lt;p&gt;Often requires an address-space identifier (ASID) stored in each entry of the page table.&lt;/p&gt;
+&lt;p&gt;Ensures the mapping of a logical page for a particular process to the corresponding physical page frame.&lt;/p&gt;
+&lt;p&gt;&amp;lt; process-id, page-number, offset &amp;gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577428523948.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;减少存储空间，但增加了查找时间。&lt;/p&gt;
+&lt;p&gt;可以通过哈希页表将查找限制在较少的条目中。访问哈希表时先访问TLB&lt;/p&gt;
+&lt;p&gt;反向页表实现共享内存困难。共享内存通常作为被映射到一个物理地址的多虚拟地址实现。而反向页表，每个物理页只有一个虚拟页条目。&lt;/p&gt;
+&lt;p&gt;解决办法：允许页表包含one mapping of a virtual address to the shared physical address&lt;/p&gt;
+&lt;h2 id=&#34;分段-segmentation&#34;&gt;分段 segmentation&lt;/h2&gt;
+&lt;p&gt;用户视角的内存管理方案&lt;/p&gt;
+&lt;p&gt;每个段有名称和长度。地址指定了段名称和段偏移。&lt;/p&gt;
+&lt;p&gt;分段：用户通过两个量指定地址，段名称和段偏移；分页：用户只指定一个地址，该地址通过硬件分为页码和偏移，对用户透明&lt;/p&gt;
+&lt;p&gt;&amp;lt;segment-number, offset&amp;gt;&lt;/p&gt;
+&lt;p&gt;二维用户定义地址映射为一维物理地址，通过段表(segment table)实现，段表每个条目有segment base和segment limit&lt;/p&gt;
+&lt;p&gt;STBR(segment-table base register): points to the segment table’s location in memory&lt;/p&gt;
+&lt;p&gt;STLR(segment-table limit register): indicates number of segments used by a program&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577429459185.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577429477972.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+- https://imfaye.me/post/os8/ - Faye</description>
+        </item>
+    
+    
+    
+        <item>
+        <title>操作系统笔记 CH7 Deadlocks</title>
+        <link>https://imfaye.me/post/os7/</link>
+        <pubDate>Fri, 28 Feb 2020 13:07:24 +0000</pubDate>
+        
+        <guid>https://imfaye.me/post/os7/</guid>
+        <description>PIKA☆NCHI https://imfaye.me/post/os7/ -&lt;h2 id=&#34;deadlock-characteristics&#34;&gt;deadlock characteristics&lt;/h2&gt;
+&lt;h3 id=&#34;necessary-conditions&#34;&gt;necessary conditions&lt;/h3&gt;
+&lt;p&gt;4个条件同时满足，引起死锁：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;mutual exclusion&lt;/p&gt;
+&lt;p&gt;至少有一个资源处于非共享模式，一次只能有一个进程使用&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;hold and wait&lt;/p&gt;
+&lt;p&gt;占有至少一个资源，等待另一为其他进程所占资源&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;no preemption&lt;/p&gt;
+&lt;p&gt;资源不能被抢占&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;circular wait&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;resource-allocation-graph&#34;&gt;resource-allocation graph&lt;/h3&gt;
+&lt;p&gt;request edge : Pi-&amp;gt;Rj&lt;/p&gt;
+&lt;p&gt;assignment edge : Rj-&amp;gt;Pi&lt;/p&gt;
+&lt;p&gt;申请边只用指向矩形，但分配边必须从某个原点开始&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573293211940.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;资源分配图有环是死锁的必要条件。若每类资源只有一个实例，含环是充分必要条件。若同类资源数&amp;gt;1,不一定有死锁。&lt;/p&gt;
+&lt;h2 id=&#34;methods-for-handling-deadlocks&#34;&gt;methods for handling deadlocks&lt;/h2&gt;
+&lt;p&gt;1.预防或避免死锁&lt;/p&gt;
+&lt;p&gt;2.允许进入死锁，检测并恢复&lt;/p&gt;
+&lt;p&gt;3.忽视这个问题(为多数OS所用)&lt;/p&gt;
+&lt;p&gt;deadlock prevention: 确保至少一个必要条件不成立，通过限制如何申请资源&lt;/p&gt;
+&lt;p&gt;deadlock avoidance: 事先得到进程申请和使用资源的额外信息，系统可确定对于一个申请，进程是否等待(申请允许还是延迟)，考虑可用、已分配、进程将来申请和释放的资源&lt;/p&gt;
+&lt;h2 id=&#34;deadlock-prevention&#34;&gt;deadlock prevention&lt;/h2&gt;
+&lt;p&gt;确保4个必要条件至少1个不成立&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;mutual exclusion&lt;/p&gt;
+&lt;p&gt;通常不通过这个条件&amp;hellip;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;hold and wait&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;每个进程在执行前申请并获得所有资源&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;进程在没有资源时才可申请资源(申请更多资源前，先释放已分配的资源)&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;缺点:1.资源利用率低 2.starvation&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;no preemption&lt;/p&gt;
+&lt;p&gt;如果一个进程占有资源并申请另一个不能立即分配的资源，其现在已分配的资源都可被抢占(被隐式释放)。&lt;/p&gt;
+&lt;p&gt;进程申请资源时，不可用也不被其他等待进程占有时，等待&lt;/p&gt;
+&lt;p&gt;常应用于状态可以保存恢复的资源，如CPU寄存器和内存，不适用于打印机和磁带驱动器等。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;circular wait&lt;/p&gt;
+&lt;p&gt;对所有资源类型进行完全排序。每个进程只按递增顺序申请资源。(只能申请编号比它大的)&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;deadlock-avoidance&#34;&gt;deadlock avoidance&lt;/h2&gt;
+&lt;p&gt;死锁避免比死锁预防要求低&lt;/p&gt;
+&lt;p&gt;deadlock prevention 低设备使用率和吞吐率&lt;/p&gt;
+&lt;p&gt;a system is in a safe state only if there exists a safe sequence&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573295674796.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;h3 id=&#34;resource-allocation-graph-algorithm&#34;&gt;resource-allocation-graph algorithm&lt;/h3&gt;
+&lt;p&gt;增加claim edge(需求边)，虚线&lt;/p&gt;
+&lt;p&gt;当进程Pi开始执行时，所有需求边必须先处于资源分配图。(可放宽为只要与Pi有关的需求边)&lt;/p&gt;
+&lt;p&gt;只有在申请边Pi-&amp;gt;Rj变成分配边Rj-&amp;gt;Pi，而不会出现环时，才允许申请。环存在是unsafe state&lt;/p&gt;
+&lt;p&gt;cycle-detection algorithm&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573296280721.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;h3 id=&#34;bankers-algorithm&#34;&gt;banker&amp;rsquo;s algorithm&lt;/h3&gt;
+&lt;p&gt;自己看书做题去 P247&lt;/p&gt;
+&lt;h2 id=&#34;deadlock-detection&#34;&gt;deadlock detection&lt;/h2&gt;
+&lt;p&gt;不采用prevention和avoidance，应提供检查是否出现死锁&amp;amp;恢复算法。&lt;/p&gt;
+&lt;h3 id=&#34;每种资源类型单个实例&#34;&gt;每种资源类型单个实例&lt;/h3&gt;
+&lt;p&gt;wait-for graph: Pi等待Pj释放一个Pi需要的资源&lt;/p&gt;
+&lt;p&gt;Pi-&amp;gt;Pj iff 资源分配图中 Pi-&amp;gt;Rq, Rq-&amp;gt;Pj&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573296978952.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;图中有环 &amp;lt;-&amp;gt; 死锁&lt;/p&gt;
+&lt;h3 id=&#34;每种资源类型多个实例&#34;&gt;每种资源类型多个实例&lt;/h3&gt;
+&lt;p&gt;detection algorithm&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573297606742.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;h3 id=&#34;资源图消边法&#34;&gt;资源图消边法&lt;/h3&gt;
+&lt;p&gt;PPT P45 + 看橘&lt;/p&gt;
+&lt;h2 id=&#34;recovery-from-deadlock&#34;&gt;recovery from deadlock&lt;/h2&gt;
+&lt;h3 id=&#34;process-termination&#34;&gt;process termination&lt;/h3&gt;
+&lt;p&gt;不管哪种进程终止方法，系统都会收回分配给终止进程的所有资源&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;终止所有死锁进程&lt;/li&gt;
+&lt;li&gt;一次终止一个，调用死锁检测，直到取消死锁循环&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;resource-preemption&#34;&gt;resource preemption&lt;/h3&gt;
+&lt;p&gt;select a victim: which resources and which processes are to be preempted 代价因素 cost factors&lt;/p&gt;
+&lt;p&gt;rollback: 抢占资源后对进程做什么安排 roll back to some safe state. simplest: total rollback&lt;/p&gt;
+&lt;p&gt;starvation: 如何保证资源总是从一个进程抢占 在代价因素中加上回滚次数&lt;/p&gt;
+- https://imfaye.me/post/os7/ - Faye</description>
+        </item>
+    
+    
+  </channel>
+</rss> 

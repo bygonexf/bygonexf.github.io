@@ -1,232 +1,1071 @@
 <!DOCTYPE html>
-<html lang="cn">
-
-<head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-	
-	<title>Play Back End Roll  | 多媒体基础知识</title>
-	<meta name="viewport" content="width=device-width,minimum-scale=1">
-	<meta name="generator" content="Hugo 0.105.0">
-	
-	
-	<META NAME="ROBOTS" CONTENT="INDEX, FOLLOW">
-	
-
-	
-	
-	<link href="/dist/app.css" rel="stylesheet">
-	
-
-	
-
-	
-	
-<link rel="shortcut icon" href="img/wind.png" type="image/png" />
-
-	
-
-	
-	
-	
-<script type="application/javascript">
-var doNotTrack = false;
-if (!doNotTrack) {
-	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-	ga('create', 'UA-FAKE', 'auto');
-	
-	ga('send', 'pageview');
-}
-</script>
-	
-	
-	
+<html><head>
+<title>多媒体基础知识</title>
 
 
 
-<link rel="stylesheet" href='https://imfaye.me/lib/katex.min.css' crossorigin="anonymous">
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
 
 
-<script defer src='https://imfaye.me/lib/katex.min.js' crossorigin="anonymous"></script>
+
+<meta property="og:title" content="多媒体基础知识" />
+<meta property="og:description" content="图像数值表示 分辨率 分辨率的基础单位是像素。1280 * 720 P 的分辨率代表共有 1280 * 720 个像素点。
+一台物理设备出厂时就已经定下了它所能拥有的最大像素点是多少。电脑显示屏调整分辨率是系统通过运算来给出模拟色彩块填充适配的。
+下述像素排列方式内容为 expansion pack，可略过。
+像素排列方式 标准 RGB 排列 LCD 屏幕上常采用标准 RGB 排列，会将一个像素分为 3 个子像素并排排列，通过红、绿、蓝滤色片将 LCD 背光模组的白光过滤后形成相应的 RGB 子像素排列。当需要显示不同颜色的时候，3 个子像素以不同的亮度发光，在视觉上会混合成所需要的颜色。
+PenTile 排列 PenTile 排列多见于 OLED 屏幕上，因子像素呈现钻石排列而得名。PenTile 排列的每个像素由红、绿和蓝、绿子像素组合而成，绿色像素是完整的，而红蓝像素相比传统 RGB 排列各减少二分之一，子像素总数减少了约三分之一。
+不像标准 RGB 排列每个像素更加独立，PenTile 排列在显示许多内容时需要借用相邻像素，显示精细内容时同分辨率下相较标准 RGB 排列的屏幕细腻度不足。
+蓝色 OLED 的发光效率要比红色和绿色低，达到相同的发光强度必须使用更高的通过电流，因而蓝色像素衰减速度更快，也就会加速“烧屏”现象的产生。
+YUV 表示方式 对于视频裸数据而言，更多使用 YUV 数据格式显示。
+Y 表示明亮度 (Luminance / Luma)，即灰阶值 U、V 表示色度 (Chrominance / Chroma)，描述色调饱和度 亮度通过 RGB 输入信号来建立，方法是将 RGB 信号的特定部分叠加到一起。色度定义了颜色的色彩和饱和度，分别用 Cr 和 Cb 表示。Cr 表示 RGB 输入信号红色部分与 RGB 亮度值之间的差异，Cb 表示 RGB 输入信号蓝色部分与 RGB 信号亮度值之间的差异。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://imfaye.me/post/multimedia-basics/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2021-03-29T15:10:25+00:00" />
+<meta property="article:modified_time" content="2021-03-29T15:10:25+00:00" /><meta property="og:site_name" content="My Blog" />
 
 
-<script defer src='https://imfaye.me/lib/contrib/auto-render.min.js'
-crossorigin="anonymous"
-onload='renderMathInElement(document.body);'></script>
 
 
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="多媒体基础知识"/>
+<meta name="twitter:description" content="图像数值表示 分辨率 分辨率的基础单位是像素。1280 * 720 P 的分辨率代表共有 1280 * 720 个像素点。
+一台物理设备出厂时就已经定下了它所能拥有的最大像素点是多少。电脑显示屏调整分辨率是系统通过运算来给出模拟色彩块填充适配的。
+下述像素排列方式内容为 expansion pack，可略过。
+像素排列方式 标准 RGB 排列 LCD 屏幕上常采用标准 RGB 排列，会将一个像素分为 3 个子像素并排排列，通过红、绿、蓝滤色片将 LCD 背光模组的白光过滤后形成相应的 RGB 子像素排列。当需要显示不同颜色的时候，3 个子像素以不同的亮度发光，在视觉上会混合成所需要的颜色。
+PenTile 排列 PenTile 排列多见于 OLED 屏幕上，因子像素呈现钻石排列而得名。PenTile 排列的每个像素由红、绿和蓝、绿子像素组合而成，绿色像素是完整的，而红蓝像素相比传统 RGB 排列各减少二分之一，子像素总数减少了约三分之一。
+不像标准 RGB 排列每个像素更加独立，PenTile 排列在显示许多内容时需要借用相邻像素，显示精细内容时同分辨率下相较标准 RGB 排列的屏幕细腻度不足。
+蓝色 OLED 的发光效率要比红色和绿色低，达到相同的发光强度必须使用更高的通过电流，因而蓝色像素衰减速度更快，也就会加速“烧屏”现象的产生。
+YUV 表示方式 对于视频裸数据而言，更多使用 YUV 数据格式显示。
+Y 表示明亮度 (Luminance / Luma)，即灰阶值 U、V 表示色度 (Chrominance / Chroma)，描述色调饱和度 亮度通过 RGB 输入信号来建立，方法是将 RGB 信号的特定部分叠加到一起。色度定义了颜色的色彩和饱和度，分别用 Cr 和 Cb 表示。Cr 表示 RGB 输入信号红色部分与 RGB 亮度值之间的差异，Cb 表示 RGB 输入信号蓝色部分与 RGB 信号亮度值之间的差异。"/>
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+<link rel="icon" href="https://imfaye.me/img/wind.png">
+
+
+
+      <script src="/js/toc.js"></script>
+    
+    <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
+<link rel="stylesheet" href="/scss/journal.min.d4c42cc03dd5885ad6a856f72cdc8991e948d78f13915e5ad7a9ea75041f0501.css" integrity="sha256-1MQswD3ViFrWqFb3LNyJkelI148TkV5a16nqdQQfBQE=" media="screen">
+
+
+
+<link rel="stylesheet" href="/scss/dark-mode.min.b063970adbc0451db461a3b3a99c3ac07ae784200123238e4bc8fc340e6b69ce.css" integrity="sha256-sGOXCtvARR20YaOzqZw6wHrnhCABIyOOS8j8NA5rac4=" media="screen">
+
+
+<link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Material+Icons">
+
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.css" integrity="sha384-RZU/ijkSsFbcmivfdRBQDtwuwVqK7GMOw6IMvKyeWL2K5UAlyp6WonmB8m7Jd0Hn" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.js" integrity="sha384-pK1WpvzWVBQiP0/GjnvRxV4mOb0oxFuyRxJlk6vVw146n3egcN5C925NCP7a7BY8" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/contrib/auto-render.min.js" integrity="sha384-vZTG03m+2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl" crossorigin="anonymous"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         renderMathInElement(document.body, {
-            delimiters: [
-                {left: "$$", right: "$$", display: true},
-                {left: "$", right: "$", display: false}
-            ]
+          
+          
+          delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false},
+              {left: '\\(', right: '\\)', display: false},
+              {left: '\\[', right: '\\]', display: true}
+          ],
+          
+          throwOnError : false
         });
     });
 </script>
 
-	
-	
-	
-	<script>
-		(function (u, c) {
-			var d = document,
-				t = 'script',
-				o = d.createElement(t),
-				s = d.getElementsByTagName(t)[0];
-			o.src = u;
-			if (c) {
-				o.addEventListener('load', function (e) {
-					c(e);
-				});
-			}
-			s.parentNode.insertBefore(o, s);
-		})('https:\/\/imfaye.me\/lib\/pangu.min.js', function () {
-			pangu.spacingPage();
-		});
-	</script>
-	
-	
-	
-	<style type="text/css" media="screen, print">
-		@font-face {
-			font-family: "FancyTitleFont";
-			font-style: normal;
-			font-display: swap;
-			src: url('https://imfaye.me/fonts/exampleFont.woff2') format('woff2'),
-				url('https://imfaye.me/fonts/exampleFont.woff') format('woff');
-		}
-		 
-		  
-		 
-		@font-face {
-			font-family: 'Noto Serif CJK SC';
-			font-style: normal;
-			font-weight: 300;
-			font-display: swap;
-			src: local('Noto Serif CJK SC Light'), local('NotoSerifCJK-Light'),
-				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-300.woff2') format('woff2'),
-				 
-				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-300.woff') format('woff');
-			 
-		}
 
-		 
-		@font-face {
-			font-family: 'Noto Serif CJK SC';
-			font-style: normal;
-			font-weight: 400;
-			font-display: swap;
-			src: local('Noto Serif CJK SC'), local('NotoSerifCJK-Regular'),
-				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-regular.woff2') format('woff2'),
-				 
-				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-regular.woff') format('woff');
-			 
-		}
 
-		 
-		@font-face {
-			font-family: 'Noto Serif CJK SC';
-			font-style: normal;
-			font-weight: 500;
-			font-display: swap;
-			src: local('Noto Serif CJK SC Medium'), local('NotoSerifCJK-Medium'),
-				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-500.woff2') format('woff2'),
-				 
-				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-500.woff') format('woff');
-			 
-		}
-	</style>
-	
+
+
+
+
+
+
+
+
+
+
+
+
+
 </head>
+<body>
+    	<div id="app"><div id="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="https://imfaye.me/">
+    
+        <div class="nav-title">
+            PIKA☆NCHI
+        </div>
+        
+        <div class="nav-subtitle">
+            Faye&#39;s Blog
+        </div>
+        
+    </a>
 
-<body class="bg-gray-100 text-gray-700 font-sans">
-	<div class="p-6 sm:p-10 md:p-16 flex flex-wrap">
-		<header class="w-full md:w-2/5 xl:w-1/2 md:pr-12 lg:pr-20 xl:pr-24 order-1 md:order-1 max-w-2xl">
-			<div
-				class="z-50 bg-gray-100 bg-opacity-75 bg-opacity-custom lg:min-w-0.7 max-w-xl md:float-right md:text-right leading-loose tracking-tight md:sticky md:top-0 pt-2">
-				
-<div>
-	<h2>
-		<a href="https://imfaye.me/" title="Play Back End Roll" class="heading font-cursive icon">Play Back End Roll</a>
-	</h2>
-</div>
-<h1 class="pt-2">多媒体基础知识</h1>
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/posts">
+                归档
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/categories">
+                分类
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/tags">
+                标签
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/about">
+                关于
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/index.xml">
+                RSS
+            </a>
+            
+        
+    </div>
 
-<div class="flex flex-wrap justify-end pt-2 "><div class="md:flex-grow-0 font-light">
+    
+
+    <div class="nav-footer">
+        
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+移植自 <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
 	
-	
-	
-	
-	<a class="post-taxonomy-category text-medium-red-violet-600 hover:text-medium-red-violet-400"
-		href='/categories/%E6%97%A0%E6%83%85%E7%AC%94%E8%AE%B0'>无情笔记</a>
-	
-	
+	Faye
 	
 
-	
-	&nbsp;&nbsp;
-	
-
-	
-	
-	
-	
-	<a class="post-taxonomy-tag text-eucalyptus-500"
-		href='/tags/%E5%A4%9A%E5%AA%92%E4%BD%93'>多媒体</a>&nbsp;&#47;
-	
-	<a class="post-taxonomy-tag text-eucalyptus-500"
-		href='/tags/%E8%A7%86%E9%A2%91%E7%BC%96%E7%A0%81'>视频编码</a>
-	
-	
-	
-</div><time class="text-eucalyptus-500 md:text-right md:flex-grow font-light pl-4"
-		datetime="2021-03-29T15:10:25Z">2021-3-29</time>
-</div>
-
-<details class="toc" open>
-<summary>
-    <hr />
-</summary>
-<div class="inline toc-content">
-    <nav id="TableOfContents">
-  <ul>
-    <li><a href="#图像数值表示">图像数值表示</a>
-      <ul>
-        <li><a href="#分辨率">分辨率</a></li>
-        <li><a href="#像素排列方式">像素排列方式</a></li>
-        <li><a href="#yuv-表示方式">YUV 表示方式</a></li>
-      </ul>
-    </li>
-    <li><a href="#ibp-帧">IBP 帧</a></li>
-    <li><a href="#gop">GOP</a></li>
-    <li><a href="#码率和帧率">码率和帧率</a>
-      <ul>
-        <li><a href="#帧率-frame-rate">帧率 (Frame Rate)</a></li>
-        <li><a href="#码率比特率">码率（比特率）</a></li>
-      </ul>
-    </li>
-    <li><a href="#参考">参考</a></li>
-  </ul>
-</nav>
-</div>
-</details>
-
-<hr />
+    </div>
+    
+</div><div id="extraContainer" class="extra-container">
+    
+    
+    <div class="toc animated-visibility" :class="{ invisible: scrollY <= 140 }">
 
 
-			</div>
-		</header>
-		<main role="main" class="w-full md:w-3/5 xl:w-1/2 max-w-3xl order-2 md:order-2 min-h-70vh pt-2 pb-4">
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- 目录 -</center>
+		
+		
+		<ul>
 			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e5%9b%be%e5%83%8f%e6%95%b0%e5%80%bc%e8%a1%a8%e7%a4%ba" onclick="onNavClick(`#图像数值表示-nav`)" id="图像数值表示-nav">
+									图像数值表示
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e5%88%86%e8%be%a8%e7%8e%87" onclick="onNavClick(`#分辨率-nav`)" id="分辨率-nav">
+									分辨率
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%83%8f%e7%b4%a0%e6%8e%92%e5%88%97%e6%96%b9%e5%bc%8f" onclick="onNavClick(`#像素排列方式-nav`)" id="像素排列方式-nav">
+									像素排列方式
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e6%a0%87%e5%87%86-rgb-%e6%8e%92%e5%88%97" onclick="onNavClick(`#标准-rgb-排列-nav`)" id="标准-rgb-排列-nav">
+									标准 RGB 排列
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#pentile-%e6%8e%92%e5%88%97" onclick="onNavClick(`#pentile-排列-nav`)" id="pentile-排列-nav">
+									PenTile 排列
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#yuv-%e8%a1%a8%e7%a4%ba%e6%96%b9%e5%bc%8f" onclick="onNavClick(`#yuv-表示方式-nav`)" id="yuv-表示方式-nav">
+									YUV 表示方式
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#yuv-%e4%bc%98%e7%82%b9" onclick="onNavClick(`#yuv-优点-nav`)" id="yuv-优点-nav">
+									YUV 优点
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#yuv-%e9%87%87%e6%a0%b7%e6%a0%bc%e5%bc%8f" onclick="onNavClick(`#yuv-采样格式-nav`)" id="yuv-采样格式-nav">
+									YUV 采样格式
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#yuv-%e5%ad%98%e5%82%a8%e6%a0%bc%e5%bc%8f" onclick="onNavClick(`#yuv-存储格式-nav`)" id="yuv-存储格式-nav">
+									YUV 存储格式
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#rgb-%e5%92%8c-yuv-%e8%bd%ac%e5%8c%96" onclick="onNavClick(`#rgb-和-yuv-转化-nav`)" id="rgb-和-yuv-转化-nav">
+									RGB 和 YUV 转化
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#ibp-%e5%b8%a7" onclick="onNavClick(`#ibp-帧-nav`)" id="ibp-帧-nav">
+									IBP 帧
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#gop" onclick="onNavClick(`#gop-nav`)" id="gop-nav">
+									GOP
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e7%a0%81%e7%8e%87%e5%92%8c%e5%b8%a7%e7%8e%87" onclick="onNavClick(`#码率和帧率-nav`)" id="码率和帧率-nav">
+									码率和帧率
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e5%b8%a7%e7%8e%87-frame-rate" onclick="onNavClick(`#帧率-frame-rate-nav`)" id="帧率-frame-rate-nav">
+									帧率 (Frame Rate)
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e7%a0%81%e7%8e%87%e6%af%94%e7%89%b9%e7%8e%87" onclick="onNavClick(`#码率比特率-nav`)" id="码率比特率-nav">
+									码率（比特率）
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e5%8f%82%e8%80%83" onclick="onNavClick(`#参考-nav`)" id="参考-nav">
+									参考
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
 
-<article>
-	<section class="mx-auto content">
-		<div class="c-rich-text"><h2 id="图像数值表示">图像数值表示</h2>
+</div>
+    
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+                dark_mode
+            </span>
+        </a>
+        
+        
+    </div>
+</div>
+<div class="single-column-drawer-container" id="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/posts">
+                    归档
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/categories">
+                    分类
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/tags">
+                    标签
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/about">
+                    关于
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/index.xml">
+                    RSS
+                </a>
+                
+            
+            
+            <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- 目录 -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e5%9b%be%e5%83%8f%e6%95%b0%e5%80%bc%e8%a1%a8%e7%a4%ba" onclick="onNavClick(`#图像数值表示-nav`)" id="图像数值表示-nav">
+									图像数值表示
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e5%88%86%e8%be%a8%e7%8e%87" onclick="onNavClick(`#分辨率-nav`)" id="分辨率-nav">
+									分辨率
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%83%8f%e7%b4%a0%e6%8e%92%e5%88%97%e6%96%b9%e5%bc%8f" onclick="onNavClick(`#像素排列方式-nav`)" id="像素排列方式-nav">
+									像素排列方式
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e6%a0%87%e5%87%86-rgb-%e6%8e%92%e5%88%97" onclick="onNavClick(`#标准-rgb-排列-nav`)" id="标准-rgb-排列-nav">
+									标准 RGB 排列
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#pentile-%e6%8e%92%e5%88%97" onclick="onNavClick(`#pentile-排列-nav`)" id="pentile-排列-nav">
+									PenTile 排列
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#yuv-%e8%a1%a8%e7%a4%ba%e6%96%b9%e5%bc%8f" onclick="onNavClick(`#yuv-表示方式-nav`)" id="yuv-表示方式-nav">
+									YUV 表示方式
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#yuv-%e4%bc%98%e7%82%b9" onclick="onNavClick(`#yuv-优点-nav`)" id="yuv-优点-nav">
+									YUV 优点
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#yuv-%e9%87%87%e6%a0%b7%e6%a0%bc%e5%bc%8f" onclick="onNavClick(`#yuv-采样格式-nav`)" id="yuv-采样格式-nav">
+									YUV 采样格式
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#yuv-%e5%ad%98%e5%82%a8%e6%a0%bc%e5%bc%8f" onclick="onNavClick(`#yuv-存储格式-nav`)" id="yuv-存储格式-nav">
+									YUV 存储格式
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#rgb-%e5%92%8c-yuv-%e8%bd%ac%e5%8c%96" onclick="onNavClick(`#rgb-和-yuv-转化-nav`)" id="rgb-和-yuv-转化-nav">
+									RGB 和 YUV 转化
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#ibp-%e5%b8%a7" onclick="onNavClick(`#ibp-帧-nav`)" id="ibp-帧-nav">
+									IBP 帧
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#gop" onclick="onNavClick(`#gop-nav`)" id="gop-nav">
+									GOP
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e7%a0%81%e7%8e%87%e5%92%8c%e5%b8%a7%e7%8e%87" onclick="onNavClick(`#码率和帧率-nav`)" id="码率和帧率-nav">
+									码率和帧率
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e5%b8%a7%e7%8e%87-frame-rate" onclick="onNavClick(`#帧率-frame-rate-nav`)" id="帧率-frame-rate-nav">
+									帧率 (Frame Rate)
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e7%a0%81%e7%8e%87%e6%af%94%e7%89%b9%e7%8e%87" onclick="onNavClick(`#码率比特率-nav`)" id="码率比特率-nav">
+									码率（比特率）
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e5%8f%82%e8%80%83" onclick="onNavClick(`#参考-nav`)" id="参考-nav">
+									参考
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+            
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div id="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a id="navTitle" class="navbar-brand" href="https://imfaye.me/">
+            PIKA☆NCHI
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
+            <i class="material-icons" id="darkModeToggleIcon2">
+                dark_mode
+            </i>
+        </button>
+        
+    </div>
+</nav>
+<div class="single-column-header-container" id="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="https://imfaye.me/">
+        <div class="single-column-header-title">PIKA☆NCHI</div>
+        
+        <div class="single-column-header-subtitle">Faye&#39;s Blog</div>
+        
+
+    </a>
+</div>
+
+            <div id="content">
+                <div id="streamContainer" class="stream-container">
+
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
+
+            <div class="post-head-wrapper-text-only"
+                
+            >
+                <div class="post-title">
+                    多媒体基础知识
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2021-03-29 15:10
+                        </time>
+                        
+
+                        
+                            <i class="material-icons" style="">folder</i>
+                                <a href="/categories/">[无情笔记]</a>
+                                &nbsp;
+                        
+
+                        
+                            <i class="material-icons" style="">label</i>
+                            
+                                <a href="/tags/%E5%A4%9A%E5%AA%92%E4%BD%93">多媒体</a>
+                                &nbsp;
+                            
+                                <a href="/tags/%E8%A7%86%E9%A2%91%E7%BC%96%E7%A0%81">视频编码</a>
+                                &nbsp;
+                            
+                        
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <h2 id="图像数值表示">图像数值表示</h2>
 <h3 id="分辨率">分辨率</h3>
 <p>分辨率的基础单位是像素。1280 * 720 P 的分辨率代表共有 1280 * 720 个像素点。</p>
 <p>一台物理设备出厂时就已经定下了它所能拥有的最大像素点是多少。电脑显示屏调整分辨率是系统通过运算来给出模拟色彩块填充适配的。</p>
@@ -346,136 +1185,59 @@ B = Y + 2.03 * U
 <p><a href="https://www.yuque.com/webmedia/handbook/ibp">IBP帧</a></p>
 </li>
 </ul>
-</div>
-	</section>
+
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;">最后修改于 2021-03-29</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <a class="newer-posts" href="/post/video-coding-structure/">
+			下回<br>H.265/HEVC 编码结构 笔记
+                </a>
+                
+                
+                
+                <a class="older-posts" href="/post/wsl/">
+			上回<br>Win10 下 Linux 子系统 (WSL) 配置小记
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
 
 
-</article>
 
-		</main>
-		<div class="w-full h-0 flex-none order-3"></div>
-		<aside role="contentinfo"
-			class="w-full md:w-2/5 xl:w-1/2 md:pr-12 lg:pr-20 xl:pr-24 order-4 md:order-3 md:sticky md:bottom-0 self-end max-w-2xl">
-			<div class="md:float-right md:text-right leading-loose tracking-tight md:mb-2">
-				
-	<div class="md:max-w-xs  flex flex-col md:items-end">
-	<ul class="font-serif flex-grow-0 flex justify-between flex-wrap md:flex-col">
-	
-	
-	<li class="px-1 md:px-0">
-		<a href="/post/" title="归档 page" 
-			class="font-medium text-medium-red-violet-600 hover:text-medium-red-violet-400" >
-			归档
-		</a>
-	</li>
-	
-	<li class="px-1 md:px-0">
-		<a href="/categories/" title="分类 page" >
-			分类
-		</a>
-	</li>
-	
-	<li class="px-1 md:px-0">
-		<a href="/tags/" title="标签 page" >
-			标签
-		</a>
-	</li>
-	
-	<li class="px-1 md:px-0">
-		<a href="/about/" title="关于 page" >
-			关于
-		</a>
-	</li>
-	
-	
-	
-	
-	<div id="fastSearch" class="m-0">
-		<input id="searchInput" type="text" size=10 
-			class="bg-gray-100 focus:outline-none border-b border-gray-100 focus:border-eucalyptus-300 md:text-right
-			placeholder-java-500 min-w-0 max-w-xxxs"
-			placeholder="search" />
-		<ul id="searchResults" class="bg-gray-200 px-2 divide-y divide-gray-400">
-		</ul>
-	</div>
-	
-</ul>
-	
 
-<div class="flex flex-wrap-reverse md:justify-end content-end md:content-start justify-start items-start   max-h-16">
+
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+                    </div>
+            </div><div id="single-column-footer">
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+移植自 <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	Faye
 	
 </div>
-	<div class="text-sm text-gray-500 leading-tight a-gray">
-		© Faye
-		<br />
-		Built with Hugo and theme <a href="https://github.com/heyeshuang/hugo-theme-tokiwa">Tokiwa</a>. 2315 words in this page.
-	</div>
-</div>
-
-			</div>
-		</aside>
-		<footer class="w-full md:w-3/5 xl:w-1/2 order-3 max-w-3xl md:order-4 pt-2">
-			
-<hr class="double-line" />
-<div class="flex flex-wrap justify-between pb-2 leading-loose font-serif">
+            </div>
     
-    <a class="flex-grow-0" href="/post/wsl/">
-        <svg class="fill-current inline-block h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24"
-            height="24">
-            <path fill="none" d="M0 0h24v24H0z" />
-            <path d="M7.828 11H20v2H7.828l5.364 5.364-1.414 1.414L4 12l7.778-7.778 1.414 1.414z" /></svg>
-        Win10 下 Linux 子系统 (WSL) 配置小记
-    </a>
-    
-    
-    <a class="flex-grow-0" href="/post/video-coding-structure/">
-        H.265/HEVC 编码结构 笔记
-        <svg class="fill-current inline-block h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24"
-            height="24">
-            <path fill="none" d="M0 0h24v24H0z" />
-            <path d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z" /></svg></a>
-    
-</div>
-<div >
-
-
-
-</div>
-<hr />
-<div class="pb-2">
-    <div id="disqus_thread"></div>
-<script type="application/javascript">
-    window.disqus_config = function () {
-    
-    
-    
-    };
-    (function() {
-        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
-            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
-            return;
-        }
-        var d = document, s = d.createElement('script'); s.async = true;
-        s.src = '//' + "faye" + '.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-    })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-</div>
-<hr />
-
-		</footer>
-		
-
-<script src="/dist/app.js"></script>
-
-
-<script src="/lib/fuse.min.js"></script> 
-<script src="/lib/fastsearch.js"></script>
-
-	</div>
-</body>
-
+    <script src="/js/journal.js"></script></body>
 </html>

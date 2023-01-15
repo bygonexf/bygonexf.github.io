@@ -1,283 +1,446 @@
 <!DOCTYPE html>
-<html lang="cn">
-
-<head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-	
-	<title>Play Back End Roll  | PAT刷题记录 1038 Recover the Smallest Number</title>
-	<meta name="viewport" content="width=device-width,minimum-scale=1">
-	<meta name="generator" content="Hugo 0.105.0">
-	
-	
-	<META NAME="ROBOTS" CONTENT="INDEX, FOLLOW">
-	
-
-	
-	
-	<link href="/dist/app.css" rel="stylesheet">
-	
-
-	
-
-	
-	
-<link rel="shortcut icon" href="img/wind.png" type="image/png" />
-
-	
-
-	
-	
-	
-<script type="application/javascript">
-var doNotTrack = false;
-if (!doNotTrack) {
-	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-	ga('create', 'UA-FAKE', 'auto');
-	
-	ga('send', 'pageview');
-}
-</script>
-	
-	
-	
+<html><head>
+<title>PAT刷题记录 1038 Recover the Smallest Number</title>
 
 
 
-<link rel="stylesheet" href='https://imfaye.me/lib/katex.min.css' crossorigin="anonymous">
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
 
 
-<script defer src='https://imfaye.me/lib/katex.min.js' crossorigin="anonymous"></script>
+
+<meta property="og:title" content="PAT刷题记录 1038 Recover the Smallest Number" />
+<meta property="og:description" content="Recover the Smallest Number
+#include &lt;iostream&gt; #include &lt;string.h&gt; #include &lt;algorithm&gt; #include &lt;map&gt; #include &lt;vector&gt; using namespace std; vector&lt;string&gt; num; bool cmp1(string a, string b) { int la = a.length(), lb = b.length(); string temp; if (la == lb) return a &lt;= b; else if (la &lt; lb) //自己重新定义字符串比较的定义 { if (a.compare(b.substr(0, la)) == 0) { temp = b.substr(la) &#43; a; if (temp &lt;= b) return false; else return true; } else return a &lt;= b; } else if (la &gt; lb) { if (b." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://imfaye.me/post/pat-1038/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2020-04-19T18:13:57+00:00" />
+<meta property="article:modified_time" content="2020-04-19T18:13:57+00:00" /><meta property="og:site_name" content="My Blog" />
 
 
-<script defer src='https://imfaye.me/lib/contrib/auto-render.min.js'
-crossorigin="anonymous"
-onload='renderMathInElement(document.body);'></script>
 
 
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="PAT刷题记录 1038 Recover the Smallest Number"/>
+<meta name="twitter:description" content="Recover the Smallest Number
+#include &lt;iostream&gt; #include &lt;string.h&gt; #include &lt;algorithm&gt; #include &lt;map&gt; #include &lt;vector&gt; using namespace std; vector&lt;string&gt; num; bool cmp1(string a, string b) { int la = a.length(), lb = b.length(); string temp; if (la == lb) return a &lt;= b; else if (la &lt; lb) //自己重新定义字符串比较的定义 { if (a.compare(b.substr(0, la)) == 0) { temp = b.substr(la) &#43; a; if (temp &lt;= b) return false; else return true; } else return a &lt;= b; } else if (la &gt; lb) { if (b."/>
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+<link rel="icon" href="https://imfaye.me/img/wind.png">
+
+
+
+      <script src="/js/toc.js"></script>
+    
+    <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
+<link rel="stylesheet" href="/scss/journal.min.d4c42cc03dd5885ad6a856f72cdc8991e948d78f13915e5ad7a9ea75041f0501.css" integrity="sha256-1MQswD3ViFrWqFb3LNyJkelI148TkV5a16nqdQQfBQE=" media="screen">
+
+
+
+<link rel="stylesheet" href="/scss/dark-mode.min.b063970adbc0451db461a3b3a99c3ac07ae784200123238e4bc8fc340e6b69ce.css" integrity="sha256-sGOXCtvARR20YaOzqZw6wHrnhCABIyOOS8j8NA5rac4=" media="screen">
+
+
+<link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Material+Icons">
+
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.css" integrity="sha384-RZU/ijkSsFbcmivfdRBQDtwuwVqK7GMOw6IMvKyeWL2K5UAlyp6WonmB8m7Jd0Hn" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.js" integrity="sha384-pK1WpvzWVBQiP0/GjnvRxV4mOb0oxFuyRxJlk6vVw146n3egcN5C925NCP7a7BY8" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/contrib/auto-render.min.js" integrity="sha384-vZTG03m+2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl" crossorigin="anonymous"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         renderMathInElement(document.body, {
-            delimiters: [
-                {left: "$$", right: "$$", display: true},
-                {left: "$", right: "$", display: false}
-            ]
+          
+          
+          delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false},
+              {left: '\\(', right: '\\)', display: false},
+              {left: '\\[', right: '\\]', display: true}
+          ],
+          
+          throwOnError : false
         });
     });
 </script>
 
-	
-	
-	
-	<script>
-		(function (u, c) {
-			var d = document,
-				t = 'script',
-				o = d.createElement(t),
-				s = d.getElementsByTagName(t)[0];
-			o.src = u;
-			if (c) {
-				o.addEventListener('load', function (e) {
-					c(e);
-				});
-			}
-			s.parentNode.insertBefore(o, s);
-		})('https:\/\/imfaye.me\/lib\/pangu.min.js', function () {
-			pangu.spacingPage();
-		});
-	</script>
-	
-	
-	
-	<style type="text/css" media="screen, print">
-		@font-face {
-			font-family: "FancyTitleFont";
-			font-style: normal;
-			font-display: swap;
-			src: url('https://imfaye.me/fonts/exampleFont.woff2') format('woff2'),
-				url('https://imfaye.me/fonts/exampleFont.woff') format('woff');
-		}
-		 
-		  
-		 
-		@font-face {
-			font-family: 'Noto Serif CJK SC';
-			font-style: normal;
-			font-weight: 300;
-			font-display: swap;
-			src: local('Noto Serif CJK SC Light'), local('NotoSerifCJK-Light'),
-				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-300.woff2') format('woff2'),
-				 
-				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-300.woff') format('woff');
-			 
-		}
 
-		 
-		@font-face {
-			font-family: 'Noto Serif CJK SC';
-			font-style: normal;
-			font-weight: 400;
-			font-display: swap;
-			src: local('Noto Serif CJK SC'), local('NotoSerifCJK-Regular'),
-				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-regular.woff2') format('woff2'),
-				 
-				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-regular.woff') format('woff');
-			 
-		}
 
-		 
-		@font-face {
-			font-family: 'Noto Serif CJK SC';
-			font-style: normal;
-			font-weight: 500;
-			font-display: swap;
-			src: local('Noto Serif CJK SC Medium'), local('NotoSerifCJK-Medium'),
-				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-500.woff2') format('woff2'),
-				 
-				url('https://imfaye.me/fonts/noto-serif-sc-v7-latin_chinese-simplified-500.woff') format('woff');
-			 
-		}
-	</style>
-	
+
+
+
+
+
+
+
+
+
+
+
+
+
 </head>
+<body>
+    	<div id="app"><div id="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="https://imfaye.me/">
+    
+        <div class="nav-title">
+            PIKA☆NCHI
+        </div>
+        
+        <div class="nav-subtitle">
+            Faye&#39;s Blog
+        </div>
+        
+    </a>
 
-<body class="bg-gray-100 text-gray-700 font-sans">
-	<div class="p-6 sm:p-10 md:p-16 flex flex-wrap">
-		<header class="w-full md:w-2/5 xl:w-1/2 md:pr-12 lg:pr-20 xl:pr-24 order-1 md:order-1 max-w-2xl">
-			<div
-				class="z-50 bg-gray-100 bg-opacity-75 bg-opacity-custom lg:min-w-0.7 max-w-xl md:float-right md:text-right leading-loose tracking-tight md:sticky md:top-0 pt-2">
-				
-<div>
-	<h2>
-		<a href="https://imfaye.me/" title="Play Back End Roll" class="heading font-cursive icon">Play Back End Roll</a>
-	</h2>
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/posts">
+                归档
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/categories">
+                分类
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/tags">
+                标签
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/about">
+                关于
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/index.xml">
+                RSS
+            </a>
+            
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
+        
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+移植自 <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	Faye
+	
+
+    </div>
+    
+</div><div id="extraContainer" class="extra-container">
+    
+    
+    <div class="toc animated-visibility" :class="{ invisible: scrollY <= 140 }">
+
+
 </div>
-<h1 class="pt-2">PAT刷题记录 1038 Recover the Smallest Number</h1>
+    
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+                dark_mode
+            </span>
+        </a>
+        
+        
+    </div>
+</div>
+<div class="single-column-drawer-container" id="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/posts">
+                    归档
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/categories">
+                    分类
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/tags">
+                    标签
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/about">
+                    关于
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/index.xml">
+                    RSS
+                </a>
+                
+            
+            
+            <div class="toc">
 
-<div class="flex flex-wrap justify-end pt-2 "><div class="md:flex-grow-0 font-light">
-	
-	
-	
-	
-	<a class="post-taxonomy-category text-medium-red-violet-600 hover:text-medium-red-violet-400"
-		href='/categories/%E6%96%AD%E6%9B%B4'>断更</a>
-	
-	
-	
 
-	
-	&nbsp;&nbsp;
-	
+</div>
+            
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div id="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a id="navTitle" class="navbar-brand" href="https://imfaye.me/">
+            PIKA☆NCHI
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
+            <i class="material-icons" id="darkModeToggleIcon2">
+                dark_mode
+            </i>
+        </button>
+        
+    </div>
+</nav>
+<div class="single-column-header-container" id="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="https://imfaye.me/">
+        <div class="single-column-header-title">PIKA☆NCHI</div>
+        
+        <div class="single-column-header-subtitle">Faye&#39;s Blog</div>
+        
 
-	
-	
-	
-	
-	<a class="post-taxonomy-tag text-eucalyptus-500"
-		href='/tags/pat'>PAT</a>&nbsp;&#47;
-	
-	<a class="post-taxonomy-tag text-eucalyptus-500"
-		href='/tags/%E7%AE%97%E6%B3%95'>算法</a>
-	
-	
-	
-</div><time class="text-eucalyptus-500 md:text-right md:flex-grow font-light pl-4"
-		datetime="2020-04-19T18:13:57Z">2020-4-19</time>
+    </a>
 </div>
 
-<hr />
+            <div id="content">
+                <div id="streamContainer" class="stream-container">
 
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
 
-			</div>
-		</header>
-		<main role="main" class="w-full md:w-3/5 xl:w-1/2 max-w-3xl order-2 md:order-2 min-h-70vh pt-2 pb-4">
-			
+            <div class="post-head-wrapper-text-only"
+                
+            >
+                <div class="post-title">
+                    PAT刷题记录 1038 Recover the Smallest Number
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2020-04-19 18:13
+                        </time>
+                        
 
-<article>
-	<section class="mx-auto content">
-		<div class="c-rich-text"><p>Recover the Smallest Number</p>
- <!-- less --> 
-<div class="highlight"><pre tabindex="0" style="color:#272822;background-color:#fafafa;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;iostream&gt;</span><span style="color:#75715e">
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;string.h&gt;</span><span style="color:#75715e">
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;algorithm&gt;</span><span style="color:#75715e">
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;map&gt;</span><span style="color:#75715e">
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;vector&gt;</span><span style="color:#75715e">
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#00a8c8">using</span> <span style="color:#00a8c8">namespace</span> <span style="color:#111">std</span><span style="color:#111">;</span>
+                        
+                            <i class="material-icons" style="">folder</i>
+                                <a href="/categories/">[断更]</a>
+                                &nbsp;
+                        
+
+                        
+                            <i class="material-icons" style="">label</i>
+                            
+                                <a href="/tags/pat">PAT</a>
+                                &nbsp;
+                            
+                                <a href="/tags/%E7%AE%97%E6%B3%95">算法</a>
+                                &nbsp;
+                            
+                        
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <p>Recover the Smallest Number</p>
+<!-- raw HTML omitted -->
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#1e889b">#include</span> <span style="color:#1e889b">&lt;iostream&gt;</span><span style="color:#1e889b">
+</span></span></span><span style="display:flex;"><span><span style="color:#1e889b">#include</span> <span style="color:#1e889b">&lt;string.h&gt;</span><span style="color:#1e889b">
+</span></span></span><span style="display:flex;"><span><span style="color:#1e889b">#include</span> <span style="color:#1e889b">&lt;algorithm&gt;</span><span style="color:#1e889b">
+</span></span></span><span style="display:flex;"><span><span style="color:#1e889b">#include</span> <span style="color:#1e889b">&lt;map&gt;</span><span style="color:#1e889b">
+</span></span></span><span style="display:flex;"><span><span style="color:#1e889b">#include</span> <span style="color:#1e889b">&lt;vector&gt;</span><span style="color:#1e889b">
+</span></span></span><span style="display:flex;"><span><span style="color:#1e889b"></span><span style="color:#8b008b;font-weight:bold">using</span> <span style="color:#8b008b;font-weight:bold">namespace</span> std;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#111">vector</span><span style="color:#f92672">&lt;</span><span style="color:#111">string</span><span style="color:#f92672">&gt;</span> <span style="color:#111">num</span><span style="color:#111">;</span>
+</span></span><span style="display:flex;"><span>vector&lt;string&gt; num;
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#00a8c8">bool</span> <span style="color:#75af00">cmp1</span><span style="color:#111">(</span><span style="color:#111">string</span> <span style="color:#111">a</span><span style="color:#111">,</span> <span style="color:#111">string</span> <span style="color:#111">b</span><span style="color:#111">)</span>
-</span></span><span style="display:flex;"><span><span style="color:#111">{</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#00a8c8">int</span> <span style="color:#111">la</span> <span style="color:#f92672">=</span> <span style="color:#111">a</span><span style="color:#111">.</span><span style="color:#111">length</span><span style="color:#111">(),</span> <span style="color:#111">lb</span> <span style="color:#f92672">=</span> <span style="color:#111">b</span><span style="color:#111">.</span><span style="color:#111">length</span><span style="color:#111">();</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#111">string</span> <span style="color:#111">temp</span><span style="color:#111">;</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#00a8c8">if</span> <span style="color:#111">(</span><span style="color:#111">la</span> <span style="color:#f92672">==</span> <span style="color:#111">lb</span><span style="color:#111">)</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#00a8c8">return</span> <span style="color:#111">a</span> <span style="color:#f92672">&lt;=</span> <span style="color:#111">b</span><span style="color:#111">;</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#00a8c8">else</span> <span style="color:#00a8c8">if</span> <span style="color:#111">(</span><span style="color:#111">la</span> <span style="color:#f92672">&lt;</span> <span style="color:#111">lb</span><span style="color:#111">)</span> <span style="color:#75715e">//自己重新定义字符串比较的定义
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#111">{</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#00a8c8">if</span> <span style="color:#111">(</span><span style="color:#111">a</span><span style="color:#111">.</span><span style="color:#111">compare</span><span style="color:#111">(</span><span style="color:#111">b</span><span style="color:#111">.</span><span style="color:#111">substr</span><span style="color:#111">(</span><span style="color:#ae81ff">0</span><span style="color:#111">,</span> <span style="color:#111">la</span><span style="color:#111">))</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span><span style="color:#111">)</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#111">{</span>
-</span></span><span style="display:flex;"><span>			<span style="color:#111">temp</span> <span style="color:#f92672">=</span> <span style="color:#111">b</span><span style="color:#111">.</span><span style="color:#111">substr</span><span style="color:#111">(</span><span style="color:#111">la</span><span style="color:#111">)</span> <span style="color:#f92672">+</span> <span style="color:#111">a</span><span style="color:#111">;</span>
-</span></span><span style="display:flex;"><span>			<span style="color:#00a8c8">if</span> <span style="color:#111">(</span><span style="color:#111">temp</span> <span style="color:#f92672">&lt;=</span> <span style="color:#111">b</span><span style="color:#111">)</span>
-</span></span><span style="display:flex;"><span>				<span style="color:#00a8c8">return</span> <span style="color:#111">false</span><span style="color:#111">;</span>
-</span></span><span style="display:flex;"><span>			<span style="color:#00a8c8">else</span>
-</span></span><span style="display:flex;"><span>				<span style="color:#00a8c8">return</span> <span style="color:#111">true</span><span style="color:#111">;</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#111">}</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#00a8c8">else</span>
-</span></span><span style="display:flex;"><span>			<span style="color:#00a8c8">return</span> <span style="color:#111">a</span> <span style="color:#f92672">&lt;=</span> <span style="color:#111">b</span><span style="color:#111">;</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#111">}</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#00a8c8">else</span> <span style="color:#00a8c8">if</span> <span style="color:#111">(</span><span style="color:#111">la</span> <span style="color:#f92672">&gt;</span> <span style="color:#111">lb</span><span style="color:#111">)</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#111">{</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#00a8c8">if</span> <span style="color:#111">(</span><span style="color:#111">b</span><span style="color:#111">.</span><span style="color:#111">compare</span><span style="color:#111">(</span><span style="color:#111">a</span><span style="color:#111">.</span><span style="color:#111">substr</span><span style="color:#111">(</span><span style="color:#ae81ff">0</span><span style="color:#111">,</span> <span style="color:#111">lb</span><span style="color:#111">))</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span><span style="color:#111">)</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#111">{</span>
-</span></span><span style="display:flex;"><span>			<span style="color:#111">temp</span> <span style="color:#f92672">=</span> <span style="color:#111">a</span><span style="color:#111">.</span><span style="color:#111">substr</span><span style="color:#111">(</span><span style="color:#111">lb</span><span style="color:#111">)</span> <span style="color:#f92672">+</span> <span style="color:#111">b</span><span style="color:#111">;</span>
-</span></span><span style="display:flex;"><span>			<span style="color:#00a8c8">if</span> <span style="color:#111">(</span><span style="color:#111">temp</span> <span style="color:#f92672">&lt;=</span> <span style="color:#111">a</span><span style="color:#111">)</span>
-</span></span><span style="display:flex;"><span>				<span style="color:#00a8c8">return</span> <span style="color:#111">true</span><span style="color:#111">;</span>
-</span></span><span style="display:flex;"><span>			<span style="color:#00a8c8">else</span>
-</span></span><span style="display:flex;"><span>				<span style="color:#00a8c8">return</span> <span style="color:#111">false</span><span style="color:#111">;</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#111">}</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#00a8c8">else</span>
-</span></span><span style="display:flex;"><span>			<span style="color:#00a8c8">return</span> <span style="color:#111">a</span> <span style="color:#f92672">&lt;=</span> <span style="color:#111">b</span><span style="color:#111">;</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#111">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#111">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#00688b;font-weight:bold">bool</span> <span style="color:#008b45">cmp1</span>(string a, string b)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	<span style="color:#00688b;font-weight:bold">int</span> la = a.length(), lb = b.length();
+</span></span><span style="display:flex;"><span>	string temp;
+</span></span><span style="display:flex;"><span>	<span style="color:#8b008b;font-weight:bold">if</span> (la == lb)
+</span></span><span style="display:flex;"><span>		<span style="color:#8b008b;font-weight:bold">return</span> a &lt;= b;
+</span></span><span style="display:flex;"><span>	<span style="color:#8b008b;font-weight:bold">else</span> <span style="color:#8b008b;font-weight:bold">if</span> (la &lt; lb) <span style="color:#228b22">//自己重新定义字符串比较的定义
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>	{
+</span></span><span style="display:flex;"><span>		<span style="color:#8b008b;font-weight:bold">if</span> (a.compare(b.substr(<span style="color:#b452cd">0</span>, la)) == <span style="color:#b452cd">0</span>)
+</span></span><span style="display:flex;"><span>		{
+</span></span><span style="display:flex;"><span>			temp = b.substr(la) + a;
+</span></span><span style="display:flex;"><span>			<span style="color:#8b008b;font-weight:bold">if</span> (temp &lt;= b)
+</span></span><span style="display:flex;"><span>				<span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#658b00">false</span>;
+</span></span><span style="display:flex;"><span>			<span style="color:#8b008b;font-weight:bold">else</span>
+</span></span><span style="display:flex;"><span>				<span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#658b00">true</span>;
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		<span style="color:#8b008b;font-weight:bold">else</span>
+</span></span><span style="display:flex;"><span>			<span style="color:#8b008b;font-weight:bold">return</span> a &lt;= b;
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#8b008b;font-weight:bold">else</span> <span style="color:#8b008b;font-weight:bold">if</span> (la &gt; lb)
+</span></span><span style="display:flex;"><span>	{
+</span></span><span style="display:flex;"><span>		<span style="color:#8b008b;font-weight:bold">if</span> (b.compare(a.substr(<span style="color:#b452cd">0</span>, lb)) == <span style="color:#b452cd">0</span>)
+</span></span><span style="display:flex;"><span>		{
+</span></span><span style="display:flex;"><span>			temp = a.substr(lb) + b;
+</span></span><span style="display:flex;"><span>			<span style="color:#8b008b;font-weight:bold">if</span> (temp &lt;= a)
+</span></span><span style="display:flex;"><span>				<span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#658b00">true</span>;
+</span></span><span style="display:flex;"><span>			<span style="color:#8b008b;font-weight:bold">else</span>
+</span></span><span style="display:flex;"><span>				<span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#658b00">false</span>;
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		<span style="color:#8b008b;font-weight:bold">else</span>
+</span></span><span style="display:flex;"><span>			<span style="color:#8b008b;font-weight:bold">return</span> a &lt;= b;
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#00a8c8">int</span> <span style="color:#75af00">main</span><span style="color:#111">()</span>
-</span></span><span style="display:flex;"><span><span style="color:#111">{</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#00a8c8">int</span> <span style="color:#111">n</span><span style="color:#111">;</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#111">cin</span> <span style="color:#f92672">&gt;&gt;</span> <span style="color:#111">n</span><span style="color:#111">;</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#111">string</span> <span style="color:#111">s</span><span style="color:#111">;</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#00a8c8">for</span> <span style="color:#111">(</span><span style="color:#00a8c8">int</span> <span style="color:#111">i</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span><span style="color:#111">;</span> <span style="color:#111">i</span> <span style="color:#f92672">&lt;</span> <span style="color:#111">n</span><span style="color:#111">;</span> <span style="color:#f92672">++</span><span style="color:#111">i</span><span style="color:#111">)</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#111">{</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#111">cin</span> <span style="color:#f92672">&gt;&gt;</span> <span style="color:#111">s</span><span style="color:#111">;</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#111">num</span><span style="color:#111">.</span><span style="color:#111">push_back</span><span style="color:#111">(</span><span style="color:#111">s</span><span style="color:#111">);</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#111">}</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#111">sort</span><span style="color:#111">(</span><span style="color:#111">num</span><span style="color:#111">.</span><span style="color:#111">begin</span><span style="color:#111">(),</span> <span style="color:#111">num</span><span style="color:#111">.</span><span style="color:#111">end</span><span style="color:#111">(),</span> <span style="color:#111">cmp1</span><span style="color:#111">);</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#00a8c8">int</span> <span style="color:#111">len</span> <span style="color:#f92672">=</span> <span style="color:#111">num</span><span style="color:#111">.</span><span style="color:#111">size</span><span style="color:#111">();</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#111">string</span> <span style="color:#111">ans</span> <span style="color:#f92672">=</span> <span style="color:#d88200">&#34;&#34;</span><span style="color:#111">;</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#00a8c8">for</span> <span style="color:#111">(</span><span style="color:#00a8c8">int</span> <span style="color:#111">i</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span><span style="color:#111">;</span> <span style="color:#111">i</span> <span style="color:#f92672">&lt;</span> <span style="color:#111">len</span><span style="color:#111">;</span> <span style="color:#f92672">++</span><span style="color:#111">i</span><span style="color:#111">)</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#111">{</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#111">ans</span> <span style="color:#f92672">+=</span> <span style="color:#111">num</span><span style="color:#111">[</span><span style="color:#111">i</span><span style="color:#111">];</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#111">}</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#00a8c8">int</span> <span style="color:#111">pos</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span><span style="color:#111">;</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#00a8c8">bool</span> <span style="color:#111">flag</span> <span style="color:#f92672">=</span> <span style="color:#111">false</span><span style="color:#111">;</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#00a8c8">for</span> <span style="color:#111">(</span><span style="color:#00a8c8">int</span> <span style="color:#111">i</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span><span style="color:#111">;</span> <span style="color:#111">i</span> <span style="color:#f92672">&lt;</span> <span style="color:#111">ans</span><span style="color:#111">.</span><span style="color:#111">length</span><span style="color:#111">();</span> <span style="color:#f92672">++</span><span style="color:#111">i</span><span style="color:#111">)</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#111">{</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#00a8c8">if</span> <span style="color:#111">(</span><span style="color:#111">ans</span><span style="color:#111">[</span><span style="color:#111">i</span><span style="color:#111">]</span> <span style="color:#f92672">!=</span> <span style="color:#d88200">&#39;0&#39;</span><span style="color:#111">)</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#111">{</span>
-</span></span><span style="display:flex;"><span>			<span style="color:#111">pos</span> <span style="color:#f92672">=</span> <span style="color:#111">i</span><span style="color:#111">;</span>
-</span></span><span style="display:flex;"><span>			<span style="color:#111">flag</span> <span style="color:#f92672">=</span> <span style="color:#111">true</span><span style="color:#111">;</span>
-</span></span><span style="display:flex;"><span>			<span style="color:#00a8c8">break</span><span style="color:#111">;</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#111">}</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#111">}</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#00a8c8">if</span> <span style="color:#111">(</span><span style="color:#111">flag</span> <span style="color:#f92672">==</span> <span style="color:#111">false</span><span style="color:#111">)</span> <span style="color:#75715e">//要注意全是0的情况！
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#111">cout</span> <span style="color:#f92672">&lt;&lt;</span> <span style="color:#d88200">&#34;0&#34;</span><span style="color:#111">;</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#00a8c8">else</span>
-</span></span><span style="display:flex;"><span>		<span style="color:#111">cout</span> <span style="color:#f92672">&lt;&lt;</span> <span style="color:#111">ans</span><span style="color:#111">.</span><span style="color:#111">substr</span><span style="color:#111">(</span><span style="color:#111">pos</span><span style="color:#111">);</span>
+</span></span><span style="display:flex;"><span><span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">main</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	<span style="color:#00688b;font-weight:bold">int</span> n;
+</span></span><span style="display:flex;"><span>	cin &gt;&gt; n;
+</span></span><span style="display:flex;"><span>	string s;
+</span></span><span style="display:flex;"><span>	<span style="color:#8b008b;font-weight:bold">for</span> (<span style="color:#00688b;font-weight:bold">int</span> i = <span style="color:#b452cd">0</span>; i &lt; n; ++i)
+</span></span><span style="display:flex;"><span>	{
+</span></span><span style="display:flex;"><span>		cin &gt;&gt; s;
+</span></span><span style="display:flex;"><span>		num.push_back(s);
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	sort(num.begin(), num.end(), cmp1);
+</span></span><span style="display:flex;"><span>	<span style="color:#00688b;font-weight:bold">int</span> len = num.size();
+</span></span><span style="display:flex;"><span>	string ans = <span style="color:#cd5555">&#34;&#34;</span>;
+</span></span><span style="display:flex;"><span>	<span style="color:#8b008b;font-weight:bold">for</span> (<span style="color:#00688b;font-weight:bold">int</span> i = <span style="color:#b452cd">0</span>; i &lt; len; ++i)
+</span></span><span style="display:flex;"><span>	{
+</span></span><span style="display:flex;"><span>		ans += num[i];
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#00688b;font-weight:bold">int</span> pos = <span style="color:#b452cd">0</span>;
+</span></span><span style="display:flex;"><span>	<span style="color:#00688b;font-weight:bold">bool</span> flag = <span style="color:#658b00">false</span>;
+</span></span><span style="display:flex;"><span>	<span style="color:#8b008b;font-weight:bold">for</span> (<span style="color:#00688b;font-weight:bold">int</span> i = <span style="color:#b452cd">0</span>; i &lt; ans.length(); ++i)
+</span></span><span style="display:flex;"><span>	{
+</span></span><span style="display:flex;"><span>		<span style="color:#8b008b;font-weight:bold">if</span> (ans[i] != <span style="color:#cd5555">&#39;0&#39;</span>)
+</span></span><span style="display:flex;"><span>		{
+</span></span><span style="display:flex;"><span>			pos = i;
+</span></span><span style="display:flex;"><span>			flag = <span style="color:#658b00">true</span>;
+</span></span><span style="display:flex;"><span>			<span style="color:#8b008b;font-weight:bold">break</span>;
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#8b008b;font-weight:bold">if</span> (flag == <span style="color:#658b00">false</span>) <span style="color:#228b22">//要注意全是0的情况！
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>		cout &lt;&lt; <span style="color:#cd5555">&#34;0&#34;</span>;
+</span></span><span style="display:flex;"><span>	<span style="color:#8b008b;font-weight:bold">else</span>
+</span></span><span style="display:flex;"><span>		cout &lt;&lt; ans.substr(pos);
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>	<span style="color:#00a8c8">return</span> <span style="color:#ae81ff">0</span><span style="color:#111">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#111">}</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#b452cd">0</span>;
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>若一长一短且短的那个是长的的前缀，重新定义比较的标准。cmp定义了何时a&lt;b，所以自己根据需要的情况直接返回true或false</p>
 <p>substr的用法：</p>
 <ul>
@@ -291,148 +454,62 @@ onload='renderMathInElement(document.body);'></script>
 </li>
 </ul>
 <p>AC了之后看别人的代码，哭了，我好傻写那么长，直接把比较的标准定义成a+b&lt;b+a就完了&hellip;</p>
-<div class="highlight"><pre tabindex="0" style="color:#272822;background-color:#fafafa;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#00a8c8">bool</span> <span style="color:#75af00">cmp0</span><span style="color:#111">(</span><span style="color:#111">string</span> <span style="color:#111">a</span><span style="color:#111">,</span> <span style="color:#111">string</span> <span style="color:#111">b</span><span style="color:#111">)</span> <span style="color:#111">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#00a8c8">return</span> <span style="color:#111">a</span> <span style="color:#f92672">+</span> <span style="color:#111">b</span> <span style="color:#f92672">&lt;</span> <span style="color:#111">b</span> <span style="color:#f92672">+</span> <span style="color:#111">a</span><span style="color:#111">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#111">}</span>
-</span></span></code></pre></div></div>
-	</section>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#00688b;font-weight:bold">bool</span> <span style="color:#008b45">cmp0</span>(string a, string b) {
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">return</span> a + b &lt; b + a;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div>
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;">最后修改于 2020-04-19</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <a class="newer-posts" href="/post/dear-diary/">
+			下回<br>一部分的日记(2019.9至2020.4)
+                </a>
+                
+                
+                
+                <a class="older-posts" href="/post/pat-1033/">
+			上回<br>PAT刷题记录 1033 To Fill or Not to Fill
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
 
 
-</article>
 
-		</main>
-		<div class="w-full h-0 flex-none order-3"></div>
-		<aside role="contentinfo"
-			class="w-full md:w-2/5 xl:w-1/2 md:pr-12 lg:pr-20 xl:pr-24 order-4 md:order-3 md:sticky md:bottom-0 self-end max-w-2xl">
-			<div class="md:float-right md:text-right leading-loose tracking-tight md:mb-2">
-				
-	<div class="md:max-w-xs  flex flex-col md:items-end">
-	<ul class="font-serif flex-grow-0 flex justify-between flex-wrap md:flex-col">
-	
-	
-	<li class="px-1 md:px-0">
-		<a href="/post/" title="归档 page" 
-			class="font-medium text-medium-red-violet-600 hover:text-medium-red-violet-400" >
-			归档
-		</a>
-	</li>
-	
-	<li class="px-1 md:px-0">
-		<a href="/categories/" title="分类 page" >
-			分类
-		</a>
-	</li>
-	
-	<li class="px-1 md:px-0">
-		<a href="/tags/" title="标签 page" >
-			标签
-		</a>
-	</li>
-	
-	<li class="px-1 md:px-0">
-		<a href="/about/" title="关于 page" >
-			关于
-		</a>
-	</li>
-	
-	
-	
-	
-	<div id="fastSearch" class="m-0">
-		<input id="searchInput" type="text" size=10 
-			class="bg-gray-100 focus:outline-none border-b border-gray-100 focus:border-eucalyptus-300 md:text-right
-			placeholder-java-500 min-w-0 max-w-xxxs"
-			placeholder="search" />
-		<ul id="searchResults" class="bg-gray-200 px-2 divide-y divide-gray-400">
-		</ul>
-	</div>
-	
-</ul>
-	
 
-<div class="flex flex-wrap-reverse md:justify-end content-end md:content-start justify-start items-start   max-h-16">
+
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+                    </div>
+            </div><div id="single-column-footer">
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+移植自 <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	Faye
 	
 </div>
-	<div class="text-sm text-gray-500 leading-tight a-gray">
-		© Faye
-		<br />
-		Built with Hugo and theme <a href="https://github.com/heyeshuang/hugo-theme-tokiwa">Tokiwa</a>. 403 words in this page.
-	</div>
-</div>
-
-			</div>
-		</aside>
-		<footer class="w-full md:w-3/5 xl:w-1/2 order-3 max-w-3xl md:order-4 pt-2">
-			
-<hr class="double-line" />
-<div class="flex flex-wrap justify-between pb-2 leading-loose font-serif">
+            </div>
     
-    <a class="flex-grow-0" href="/post/pat-1033/">
-        <svg class="fill-current inline-block h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24"
-            height="24">
-            <path fill="none" d="M0 0h24v24H0z" />
-            <path d="M7.828 11H20v2H7.828l5.364 5.364-1.414 1.414L4 12l7.778-7.778 1.414 1.414z" /></svg>
-        PAT刷题记录 1033 To Fill or Not to Fill
-    </a>
-    
-    
-    <a class="flex-grow-0" href="/post/dear-diary/">
-        一部分的日记(2019.9至2020.4)
-        <svg class="fill-current inline-block h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24"
-            height="24">
-            <path fill="none" d="M0 0h24v24H0z" />
-            <path d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z" /></svg></a>
-    
-</div>
-<div >
-
-
-
-<div class="font-serif pb-2 flex align-start leading-loose">
-	<span class="heading pr-6 leading-loose">Related</span>
-	<span >
-		
-			<a href="/post/pat-1033/">PAT刷题记录 1033 To Fill or Not to Fill</a>
-		
-</span>
-</div>
-
-</div>
-<hr />
-<div class="pb-2">
-    <div id="disqus_thread"></div>
-<script type="application/javascript">
-    window.disqus_config = function () {
-    
-    
-    
-    };
-    (function() {
-        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
-            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
-            return;
-        }
-        var d = document, s = d.createElement('script'); s.async = true;
-        s.src = '//' + "faye" + '.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-    })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-</div>
-<hr />
-
-		</footer>
-		
-
-<script src="/dist/app.js"></script>
-
-
-<script src="/lib/fuse.min.js"></script> 
-<script src="/lib/fastsearch.js"></script>
-
-	</div>
-</body>
-
+    <script src="/js/journal.js"></script></body>
 </html>
