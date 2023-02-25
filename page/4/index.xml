@@ -1,15 +1,308 @@
 <?xml-stylesheet href="/rss.xsl" type="text/xsl"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>PIKA☆NCHI</title>
+    <title>好雪片片</title>
     <link>https://imfaye.me/</link>
-    <description>Recent content on PIKA☆NCHI</description>
+    <description>Recent content on 好雪片片</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Faye</copyright>
-    <lastBuildDate>Sun, 15 Jan 2023 15:04:21 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 25 Feb 2023 23:25:36 +0800</lastBuildDate>
     
         <atom:link href="https://imfaye.me/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>操作系统笔记 CH1 Intro</title>
+        <link>https://imfaye.me/post/os1/</link>
+        <pubDate>Fri, 28 Feb 2020 13:00:24 +0000</pubDate>
+        
+        <guid>https://imfaye.me/post/os1/</guid>
+        <description>好雪片片 https://imfaye.me/post/os1/ -&lt;h2 id=&#34;what-os-do&#34;&gt;What OS do&lt;/h2&gt;
+&lt;p&gt;操作系统是管理计算机硬件的程序&lt;/p&gt;
+&lt;p&gt;computer system: hardware, operating system, application programs, users&lt;/p&gt;
+&lt;p&gt;​	hardware: CPU, memory, I/O devices&lt;/p&gt;
+&lt;h3 id=&#34;user-view&#34;&gt;user view&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573524547711.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;services provided by OS:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;program development (editors and debuggers)&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;program execution&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;access to IO devices&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;controlled access to files&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;system access&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;error detection and response&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;internal and external hardware errors&lt;/p&gt;
+&lt;p&gt;memory error, device failure&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;software errors&lt;/p&gt;
+&lt;p&gt;arithmetic overflow, accesss forbidden memory locations&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;外中断: interruption 与当前运行程序无关的事件&lt;/p&gt;
+&lt;p&gt;内中断: exception / trap  非法操作码，地址越界，算术溢出，缺页，专门陷入指令&amp;hellip;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;accounting&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;collect statistics&lt;/li&gt;
+&lt;li&gt;monitor performance&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;system-view&#34;&gt;system view&lt;/h3&gt;
+&lt;p&gt;resource allocator, control program&lt;/p&gt;
+&lt;h3 id=&#34;defining-os&#34;&gt;defining OS&lt;/h3&gt;
+&lt;p&gt;kernel, one program running at all times&lt;/p&gt;
+&lt;p&gt;系统软件。程序模块的集合。组织和管理计算机的软硬件资源。&lt;/p&gt;
+&lt;h2 id=&#34;computer-system-organization&#34;&gt;computer-system organization&lt;/h2&gt;
+&lt;p&gt;computer startup:
+bootsrap program: stored in ROM/EEPROM, AKA firmware&lt;/p&gt;
+&lt;p&gt;硬件&amp;amp;固件：&lt;/p&gt;
+&lt;p&gt;​	A hardware has a physical entity&lt;/p&gt;
+&lt;p&gt;​	A hardware needs a program to run. A firmware is a program itself.&lt;/p&gt;
+&lt;p&gt;​	A hardware cannot operate without a firmware. A firmware operates on a hardware.&lt;/p&gt;
+&lt;p&gt;OS starts executing the first process, and waits for some event to occur:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;an interrupt from the hardware&lt;/p&gt;
+&lt;p&gt;sending a signal to CPU by way of the system bus&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;an interrupt from the software&lt;/p&gt;
+&lt;p&gt;executing a system call&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;computer-system-operation&#34;&gt;computer-system operation&lt;/h3&gt;
+&lt;p&gt;device controller informs CPU that it has finishd its operation by causing an interrupt&lt;/p&gt;
+&lt;p&gt;&lt;!-- raw HTML omitted --&gt;interrupt&lt;!-- raw HTML omitted --&gt;:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573526982292.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;​	interrupt vector(中断向量): the staring address of all the interrupt service routines(中断服务程序).&lt;/p&gt;
+&lt;p&gt;a &lt;!-- raw HTML omitted --&gt;trap&lt;!-- raw HTML omitted --&gt; is a software-generated interrupt caused either by an error or a user request&lt;/p&gt;
+&lt;p&gt;OS is interrupt-driven&lt;/p&gt;
+&lt;h3 id=&#34;storage-structure&#34;&gt;storage structure&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573527305908.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;storage hierarchy&lt;/p&gt;
+&lt;p&gt;​	speed, cost, volatility&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573527537071.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;h3 id=&#34;io-structure&#34;&gt;IO structure&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;programmed IO&lt;/p&gt;
+&lt;p&gt;IO module performs the action&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;interrupt-driven IO&lt;/p&gt;
+&lt;p&gt;processor is interrupted when IO module ready to exchange data&lt;/p&gt;
+&lt;p&gt;processor is free to do other work&lt;/p&gt;
+&lt;p&gt;consume a lot of processor time&lt;/p&gt;
+&lt;p&gt;we need system call &amp;amp; device-status table&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;synchronous IO&lt;/p&gt;
+&lt;p&gt;After I/O starts, control returns to user program only upon I/O completion.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;asychronous IO&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;DMA&lt;/p&gt;
+&lt;p&gt;Transfers a block of data directly to / from memory.&lt;/p&gt;
+&lt;p&gt;device controller transfers blocks of data from buffer storage directly to main memory without CPU intervention.&lt;/p&gt;
+&lt;p&gt;Only one interrupt is generated per block. The processor is only involved at the beginning and the end of the transfer.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;IO channel&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573528354725.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;一个CPU和多个device controller通过总线连接。每个dvice controller可负责多个特定类型设备。&lt;/p&gt;
+&lt;p&gt;OS为每个device controller提供一个device driver, driver presents a uniform interface to the device&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573527989496.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;computer-system-architecture&#34;&gt;computer-system architecture&lt;/h2&gt;
+&lt;h3 id=&#34;single-processor-system&#34;&gt;single-processor system&lt;/h3&gt;
+&lt;h3 id=&#34;multiprocessor-system--parallel-system--tightly-coupled&#34;&gt;multiprocessor system / parallel system / tightly coupled&lt;/h3&gt;
+&lt;p&gt;增加吞吐量、规模经济、增加可靠性&lt;/p&gt;
+&lt;p&gt;graceful degradation: 提供与正常工作的硬件成正比服务的能力&lt;/p&gt;
+&lt;p&gt;fault tolerant: 超出适度退化的能力 容错&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;asymmetric multiprocessing&lt;/p&gt;
+&lt;p&gt;主从&lt;/p&gt;
+&lt;p&gt;each processor is assigned a specific task. a master processor controls the system, allocates work to the slave processors.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;symmetric multiprocessing SMP&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;multicore-CPUs&lt;/p&gt;
+&lt;p&gt;Multiple compute cores on a single chip 多个内核 单个芯片&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;blade servers 刀片服务器&lt;/p&gt;
+&lt;p&gt;每个刀片处理器独立启动并运行各自的OS&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;clustered-system&#34;&gt;clustered system&lt;/h2&gt;
+&lt;p&gt;与多处理器系统不同：多个独立系统耦合&lt;/p&gt;
+&lt;p&gt;共享存储并通过LAN/更快内部连接&lt;/p&gt;
+&lt;p&gt;asymmetric clustering: one machine is in hot-stand-by mode(热备份)&lt;/p&gt;
+&lt;p&gt;symmetric clustering: monitor each other&lt;/p&gt;
+&lt;h2 id=&#34;os-structure&#34;&gt;OS structure&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;time-sharing system(multitasking)&lt;/p&gt;
+&lt;p&gt;interactive&lt;/p&gt;
+&lt;p&gt;response time short&lt;/p&gt;
+&lt;p&gt;允许多用户同时共享计算机&lt;/p&gt;
+&lt;p&gt;&lt;!-- raw HTML omitted --&gt;CPU scheduling &amp;amp; multiprogramming&lt;!-- raw HTML omitted --&gt; : 以提供用户分时计算机的一部分&lt;/p&gt;
+&lt;p&gt;为保证合理响应时间，通过swapping得到，使用virtual memory&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573530369578.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;os-operations&#34;&gt;OS operations&lt;/h2&gt;
+&lt;p&gt;dual mode: user mode &amp;amp; monitor mode&lt;/p&gt;
+&lt;p&gt;mode bit provided by hardware&lt;/p&gt;
+&lt;p&gt;Some instructions are designated as privileged, only executable in kernel mode.&lt;/p&gt;
+&lt;p&gt;System call changes mode to kernel mode, return from call resets it to user mode.&lt;/p&gt;
+&lt;p&gt;特权指令包括转换到用户模式，IO控制，定时器管理，中断管理等&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573530628171.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573530670239.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;h3 id=&#34;process-management&#34;&gt;process management&lt;/h3&gt;
+&lt;p&gt;Single-threaded process has one program counter specifying location of next instruction to execute.&lt;/p&gt;
+&lt;p&gt;Multi-threaded process has one program counter per thread.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573530891037.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;h3 id=&#34;memory-management&#34;&gt;memory management&lt;/h3&gt;
+&lt;p&gt;determines what is in memory&lt;/p&gt;
+&lt;p&gt;Central to the operation of a modern computer system.
+ All data should be in memory before and after processing.
+ All instructions should be in memory in order to execute.&lt;/p&gt;
+&lt;p&gt;virtual memory:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573531043445.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;h3 id=&#34;storage-management&#34;&gt;storage management&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;file-system management&lt;/p&gt;
+&lt;p&gt;Access control on most systems to determine who can access what.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;mass-storage management&lt;/p&gt;
+&lt;p&gt;secondary storage, tertiary storage&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;caching&lt;/p&gt;
+&lt;p&gt;copying information into faster storage system&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;disk cache&lt;/p&gt;
+&lt;p&gt;A portion of main memory used as a buffer to temporarily to hold data for the disk.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;cache memory 高速缓存&lt;/p&gt;
+&lt;p&gt;invisible to OS&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;coherency &amp;amp; consistency&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;IO subsystem&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573531626180.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;protection-and-security&#34;&gt;protection and security&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;protection&lt;/p&gt;
+&lt;p&gt;控制进程或用户对计算机系统资源的访问的机制&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;security&lt;/p&gt;
+&lt;p&gt;防止系统不受外部或内部攻击&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;access control&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;information flow control&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;certification&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;保护和安全需要系统能区分用户，user ID(UID); 需要区分用户集，group ID&lt;/p&gt;
+&lt;p&gt;privilege escalation: 有时用户需要升级特权来获取对一个活动的额外特权&lt;/p&gt;
+&lt;h3 id=&#34;distributed-systems&#34;&gt;distributed systems&lt;/h3&gt;
+&lt;p&gt;loosely coupled&lt;/p&gt;
+&lt;p&gt;network: communication path TCP/IP协议常用&lt;/p&gt;
+&lt;p&gt;network operating system: 更自治 提供信息交换的通信 file sharing, communication, runs independently&lt;/p&gt;
+&lt;p&gt;分布式系统更少自治，不同的草作系统紧密连接，好像是一个操作系统控制网络 &lt;strong&gt;process migration&lt;/strong&gt;&lt;/p&gt;
+&lt;h3 id=&#34;special-purpose-systems&#34;&gt;special-purpose systems&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;real-time system&lt;/p&gt;
+&lt;p&gt;Often used as a control device in a dedicated application&lt;/p&gt;
+&lt;p&gt;hard/soft&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;real-time embedded system 实时嵌入式系统&lt;/p&gt;
+&lt;p&gt;OS很limited&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;multimedia system 多媒体系统&lt;/p&gt;
+&lt;p&gt;将多媒体数据加入到计算机系统(audio and video files)&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;handheld system 手持系统&lt;/p&gt;
+&lt;p&gt;PDA: personal digital assistants 专门的嵌入式系统&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;computing-environments&#34;&gt;computing environments&lt;/h3&gt;
+&lt;p&gt;traditional computing&lt;/p&gt;
+&lt;p&gt;client-server computing: computer-server, file-server&lt;/p&gt;
+&lt;p&gt;peer-to-peer computing: centralized lookupservice, discovery protocol, voice over IP&lt;/p&gt;
+&lt;p&gt;cloud computing&lt;/p&gt;
+&lt;p&gt;Operating System Concepts 7th edition&lt;/p&gt;
+&lt;p&gt;Operating System Concepts 7th edition&lt;/p&gt;
+&lt;p&gt;Operating System Concepts 7th&lt;/p&gt;
+- https://imfaye.me/post/os1/ - Faye</description>
+        </item>
+    
+    
+    
+        <item>
+        <title>关于我</title>
+        <link>https://imfaye.me/about/</link>
+        <pubDate>Sun, 08 Sep 2019 00:00:00 +0000</pubDate>
+        
+        <guid>https://imfaye.me/about/</guid>
+        <description>好雪片片 https://imfaye.me/about/ -&lt;p&gt;博客什么的，像对着充满未知的可能性的黑洞在倾诉在记录在整理自己。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;他迫切地需要表达自己，复述他读过的东西，表达自己观察到的事物。这是他整理自己的思想的方式——谈话，谈话，谈话，但我想这也是他寂寞的一种表现。我觉得自己和他很像，这让我觉得很自豪，我和他一样都想塑造自己作为读书人的形象，并且让别人承认这一点，就像在说：这就是我所知道的事情，这就是我要成为的人。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;我们的卑劣和我们的坦诚在这点上和莱农和尼诺也是类似的吧。&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;如果我说自己的天赋在于感受，也太狡猾了。能感受不能输出，怎么看也像是程度不够的借口。我想记录，各个方面的，以各种形式。没有超8mm胶片，有文字也不错。&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;最后留个邮箱：faye#stu.pku.edu.cn (请将#替换为@)&lt;/p&gt;
+- https://imfaye.me/about/ - Faye</description>
+        </item>
     
     
     
@@ -19,7 +312,7 @@
         <pubDate>Sat, 07 Sep 2019 00:23:06 +0000</pubDate>
         
         <guid>https://imfaye.me/post/beginning/</guid>
-        <description>PIKA☆NCHI https://imfaye.me/post/beginning/ -&lt;p&gt;最近很迷茫呢&amp;hellip;&lt;/p&gt;
+        <description>好雪片片 https://imfaye.me/post/beginning/ -&lt;p&gt;最近很迷茫呢&amp;hellip;&lt;/p&gt;
 &lt;p&gt;感觉自己不学无术&amp;hellip;&lt;/p&gt;
 &lt;p&gt;夜里12点了，在宿舍床上的电脑桌上敲我的第一篇博客。&lt;/p&gt;
 &lt;p&gt;如题，希望是什么的开始。&lt;/p&gt;
@@ -35,7 +328,7 @@
         <pubDate>Tue, 28 May 2019 00:00:00 +0000</pubDate>
         
         <guid>https://imfaye.me/archives/</guid>
-        <description>PIKA☆NCHI https://imfaye.me/archives/ -- https://imfaye.me/archives/ - Faye</description>
+        <description>好雪片片 https://imfaye.me/archives/ -- https://imfaye.me/archives/ - Faye</description>
         </item>
     
     

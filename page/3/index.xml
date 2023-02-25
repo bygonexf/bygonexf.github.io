@@ -1,15 +1,421 @@
 <?xml-stylesheet href="/rss.xsl" type="text/xsl"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>PIKA☆NCHI</title>
+    <title>好雪片片</title>
     <link>https://imfaye.me/</link>
-    <description>Recent content on PIKA☆NCHI</description>
+    <description>Recent content on 好雪片片</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Faye</copyright>
-    <lastBuildDate>Sun, 15 Jan 2023 15:04:21 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 25 Feb 2023 23:25:36 +0800</lastBuildDate>
     
         <atom:link href="https://imfaye.me/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>操作系统笔记 CH11 File-System Implementation</title>
+        <link>https://imfaye.me/post/os11/</link>
+        <pubDate>Fri, 28 Feb 2020 13:11:24 +0000</pubDate>
+        
+        <guid>https://imfaye.me/post/os11/</guid>
+        <description>好雪片片 https://imfaye.me/post/os11/ -&lt;h2 id=&#34;文件系统结构&#34;&gt;文件系统结构&lt;/h2&gt;
+&lt;p&gt;磁盘特点：可以原地重写，可以直接访问任意一块。&lt;/p&gt;
+&lt;p&gt;内存和磁盘之间的IO以块为单位。每块为一个或多个扇区。扇区通常为512B&lt;/p&gt;
+&lt;p&gt;File system resides on secondary storage (disks) OS通过文件系统存储、定位、提取数据&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577502786991.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;IO control 最底层&lt;/p&gt;
+&lt;p&gt;由device driver 和 Interrupt handlers组成&lt;/p&gt;
+&lt;p&gt;实现内存和磁盘之间的信息传输。&lt;/p&gt;
+&lt;p&gt;device driver可作为翻译器。输入是高层命令，输出是底层的、硬件特定的命令。命令用于控制hardware controller&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577503036078.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;device driver控制一类设备&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;basic file system&lt;/p&gt;
+&lt;p&gt;Issue generic commands to the appropriate device driver to read and write physical blocks on the disk.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;file-organization module&lt;/p&gt;
+&lt;p&gt;将逻辑块地址 转换成 物理块地址&lt;/p&gt;
+&lt;p&gt;也包括空闲空间管理器&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;logical file system&lt;/p&gt;
+&lt;p&gt;管理metadata，元数据包括文件系统所有结构数据，而不包括实际数据&lt;/p&gt;
+&lt;p&gt;管理目录结构&lt;/p&gt;
+&lt;p&gt;通过FCB((inodes in UNIX))维护文件结构&lt;/p&gt;
+&lt;p&gt;负责保护和安全&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Layering useful for reducing complexity and redundancy, but adds overhead and can decrease performance.&lt;/p&gt;
+&lt;p&gt;绝大多数OS支持多个文件系统&lt;/p&gt;
+&lt;p&gt;UNIX使用UFS&lt;/p&gt;
+&lt;p&gt;标准的Linux文件系统是extende file system&lt;/p&gt;
+&lt;h2 id=&#34;文件系统实现&#34;&gt;文件系统实现&lt;/h2&gt;
+&lt;p&gt;每个卷的boot control block：从该卷引导OS需要的信息。如果没有OS，该块为空，通常为卷的第一块。UFS称之为boot block，NTFS称之为partition boot sector&lt;/p&gt;
+&lt;p&gt;每个卷的volume control blcok：包括卷(或分区)的详细信息，如分区的块数，块的大小&amp;hellip;UFS称之为superblock，NTFS中它存在master file table中&lt;/p&gt;
+&lt;p&gt;每个文件系统的目录结构用来组织文件。UFS中包含文件名和相关的inode号，NTFS中它存储在master file table中&lt;/p&gt;
+&lt;p&gt;每个文件的FCB。UFS中是inode，NTFS存在master file table中，每个文件占一行&lt;/p&gt;
+&lt;h3 id=&#34;in-memory-file-system-structures&#34;&gt;In-Memory File System Structures&lt;/h3&gt;
+&lt;p&gt;一个内存中的mount table(partition table)&lt;/p&gt;
+&lt;p&gt;一个内存中的director structure cache&lt;/p&gt;
+&lt;p&gt;system-wide open-file table: 包括每个打开文件的FCB副本&lt;/p&gt;
+&lt;p&gt;per-process open-file table: Contains a pointer to the appropriate entry in the system-wide open-file table.&lt;/p&gt;
+&lt;p&gt;buffers hold data blocks from secondary storage.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577507477227.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;对于访问打开文件表的索引：UNIX称之为file descriptor，Windows称之为file handle. 只要文件没有关闭，所有文件操作都是通过打开文件表来进行的&lt;/p&gt;
+&lt;h3 id=&#34;partitions-and-mounting-分区和安装&#34;&gt;partitions and mounting 分区和安装&lt;/h3&gt;
+&lt;p&gt;一个disk可以分为多个partition，一个partition可以横跨多个disk(作为RAID的一种形式比较合适)&lt;/p&gt;
+&lt;p&gt;分区可以是&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;raw 没有文件系统&lt;/li&gt;
+&lt;li&gt;cooked 含有文件系统&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;引导信息能保存在多个分区中，通常为一组有序块，并作为镜像文件读入内存&lt;/p&gt;
+&lt;p&gt;boot loader知道位于引导区的多个文件系统和多个操作系统，一旦装入，它可以引导位于磁盘上的一个操作系统。磁盘可以有多个分区，每个分区包含不同类型的文件系统和不同的操作系统。&lt;/p&gt;
+&lt;p&gt;root partiton包括操作系统内核或其他系统文件，在引导时装入内存。&lt;/p&gt;
+&lt;p&gt;内存中有Mount table – containing information about file systems that has been mounted.&lt;/p&gt;
+&lt;h3 id=&#34;virtual-file-system-vfs&#34;&gt;virtual file system (VFS)&lt;/h3&gt;
+&lt;p&gt;Virtual file system (VFS) on most OSes, including Unix, use object-oriented techniques to implement the file system. 用户甚至可以访问位于网络上的操作系统&lt;/p&gt;
+&lt;p&gt;VFS allows the same system call interface (the API) to be used for different types of file systems.&lt;/p&gt;
+&lt;p&gt;Implements vnodes which hold inodes or network file details.&lt;/p&gt;
+&lt;p&gt;The API is to the VFS interface, rather than any specific type of file system.&lt;/p&gt;
+&lt;p&gt;多个VFS接口的实现可以共存在同一台机器上&lt;/p&gt;
+&lt;p&gt;vnode表示位于整个网络范围内唯一的文件&lt;/p&gt;
+&lt;p&gt;Linux has four object types: inode, file, superblock, dentry&lt;/p&gt;
+&lt;p&gt;VFS defines a set of operations on the objects that must be implemented.&lt;/p&gt;
+&lt;h2 id=&#34;目录实现&#34;&gt;目录实现&lt;/h2&gt;
+&lt;h3 id=&#34;linear-list-线性列表&#34;&gt;linear list 线性列表&lt;/h3&gt;
+&lt;p&gt;linear search time费时&lt;/p&gt;
+&lt;p&gt;sorted list允许binary search&lt;/p&gt;
+&lt;p&gt;a balanced tree&lt;/p&gt;
+&lt;h3 id=&#34;hash-table&#34;&gt;hash table&lt;/h3&gt;
+&lt;p&gt;decreases directory search time&lt;/p&gt;
+&lt;p&gt;需要处理collision(两个文件名哈希到相同的位置)：chained-overflow&lt;/p&gt;
+&lt;p&gt;Difficulties: fixed size, hash function&lt;/p&gt;
+&lt;h2 id=&#34;分配方法&#34;&gt;分配方法&lt;/h2&gt;
+&lt;p&gt;how disk blocks are allocated for files&lt;/p&gt;
+&lt;h3 id=&#34;contiguous-allocation-连续分配&#34;&gt;Contiguous Allocation 连续分配&lt;/h3&gt;
+&lt;p&gt;每个文件在磁盘上占有一组连续的块&lt;/p&gt;
+&lt;p&gt;访问连续分配文件所需寻道数最少&lt;/p&gt;
+&lt;p&gt;用第一块的磁盘地址和连续块的数量来定义&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577509061560.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;sequential and direct access&lt;/p&gt;
+&lt;p&gt;Best performance in most cases&lt;/p&gt;
+&lt;p&gt;问题&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Difficult to find space for a new file: First-fit, best-fit&lt;/li&gt;
+&lt;li&gt;External fragmentation&lt;/li&gt;
+&lt;li&gt;compaction off-line (downtime) or on-line&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Extent-Based Systems, a modified contiguous allocation scheme 当空间不够时，另一块被称为扩展的连续空间会添加到原来的文件分配中&lt;/p&gt;
+&lt;h3 id=&#34;linked-allocation-链接分配&#34;&gt;Linked Allocation 链接分配&lt;/h3&gt;
+&lt;p&gt;每个文件是磁盘块的链表&lt;/p&gt;
+&lt;p&gt;目录包括文件第一块的指针和最后一块的指针。每一块都有下一块的指针。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577509383605.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;没有外部碎片&lt;/p&gt;
+&lt;p&gt;只要有空闲块，文件就可以增大&lt;/p&gt;
+&lt;p&gt;Disadvantages: 不能随机访问，指针需要空间，不可靠&lt;/p&gt;
+&lt;p&gt;对于指针需要空间，解决办法是将多个块组成簇(cluster)，代价是增加了内部碎片&lt;/p&gt;
+&lt;h4 id=&#34;fatfile-allocation-table文件分配表&#34;&gt;FAT(file-allocation table)文件分配表&lt;/h4&gt;
+&lt;p&gt;used by MS-DOS and OS/2&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577510977781.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;对FAT采用缓存&lt;/p&gt;
+&lt;p&gt;支持直接访问&lt;/p&gt;
+&lt;h3 id=&#34;indexed-allocation-索引分配&#34;&gt;Indexed Allocation 索引分配&lt;/h3&gt;
+&lt;p&gt;每个文件都有索引块，是一个磁盘块地址的数组&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577511076567.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;目录条目包括索引块的地址&lt;/p&gt;
+&lt;p&gt;支持直接访问&lt;/p&gt;
+&lt;p&gt;没有外部碎片&lt;/p&gt;
+&lt;p&gt;索引块应该多大&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;linked scheme&lt;/p&gt;
+&lt;p&gt;将多个索引块链接起来&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;two-level index&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;combined scheme&lt;/p&gt;
+&lt;p&gt;UNIX采用&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;性能&#34;&gt;性能&lt;/h3&gt;
+&lt;p&gt;contiguous great for sequential and random&lt;/p&gt;
+&lt;p&gt;linked good for sequential, not random&lt;/p&gt;
+&lt;p&gt;combine contiguous allocation with indexed allocation by using contiguous allocation for small files (up to three or four blocks), automatically switching to an indexed allocation if the file grows large.&lt;/p&gt;
+&lt;h3 id=&#34;free-space-management&#34;&gt;free-space management&lt;/h3&gt;
+&lt;p&gt;文件系统需要维护free-space list记录空闲磁盘空间(不一定是链表)&lt;/p&gt;
+&lt;h4 id=&#34;bit-map--bit-vector&#34;&gt;bit map / bit vector&lt;/h4&gt;
+&lt;p&gt;每块用一位表示。空闲-1，已分配-0&lt;/p&gt;
+&lt;p&gt;查找第一个和n个连续空闲块简单高效&lt;/p&gt;
+&lt;p&gt;Bit map requires extra space.&lt;/p&gt;
+&lt;p&gt;Easy to get contiguous files space.&lt;/p&gt;
+&lt;h4 id=&#34;linked-list-链表&#34;&gt;linked list 链表&lt;/h4&gt;
+&lt;p&gt;将所有空闲块用链表链接&lt;/p&gt;
+&lt;p&gt;将指向第一空闲块的指针缓存在内存&lt;/p&gt;
+&lt;p&gt;Cannot get contiguous space easily.&lt;/p&gt;
+&lt;h4 id=&#34;grouping&#34;&gt;grouping&lt;/h4&gt;
+&lt;p&gt;将n个空闲块的地址存在第一个空闲块里。(前n-1确实为空，最后一块包含另外n个空闲块的地址)&lt;/p&gt;
+&lt;p&gt;可以找到大量空闲块&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577512314875.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;h4 id=&#34;counting&#34;&gt;counting&lt;/h4&gt;
+&lt;p&gt;记录第一块的地址和紧跟第一块的连续的空闲块的数量n&lt;/p&gt;
+&lt;p&gt;can be stored in a balanced tree for efficiency&lt;/p&gt;
+- https://imfaye.me/post/os11/ - Faye</description>
+        </item>
+    
+    
+    
+        <item>
+        <title>操作系统笔记 CH10 File-System Interface</title>
+        <link>https://imfaye.me/post/os10/</link>
+        <pubDate>Fri, 28 Feb 2020 13:10:24 +0000</pubDate>
+        
+        <guid>https://imfaye.me/post/os10/</guid>
+        <description>好雪片片 https://imfaye.me/post/os10/ -&lt;h2 id=&#34;file-concept&#34;&gt;file concept&lt;/h2&gt;
+&lt;p&gt;文件：记录在外存上的 相关信息的 具有名称的 集合，逻辑内存的最小分配单元&lt;/p&gt;
+&lt;p&gt;通常，文件表示程序和数据&lt;/p&gt;
+&lt;p&gt;free form or may be formatted rigidly&lt;/p&gt;
+&lt;h3 id=&#34;file-attributes&#34;&gt;file attributes&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;name: human-readable&lt;/li&gt;
+&lt;li&gt;identifier: a unique number, non-human-readable name&lt;/li&gt;
+&lt;li&gt;type&lt;/li&gt;
+&lt;li&gt;location&lt;/li&gt;
+&lt;li&gt;size&lt;/li&gt;
+&lt;li&gt;protection&lt;/li&gt;
+&lt;li&gt;time, date and user identification&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;文件的信息存在directory中，directory也存在外存上&lt;/p&gt;
+&lt;p&gt;A directory entry consists of the file&amp;rsquo;s name and its unique id. The id in turn locates the other file attributes.&lt;/p&gt;
+&lt;h3 id=&#34;file-operations&#34;&gt;file operations&lt;/h3&gt;
+&lt;p&gt;6个基本文件操作：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;create&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;write&lt;/p&gt;
+&lt;p&gt;write pointer&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;read&lt;/p&gt;
+&lt;p&gt;read pointer&lt;/p&gt;
+&lt;p&gt;A per-process current-file-position pointer&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;reposition&lt;/p&gt;
+&lt;p&gt;file seek, not need I/O&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;delete&lt;/p&gt;
+&lt;p&gt;release file space, erase directory entry&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;truncate&lt;/p&gt;
+&lt;p&gt;reset length to 0, release file space&lt;/p&gt;
+&lt;p&gt;只删除内容，保留属性&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;基本操作可以组合成其他操作&lt;/p&gt;
+&lt;p&gt;Most file operations involve searching the directory for the entry associated with the named file&lt;/p&gt;
+&lt;p&gt;首次使用文件时，使用系统调用open()&lt;/p&gt;
+&lt;p&gt;OS维护一个包含所有打开文件的信息表(open-file table)。当需要一个文件操作时，通过该表的一个索引指定文件，无需搜索。文件不再使用时，进程可关闭它，OS从open-file table删除这一条目。系统调用create和delete操作的是关闭文件，而不是打开文件。&lt;/p&gt;
+&lt;p&gt;系统调用open()返回一个指向open-file table中一个条目的指针。通过使用该指针，而不是真实文件名称，进行所有IO操作。also accept access mode information, such as create, read-only, read-write, append-only, etc.&lt;/p&gt;
+&lt;p&gt;close(Fi), move the content of entry Fi in open-file table to directory structure on disk.&lt;/p&gt;
+&lt;p&gt;多进程可能同时打开同一文件。OS采用两级内部表。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Process open-file table, a per-process table&lt;/p&gt;
+&lt;p&gt;该进程所使用的文件信息&lt;/p&gt;
+&lt;p&gt;单个进程表的每个条目相应地指向整个系统的打开文件表&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;System open-file table, a system-wide table&lt;/p&gt;
+&lt;p&gt;包含进程无关信息(如文件在磁盘上的位置，访问日期和文件大小)&lt;/p&gt;
+&lt;p&gt;一旦一个进程打开文件，System open-file table会增加相应条目，当另一个进程执行调用open()，在其Process open-file table增加一个条目，并指向System open-file table相应条目&lt;/p&gt;
+&lt;p&gt;每个文件有一个open count，记录多少进程打开了该文件。当open count=0，该文件条目可删除。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;每个打开文件有如下信息：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;file pointer&lt;/p&gt;
+&lt;p&gt;pointer to last read/write location&lt;/p&gt;
+&lt;p&gt;对每个进程唯一&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;file-open count&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;disk location of file&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;access rights&lt;/p&gt;
+&lt;p&gt;每个进程用一个访问模式打开文件&lt;/p&gt;
+&lt;p&gt;保存在单个进程打开文件表中&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;文件锁file-locks&#34;&gt;文件锁(file locks)&lt;/h4&gt;
+&lt;p&gt;shared lock: 多个进程并发获取&lt;/p&gt;
+&lt;p&gt;exclusive lock: 只有一个进程可以获取&lt;/p&gt;
+&lt;p&gt;加锁机制：&lt;/p&gt;
+&lt;p&gt;mandatory强制：一个进程获得锁，阻止其他进程访问已加锁的文件。access is denied depending on locks held and requested. &amp;ndash; Windows OS.&lt;/p&gt;
+&lt;p&gt;advisory建议：processes can find status of locks and decide what to do. &amp;ndash; Unix OS.&lt;/p&gt;
+&lt;h3 id=&#34;file-types&#34;&gt;file types&lt;/h3&gt;
+&lt;p&gt;实现文件类型的常用技术：在文件名称内包含类型。名称可分为两部分：name , extension&lt;/p&gt;
+&lt;p&gt;Some OS, each file has a type, and a creator attribute containing the name of the program that created it.&lt;/p&gt;
+&lt;p&gt;UNIX, a magic number stored at the beginning of some files to indicate roughly the type of the file.&lt;/p&gt;
+&lt;h2 id=&#34;access-methods&#34;&gt;access methods&lt;/h2&gt;
+&lt;p&gt;Criteria for File Organization: Rapid access, Ease of update, Economy of storage, Simple maintenance, Reliability&lt;/p&gt;
+&lt;h3 id=&#34;sequential-access-顺序访问&#34;&gt;sequential access 顺序访问&lt;/h3&gt;
+&lt;p&gt;基于文件的磁带模型。不仅适用于顺序访问设备，也适用于随机访问设备&lt;/p&gt;
+&lt;h3 id=&#34;direct-access-直接访问&#34;&gt;direct access 直接访问&lt;/h3&gt;
+&lt;p&gt;文件由固定长度的逻辑记录组成。基于文件的磁盘模型。可立即访问大量信息。数据库常采用这种类型的文件。&lt;/p&gt;
+&lt;p&gt;提供的是相对块号。&lt;/p&gt;
+&lt;p&gt;对直接访问文件，可容易地模拟顺序访问。反过来很低效。&lt;/p&gt;
+&lt;h3 id=&#34;其他访问方式&#34;&gt;其他访问方式&lt;/h3&gt;
+&lt;p&gt;通常涉及创建索引&lt;/p&gt;
+&lt;h2 id=&#34;directory-structure&#34;&gt;directory structure&lt;/h2&gt;
+&lt;p&gt;有时需要在一个磁盘上装多种文件系统&lt;/p&gt;
+&lt;p&gt;Disk can be subdivided into partitions.&lt;/p&gt;
+&lt;p&gt;Disk or partition can be used：&lt;/p&gt;
+&lt;p&gt;​	raw, without a file system, e.g. swap space&lt;/p&gt;
+&lt;p&gt;​	formatted with a file system&lt;/p&gt;
+&lt;p&gt;Volume: Entity containing file system&lt;/p&gt;
+&lt;p&gt;Each volume containing file system also tracks that file system&amp;rsquo;s info in device directory or volume table of contents.&lt;/p&gt;
+&lt;p&gt;Disks or partitions can be RAID protected against failure.&lt;/p&gt;
+&lt;p&gt;directory可看作符号表，将 文件名 转换成 目录条目&lt;/p&gt;
+&lt;p&gt;Both the directory structure and the files reside on disk.&lt;/p&gt;
+&lt;h3 id=&#34;single-level-directory&#34;&gt;Single-Level Directory&lt;/h3&gt;
+&lt;p&gt;所有文件包含在同一目录中&lt;/p&gt;
+&lt;p&gt;必须有唯一名称&lt;/p&gt;
+&lt;p&gt;naming problem , grouping problem&lt;/p&gt;
+&lt;h3 id=&#34;two-level-directory&#34;&gt;Two-Level Directory&lt;/h3&gt;
+&lt;p&gt;为每个用户创建独立目录&lt;/p&gt;
+&lt;p&gt;A master file directory(主文件目录MFD) and one user file directory(用户文件目录UFD) for each user.&lt;/p&gt;
+&lt;p&gt;UFD内文件名唯一即可&lt;/p&gt;
+&lt;p&gt;No grouping capability&lt;/p&gt;
+&lt;p&gt;File sharing怎么解决&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Path name. defined by a user name and a file name.&lt;/li&gt;
+&lt;li&gt;Special user directory, containing system files.&lt;/li&gt;
+&lt;li&gt;Search path, the sequence of directories searched.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;tree-structured-directories&#34;&gt;Tree-Structured Directories&lt;/h3&gt;
+&lt;p&gt;树有根目录，系统内的每个文件都有唯一路径名&lt;/p&gt;
+&lt;p&gt;One bit in each entry defines the entry as a file(0) or as a subdirectory(1).&lt;/p&gt;
+&lt;p&gt;Grouping Capability&lt;/p&gt;
+&lt;p&gt;每个进程有 Current directory (working directory) 当前目录 In accounting file, a pointer/the name of the user&amp;rsquo;s initial directory. Copied to a local variable for this user.&lt;/p&gt;
+&lt;p&gt;Absolute path name: 从根开始&lt;/p&gt;
+&lt;p&gt;relative path name: 从当前目录开始&lt;/p&gt;
+&lt;p&gt;创建子目录/新文件在当前目录下完成&lt;/p&gt;
+&lt;p&gt;Deleting a subdirectory&lt;/p&gt;
+&lt;p&gt;​	deleting a empty directory. &amp;ndash; MS-DOS 目录不为空不能删除&lt;/p&gt;
+&lt;p&gt;​	deleting all files and subdirectories that it contains.&amp;ndash; UNIX 所有该目录的文件和子目录可删除&lt;/p&gt;
+&lt;h3 id=&#34;acyclic-graph-directories-无环图&#34;&gt;Acyclic-Graph Directories 无环图&lt;/h3&gt;
+&lt;p&gt;树状结构禁止共享文件和目录&lt;/p&gt;
+&lt;p&gt;注意这里是共享文件而不是文件复制，共享文件任何改变为其他用户可见&lt;/p&gt;
+&lt;p&gt;Ways implementing shared files and subdirectories:&lt;/p&gt;
+&lt;p&gt;​	Create a new directory entry, called a link. &amp;ndash; UNIX  link, a pointer to another file or subdirectory. Resolve the link – follow pointer to locate the file.&lt;/p&gt;
+&lt;p&gt;​	duplicate all information about shared files in all sharing directories. 问题：维护一致性&lt;/p&gt;
+&lt;p&gt;当用户删除文件时就删除，会留下dangling pointer&lt;/p&gt;
+&lt;p&gt;​	对于link: Deletion of a link need not affectt he original file. Deletion of the file entry, leaving the links dangling.&lt;/p&gt;
+&lt;p&gt;​	对于duplication: File-reference list, Backpointers. 为每个文件保留一个引用列表或引用计数Backpointers, so we can delete all pointers.&lt;/p&gt;
+&lt;h3 id=&#34;general-graph-directory&#34;&gt;General Graph Directory&lt;/h3&gt;
+&lt;p&gt;允许环存在&lt;/p&gt;
+&lt;p&gt;为避免无限循环：强制限制在搜索时所访问目录的次数&lt;/p&gt;
+&lt;p&gt;何时可删除？因为有环，就算不存在引用，其引用计数也可能不为0，可能存在自我引用。解决办法：Garbage collection: The first pass, traversing the entire file system, marking everything that can be accessed.  The second pass, collects everything that is not marked onto a list of free space.&lt;/p&gt;
+&lt;p&gt;How to avoid cycles? Allow only links to file not subdirectories. Every time a new link is added use a cycle detection algorithm. A simpler algorithm, bypass links during directory traversal.&lt;/p&gt;
+&lt;h2 id=&#34;file-system-mounting-文件系统安装&#34;&gt;file system mounting 文件系统安装&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;OS需要知道 设备名称 和 安装点(mount point)&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;OS验证设备是否包含一个有效文件系统(通过device driver读入设备目录，验证目录是否具有期望格式)&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;OS在其目录结构记录下：一个文件系统已安装在给定安装点上&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Systems impose semantics to clarify functionality.&lt;/p&gt;
+&lt;h2 id=&#34;file-sharing&#34;&gt;file sharing&lt;/h2&gt;
+&lt;p&gt;多用户需要共享文件&lt;/p&gt;
+&lt;p&gt;Sharing may be done through a protection scheme.&lt;/p&gt;
+&lt;p&gt;More file and directory attributes are needed: File / directory owner; File / directory user, access rights; File / directory user groups, access rights&lt;/p&gt;
+&lt;p&gt;User IDs identify users, allowing permissions and protections to be per-user. Group IDs allow users to be in groups, permitting group access rights.&lt;/p&gt;
+&lt;h3 id=&#34;remote-file-system-远程文件系统&#34;&gt;remote file system 远程文件系统&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;通过程序(如ftp)在机器之间进行文件的人工传输&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;distributed file systems (DFS)&lt;/p&gt;
+&lt;p&gt;远程目录可从本机上直接访问&lt;/p&gt;
+&lt;p&gt;much tighter integration&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;via the World Wide Web(WWW)&lt;/p&gt;
+&lt;p&gt;A browser is needed. uses anonymous file exchange.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4 id=&#34;client-server-model&#34;&gt;Client-server model&lt;/h4&gt;
+&lt;p&gt;allows clients to mount remote file systems from servers.&lt;/p&gt;
+&lt;p&gt;Client and user-on-client identification is insecure or complicated.&lt;/p&gt;
+&lt;p&gt;​	client can be specified by a network name or other identifier, such as an IP address, Can be spoofed or imitated.&lt;/p&gt;
+&lt;p&gt;​	Secure authentication via encrypted keys. Ensuring compatibility of the client and server.&lt;/p&gt;
+&lt;p&gt;NFS: standard UNIX client-server file sharing protocol&lt;/p&gt;
+&lt;p&gt;CIFS(Common Internet File System): standard Windows protocol, uses active directory&lt;/p&gt;
+&lt;p&gt;Standard operating system file calls are translated into remote calls远程调用&lt;/p&gt;
+&lt;h4 id=&#34;distributed-information-systems&#34;&gt;Distributed Information Systems&lt;/h4&gt;
+&lt;p&gt;Providing unified access to the information needed for remote computing.&lt;/p&gt;
+&lt;p&gt;DNS (domain name system) provides host-name-to-network-address translations for entire internet.&lt;/p&gt;
+&lt;p&gt;NIS (network information service), yellow pages黄页, centralizes storage of user names, host names, printer information, and the like.&lt;/p&gt;
+&lt;p&gt;LDAP (lightweight directory-access protocol), used by industry as a secure distributed naming mechanism. secure single sign-on&lt;/p&gt;
+&lt;h4 id=&#34;failure-modes-故障模式&#34;&gt;Failure Modes 故障模式&lt;/h4&gt;
+&lt;p&gt;Remote file systems add new failure modes, due to network failure, server failure.&lt;/p&gt;
+&lt;p&gt;Recovery from failure can involve state information about status状态信息 of each remote request.&lt;/p&gt;
+&lt;p&gt;Stateless protocols such as NFS V3 include all information in each request, allowing easy recovery but less security.&lt;/p&gt;
+&lt;p&gt;In NFS V4, it is made stateful&lt;/p&gt;
+&lt;h3 id=&#34;consistency-semantics-一致性语义&#34;&gt;Consistency Semantics 一致性语义&lt;/h3&gt;
+&lt;p&gt;描述多用户同时访问共享文件时的语义。规定了一个用户所修改的数据何时对另一用户可见。&lt;/p&gt;
+&lt;p&gt;由于延迟，不适合类似进程同步那些复杂算法&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;AFS (Andrew File System) implemented complex remote file sharing semantics&lt;/p&gt;
+&lt;p&gt;server记录client的动作&lt;/p&gt;
+&lt;p&gt;When a client changes a file, the server notifies other clients with a call back promise technique&lt;/p&gt;
+&lt;p&gt;一个用户对打开文件的写不能立即被打开同一文件的其他用户看见。一旦文件关闭，其修改只能被以后打开的会话所见。&lt;/p&gt;
+&lt;p&gt;多个用户允许对自己的映像进行并发(没有延迟)的读写操作&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;UFS (Unix file system) implements&lt;/p&gt;
+&lt;p&gt;一个文件与单个物理映射相关联，该映射作为互斥资源访问。修改立即可见。竞争导致用户进程延迟。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Immutable shared files, declared by its creator. Read-only. 不可修改&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;protection&#34;&gt;protection&lt;/h2&gt;
+&lt;p&gt;高层功能可以用系统程序调用低层系统调用实现。保护可以只在低层提供。&lt;/p&gt;
+&lt;p&gt;Mode of access: read, write, execute&lt;/p&gt;
+&lt;p&gt;为每个文件和目录增加一个访问控制列表ACL(Access-control list)，给定每个用户名及其允许访问的类型&lt;/p&gt;
+&lt;p&gt;三种用户类型:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;owner&lt;/li&gt;
+&lt;li&gt;group&lt;/li&gt;
+&lt;li&gt;universe(public): all other users in the system&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;每个域三个位:RWX. 需要9个位&lt;/p&gt;
+- https://imfaye.me/post/os10/ - Faye</description>
+        </item>
     
     
     
@@ -19,7 +425,7 @@
         <pubDate>Fri, 28 Feb 2020 13:09:24 +0000</pubDate>
         
         <guid>https://imfaye.me/post/os9/</guid>
-        <description>PIKA☆NCHI https://imfaye.me/post/os9/ -&lt;h2 id=&#34;background&#34;&gt;background&lt;/h2&gt;
+        <description>好雪片片 https://imfaye.me/post/os9/ -&lt;h2 id=&#34;background&#34;&gt;background&lt;/h2&gt;
 &lt;p&gt;CH8的内存管理方案需要将整个进程放入内存，动态载入只能减轻这一限制&lt;/p&gt;
 &lt;p&gt;Code needs to be in memory to execute, but entire program rarely used.&lt;/p&gt;
 &lt;p&gt;execute partially-loaded program&lt;/p&gt;
@@ -185,7 +591,7 @@
         <pubDate>Fri, 28 Feb 2020 13:08:24 +0000</pubDate>
         
         <guid>https://imfaye.me/post/os8/</guid>
-        <description>PIKA☆NCHI https://imfaye.me/post/os8/ -&lt;h2 id=&#34;background&#34;&gt;background&lt;/h2&gt;
+        <description>好雪片片 https://imfaye.me/post/os8/ -&lt;h2 id=&#34;background&#34;&gt;background&lt;/h2&gt;
 &lt;h3 id=&#34;基本硬件&#34;&gt;基本硬件&lt;/h3&gt;
 &lt;p&gt;CPU可直接访问的存储器只有 内存 和  处理器内的寄存器&lt;/p&gt;
 &lt;p&gt;​	CPU内置寄存器可在一个CPU时钟周期内完成访问，对于寄存器中的内容，CPU可以在一个周期内解析并执行多个指令&lt;/p&gt;
@@ -402,7 +808,7 @@
         <pubDate>Fri, 28 Feb 2020 13:07:24 +0000</pubDate>
         
         <guid>https://imfaye.me/post/os7/</guid>
-        <description>PIKA☆NCHI https://imfaye.me/post/os7/ -&lt;h2 id=&#34;deadlock-characteristics&#34;&gt;deadlock characteristics&lt;/h2&gt;
+        <description>好雪片片 https://imfaye.me/post/os7/ -&lt;h2 id=&#34;deadlock-characteristics&#34;&gt;deadlock characteristics&lt;/h2&gt;
 &lt;h3 id=&#34;necessary-conditions&#34;&gt;necessary conditions&lt;/h3&gt;
 &lt;p&gt;4个条件同时满足，引起死锁：&lt;/p&gt;
 &lt;ul&gt;
@@ -511,7 +917,7 @@
         <pubDate>Fri, 28 Feb 2020 13:06:24 +0000</pubDate>
         
         <guid>https://imfaye.me/post/os6/</guid>
-        <description>PIKA☆NCHI https://imfaye.me/post/os6/ -&lt;p&gt;race condition: 多个进程并发访问和操作同一数据，结果与访问顺序有关&lt;/p&gt;
+        <description>好雪片片 https://imfaye.me/post/os6/ -&lt;p&gt;race condition: 多个进程并发访问和操作同一数据，结果与访问顺序有关&lt;/p&gt;
 &lt;h2 id=&#34;critical-section&#34;&gt;critical section&lt;/h2&gt;
 &lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573274792092.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
 &lt;p&gt;critical section: 进程可能改变共同变量，更新表，写文件的代码段&lt;/p&gt;
@@ -548,7 +954,7 @@
         <pubDate>Fri, 28 Feb 2020 13:05:24 +0000</pubDate>
         
         <guid>https://imfaye.me/post/os5/</guid>
-        <description>PIKA☆NCHI https://imfaye.me/post/os5/ -&lt;p&gt;dispatcher: gives control of the CPU to the process selected by the short-term scheduler;&lt;/p&gt;
+        <description>好雪片片 https://imfaye.me/post/os5/ -&lt;p&gt;dispatcher: gives control of the CPU to the process selected by the short-term scheduler;&lt;/p&gt;
 &lt;p&gt;dispatch latency&lt;/p&gt;
 &lt;h2 id=&#34;scheduling-criteria&#34;&gt;scheduling criteria&lt;/h2&gt;
 &lt;ul&gt;
@@ -665,7 +1071,7 @@
         <pubDate>Fri, 28 Feb 2020 13:04:24 +0000</pubDate>
         
         <guid>https://imfaye.me/post/os4/</guid>
-        <description>PIKA☆NCHI https://imfaye.me/post/os4/ -&lt;p&gt;Dispatching is referred to as a thread. Resource of ownership is referred to as a process or
+        <description>好雪片片 https://imfaye.me/post/os4/ -&lt;p&gt;Dispatching is referred to as a thread. Resource of ownership is referred to as a process or
 task.&lt;/p&gt;
 &lt;p&gt;对进程的swapping和termination都牵扯它所有线程&lt;/p&gt;
 &lt;p&gt;线程是CPU使用的基本单位。由thread ID, program counter, register set, stack组成&lt;/p&gt;
@@ -758,7 +1164,7 @@ task.&lt;/p&gt;
         <pubDate>Fri, 28 Feb 2020 13:03:24 +0000</pubDate>
         
         <guid>https://imfaye.me/post/os3/</guid>
-        <description>PIKA☆NCHI https://imfaye.me/post/os3/ -&lt;h2 id=&#34;process-concepts&#34;&gt;process concepts&lt;/h2&gt;
+        <description>好雪片片 https://imfaye.me/post/os3/ -&lt;h2 id=&#34;process-concepts&#34;&gt;process concepts&lt;/h2&gt;
 &lt;p&gt;batch system: job; time-sharing system: program/task&lt;/p&gt;
 &lt;p&gt;Program is passive entity stored on disk (executable file), process is active.&lt;/p&gt;
 &lt;p&gt;a process includes&lt;/p&gt;
@@ -935,7 +1341,7 @@ connection, it is assigned a port (greater than 1024) by its host computer.&lt;/
         <pubDate>Fri, 28 Feb 2020 13:01:24 +0000</pubDate>
         
         <guid>https://imfaye.me/post/os2/</guid>
-        <description>PIKA☆NCHI https://imfaye.me/post/os2/ -&lt;h2 id=&#34;ui&#34;&gt;UI&lt;/h2&gt;
+        <description>好雪片片 https://imfaye.me/post/os2/ -&lt;h2 id=&#34;ui&#34;&gt;UI&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;
 &lt;p&gt;CLI command-line / command interpreter&lt;/p&gt;
@@ -1117,299 +1523,6 @@ connection, it is assigned a port (greater than 1024) by its host computer.&lt;/
 &lt;/li&gt;
 &lt;/ol&gt;
 - https://imfaye.me/post/os2/ - Faye</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>操作系统笔记 CH1 Intro</title>
-        <link>https://imfaye.me/post/os1/</link>
-        <pubDate>Fri, 28 Feb 2020 13:00:24 +0000</pubDate>
-        
-        <guid>https://imfaye.me/post/os1/</guid>
-        <description>PIKA☆NCHI https://imfaye.me/post/os1/ -&lt;h2 id=&#34;what-os-do&#34;&gt;What OS do&lt;/h2&gt;
-&lt;p&gt;操作系统是管理计算机硬件的程序&lt;/p&gt;
-&lt;p&gt;computer system: hardware, operating system, application programs, users&lt;/p&gt;
-&lt;p&gt;​	hardware: CPU, memory, I/O devices&lt;/p&gt;
-&lt;h3 id=&#34;user-view&#34;&gt;user view&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573524547711.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
-&lt;p&gt;services provided by OS:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;program development (editors and debuggers)&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;program execution&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;access to IO devices&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;controlled access to files&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;system access&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;error detection and response&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;internal and external hardware errors&lt;/p&gt;
-&lt;p&gt;memory error, device failure&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;software errors&lt;/p&gt;
-&lt;p&gt;arithmetic overflow, accesss forbidden memory locations&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;外中断: interruption 与当前运行程序无关的事件&lt;/p&gt;
-&lt;p&gt;内中断: exception / trap  非法操作码，地址越界，算术溢出，缺页，专门陷入指令&amp;hellip;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;accounting&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;collect statistics&lt;/li&gt;
-&lt;li&gt;monitor performance&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;system-view&#34;&gt;system view&lt;/h3&gt;
-&lt;p&gt;resource allocator, control program&lt;/p&gt;
-&lt;h3 id=&#34;defining-os&#34;&gt;defining OS&lt;/h3&gt;
-&lt;p&gt;kernel, one program running at all times&lt;/p&gt;
-&lt;p&gt;系统软件。程序模块的集合。组织和管理计算机的软硬件资源。&lt;/p&gt;
-&lt;h2 id=&#34;computer-system-organization&#34;&gt;computer-system organization&lt;/h2&gt;
-&lt;p&gt;computer startup:
-bootsrap program: stored in ROM/EEPROM, AKA firmware&lt;/p&gt;
-&lt;p&gt;硬件&amp;amp;固件：&lt;/p&gt;
-&lt;p&gt;​	A hardware has a physical entity&lt;/p&gt;
-&lt;p&gt;​	A hardware needs a program to run. A firmware is a program itself.&lt;/p&gt;
-&lt;p&gt;​	A hardware cannot operate without a firmware. A firmware operates on a hardware.&lt;/p&gt;
-&lt;p&gt;OS starts executing the first process, and waits for some event to occur:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;an interrupt from the hardware&lt;/p&gt;
-&lt;p&gt;sending a signal to CPU by way of the system bus&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;an interrupt from the software&lt;/p&gt;
-&lt;p&gt;executing a system call&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;computer-system-operation&#34;&gt;computer-system operation&lt;/h3&gt;
-&lt;p&gt;device controller informs CPU that it has finishd its operation by causing an interrupt&lt;/p&gt;
-&lt;p&gt;&lt;!-- raw HTML omitted --&gt;interrupt&lt;!-- raw HTML omitted --&gt;:&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573526982292.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
-&lt;p&gt;​	interrupt vector(中断向量): the staring address of all the interrupt service routines(中断服务程序).&lt;/p&gt;
-&lt;p&gt;a &lt;!-- raw HTML omitted --&gt;trap&lt;!-- raw HTML omitted --&gt; is a software-generated interrupt caused either by an error or a user request&lt;/p&gt;
-&lt;p&gt;OS is interrupt-driven&lt;/p&gt;
-&lt;h3 id=&#34;storage-structure&#34;&gt;storage structure&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573527305908.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
-&lt;p&gt;storage hierarchy&lt;/p&gt;
-&lt;p&gt;​	speed, cost, volatility&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573527537071.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
-&lt;h3 id=&#34;io-structure&#34;&gt;IO structure&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;programmed IO&lt;/p&gt;
-&lt;p&gt;IO module performs the action&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;interrupt-driven IO&lt;/p&gt;
-&lt;p&gt;processor is interrupted when IO module ready to exchange data&lt;/p&gt;
-&lt;p&gt;processor is free to do other work&lt;/p&gt;
-&lt;p&gt;consume a lot of processor time&lt;/p&gt;
-&lt;p&gt;we need system call &amp;amp; device-status table&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;synchronous IO&lt;/p&gt;
-&lt;p&gt;After I/O starts, control returns to user program only upon I/O completion.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;asychronous IO&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;DMA&lt;/p&gt;
-&lt;p&gt;Transfers a block of data directly to / from memory.&lt;/p&gt;
-&lt;p&gt;device controller transfers blocks of data from buffer storage directly to main memory without CPU intervention.&lt;/p&gt;
-&lt;p&gt;Only one interrupt is generated per block. The processor is only involved at the beginning and the end of the transfer.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;IO channel&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573528354725.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;一个CPU和多个device controller通过总线连接。每个dvice controller可负责多个特定类型设备。&lt;/p&gt;
-&lt;p&gt;OS为每个device controller提供一个device driver, driver presents a uniform interface to the device&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573527989496.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
-&lt;h2 id=&#34;computer-system-architecture&#34;&gt;computer-system architecture&lt;/h2&gt;
-&lt;h3 id=&#34;single-processor-system&#34;&gt;single-processor system&lt;/h3&gt;
-&lt;h3 id=&#34;multiprocessor-system--parallel-system--tightly-coupled&#34;&gt;multiprocessor system / parallel system / tightly coupled&lt;/h3&gt;
-&lt;p&gt;增加吞吐量、规模经济、增加可靠性&lt;/p&gt;
-&lt;p&gt;graceful degradation: 提供与正常工作的硬件成正比服务的能力&lt;/p&gt;
-&lt;p&gt;fault tolerant: 超出适度退化的能力 容错&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;asymmetric multiprocessing&lt;/p&gt;
-&lt;p&gt;主从&lt;/p&gt;
-&lt;p&gt;each processor is assigned a specific task. a master processor controls the system, allocates work to the slave processors.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;symmetric multiprocessing SMP&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;multicore-CPUs&lt;/p&gt;
-&lt;p&gt;Multiple compute cores on a single chip 多个内核 单个芯片&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;blade servers 刀片服务器&lt;/p&gt;
-&lt;p&gt;每个刀片处理器独立启动并运行各自的OS&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;clustered-system&#34;&gt;clustered system&lt;/h2&gt;
-&lt;p&gt;与多处理器系统不同：多个独立系统耦合&lt;/p&gt;
-&lt;p&gt;共享存储并通过LAN/更快内部连接&lt;/p&gt;
-&lt;p&gt;asymmetric clustering: one machine is in hot-stand-by mode(热备份)&lt;/p&gt;
-&lt;p&gt;symmetric clustering: monitor each other&lt;/p&gt;
-&lt;h2 id=&#34;os-structure&#34;&gt;OS structure&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;time-sharing system(multitasking)&lt;/p&gt;
-&lt;p&gt;interactive&lt;/p&gt;
-&lt;p&gt;response time short&lt;/p&gt;
-&lt;p&gt;允许多用户同时共享计算机&lt;/p&gt;
-&lt;p&gt;&lt;!-- raw HTML omitted --&gt;CPU scheduling &amp;amp; multiprogramming&lt;!-- raw HTML omitted --&gt; : 以提供用户分时计算机的一部分&lt;/p&gt;
-&lt;p&gt;为保证合理响应时间，通过swapping得到，使用virtual memory&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573530369578.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
-&lt;h2 id=&#34;os-operations&#34;&gt;OS operations&lt;/h2&gt;
-&lt;p&gt;dual mode: user mode &amp;amp; monitor mode&lt;/p&gt;
-&lt;p&gt;mode bit provided by hardware&lt;/p&gt;
-&lt;p&gt;Some instructions are designated as privileged, only executable in kernel mode.&lt;/p&gt;
-&lt;p&gt;System call changes mode to kernel mode, return from call resets it to user mode.&lt;/p&gt;
-&lt;p&gt;特权指令包括转换到用户模式，IO控制，定时器管理，中断管理等&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573530628171.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573530670239.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
-&lt;h3 id=&#34;process-management&#34;&gt;process management&lt;/h3&gt;
-&lt;p&gt;Single-threaded process has one program counter specifying location of next instruction to execute.&lt;/p&gt;
-&lt;p&gt;Multi-threaded process has one program counter per thread.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573530891037.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
-&lt;h3 id=&#34;memory-management&#34;&gt;memory management&lt;/h3&gt;
-&lt;p&gt;determines what is in memory&lt;/p&gt;
-&lt;p&gt;Central to the operation of a modern computer system.
- All data should be in memory before and after processing.
- All instructions should be in memory in order to execute.&lt;/p&gt;
-&lt;p&gt;virtual memory:&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573531043445.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
-&lt;h3 id=&#34;storage-management&#34;&gt;storage management&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;file-system management&lt;/p&gt;
-&lt;p&gt;Access control on most systems to determine who can access what.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;mass-storage management&lt;/p&gt;
-&lt;p&gt;secondary storage, tertiary storage&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;caching&lt;/p&gt;
-&lt;p&gt;copying information into faster storage system&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;disk cache&lt;/p&gt;
-&lt;p&gt;A portion of main memory used as a buffer to temporarily to hold data for the disk.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;cache memory 高速缓存&lt;/p&gt;
-&lt;p&gt;invisible to OS&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;coherency &amp;amp; consistency&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;IO subsystem&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573531626180.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;protection-and-security&#34;&gt;protection and security&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;protection&lt;/p&gt;
-&lt;p&gt;控制进程或用户对计算机系统资源的访问的机制&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;security&lt;/p&gt;
-&lt;p&gt;防止系统不受外部或内部攻击&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;access control&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;information flow control&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;certification&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;保护和安全需要系统能区分用户，user ID(UID); 需要区分用户集，group ID&lt;/p&gt;
-&lt;p&gt;privilege escalation: 有时用户需要升级特权来获取对一个活动的额外特权&lt;/p&gt;
-&lt;h3 id=&#34;distributed-systems&#34;&gt;distributed systems&lt;/h3&gt;
-&lt;p&gt;loosely coupled&lt;/p&gt;
-&lt;p&gt;network: communication path TCP/IP协议常用&lt;/p&gt;
-&lt;p&gt;network operating system: 更自治 提供信息交换的通信 file sharing, communication, runs independently&lt;/p&gt;
-&lt;p&gt;分布式系统更少自治，不同的草作系统紧密连接，好像是一个操作系统控制网络 &lt;strong&gt;process migration&lt;/strong&gt;&lt;/p&gt;
-&lt;h3 id=&#34;special-purpose-systems&#34;&gt;special-purpose systems&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;real-time system&lt;/p&gt;
-&lt;p&gt;Often used as a control device in a dedicated application&lt;/p&gt;
-&lt;p&gt;hard/soft&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;real-time embedded system 实时嵌入式系统&lt;/p&gt;
-&lt;p&gt;OS很limited&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;multimedia system 多媒体系统&lt;/p&gt;
-&lt;p&gt;将多媒体数据加入到计算机系统(audio and video files)&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;handheld system 手持系统&lt;/p&gt;
-&lt;p&gt;PDA: personal digital assistants 专门的嵌入式系统&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;computing-environments&#34;&gt;computing environments&lt;/h3&gt;
-&lt;p&gt;traditional computing&lt;/p&gt;
-&lt;p&gt;client-server computing: computer-server, file-server&lt;/p&gt;
-&lt;p&gt;peer-to-peer computing: centralized lookupservice, discovery protocol, voice over IP&lt;/p&gt;
-&lt;p&gt;cloud computing&lt;/p&gt;
-&lt;p&gt;Operating System Concepts 7th edition&lt;/p&gt;
-&lt;p&gt;Operating System Concepts 7th edition&lt;/p&gt;
-&lt;p&gt;Operating System Concepts 7th&lt;/p&gt;
-- https://imfaye.me/post/os1/ - Faye</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>关于我</title>
-        <link>https://imfaye.me/about/</link>
-        <pubDate>Sun, 08 Sep 2019 00:00:00 +0000</pubDate>
-        
-        <guid>https://imfaye.me/about/</guid>
-        <description>PIKA☆NCHI https://imfaye.me/about/ -&lt;p&gt;博客什么的，像对着充满未知的可能性的黑洞在倾诉在记录在整理自己。&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;他迫切地需要表达自己，复述他读过的东西，表达自己观察到的事物。这是他整理自己的思想的方式——谈话，谈话，谈话，但我想这也是他寂寞的一种表现。我觉得自己和他很像，这让我觉得很自豪，我和他一样都想塑造自己作为读书人的形象，并且让别人承认这一点，就像在说：这就是我所知道的事情，这就是我要成为的人。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;我们的卑劣和我们的坦诚在这点上和莱农和尼诺也是类似的吧。&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;如果我说自己的天赋在于感受，也太狡猾了。能感受不能输出，怎么看也像是程度不够的借口。我想记录，各个方面的，以各种形式。没有超8mm胶片，有文字也不错。&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;最后留个邮箱：faye#stu.pku.edu.cn (请将#替换为@)&lt;/p&gt;
-- https://imfaye.me/about/ - Faye</description>
         </item>
     
     
