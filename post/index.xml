@@ -30,7 +30,7 @@
     <item>
       <title>耶，VAE</title>
       <link>https://imfaye.me/post/vae/</link>
-      <pubDate>Thu, 10 Feb 2022 23:43:59 +0000</pubDate>
+      <pubDate>Sun, 10 Jul 2022 23:43:59 +0000</pubDate>
       
       <guid>https://imfaye.me/post/vae/</guid>
       <description>引子 生成模型 能从可学习的概率分布中采样得到样本的模型。
@@ -50,7 +50,45 @@ $\mathop{min}\limits_{\theta, \phi} \sum\limits_{i=1}^n||D_\theta(E_\phi(X_i))-X
     </item>
     
     <item>
-      <title>关于熵编码</title>
+      <title>端到端图像/视频压缩里的熵模型</title>
+      <link>https://imfaye.me/post/e2e-entropy-model/</link>
+      <pubDate>Wed, 20 Apr 2022 17:04:37 +0800</pubDate>
+      
+      <guid>https://imfaye.me/post/e2e-entropy-model/</guid>
+      <description>概率分布与熵编码 在端到端图像/视频压缩模型中，我们需要去尽可能精准地模拟待编码元素值的概率分布。一方面是为了更精确地进行码率估计，另一方面也是因为更精准的概率分布建模能使得熵编码环节更好地消除统计冗余节省码字。
+建模出概率分布后，在实际熵编码中，就可以通过概率分布生成熵编码器所需要的概率表。
+多说一句，在传统编解码里，通常熵编码会采用自适应模型，即随着编码字符的输入，不断更新概率分布（自适应模型相比静态模型效率更高，符合局部性原理，适应符号概率忽大忽小的波动，如果能合理地利用上下文信息压缩效率可以远超静态模型）。然而在端到端压缩模型里，通常直接通过网络生成独立的概率分布的参数，不会随着编码过程更新概率表。
+量化不可导 这个没什么好说的，量化四舍五入的取整操作显然是不可导的，所以在训练的时候可以通过加均匀噪声来替换四舍五入的操作。
+在训练阶段，我们会通过给待编码元素值加上-0.5到0.5的均匀噪声来替代量化操作。而实际推理的时候，就正常进行量化。
+均匀噪声涉及到的概率关系 首先明确一下这几条线分布代表什么。
+$p_{y_i}$：编码空间元素值的概率密度函数
+$p_{\tilde{y_i}}$：$y_i$ 加上均匀噪声后的概率密度函数
+$p_{\hat{y_i}}$：$y_i$量化后的概率质量函数（量化后就成了离散型变量了）
+均匀噪声其实就是均匀分布 $U(-0.5, 0.5)$，$y_i$ 加上均匀噪声得到 $\tilde{y_i}$，两个独立的连续随机变量的和的概率分布公式是 $f_{X+Y}(z) = \int_{-\infty}^{\infty} f_X(x) f_Y(z-x) ,\mathrm{d}x$，直观来说也很好理解，对于任意 $\tilde{y_i}$ 值为 $c$，可能加均匀噪声得到 $c$ 的 $y_i$ 取值范围其实就是 $c-0.5$ 到 $c+0.5$，$p_{\tilde{y_i}}$ 在 $c$ 点的值其实就可以通过 $p_{y_i}$ 在 $c-0.5$ 到 $c+0.5$ 的积分得出。
+对于每个整数点，也自然符合上述描述。
+而这样一来，加均匀噪声得到的 $p_{\tilde{y_i}}$ 最妙的性质就在于，在每个整数点 $p_{\tilde{y_i}}$ 的值和实际量化得到的离散变量 $p_{\hat{y_i}}$ 在这一点的概率质量相等。
+所以说，加均匀噪声这一操作，本质上类似于在给 $p_{\hat{y_i}}$ 的概率质量函数作插值，类似于一个连续松弛 (continuous relaxation) 的操作。
+此外，我们在端到端模型里通常去建模的也就是这个 $p_{y_i}$，而这里其实是假设 $p_{y_i}$ 近似一个拉普拉斯分布，实际代码实现中，有一部分模型采用拉普拉斯分布去建模，也有一部分模型，比如 CompressAI，是采用高斯分布去建模的。
+CompressAI 代码中的熵模型 以其中的 GaussianConditional 熵模型为例，稍微讲一下实际实现的时候一些常见操作。
+def forward( self, inputs: Tensor, scales: Tensor, means: Optional[Tensor] = None, training: Optional[bool] = None, ) -&amp;gt; Tuple[Tensor, Tensor]: if training is None: training = self.</description>
+    </item>
+    
+    <item>
+      <title>可变形卷积与光流</title>
+      <link>https://imfaye.me/post/dcn-and-optical-flow/</link>
+      <pubDate>Sun, 20 Feb 2022 17:04:37 +0800</pubDate>
+      
+      <guid>https://imfaye.me/post/dcn-and-optical-flow/</guid>
+      <description>可变形卷积代码篇 一个调用 from mmcv.ops import ModulatedDeformConv2d 的例子：
+def forward(self, input): x = self.offset_mask_conv(input) o1, o2, mask = torch.chunk(x, 3, dim=1) offset = torch.cat((o1, o2), dim=1) mask = torch.sigmoid(mask) output = self.dcnv2(input, offset, mask) return output 总而言之 offset 的 size 就是 2*kernel[0]*kernel[1] ，想一想，原来我们求偏移的时候，会把 B*H*W*C 的图像送入普通卷积得到 B*H*W*2C 得到偏移，也就是每个通道每个位置点都有 x 和 y 两个方向的偏移量。
+对 DCN 来说，每个通道都做一样的处理，也就是只需要对每个位置点存卷积核每个点的 x 和 y 的偏移，所以就是 B*H*W*(2*kernel_size) 。
+关于 mask:：置信 mask，并非必需，不作展开了
+所以 offset 和 mask 一起就是 B*H*W*(3*kernel_size)
+关于 deform_groups：本来是所有通道公用，也可以改成划成几组，组数就是 deform_groups，那这样就是 B*H*W*(group_num*3*kernel_size)</description>
+    </item>
+    
+    <item>
+      <title>一些传统的熵编码方法</title>
       <link>https://imfaye.me/post/entropy-coding/</link>
       <pubDate>Sun, 05 Dec 2021 13:09:24 +0000</pubDate>
       
@@ -208,7 +246,6 @@ git config --global http.proxy &amp;#34;socks5://&amp;lt;windows_ip&amp;gt;:&amp
 总是想起那个教授说的，我们检索记忆的方式，不是倒放，而是直接抽取过去某个点。
 人脑存储记忆的方式。回想是一个重构的过程。随着每次检索，都会改变。大脑对概念的优先级高于细节。
 4/3 早上竟然就在床上听完了机器学习。这个老师好憨。
-中午一直在看些经验视频。别的小姐姐好温柔。诚实一点。这就是你，这就是你的大学四年，你花在其他地方的时间一定也是有意义的。鸡汤如果可以拯救我一小下，我烂俗一点也无妨。
 看了一些语言学的视频。
 下午看了看瑞幸那事。想起之前听的剩余价值了。资本真的在侵压我们所有的生活空间的小角落，从公到私。压榨剩余价值，侵入，一切追求效率利润最大化。我还是觉得，它应当只作为被提供的选择出现，而不是强制性地挤压所有弹性空间。小商小贩，我们的个性化的充满生活气息的小角落，不得不和巨型资本融合。我们真的需要那么强的便利性吗，我们只是一味地被市场投喂，靥足之后进化出妖怪一样的欲望。
 听剩余价值，这期聊足球。
@@ -238,7 +275,8 @@ git config --global http.proxy &amp;#34;socks5://&amp;lt;windows_ip&amp;gt;:&amp
 3/24 依旧，装修的声音让人简直神经衰弱。有在看魔兽战线。喜欢闪闪。
 上午和红叶打电话，聊天。嗯，跳出那个框子，稳固一点弥补自己觉得应该弥补的，不用太担心会和高中一样，也不用太高地期望什么。
 老婆饼，榴莲酥，青团，酸奶拌香蕉。
-下午后来在研究吉尔伽美什和恩齐都。后来和污妖王聊了会儿天，我完全都不知道原来新加坡现在疫情愈发严重了。有点可怕。</description>
+下午后来在研究吉尔伽美什和恩齐都。后来和污妖王聊了会儿天，我完全都不知道原来新加坡现在疫情愈发严重了。有点可怕。
+后来还和春花聊天。</description>
     </item>
     
     <item>

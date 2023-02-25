@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>可变形卷积 on PIKA☆NCHI</title>
+    <link>https://imfaye.me/tags/%E5%8F%AF%E5%8F%98%E5%BD%A2%E5%8D%B7%E7%A7%AF/</link>
+    <description>Recent content in 可变形卷积 on PIKA☆NCHI</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>Faye</copyright>
+    <lastBuildDate>Sun, 20 Feb 2022 17:04:37 +0800</lastBuildDate><atom:link href="https://imfaye.me/tags/%E5%8F%AF%E5%8F%98%E5%BD%A2%E5%8D%B7%E7%A7%AF/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>可变形卷积与光流</title>
+      <link>https://imfaye.me/post/dcn-and-optical-flow/</link>
+      <pubDate>Sun, 20 Feb 2022 17:04:37 +0800</pubDate>
+      
+      <guid>https://imfaye.me/post/dcn-and-optical-flow/</guid>
+      <description>可变形卷积代码篇 一个调用 from mmcv.ops import ModulatedDeformConv2d 的例子：
+def forward(self, input): x = self.offset_mask_conv(input) o1, o2, mask = torch.chunk(x, 3, dim=1) offset = torch.cat((o1, o2), dim=1) mask = torch.sigmoid(mask) output = self.dcnv2(input, offset, mask) return output 总而言之 offset 的 size 就是 2*kernel[0]*kernel[1] ，想一想，原来我们求偏移的时候，会把 B*H*W*C 的图像送入普通卷积得到 B*H*W*2C 得到偏移，也就是每个通道每个位置点都有 x 和 y 两个方向的偏移量。
+对 DCN 来说，每个通道都做一样的处理，也就是只需要对每个位置点存卷积核每个点的 x 和 y 的偏移，所以就是 B*H*W*(2*kernel_size) 。
+关于 mask:：置信 mask，并非必需，不作展开了
+所以 offset 和 mask 一起就是 B*H*W*(3*kernel_size)
+关于 deform_groups：本来是所有通道公用，也可以改成划成几组，组数就是 deform_groups，那这样就是 B*H*W*(group_num*3*kernel_size)</description>
+    </item>
+    
+  </channel>
+</rss>

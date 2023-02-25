@@ -1,0 +1,27 @@
+<?xml-stylesheet href="/rss.xsl" type="text/xsl"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>PIKA☆NCHI</title>
+    <link>https://imfaye.me/</link>
+    <description>Recent content on PIKA☆NCHI</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>Faye</copyright>
+    <lastBuildDate>Sun, 15 Jan 2023 15:04:21 +0800</lastBuildDate>
+    
+        <atom:link href="https://imfaye.me/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title></title>
+        <link>https://imfaye.me/archives/</link>
+        <pubDate>Tue, 28 May 2019 00:00:00 +0000</pubDate>
+        
+        <guid>https://imfaye.me/archives/</guid>
+        <description>PIKA☆NCHI https://imfaye.me/archives/ -- https://imfaye.me/archives/ - Faye</description>
+        </item>
+    
+    
+  </channel>
+</rss> 

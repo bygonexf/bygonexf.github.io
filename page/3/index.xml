@@ -14,6 +14,332 @@
     
     
         <item>
+        <title>操作系统笔记 CH8 Main Memory</title>
+        <link>https://imfaye.me/post/os8/</link>
+        <pubDate>Fri, 28 Feb 2020 13:08:24 +0000</pubDate>
+        
+        <guid>https://imfaye.me/post/os8/</guid>
+        <description>PIKA☆NCHI https://imfaye.me/post/os8/ -&lt;h2 id=&#34;background&#34;&gt;background&lt;/h2&gt;
+&lt;h3 id=&#34;基本硬件&#34;&gt;基本硬件&lt;/h3&gt;
+&lt;p&gt;CPU可直接访问的存储器只有 内存 和  处理器内的寄存器&lt;/p&gt;
+&lt;p&gt;​	CPU内置寄存器可在一个CPU时钟周期内完成访问，对于寄存器中的内容，CPU可以在一个周期内解析并执行多个指令&lt;/p&gt;
+&lt;p&gt;​	对于内存，访存可能需要多个时钟周期。没有数据时，要暂停(stall)&lt;/p&gt;
+&lt;p&gt;协调速度差异，在CPU和内存之间，增加高速缓存cache&lt;/p&gt;
+&lt;p&gt;instruction-execution cycle: Fetch an instruction, decode instruction, fetch operands, execute, store results back into memory&lt;/p&gt;
+&lt;p&gt;为了确保正确操作，需要保护内存。&lt;/p&gt;
+&lt;p&gt;每个进程有独立空间。两个寄存器：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;base register: 最小的合法物理地址&lt;/li&gt;
+&lt;li&gt;limit register: 范围的大小&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;CPU硬件对user mode产生的每一个地址与寄存器的地址进行比较，实现内存空间的保护。&lt;/p&gt;
+&lt;p&gt;只有OS可以通过特殊的特权指令加载base register和limit register&lt;/p&gt;
+&lt;h3 id=&#34;地址绑定-address-binding&#34;&gt;地址绑定 address binding&lt;/h3&gt;
+&lt;p&gt;进程在执行时可以在磁盘和内存之间移动，在磁盘上等待调入内存以便执行的进程形成input queue&lt;/p&gt;
+&lt;p&gt;许多系统允许用户进程放在物理内存的任意位置，用户进程开始地址不必为0&lt;/p&gt;
+&lt;p&gt;源程序中的地址用符号表示，compiler将symbolic address绑定到relocatable address(如从本模块开始的第14字节)，linker或loader将可重定位地址绑定成absolute address。每次绑定都是从一个地址空间到另一个的映射。&lt;/p&gt;
+&lt;p&gt;将指令与数据绑定到内存地址有几种情况：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;compile time&lt;/p&gt;
+&lt;p&gt;编译时就知道进程将在内存中的驻留地址，可以生成absolute code&lt;/p&gt;
+&lt;p&gt;如果将来地址发生变化，必须重新编译代码&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;load time&lt;/p&gt;
+&lt;p&gt;编译时不知道。编译器生成relocatable code&lt;/p&gt;
+&lt;p&gt;绑定延迟到加载时&lt;/p&gt;
+&lt;p&gt;如果开始地址发生变化，只需重新加载用户代码引入改变值&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;execution time&lt;/p&gt;
+&lt;p&gt;进程在执行时可以从一个内存段移到另一个内存段&lt;/p&gt;
+&lt;p&gt;绑定延迟到执行时&lt;/p&gt;
+&lt;p&gt;需要硬件(如base and limit registers)&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577411832987.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;h3 id=&#34;logical-vs-physical-address-space&#34;&gt;logical vs. physical address space&lt;/h3&gt;
+&lt;p&gt;logical address: CPU生成的地址，virtual adderss&lt;/p&gt;
+&lt;p&gt;physical address: 内存单元看到的地址，即加载到memory-address register的地址&lt;/p&gt;
+&lt;p&gt;compile-time和load-time的address binding生成相同的逻辑地址和物理地址，但execution-time生成不同的，这种情况称逻辑地址为virtual address&lt;/p&gt;
+&lt;p&gt;logical address space: 程序所生成的所有逻辑地址的集合&lt;/p&gt;
+&lt;p&gt;physical address space: 与这些逻辑地址相对应的物理地址的集合&lt;/p&gt;
+&lt;p&gt;运行时完成从虚拟到物理的地址映射的硬件：MMU(memory-management unit)&lt;/p&gt;
+&lt;p&gt;relocation register: 用户进程所生成的地址送交内存前，加上relocation register的值&lt;/p&gt;
+&lt;p&gt;用户程序绝不会看到真正的物理地址(execution-binding只发生在它作为内存地址引用时(比如间接加载和存储时))&lt;/p&gt;
+&lt;p&gt;用户程序处理逻辑地址，内存映射硬件将逻辑地址映射为物理地址&lt;/p&gt;
+&lt;h2 id=&#34;swapping&#34;&gt;swapping&lt;/h2&gt;
+&lt;p&gt;进程可以暂时从内存swap到backing store上，需要再次执行时再调入内存&lt;/p&gt;
+&lt;p&gt;backing store通常是fast disk，容纳所有用户的memory images，提供对这些内存镜像的直接访问。&lt;/p&gt;
+&lt;p&gt;ready queue包括在backing store和在内存中准备运行的所有进程&lt;/p&gt;
+&lt;p&gt;如果绑定是在汇编时或加载时所定的，一个交换出的进程必须交换回原来的内存空间，如果绑定是在运行是所定，可以移到不同的位置&lt;/p&gt;
+&lt;p&gt;roll in, roll out: 交换策略的变种被用在基于优先级的调度算法中&lt;/p&gt;
+&lt;p&gt;Dispatcher is called whenever the CPU scheduler decides to execute a process&lt;/p&gt;
+&lt;p&gt;交换系统的context switch time比较长&lt;/p&gt;
+&lt;p&gt;为了有效使用CPU，需要每个进程的执行时间比交换时间长&lt;/p&gt;
+&lt;p&gt;交换时间主要是transfer time, 和所交换的内存空间成正比(进程10MB，备份存储是40MBps的硬盘，传入或传出：10MB/40MBps)&lt;/p&gt;
+&lt;p&gt;如果要换出进程，必须确保该进程完全处于空闲状态&lt;/p&gt;
+&lt;p&gt;solution to 待处理IO(pending IO)&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;不能换出有待处理IO的进程&lt;/li&gt;
+&lt;li&gt;IO操作的执行只能使用OS buffers. double buffering&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;交换空间通常作为磁盘的一整块，且独立于文件系统。&lt;/p&gt;
+&lt;p&gt;标准交换使用不多，一些交换的变种得到应用。(不如通常不执行交换，许多进程运行且内存吃紧，开始交换，若系统负荷降低，停止交换)&lt;/p&gt;
+&lt;h2 id=&#34;contiguous-memory-allocation&#34;&gt;contiguous memory allocation&lt;/h2&gt;
+&lt;p&gt;内存通常分为两部分，一部分驻留OS，一部分用于用户进程。操作系统通常位于低内存。&lt;/p&gt;
+&lt;p&gt;连续内存分配：每个进程位于一个连续的内存区域&lt;/p&gt;
+&lt;h3 id=&#34;内存映射和保护&#34;&gt;内存映射和保护&lt;/h3&gt;
+&lt;p&gt;relocation-register scheme:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;relocatio/base register&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;limit register&lt;/p&gt;
+&lt;p&gt;每个逻辑地址必须小于limit register&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;MMU动态地将逻辑地址加上relocation register的值后映射成物理地址&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577415727527.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;relocation-register scheme允许OS动态改变。如果某驱动程序不常用，不必再内存保存数据和代码，transient kernel code根据需要调入或调出，使用这类代码可以在程序运行时动态改变OS大小&lt;/p&gt;
+&lt;h3 id=&#34;memory-allocation&#34;&gt;memory allocation&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;fixed partitioning (MFT)&lt;/p&gt;
+&lt;p&gt;多道程序的程度受分区数限制&lt;/p&gt;
+&lt;p&gt;internal fragmentation: 进程所分配的内存比所需要大&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;equal-size partitions&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;unequal-size partitions&lt;/p&gt;
+&lt;p&gt;queue for each partition&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;variable partitioning (MVT)&lt;/p&gt;
+&lt;p&gt;variable length and number&lt;/p&gt;
+&lt;p&gt;hole: a block of available memory&lt;/p&gt;
+&lt;p&gt;OS维护一个表，记录哪些内存可用/已被占用&lt;/p&gt;
+&lt;p&gt;recaim的时候如果新孔与其他孔相邻，将这些孔合并成大孔&lt;/p&gt;
+&lt;p&gt;从一组可用孔选择一个：fisrst-fit, best-fit, worst-fit&lt;/p&gt;
+&lt;p&gt;fisrt fit: 50% rule N个可分配快，0.5N个块为外部碎片，1/3内存不可用&lt;/p&gt;
+&lt;p&gt;first和best在时间和利用空间好于worst，first和best利用空间差不多，first更快。&lt;/p&gt;
+&lt;p&gt;external fragmentation: 所有可用内存之和可以满足要求，但并不连续&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;解决外部碎片：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;紧缩(compaction)&lt;/p&gt;
+&lt;p&gt;把所有空闲空间合并成一整块&lt;/p&gt;
+&lt;p&gt;紧缩仅在重定位是动态并在运行时可采用&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;允许物理地址空间非连续&lt;/p&gt;
+&lt;p&gt;分页/分段&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;paging-分页&#34;&gt;paging 分页&lt;/h2&gt;
+&lt;p&gt;允许进程物理地址空间非连续&lt;/p&gt;
+&lt;p&gt;帧(frame): 物理内存划分为固定大小的块&lt;/p&gt;
+&lt;p&gt;页(page): 逻辑内存分为同样大小的块&lt;/p&gt;
+&lt;p&gt;backing store也划分为固定大小的块(block)&lt;/p&gt;
+&lt;p&gt;页大小由硬件决定，通常为2的幂(power of 2)，512B~16MB&lt;/p&gt;
+&lt;p&gt;When a process is to be executed, its pages are loaded into any available memory frames from the blocks.&lt;/p&gt;
+&lt;p&gt;OS为每个进程维护一个page table, contains the frame location for each page in the process, page table used to translate logical to physical addresse&lt;/p&gt;
+&lt;p&gt;有internal fragmentation(进程要求内存大小不是页大小的整数倍)&lt;/p&gt;
+&lt;p&gt;由CPU生成的地址分为两部分：page number(used as an index into a page table), page offset&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577426080611.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;逻辑地址页号位数：进程可以有多少页决定&lt;/p&gt;
+&lt;p&gt;物理地址页号位数：帧数决定&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577426108848.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577426371002.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;分页特定：用户视角的内存与物理内存分离。用户程序将内存作为一整块处理，只包括这一个进程。逻辑地址到物理地址的映射由硬件完成，用户不知道。&lt;/p&gt;
+&lt;h3 id=&#34;分页的硬件支持&#34;&gt;分页的硬件支持&lt;/h3&gt;
+&lt;p&gt;每个进程一个页表。页表的指针与其他寄存器的值存入PCB。启动进程时，首先装入用户寄存器。&lt;/p&gt;
+&lt;p&gt;&amp;lt;256 entries, 页表可作为一组专用寄存器实现；大的页表存在内存中。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;PTBR(Page-table base register)&lt;/li&gt;
+&lt;li&gt;PTLR(Page-table length register)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;装入或修改页表寄存器的指令是特权级的&lt;/p&gt;
+&lt;p&gt;访问一个字节需要2次访存(一次页表条目，一次字节)&lt;/p&gt;
+&lt;h4 id=&#34;tlb&#34;&gt;TLB&lt;/h4&gt;
+&lt;p&gt;解决这个问题：TLB(translation look-aside buffer / associative memory)&lt;/p&gt;
+&lt;p&gt;The given page number is compared with all keys simultaneously.&lt;/p&gt;
+&lt;p&gt;page # 和 frame #&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;a hit&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;a miss&lt;/p&gt;
+&lt;p&gt;the page number is used to index the process page table&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577427134596.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;有的TLB允许有些条目固定下来 wired down(e.g. entries for kernel code)&lt;/p&gt;
+&lt;p&gt;有的TLB在在每个TLB条目中保存ASID(address-space identifier)，可唯一地标识进程，为进程提供地址空间保护，允许TLB同时包含多个不同进程的条目&lt;/p&gt;
+&lt;h4 id=&#34;eateffective-access-time&#34;&gt;EAT(Effective Access Time)&lt;/h4&gt;
+&lt;p&gt;hit ratio: 页号在TLB中被查找到的百分比率&lt;/p&gt;
+&lt;h3 id=&#34;内存保护&#34;&gt;内存保护&lt;/h3&gt;
+&lt;p&gt;分页环境下，内存保护通过与每个帧相关联的保护位实现。这些位保存在页表里。&lt;/p&gt;
+&lt;p&gt;RW bit: read-write or read-only&lt;/p&gt;
+&lt;p&gt;valid-invalid bit: 在不在进程的逻辑地址空间中。有点浪费，所以有时用PTLR看页表长度&lt;/p&gt;
+&lt;p&gt;Any violations result in a trap to the kernel.&lt;/p&gt;
+&lt;h2 id=&#34;页表结构&#34;&gt;页表结构&lt;/h2&gt;
+&lt;h3 id=&#34;层次页表-hierarchical&#34;&gt;层次页表 Hierarchical&lt;/h3&gt;
+&lt;p&gt;forward-mapped page table&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577427835376.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;e.g. VAX(virtual address extension)体系结构支持一种两层分页的变种&lt;/p&gt;
+&lt;p&gt;页表项长度是页面的地址。页表大小=页面个数*页表项长度 。&lt;/p&gt;
+&lt;h3 id=&#34;哈希页表-hashed-page-tables&#34;&gt;哈希页表 Hashed Page Tables&lt;/h3&gt;
+&lt;p&gt;Common in address spaces &amp;gt; 32 bits&lt;/p&gt;
+&lt;p&gt;哈希页表每一条目包括一个链表的元素，每个元素3个域：1虚拟页码  2所映射的帧号 3指向链表中下一元素的指针&lt;/p&gt;
+&lt;p&gt;群集页表(clustered page table)类似于哈希页表，不过每一条目包括多页，对于稀疏地址空间有用&lt;/p&gt;
+&lt;h3 id=&#34;反向页表-inverted-page-table&#34;&gt;反向页表 Inverted Page Table&lt;/h3&gt;
+&lt;p&gt;Rather than each process having a page table and keeping track of all possible logical pages, track all physical pages.&lt;/p&gt;
+&lt;p&gt;One entry for each real frame of memory.&lt;/p&gt;
+&lt;p&gt;每个条目包含 保存在真正内存位置的页的虚拟地址 和 拥有该页的进程的信息&lt;/p&gt;
+&lt;p&gt;整个系统只有一个页表。&lt;/p&gt;
+&lt;p&gt;Often requires an address-space identifier (ASID) stored in each entry of the page table.&lt;/p&gt;
+&lt;p&gt;Ensures the mapping of a logical page for a particular process to the corresponding physical page frame.&lt;/p&gt;
+&lt;p&gt;&amp;lt; process-id, page-number, offset &amp;gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577428523948.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;减少存储空间，但增加了查找时间。&lt;/p&gt;
+&lt;p&gt;可以通过哈希页表将查找限制在较少的条目中。访问哈希表时先访问TLB&lt;/p&gt;
+&lt;p&gt;反向页表实现共享内存困难。共享内存通常作为被映射到一个物理地址的多虚拟地址实现。而反向页表，每个物理页只有一个虚拟页条目。&lt;/p&gt;
+&lt;p&gt;解决办法：允许页表包含one mapping of a virtual address to the shared physical address&lt;/p&gt;
+&lt;h2 id=&#34;分段-segmentation&#34;&gt;分段 segmentation&lt;/h2&gt;
+&lt;p&gt;用户视角的内存管理方案&lt;/p&gt;
+&lt;p&gt;每个段有名称和长度。地址指定了段名称和段偏移。&lt;/p&gt;
+&lt;p&gt;分段：用户通过两个量指定地址，段名称和段偏移；分页：用户只指定一个地址，该地址通过硬件分为页码和偏移，对用户透明&lt;/p&gt;
+&lt;p&gt;&amp;lt;segment-number, offset&amp;gt;&lt;/p&gt;
+&lt;p&gt;二维用户定义地址映射为一维物理地址，通过段表(segment table)实现，段表每个条目有segment base和segment limit&lt;/p&gt;
+&lt;p&gt;STBR(segment-table base register): points to the segment table’s location in memory&lt;/p&gt;
+&lt;p&gt;STLR(segment-table limit register): indicates number of segments used by a program&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577429459185.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577429477972.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+- https://imfaye.me/post/os8/ - Faye</description>
+        </item>
+    
+    
+    
+        <item>
+        <title>操作系统笔记 CH7 Deadlocks</title>
+        <link>https://imfaye.me/post/os7/</link>
+        <pubDate>Fri, 28 Feb 2020 13:07:24 +0000</pubDate>
+        
+        <guid>https://imfaye.me/post/os7/</guid>
+        <description>PIKA☆NCHI https://imfaye.me/post/os7/ -&lt;h2 id=&#34;deadlock-characteristics&#34;&gt;deadlock characteristics&lt;/h2&gt;
+&lt;h3 id=&#34;necessary-conditions&#34;&gt;necessary conditions&lt;/h3&gt;
+&lt;p&gt;4个条件同时满足，引起死锁：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;mutual exclusion&lt;/p&gt;
+&lt;p&gt;至少有一个资源处于非共享模式，一次只能有一个进程使用&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;hold and wait&lt;/p&gt;
+&lt;p&gt;占有至少一个资源，等待另一为其他进程所占资源&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;no preemption&lt;/p&gt;
+&lt;p&gt;资源不能被抢占&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;circular wait&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;resource-allocation-graph&#34;&gt;resource-allocation graph&lt;/h3&gt;
+&lt;p&gt;request edge : Pi-&amp;gt;Rj&lt;/p&gt;
+&lt;p&gt;assignment edge : Rj-&amp;gt;Pi&lt;/p&gt;
+&lt;p&gt;申请边只用指向矩形，但分配边必须从某个原点开始&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573293211940.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;资源分配图有环是死锁的必要条件。若每类资源只有一个实例，含环是充分必要条件。若同类资源数&amp;gt;1,不一定有死锁。&lt;/p&gt;
+&lt;h2 id=&#34;methods-for-handling-deadlocks&#34;&gt;methods for handling deadlocks&lt;/h2&gt;
+&lt;p&gt;1.预防或避免死锁&lt;/p&gt;
+&lt;p&gt;2.允许进入死锁，检测并恢复&lt;/p&gt;
+&lt;p&gt;3.忽视这个问题(为多数OS所用)&lt;/p&gt;
+&lt;p&gt;deadlock prevention: 确保至少一个必要条件不成立，通过限制如何申请资源&lt;/p&gt;
+&lt;p&gt;deadlock avoidance: 事先得到进程申请和使用资源的额外信息，系统可确定对于一个申请，进程是否等待(申请允许还是延迟)，考虑可用、已分配、进程将来申请和释放的资源&lt;/p&gt;
+&lt;h2 id=&#34;deadlock-prevention&#34;&gt;deadlock prevention&lt;/h2&gt;
+&lt;p&gt;确保4个必要条件至少1个不成立&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;mutual exclusion&lt;/p&gt;
+&lt;p&gt;通常不通过这个条件&amp;hellip;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;hold and wait&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;每个进程在执行前申请并获得所有资源&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;进程在没有资源时才可申请资源(申请更多资源前，先释放已分配的资源)&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;缺点:1.资源利用率低 2.starvation&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;no preemption&lt;/p&gt;
+&lt;p&gt;如果一个进程占有资源并申请另一个不能立即分配的资源，其现在已分配的资源都可被抢占(被隐式释放)。&lt;/p&gt;
+&lt;p&gt;进程申请资源时，不可用也不被其他等待进程占有时，等待&lt;/p&gt;
+&lt;p&gt;常应用于状态可以保存恢复的资源，如CPU寄存器和内存，不适用于打印机和磁带驱动器等。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;circular wait&lt;/p&gt;
+&lt;p&gt;对所有资源类型进行完全排序。每个进程只按递增顺序申请资源。(只能申请编号比它大的)&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;deadlock-avoidance&#34;&gt;deadlock avoidance&lt;/h2&gt;
+&lt;p&gt;死锁避免比死锁预防要求低&lt;/p&gt;
+&lt;p&gt;deadlock prevention 低设备使用率和吞吐率&lt;/p&gt;
+&lt;p&gt;a system is in a safe state only if there exists a safe sequence&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573295674796.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;h3 id=&#34;resource-allocation-graph-algorithm&#34;&gt;resource-allocation-graph algorithm&lt;/h3&gt;
+&lt;p&gt;增加claim edge(需求边)，虚线&lt;/p&gt;
+&lt;p&gt;当进程Pi开始执行时，所有需求边必须先处于资源分配图。(可放宽为只要与Pi有关的需求边)&lt;/p&gt;
+&lt;p&gt;只有在申请边Pi-&amp;gt;Rj变成分配边Rj-&amp;gt;Pi，而不会出现环时，才允许申请。环存在是unsafe state&lt;/p&gt;
+&lt;p&gt;cycle-detection algorithm&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573296280721.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;h3 id=&#34;bankers-algorithm&#34;&gt;banker&amp;rsquo;s algorithm&lt;/h3&gt;
+&lt;p&gt;自己看书做题去 P247&lt;/p&gt;
+&lt;h2 id=&#34;deadlock-detection&#34;&gt;deadlock detection&lt;/h2&gt;
+&lt;p&gt;不采用prevention和avoidance，应提供检查是否出现死锁&amp;amp;恢复算法。&lt;/p&gt;
+&lt;h3 id=&#34;每种资源类型单个实例&#34;&gt;每种资源类型单个实例&lt;/h3&gt;
+&lt;p&gt;wait-for graph: Pi等待Pj释放一个Pi需要的资源&lt;/p&gt;
+&lt;p&gt;Pi-&amp;gt;Pj iff 资源分配图中 Pi-&amp;gt;Rq, Rq-&amp;gt;Pj&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573296978952.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;图中有环 &amp;lt;-&amp;gt; 死锁&lt;/p&gt;
+&lt;h3 id=&#34;每种资源类型多个实例&#34;&gt;每种资源类型多个实例&lt;/h3&gt;
+&lt;p&gt;detection algorithm&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573297606742.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;h3 id=&#34;资源图消边法&#34;&gt;资源图消边法&lt;/h3&gt;
+&lt;p&gt;PPT P45 + 看橘&lt;/p&gt;
+&lt;h2 id=&#34;recovery-from-deadlock&#34;&gt;recovery from deadlock&lt;/h2&gt;
+&lt;h3 id=&#34;process-termination&#34;&gt;process termination&lt;/h3&gt;
+&lt;p&gt;不管哪种进程终止方法，系统都会收回分配给终止进程的所有资源&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;终止所有死锁进程&lt;/li&gt;
+&lt;li&gt;一次终止一个，调用死锁检测，直到取消死锁循环&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;resource-preemption&#34;&gt;resource preemption&lt;/h3&gt;
+&lt;p&gt;select a victim: which resources and which processes are to be preempted 代价因素 cost factors&lt;/p&gt;
+&lt;p&gt;rollback: 抢占资源后对进程做什么安排 roll back to some safe state. simplest: total rollback&lt;/p&gt;
+&lt;p&gt;starvation: 如何保证资源总是从一个进程抢占 在代价因素中加上回滚次数&lt;/p&gt;
+- https://imfaye.me/post/os7/ - Faye</description>
+        </item>
+    
+    
+    
+        <item>
         <title>操作系统笔记 CH6 Process Synchronization</title>
         <link>https://imfaye.me/post/os6/</link>
         <pubDate>Fri, 28 Feb 2020 13:06:24 +0000</pubDate>
@@ -934,17 +1260,6 @@ bootsrap program: stored in ROM/EEPROM, AKA firmware&lt;/p&gt;
 &lt;p&gt;如题，希望是什么的开始。&lt;/p&gt;
 &lt;p&gt;TBC&lt;/p&gt;
 - https://imfaye.me/post/beginning/ - Faye</description>
-        </item>
-    
-    
-    
-        <item>
-        <title></title>
-        <link>https://imfaye.me/archives/</link>
-        <pubDate>Tue, 28 May 2019 00:00:00 +0000</pubDate>
-        
-        <guid>https://imfaye.me/archives/</guid>
-        <description>PIKA☆NCHI https://imfaye.me/archives/ -- https://imfaye.me/archives/ - Faye</description>
         </item>
     
     

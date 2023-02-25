@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html><head>
-<title>关于熵编码</title>
+<title>一些传统的熵编码方法</title>
 
 
 
@@ -16,7 +16,7 @@
 
 
 
-<meta property="og:title" content="关于熵编码" />
+<meta property="og:title" content="一些传统的熵编码方法" />
 <meta property="og:description" content="传统熵模型 算术编码 (Arithmetic Coding) 流程 （以静态模型举例）
 假设有一段数据需要编码，统计里面所有的字符和出现的次数。编码从初始区间 (0, 1] 开始。 在当前区间内根据各字符概率划分子区间。 读入字符，找到该字符落入的子区间，将区间更新为该子区间，并重复 2, 3 步骤 最后得到的区间 [low, high) 中任意一个小数以二进制形式输出即得到编码的数据 例子如下：
 实现细节 最后结果是一个小数，我们不能简单地用一个 double 类型去表示和计算这个小数，因为根据数据的复杂程度，这个小数可能任意长，小数点后可能会有成千上万位。
@@ -46,7 +46,7 @@ CABAC虽然性能很好，但也存在以下几点不足：
 
 
 <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="关于熵编码"/>
+<meta name="twitter:title" content="一些传统的熵编码方法"/>
 <meta name="twitter:description" content="传统熵模型 算术编码 (Arithmetic Coding) 流程 （以静态模型举例）
 假设有一段数据需要编码，统计里面所有的字符和出现的次数。编码从初始区间 (0, 1] 开始。 在当前区间内根据各字符概率划分子区间。 读入字符，找到该字符落入的子区间，将区间更新为该子区间，并重复 2, 3 步骤 最后得到的区间 [low, high) 中任意一个小数以二进制形式输出即得到编码的数据 例子如下：
 实现细节 最后结果是一个小数，我们不能简单地用一个 double 类型去表示和计算这个小数，因为根据数据的复杂程度，这个小数可能任意长，小数点后可能会有成千上万位。
@@ -785,7 +785,7 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
                 
             >
                 <div class="post-title">
-                    关于熵编码
+                    一些传统的熵编码方法
                     
                     <div class="post-meta">
                         
@@ -802,6 +802,9 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 
                         
                             <i class="material-icons" style="">label</i>
+                            
+                                <a href="/tags/%E5%9B%BE%E5%83%8F%E7%BC%96%E7%A0%81">图像编码</a>
+                                &nbsp;
                             
                                 <a href="/tags/%E8%A7%86%E9%A2%91%E7%BC%96%E7%A0%81">视频编码</a>
                                 &nbsp;
@@ -876,8 +879,8 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
             <nav class="post-pagination">
 
                 
-                <a class="newer-posts" href="/post/vae/">
-			下回<br>耶，VAE
+                <a class="newer-posts" href="/post/dcn-and-optical-flow/">
+			下回<br>可变形卷积与光流
                 </a>
                 
                 

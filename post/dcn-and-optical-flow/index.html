@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html><head>
-<title>图像质量评价指标(MSE, PSNR, MS-SSIM)</title>
+<title>可变形卷积与光流</title>
 
 
 
@@ -16,23 +16,17 @@
 
 
 
-<meta property="og:title" content="图像质量评价指标(MSE, PSNR, MS-SSIM)" />
-<meta property="og:description" content="如何评价重建图像的质量：比较重建图像与原始图像的可视误差。
-MSE Mean Squared Error, 均方误差
-$MSE = \frac{1}{N}\sum\limits_{i=1}^{N}(x_i-y_i)^2$
-两者越接近，MSE 越小。MSE 损失的范围为 0 到 ∞。
-PSNR Peak Signal to Noise Ratio，峰值信噪比，即峰值信号的能量与噪声的平均能量之比，通常取 log 单位为分贝。
-$PSNR = 10 log_{10}\frac{MaxValue^2}{MSE}$
-从式子可以看出 PSNR 可以理解为 MSE 的另一种表达形式。与 MSE 相反的是，重建图像质量越好，PSNR 数值越大。
-对于图像来说，像素点数值以量化方式保存，八比特位深的情况，取值范围为 [0, 255]，$MaxValue$ 就是 255。
-SSIM MSE 与 PSNR 的问题是，在计算每个位置上的像素差异时，其结果仅与当前位置的两个像素值有关，与其它任何位置上的像素无关。这种计算差异的方式仅仅将图像看成了一个个孤立的像素点，而忽略了图像内容所包含的一些视觉特征，特别是图像的局部结构信息。而图像质量的好坏极大程度上是一个主观感受，其中结构信息对人主观感受的影响非常之大。
-而 SSIM (Structural Similarity，结构相似性) 就试图解决这个问题
-SSIM 由三部分组成：
-亮度对比 平均灰度作为亮度测量： $\mu_x = \frac{1}{N}\sum\limits_{i=1}^{N}x_i$ 亮度对比函数： $l(x,y) = \frac{2\mu_x\mu_y &#43; C_1}{\mu_x^2&#43;\mu_y^2&#43;C_1}$ 对比度对比 灰度标准差作为对比度测量： $\sigma_x={(\frac{1}{N-1}\sum\limits_{i=1}^N{(x_i-\mu_x)}^2)}^{\frac{1}{2}}$ 亮度对比函数： $c(x,y)=\frac{2\sigma_x\sigma_y&#43;C_2}{\sigma_x^2&#43;\sigma_y^2&#43;C_2}$ 结构对比 结构测量： $\frac{x-\mu_x}{\sigma_x}$ 结构对比函数： $s(x,y) = \frac{\sigma_{xy}&#43;C_3}{\sigma_x\sigma_y &#43; C_3}$ SSIM 函数：" />
+<meta property="og:title" content="可变形卷积与光流" />
+<meta property="og:description" content="可变形卷积代码篇 一个调用 from mmcv.ops import ModulatedDeformConv2d 的例子：
+def forward(self, input): x = self.offset_mask_conv(input) o1, o2, mask = torch.chunk(x, 3, dim=1) offset = torch.cat((o1, o2), dim=1) mask = torch.sigmoid(mask) output = self.dcnv2(input, offset, mask) return output 总而言之 offset 的 size 就是 2*kernel[0]*kernel[1] ，想一想，原来我们求偏移的时候，会把 B*H*W*C 的图像送入普通卷积得到 B*H*W*2C 得到偏移，也就是每个通道每个位置点都有 x 和 y 两个方向的偏移量。
+对 DCN 来说，每个通道都做一样的处理，也就是只需要对每个位置点存卷积核每个点的 x 和 y 的偏移，所以就是 B*H*W*(2*kernel_size) 。
+关于 mask:：置信 mask，并非必需，不作展开了
+所以 offset 和 mask 一起就是 B*H*W*(3*kernel_size)
+关于 deform_groups：本来是所有通道公用，也可以改成划成几组，组数就是 deform_groups，那这样就是 B*H*W*(group_num*3*kernel_size)" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://imfaye.me/post/image-quality-evaluation-metrics/" /><meta property="article:section" content="post" />
-<meta property="article:published_time" content="2021-12-02T23:35:47+00:00" />
-<meta property="article:modified_time" content="2021-12-02T23:35:47+00:00" /><meta property="og:site_name" content="My Blog" />
+<meta property="og:url" content="https://imfaye.me/post/dcn-and-optical-flow/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2022-02-20T17:04:37+08:00" />
+<meta property="article:modified_time" content="2022-02-20T17:04:37+08:00" /><meta property="og:site_name" content="My Blog" />
 
 
 
@@ -40,19 +34,13 @@ SSIM 由三部分组成：
 
 
 <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="图像质量评价指标(MSE, PSNR, MS-SSIM)"/>
-<meta name="twitter:description" content="如何评价重建图像的质量：比较重建图像与原始图像的可视误差。
-MSE Mean Squared Error, 均方误差
-$MSE = \frac{1}{N}\sum\limits_{i=1}^{N}(x_i-y_i)^2$
-两者越接近，MSE 越小。MSE 损失的范围为 0 到 ∞。
-PSNR Peak Signal to Noise Ratio，峰值信噪比，即峰值信号的能量与噪声的平均能量之比，通常取 log 单位为分贝。
-$PSNR = 10 log_{10}\frac{MaxValue^2}{MSE}$
-从式子可以看出 PSNR 可以理解为 MSE 的另一种表达形式。与 MSE 相反的是，重建图像质量越好，PSNR 数值越大。
-对于图像来说，像素点数值以量化方式保存，八比特位深的情况，取值范围为 [0, 255]，$MaxValue$ 就是 255。
-SSIM MSE 与 PSNR 的问题是，在计算每个位置上的像素差异时，其结果仅与当前位置的两个像素值有关，与其它任何位置上的像素无关。这种计算差异的方式仅仅将图像看成了一个个孤立的像素点，而忽略了图像内容所包含的一些视觉特征，特别是图像的局部结构信息。而图像质量的好坏极大程度上是一个主观感受，其中结构信息对人主观感受的影响非常之大。
-而 SSIM (Structural Similarity，结构相似性) 就试图解决这个问题
-SSIM 由三部分组成：
-亮度对比 平均灰度作为亮度测量： $\mu_x = \frac{1}{N}\sum\limits_{i=1}^{N}x_i$ 亮度对比函数： $l(x,y) = \frac{2\mu_x\mu_y &#43; C_1}{\mu_x^2&#43;\mu_y^2&#43;C_1}$ 对比度对比 灰度标准差作为对比度测量： $\sigma_x={(\frac{1}{N-1}\sum\limits_{i=1}^N{(x_i-\mu_x)}^2)}^{\frac{1}{2}}$ 亮度对比函数： $c(x,y)=\frac{2\sigma_x\sigma_y&#43;C_2}{\sigma_x^2&#43;\sigma_y^2&#43;C_2}$ 结构对比 结构测量： $\frac{x-\mu_x}{\sigma_x}$ 结构对比函数： $s(x,y) = \frac{\sigma_{xy}&#43;C_3}{\sigma_x\sigma_y &#43; C_3}$ SSIM 函数："/>
+<meta name="twitter:title" content="可变形卷积与光流"/>
+<meta name="twitter:description" content="可变形卷积代码篇 一个调用 from mmcv.ops import ModulatedDeformConv2d 的例子：
+def forward(self, input): x = self.offset_mask_conv(input) o1, o2, mask = torch.chunk(x, 3, dim=1) offset = torch.cat((o1, o2), dim=1) mask = torch.sigmoid(mask) output = self.dcnv2(input, offset, mask) return output 总而言之 offset 的 size 就是 2*kernel[0]*kernel[1] ，想一想，原来我们求偏移的时候，会把 B*H*W*C 的图像送入普通卷积得到 B*H*W*2C 得到偏移，也就是每个通道每个位置点都有 x 和 y 两个方向的偏移量。
+对 DCN 来说，每个通道都做一样的处理，也就是只需要对每个位置点存卷积核每个点的 x 和 y 的偏移，所以就是 B*H*W*(2*kernel_size) 。
+关于 mask:：置信 mask，并非必需，不作展开了
+所以 offset 和 mask 一起就是 B*H*W*(3*kernel_size)
+关于 deform_groups：本来是所有通道公用，也可以改成划成几组，组数就是 deform_groups，那这样就是 B*H*W*(group_num*3*kernel_size)"/>
 
 
 
@@ -241,8 +229,8 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 						
 						
 							<li>
-								<a href="#mse" onclick="onNavClick(`#mse-nav`)" id="mse-nav">
-									MSE
+								<a href="#%e5%8f%af%e5%8f%98%e5%bd%a2%e5%8d%b7%e7%a7%af%e4%bb%a3%e7%a0%81%e7%af%87" onclick="onNavClick(`#可变形卷积代码篇-nav`)" id="可变形卷积代码篇-nav">
+									可变形卷积代码篇
 								</a>
 							</li>
 						
@@ -259,8 +247,32 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 						
 						
 							<li>
-								<a href="#psnr" onclick="onNavClick(`#psnr-nav`)" id="psnr-nav">
-									PSNR
+								<a href="#%e5%8f%af%e5%8f%98%e5%bd%a2%e5%8d%b7%e7%a7%af%e4%b8%8e%e5%85%89%e6%b5%81" onclick="onNavClick(`#可变形卷积与光流-nav`)" id="可变形卷积与光流-nav">
+									可变形卷积与光流
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e5%8f%af%e5%8f%98%e5%bd%a2%e5%8d%b7%e7%a7%af%e6%b6%89%e5%8f%8a%e5%a4%9a%e5%b0%91%e4%b8%aa%e4%b8%8d%e5%90%8c%e7%9a%84-offset-map" onclick="onNavClick(`#可变形卷积涉及多少个不同的-offset-map-nav`)" id="可变形卷积涉及多少个不同的-offset-map-nav">
+									可变形卷积涉及多少个不同的 offset map
 								</a>
 							</li>
 						
@@ -277,26 +289,8 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 						
 						
 							<li>
-								<a href="#ssim" onclick="onNavClick(`#ssim-nav`)" id="ssim-nav">
-									SSIM
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#ms-ssim" onclick="onNavClick(`#ms-ssim-nav`)" id="ms-ssim-nav">
-									MS-SSIM
+								<a href="#dcn-%e5%af%b9%e9%bd%90%e5%92%8c%e5%85%89%e6%b5%81%e5%af%b9%e9%bd%90%e7%9a%84%e6%9c%ac%e8%b4%a8%e5%b7%ae%e5%bc%82" onclick="onNavClick(`#dcn-对齐和光流对齐的本质差异-nav`)" id="dcn-对齐和光流对齐的本质差异-nav">
+									DCN 对齐和光流对齐的本质差异
 								</a>
 							</li>
 						
@@ -411,8 +405,8 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 						
 						
 							<li>
-								<a href="#mse" onclick="onNavClick(`#mse-nav`)" id="mse-nav">
-									MSE
+								<a href="#%e5%8f%af%e5%8f%98%e5%bd%a2%e5%8d%b7%e7%a7%af%e4%bb%a3%e7%a0%81%e7%af%87" onclick="onNavClick(`#可变形卷积代码篇-nav`)" id="可变形卷积代码篇-nav">
+									可变形卷积代码篇
 								</a>
 							</li>
 						
@@ -429,8 +423,32 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 						
 						
 							<li>
-								<a href="#psnr" onclick="onNavClick(`#psnr-nav`)" id="psnr-nav">
-									PSNR
+								<a href="#%e5%8f%af%e5%8f%98%e5%bd%a2%e5%8d%b7%e7%a7%af%e4%b8%8e%e5%85%89%e6%b5%81" onclick="onNavClick(`#可变形卷积与光流-nav`)" id="可变形卷积与光流-nav">
+									可变形卷积与光流
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e5%8f%af%e5%8f%98%e5%bd%a2%e5%8d%b7%e7%a7%af%e6%b6%89%e5%8f%8a%e5%a4%9a%e5%b0%91%e4%b8%aa%e4%b8%8d%e5%90%8c%e7%9a%84-offset-map" onclick="onNavClick(`#可变形卷积涉及多少个不同的-offset-map-nav`)" id="可变形卷积涉及多少个不同的-offset-map-nav">
+									可变形卷积涉及多少个不同的 offset map
 								</a>
 							</li>
 						
@@ -447,26 +465,8 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 						
 						
 							<li>
-								<a href="#ssim" onclick="onNavClick(`#ssim-nav`)" id="ssim-nav">
-									SSIM
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#ms-ssim" onclick="onNavClick(`#ms-ssim-nav`)" id="ms-ssim-nav">
-									MS-SSIM
+								<a href="#dcn-%e5%af%b9%e9%bd%90%e5%92%8c%e5%85%89%e6%b5%81%e5%af%b9%e9%bd%90%e7%9a%84%e6%9c%ac%e8%b4%a8%e5%b7%ae%e5%bc%82" onclick="onNavClick(`#dcn-对齐和光流对齐的本质差异-nav`)" id="dcn-对齐和光流对齐的本质差异-nav">
+									DCN 对齐和光流对齐的本质差异
 								</a>
 							</li>
 						
@@ -529,25 +529,28 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
                 
             >
                 <div class="post-title">
-                    图像质量评价指标(MSE, PSNR, MS-SSIM)
+                    可变形卷积与光流
                     
                     <div class="post-meta">
                         
                         <time itemprop="datePublished">
-                            2021-12-02 23:35
+                            2022-02-20 17:04
                         </time>
                         
 
                         
                             <i class="material-icons" style="">folder</i>
-                                <a href="/categories/">[无情笔记]</a>
+                                <a href="/categories/">[有情笔记]</a>
                                 &nbsp;
                         
 
                         
                             <i class="material-icons" style="">label</i>
                             
-                                <a href="/tags/%E5%9B%BE%E5%83%8F%E7%BC%96%E7%A0%81">图像编码</a>
+                                <a href="/tags/%E5%85%89%E6%B5%81">光流</a>
+                                &nbsp;
+                            
+                                <a href="/tags/%E5%8F%AF%E5%8F%98%E5%BD%A2%E5%8D%B7%E7%A7%AF">可变形卷积</a>
                                 &nbsp;
                             
                                 <a href="/tags/%E8%A7%86%E9%A2%91%E7%BC%96%E7%A0%81">视频编码</a>
@@ -563,44 +566,46 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
                 
                 <div class="post-body" v-pre>
                 
-                    <p>如何评价重建图像的质量：比较重建图像与原始图像的可视误差。</p>
-<h2 id="mse">MSE</h2>
-<p>Mean Squared Error, 均方误差</p>
-<p>$MSE = \frac{1}{N}\sum\limits_{i=1}^{N}(x_i-y_i)^2$</p>
-<p>两者越接近，MSE 越小。MSE 损失的范围为 0 到 ∞。</p>
-<h2 id="psnr">PSNR</h2>
-<p>Peak Signal to Noise Ratio，峰值信噪比，即峰值信号的能量与噪声的平均能量之比，通常取 log 单位为分贝。</p>
-<p>$PSNR = 10 log_{10}\frac{MaxValue^2}{MSE}$</p>
-<p>从式子可以看出 PSNR 可以理解为 MSE 的另一种表达形式。与 MSE 相反的是，重建图像质量越好，PSNR 数值越大。</p>
-<p>对于图像来说，像素点数值以量化方式保存，八比特位深的情况，取值范围为 [0, 255]，$MaxValue$ 就是 255。</p>
-<h2 id="ssim">SSIM</h2>
-<p>MSE 与 PSNR 的问题是，在计算每个位置上的像素差异时，其结果仅与当前位置的两个像素值有关，与其它任何位置上的像素无关。这种计算差异的方式仅仅将图像看成了一个个孤立的像素点，而忽略了图像内容所包含的一些视觉特征，特别是图像的局部结构信息。而图像质量的好坏极大程度上是一个主观感受，其中结构信息对人主观感受的影响非常之大。</p>
-<p>而 SSIM (Structural Similarity，结构相似性) 就试图解决这个问题</p>
-<p>SSIM 由三部分组成：</p>
+                    <h2 id="可变形卷积代码篇">可变形卷积代码篇</h2>
+<p>一个调用 <code>from mmcv.ops import ModulatedDeformConv2d</code> 的例子：</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">def</span> <span style="color:#008b45">forward</span>(self, <span style="color:#658b00">input</span>):
+</span></span><span style="display:flex;"><span>        x = self.offset_mask_conv(<span style="color:#658b00">input</span>)
+</span></span><span style="display:flex;"><span>        o1, o2, mask = torch.chunk(x, <span style="color:#b452cd">3</span>, dim=<span style="color:#b452cd">1</span>)
+</span></span><span style="display:flex;"><span>        offset = torch.cat((o1, o2), dim=<span style="color:#b452cd">1</span>)
+</span></span><span style="display:flex;"><span>        mask = torch.sigmoid(mask)
+</span></span><span style="display:flex;"><span>        output = self.dcnv2(<span style="color:#658b00">input</span>, offset, mask)
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">return</span> output
+</span></span></code></pre></div><p>总而言之 <code>offset</code> 的 size 就是 <code>2*kernel[0]*kernel[1]</code> ，想一想，原来我们求偏移的时候，会把 <code>B*H*W*C</code> 的图像送入普通卷积得到 <code>B*H*W*2C</code> 得到偏移，也就是每个通道每个位置点都有 x 和 y 两个方向的偏移量。</p>
+<p>对 DCN 来说，每个通道都做一样的处理，也就是只需要对每个位置点存卷积核每个点的 x 和 y 的偏移，所以就是 <code>B*H*W*(2*kernel_size)</code> 。</p>
+<p>关于 mask:：置信 mask，并非必需，不作展开了</p>
+<p>所以 offset 和 mask 一起就是 <code>B*H*W*(3*kernel_size)</code></p>
+<p>关于 deform_groups：本来是所有通道公用，也可以改成划成几组，组数就是 deform_groups，那这样就是 <code>B*H*W*(group_num*3*kernel_size)</code></p>
+<h2 id="可变形卷积与光流">可变形卷积与光流</h2>
+<p>端到端视频压缩模型里，运动估计运动补偿环节，常用到光流和可变形卷积。本质上都是预测偏移，只不过 DCN 可以利用多个偏移，这样在预测难度较大的位置就有多个 offset 互作补充，所以比只用单一的光流更有优势一些。</p>
+<p>推荐一下这篇文章：<a href="https://ckkelvinchan.github.io/projects/DCN/">Understanding Deformable Alignment in Video Super-Resolution</a>，讲得比较透彻了。</p>
+<h3 id="可变形卷积涉及多少个不同的-offset-map">可变形卷积涉及多少个不同的 offset map</h3>
 <ol>
-<li>亮度对比 平均灰度作为亮度测量： $\mu_x = \frac{1}{N}\sum\limits_{i=1}^{N}x_i$ 亮度对比函数： $l(x,y) = \frac{2\mu_x\mu_y + C_1}{\mu_x^2+\mu_y^2+C_1}$</li>
-<li>对比度对比 灰度标准差作为对比度测量： $\sigma_x={(\frac{1}{N-1}\sum\limits_{i=1}^N{(x_i-\mu_x)}^2)}^{\frac{1}{2}}$ 亮度对比函数： $c(x,y)=\frac{2\sigma_x\sigma_y+C_2}{\sigma_x^2+\sigma_y^2+C_2}$</li>
-<li>结构对比 结构测量： $\frac{x-\mu_x}{\sigma_x}$ 结构对比函数： $s(x,y) = \frac{\sigma_{xy}+C_3}{\sigma_x\sigma_y + C_3}$</li>
+<li>
+<p>首先，与 kernel size 有关</p>
+<p><img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/2023/02/upgit_20230225_1677309897.png" alt="image-20230225152456053"></p>
+<p>假设特征图大小为 <code>W * H</code>，每个点的感受野都对应了 <code>kernel_size * kernel_size</code> 个偏移</p>
+</li>
+<li>
+<p>其次，与 group num 有关</p>
+<p><img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/2023/02/upgit_20230225_1677310198.png" alt="image-20230225152648179"></p>
+<p>每 <code>C(通道数) / group_num</code> 个通道共用一套 offset</p>
+<p>比如假设特征有 8 个通道，group_num 为 4,则 每 2 个通道共用一套偏移参数</p>
+</li>
 </ol>
-<p>SSIM 函数：</p>
-<p>$SSIM(x,y)={[l(x,y)]}^\alpha \cdot {[c(x,y)]}^\beta \cdot {[s(x,y)]}^\gamma$</p>
-<p>$一般取 \alpha = \beta =\gamma=1$</p>
-<p>$SSIM(x,y)=\frac{(2\mu_x\mu_y+C_1)(2\sigma_x\sigma_y+C_2)}{(\mu_x^2+\mu_y^2+C_1)(\sigma_x^2\sigma_y^2+C_2)}$</p>
-<p>下图是同样 MSE 的图片，仅仅做对比拉伸（灰度拉伸，增大图像灰度级的动态范围）、均值偏移，其实不怎么影响人眼对图像的理解，而模糊和压缩痕迹则影响较大，这些情况下 SSIM 就能更好地做出判断。</p>
-<p><img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/image-20220723233900866.png" alt=""></p>
-<h2 id="ms-ssim">MS-SSIM</h2>
-<p>SSIM 算法基于 HVS 擅长从图像中提取结构信息，并利用结构相似度计算图像的感知质量。但 SSIM 是一种单尺度算法，实际上正确的图像尺度取决于用户的观看条件，如显示设备分辨率、用户的观看距离等。</p>
-<p>单尺度的 SSIM 算法可能仅适用于某个特定的配置，为了解决该问题，MS-SSIM (Multi-scale structural similarity) 在 SSIM 算法的基础上提出了多尺度的结构相似性评估算法。</p>
-<p><img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/image-20220723233921947.png" alt=""></p>
-<p><em>MS-SSIM 算法，L 表示低通滤波器，2↓ 表示采样间隔为 2 的下采样</em></p>
-<p>原始图像的尺度为 1，最大尺度为 M，对 $scale=j$ 的尺度而言，其亮度、对比度、结构的相似性分布表示为 $l_j(x,y), c_j(x,y), s_j(x,y)$，MS-SSIM 的计算公式为：</p>
-<p>$MS-SSIM(x,y) = {[l_M(x,y)]}^{\alpha M} \cdot \prod\limits_{j=1}^M{[c_j(x,y)]}^{\beta j}{[s_j(x,y)]}^{\gamma j}$</p>
-<p>一般，令 $\alpha_j = \beta_j = \gamma_j$，$j \in [1, M]$，我们得到：</p>
-<p>$MS-SSIM(x,y) = {[l_M(x,y)]}^{\alpha M} \cdot \prod\limits_{j=1}^M{[c_j(x,y) \cdot s_j(x,y)]}^{\alpha j}$</p>
+<p>综合来说，一共会有 <code>(kernel_size * kernel_size) * group_num</code> 个 <code>W * H</code> 大小的偏移图。</p>
+<h3 id="dcn-对齐和光流对齐的本质差异">DCN 对齐和光流对齐的本质差异</h3>
+<p><img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/2023/02/upgit_20230225_1677310203.png" alt="image-20230225152953943"></p>
+<p>$kernel\space size 为 n<em>n的DCN = n^2个空间warping \space +\space 1</em>1*n^2的3D卷积$</p>
+<p>也就是说，如果 n=1, group_num=1，DCN对齐基本就等同于光流对齐，DCN 和 光流的本质区别就在于 offset diversity。</p>
 
                     
                     <HR width="100%" id="EOF">
-		    <p style="color:#777;">最后修改于 2021-12-02</p>
+		    <p style="color:#777;">最后修改于 2022-02-20</p>
                     
                 </div>
             </div>
@@ -609,14 +614,14 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
             <nav class="post-pagination">
 
                 
-                <a class="newer-posts" href="/post/entropy-coding/">
-			下回<br>一些传统的熵编码方法
+                <a class="newer-posts" href="/post/e2e-entropy-model/">
+			下回<br>端到端图像/视频压缩里的熵模型
                 </a>
                 
                 
                 
-                <a class="older-posts" href="/post/avs3-bitstream/">
-			上回<br>AVS3 编码位流
+                <a class="older-posts" href="/post/entropy-coding/">
+			上回<br>一些传统的熵编码方法
                 </a>
                 
             </nav>
