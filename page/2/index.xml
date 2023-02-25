@@ -14,6 +14,137 @@
     
     
         <item>
+        <title>多媒体基础知识</title>
+        <link>https://imfaye.me/post/multimedia-basics/</link>
+        <pubDate>Mon, 29 Mar 2021 15:10:25 +0000</pubDate>
+        
+        <guid>https://imfaye.me/post/multimedia-basics/</guid>
+        <description>PIKA☆NCHI https://imfaye.me/post/multimedia-basics/ -&lt;h2 id=&#34;图像数值表示&#34;&gt;图像数值表示&lt;/h2&gt;
+&lt;h3 id=&#34;分辨率&#34;&gt;分辨率&lt;/h3&gt;
+&lt;p&gt;分辨率的基础单位是像素。1280 * 720 P 的分辨率代表共有 1280 * 720 个像素点。&lt;/p&gt;
+&lt;p&gt;一台物理设备出厂时就已经定下了它所能拥有的最大像素点是多少。电脑显示屏调整分辨率是系统通过运算来给出模拟色彩块填充适配的。&lt;/p&gt;
+&lt;p&gt;下述像素排列方式内容为 expansion pack，可略过。&lt;/p&gt;
+&lt;h3 id=&#34;像素排列方式&#34;&gt;像素排列方式&lt;/h3&gt;
+&lt;h4 id=&#34;标准-rgb-排列&#34;&gt;标准 RGB 排列&lt;/h4&gt;
+&lt;p&gt;LCD 屏幕上常采用标准 RGB 排列，会将一个像素分为 3 个子像素并排排列，通过红、绿、蓝滤色片将 LCD 背光模组的白光过滤后形成相应的 RGB 子像素排列。当需要显示不同颜色的时候，3 个子像素以不同的亮度发光，在视觉上会混合成所需要的颜色。&lt;/p&gt;
+&lt;h4 id=&#34;pentile-排列&#34;&gt;PenTile 排列&lt;/h4&gt;
+&lt;p&gt;PenTile 排列多见于 OLED 屏幕上，因子像素呈现钻石排列而得名。PenTile 排列的每个像素由红、绿和蓝、绿子像素组合而成，绿色像素是完整的，而红蓝像素相比传统 RGB 排列各减少二分之一，子像素总数减少了约三分之一。&lt;/p&gt;
+&lt;p&gt;不像标准 RGB 排列每个像素更加独立，PenTile 排列在显示许多内容时需要借用相邻像素，显示精细内容时同分辨率下相较标准 RGB 排列的屏幕细腻度不足。&lt;/p&gt;
+&lt;p&gt;蓝色 OLED 的发光效率要比红色和绿色低，达到相同的发光强度必须使用更高的通过电流，因而蓝色像素衰减速度更快，也就会加速“烧屏”现象的产生。&lt;/p&gt;
+&lt;h3 id=&#34;yuv-表示方式&#34;&gt;YUV 表示方式&lt;/h3&gt;
+&lt;p&gt;对于视频裸数据而言，更多使用 YUV 数据格式显示。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Y 表示明亮度 (Luminance / Luma)，即灰阶值&lt;/li&gt;
+&lt;li&gt;U、V 表示色度 (Chrominance / Chroma)，描述色调饱和度&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;亮度通过 RGB 输入信号来建立，方法是将 RGB 信号的特定部分叠加到一起。色度定义了颜色的色彩和饱和度，分别用 Cr 和 Cb 表示。Cr 表示 RGB 输入信号红色部分与 RGB 亮度值之间的差异，Cb 表示 RGB 输入信号蓝色部分与 RGB 信号亮度值之间的差异。&lt;/p&gt;
+&lt;h4 id=&#34;yuv-优点&#34;&gt;YUV 优点&lt;/h4&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;与黑白电视机也能兼容&lt;/p&gt;
+&lt;p&gt;Y 和 UV 分量分离，只有 Y 分量就是黑白图像。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;相较于 RGB，YUV 数据格式占用空间小&lt;/p&gt;
+&lt;p&gt;人眼对色度的敏感程度低于对亮度的敏感程度（因为识别亮度的视网膜杆细胞比识别色度的视网膜锥细胞多）。将色的信息减少，人眼也无法察觉。且并不是每个像素点都需要包含 YUV 三个分量，根据不同的采用格式，每个 Y 分量可以对应自己的 UV 分量。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4 id=&#34;yuv-采样格式&#34;&gt;YUV 采样格式&lt;/h4&gt;
+&lt;h5 id=&#34;yuv-444-采样&#34;&gt;YUV 4:4:4 采样&lt;/h5&gt;
+&lt;p&gt;每个像素三个分量信息完整。&lt;/p&gt;
+&lt;p&gt;举个例子，一张 1 * 4 的图片：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;图像像素为：[Y0 U0 V0]、[Y1 U1 V1]、[Y2 U2 V2]、[Y3 U3 V3]&lt;/p&gt;
+&lt;p&gt;采样码流为：Y0 U0 V0 Y1 U1 V1 Y2 U2 V2 Y3 U3 V3&lt;/p&gt;
+&lt;p&gt;最后映射出的像素点依旧为 [Y0 U0 V0]、[Y1 U1 V1]、[Y2 U2 V2]、[Y3 U3 V3]&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;一张 1280 * 720P 的图片使用 YUV 4:4:4 采样，大小为：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;1280 * 720 * 3 / 1024 / 1024 = 2.636 MB
+&lt;/code&gt;&lt;/pre&gt;&lt;h5 id=&#34;yuv-422-采样&#34;&gt;YUV 4:2:2 采样&lt;/h5&gt;
+&lt;p&gt;Y 分量和 UV 分量按 2:1 的比例采样。&lt;/p&gt;
+&lt;p&gt;举个例子，一张 1 * 4 的图片：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;图像像素为：[Y0 U0 V0]、[Y1 U1 V1]、[Y2 U2 V2]、[Y3 U3 V3]&lt;/p&gt;
+&lt;p&gt;采样码流为：Y0 U0 Y1 V1 Y2 U2 Y3 V3&lt;/p&gt;
+&lt;p&gt;最后映射出的像素点依旧为 [Y0 U0 V1]、[Y1 U0 V1]、[Y2 U2 V3]、[Y3 U2 V3]&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;一张 1280 * 720 P 的图片使用 YUV 4:2:2 采样，大小为：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;(1280 * 720 + 1280 * 720 * 0.5 * 2) / 1024 / 1024 = 1.759 MB
+&lt;/code&gt;&lt;/pre&gt;&lt;h5 id=&#34;yuv-420-采样&#34;&gt;YUV 4:2:0 采样&lt;/h5&gt;
+&lt;p&gt;不是指没有 Cb，而是意味着第一行 Y 分量和 U 分量按 2:1 的比例采样，第二行 Y 分量和 V 分量按 2:1 的比例采样。Y 分量和 UV 分量按 4:1 的比例采样。&lt;/p&gt;
+&lt;p&gt;举个例子，一张 2* 4 的图片：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;图像像素为：[Y0 U0 V0]、[Y1 U1 V1]、[Y2 U2 V2]、[Y3 U3 V3]、[Y4 U4 V4]、[Y5 U5 V5]、[Y6 U6 V6]、[Y7 U7 V7]&lt;/p&gt;
+&lt;p&gt;采样码流为：Y0 U0 Y1 Y2 U2 Y3 Y4 V4 Y5 Y6 V6 Y7&lt;/p&gt;
+&lt;p&gt;最后映射出的像素点依旧为 [Y0 U0 V4]、[Y1 U0 V4]、[Y2 U2 V6]、[Y3 U2 V6]、[Y4 U0 V4]、[Y5 U0 V4]、[Y6 U2 V6]、[Y7 U2 V6]&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;一张 1280 * 720 P 的图片使用 YUV 4:2:0 采样，大小为：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;(1280 * 720 + 1280 * 720 * 0.25 * 2) / 1024 / 1024 = 1.318 MB
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id=&#34;yuv-存储格式&#34;&gt;YUV 存储格式&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;planar 平面格式&lt;/p&gt;
+&lt;p&gt;先连续存储所有像素点的 Y 分量，然后存储 UV 分量。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;packed 打包模式&lt;/p&gt;
+&lt;p&gt;每个像素点的 YUV 分量连续交替存储。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;rgb-和-yuv-转化&#34;&gt;RGB 和 YUV 转化&lt;/h4&gt;
+&lt;p&gt;对于图像显示器来说，它是通过 RGB 模型显示图像的，而在传输图像数据时又是使用 YUV 模型的。因此两种模型需要互相转化。&lt;/p&gt;
+&lt;p&gt;有如下公式：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;Y = 0.299 * R + 0.587 * G + 0.114 * B
+U = - 0.147 * R - 0.289 * G + 0.436 * B
+V = 0.615 * R - 0.515 * G - 0.100 * B
+&lt;/code&gt;&lt;/pre&gt;&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;R = Y + 1.14 * V
+G = Y - 0.39 * U - 0.58 * V
+B = Y + 2.03 * U
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;ibp-帧&#34;&gt;IBP 帧&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;I 帧 (intra picture)&lt;/p&gt;
+&lt;p&gt;内部编码帧（也称为关键帧），通常是每个 GOP 片段的第一帧，经过适度压缩，作为随机访问的参考点，可以当作静态图像。I 帧压缩可去掉视频的空间冗余信息。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;P 帧 (predictive-frame)&lt;/p&gt;
+&lt;p&gt;前向预测编码帧（也称为预测帧），通过将图像序列中前面已编码帧的时间冗余信息去充分去除压缩传输数据量的编码图像，需要参考前面的一个 I 帧或者 P 帧才能解码成一张完整的图像。P 帧可以简单理解为当前帧画面与前一帧的差别。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;B 帧 (bi-directional interpolated prediction frame)&lt;/p&gt;
+&lt;p&gt;双向预测内插编码帧（也称双向预测帧），需要参考前面的一个 I 帧或者 P 帧以及后面的一个 P 帧才能编码成一张完整的图像。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;简单来说，I 帧是一个完整的画面，而 P 帧和 B 帧记录的是相对于 I 帧的变化。如果没有 I 帧，P 帧和 B 帧就无法解码。压缩比 I 帧 &amp;lt; P 帧 &amp;lt; B 帧。&lt;/p&gt;
+&lt;h2 id=&#34;gop&#34;&gt;GOP&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/20210329171222.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;编码器将多张图像进行编码后生产成一段一段的 GOP (Group of Pictures)，解码器在播放时则是读取一段一段的 GOP 进行编码后读取画面再渲染显示。GOP 是一组连续的画面，由一张 I 帧和数张 B / P 帧组成，是视频图像编码器和解码器存取的基本单位。gop_size 描述的是两个 I 帧之间的帧数目。&lt;/p&gt;
+&lt;h2 id=&#34;码率和帧率&#34;&gt;码率和帧率&lt;/h2&gt;
+&lt;h3 id=&#34;帧率-frame-rate&#34;&gt;帧率 (Frame Rate)&lt;/h3&gt;
+&lt;p&gt;表示每秒实践显示的帧数（Frames per Second，简称 FPS）。&lt;/p&gt;
+&lt;p&gt;对于人眼来说，如果所看画面的帧率高于 24，就会认为是连贯的，此现象称为视觉暂留。&lt;/p&gt;
+&lt;h3 id=&#34;码率比特率&#34;&gt;码率（比特率）&lt;/h3&gt;
+&lt;p&gt;码率指每秒传输的比特数，单位为 bps (Bits Per Second)，通俗一点讲就是取样率，单位时间内取样率越大，精度就越高，处理出的文件就越接近原始文件。&lt;/p&gt;
+&lt;p&gt;文件体积与取样率成正比，所有的编码格式都很重视如何用最低的码率达到最少的失真。&lt;/p&gt;
+&lt;p&gt;码率简单来说是指再压缩视频时给这个视频指定一个参数，用以告诉压缩软件&lt;strong&gt;期望的压缩后视频的大小&lt;/strong&gt;。&lt;/p&gt;
+&lt;h2 id=&#34;参考&#34;&gt;参考&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;视频基础知识扫盲&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&#34;https://glumes.com/post/ffmpeg/understand-yuv-format/&#34;&gt;一文读懂 YUV 的采样与格式&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.yuque.com/webmedia/handbook/ibp&#34;&gt;IBP帧&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+- https://imfaye.me/post/multimedia-basics/ - Faye</description>
+        </item>
+    
+    
+    
+        <item>
         <title>Win10 下 Linux 子系统 (WSL) 配置小记</title>
         <link>https://imfaye.me/post/wsl/</link>
         <pubDate>Sun, 21 Mar 2021 20:29:24 +0000</pubDate>
@@ -1474,172 +1605,6 @@ cache and the disk surface. Data transfer to the host, at fast electronic speeds
 &lt;/ul&gt;
 &lt;p&gt;每个域三个位:RWX. 需要9个位&lt;/p&gt;
 - https://imfaye.me/post/os10/ - Faye</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>操作系统笔记 CH9 Virtual Memory</title>
-        <link>https://imfaye.me/post/os9/</link>
-        <pubDate>Fri, 28 Feb 2020 13:09:24 +0000</pubDate>
-        
-        <guid>https://imfaye.me/post/os9/</guid>
-        <description>PIKA☆NCHI https://imfaye.me/post/os9/ -&lt;h2 id=&#34;background&#34;&gt;background&lt;/h2&gt;
-&lt;p&gt;CH8的内存管理方案需要将整个进程放入内存，动态载入只能减轻这一限制&lt;/p&gt;
-&lt;p&gt;Code needs to be in memory to execute, but entire program rarely used.&lt;/p&gt;
-&lt;p&gt;execute partially-loaded program&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;程序不受现有物理内存大小限制，可以为virtual address space编写程序&lt;/li&gt;
-&lt;li&gt;更多程序可以同时执行，CPU利用率增加，而响应时间、周转时间不增加&lt;/li&gt;
-&lt;li&gt;载入或交换程序所需IO变少，用户程序运行更快&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Virtual memory – separation of user logical memory from physical memory.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577436249080.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
-&lt;p&gt;动态内存分配，堆向上增长；子程序调用，栈向下增长。包括洞的虚拟地址空间是稀地址空间。&lt;/p&gt;
-&lt;p&gt;Enables sparse address spaces with holes left for growth, dynamically linked libraries, etc.&lt;/p&gt;
-&lt;p&gt;Virtual memory allows files and memory to be shared by two or more processes through page sharing.&lt;/p&gt;
-&lt;p&gt;虚拟内存实现：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;demand paging&lt;/li&gt;
-&lt;li&gt;demand segmentation&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;demand-paging-按需调页&#34;&gt;demand paging 按需调页&lt;/h2&gt;
-&lt;p&gt;Lazy swapper: never swaps a page into memory unless that page will be needed.&lt;/p&gt;
-&lt;p&gt;swapper对整个进程进行操作，pager只对进程的单个页进行操作&lt;/p&gt;
-&lt;p&gt;页表条目，valid-invalid bit: valid-合法也在内存 invalid-无效(不在逻辑地址空间) 或 有效但在磁盘&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577443877399.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577444151280.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577444186893.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
-&lt;p&gt;pure demand paging: 只有在需要时才将页调入内存&lt;/p&gt;
-&lt;p&gt;单个指令可能访问多个页的内存(一页指令，其他页数据)，一个指令可能产生多个page fault. 不过由于locality of reference, 按需调页的性能还算合理。&lt;/p&gt;
-&lt;p&gt;按需调页的硬件支持：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Page table with valid-Invalid bit&lt;/li&gt;
-&lt;li&gt;Secondary memory (swap device with swap space)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;请求调页的关键要求是能够在页错误后instruction restart&lt;/p&gt;
-&lt;p&gt;如果页错误在获取操作数时，再次获取指令，再次译码指令，再次获取操作数。&lt;/p&gt;
-&lt;p&gt;一个指令可能改变多个不同位置。若源和目的块有重叠，源块可能已修改，不能简单地再次执行。(微码计算试图访问两块的两端；临时寄存器保存覆盖位置的值)&lt;/p&gt;
-&lt;p&gt;EAT = (1– p) * memory access time + p * page fault service time&lt;/p&gt;
-&lt;p&gt;page fault service time = page fault overhead+[ swap page out ]+swap page in+restart overhead&lt;/p&gt;
-&lt;p&gt;处理页错误中断和重新启动进程可以通过仔细编码降低开销&lt;/p&gt;
-&lt;p&gt;EAT与页错误率直接相关&lt;/p&gt;
-&lt;p&gt;与文件无关的页需要使用交换空间&lt;/p&gt;
-&lt;h2 id=&#34;copy-on-write-写时复制&#34;&gt;Copy-on-Write 写时复制&lt;/h2&gt;
-&lt;p&gt;fork()使用写时复制技术&lt;/p&gt;
-&lt;p&gt;父子进程开始时共享同一页面。这些页面标记为写时复制页(只有可能修改的页需要标记)。如果任一进程对页进行写，创建一个共享页的副本。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577445363016.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
-&lt;p&gt;COW allows more efficient process creation as only modified pages are copied.&lt;/p&gt;
-&lt;p&gt;free pages are allocated from a pool of free pages. 采用按需填零(zero-fill-on-demand)技术分配这些页，需要分配前先填零，因此清除了以前的内容。&lt;/p&gt;
-&lt;p&gt;vfork()，不采用copy-on-write，vfork()将父进程挂起，子进程使用父进程的地址空间。如果子进程修改父进程地址空间的任何页， 父进程重启时可见。主要用于子进程被创建后立即调用exec()的情况。比较高效。用于实现UNIX命令行shell的接口。&lt;/p&gt;
-&lt;h2 id=&#34;page-replacement&#34;&gt;page replacement&lt;/h2&gt;
-&lt;p&gt;Use modify bit (dirty bit) to reduce overhead of page transfers. 不修改的话不需要写回磁盘&lt;/p&gt;
-&lt;p&gt;Page replacement completes separation between logical memory and physical memory.&lt;/p&gt;
-&lt;p&gt;frame-allocation algorithm&lt;/p&gt;
-&lt;p&gt;page replacement algorithm&lt;/p&gt;
-&lt;p&gt;reference string: 内存的引用序列&lt;/p&gt;
-&lt;h3 id=&#34;fifo&#34;&gt;FIFO&lt;/h3&gt;
-&lt;p&gt;Belady&amp;rsquo;s anomaly: 页错误率可能会随着所分配的帧数的增加而增加&lt;/p&gt;
-&lt;h3 id=&#34;optmin&#34;&gt;OPT/MIN&lt;/h3&gt;
-&lt;p&gt;置换最长时间不会使用的页&lt;/p&gt;
-&lt;p&gt;未来知识&lt;/p&gt;
-&lt;h3 id=&#34;lru&#34;&gt;LRU&lt;/h3&gt;
-&lt;p&gt;最长时间没有使用的页&lt;/p&gt;
-&lt;p&gt;By the principle of locality, this should be the page least likely to be referenced in the near future.&lt;/p&gt;
-&lt;p&gt;Associates with each page the time of that page’s last use.&lt;/p&gt;
-&lt;p&gt;两种可行实现：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;counter&lt;/p&gt;
-&lt;p&gt;每个页表项关联一个使用时间域。对每次引用，计数器增加。置换具有最小时间的页。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;stack&lt;/p&gt;
-&lt;p&gt;没引用一个页，页就从栈中删除并放在顶部&lt;/p&gt;
-&lt;p&gt;No search for replacement, LRU page is at the bottom.&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;lru-approximation-algorithms&#34;&gt;LRU Approximation Algorithms&lt;/h3&gt;
-&lt;p&gt;LRU needs special hardware and still slow.所以用近似算法&lt;/p&gt;
-&lt;p&gt;页表每项都关联一个reference bit, 每引用一个页(读or写)，引用位被硬件置1&lt;/p&gt;
-&lt;h4 id=&#34;reference-bit-algorithm&#34;&gt;Reference bit algorithm&lt;/h4&gt;
-&lt;p&gt;When page is referenced, the bit is set to 1 by the hardware.&lt;/p&gt;
-&lt;p&gt;Replace the one which is 0 (if one exists).&lt;/p&gt;
-&lt;p&gt;Problem ：We do not know the order.&lt;/p&gt;
-&lt;h4 id=&#34;additional-reference-bits-algorithm&#34;&gt;Additional-reference-bits algorithm&lt;/h4&gt;
-&lt;p&gt;Keep an 8-bit byte for each page in a table in memory.&lt;/p&gt;
-&lt;p&gt;规定时间间隔里记录引用位&lt;/p&gt;
-&lt;p&gt;At regular intervals, a timer interrupts, OS shifts the reference bit for each page into the high-order bit of its 8- bit byte, shifting the other bits right by 1 bit and discarding the low-order bit.&lt;/p&gt;
-&lt;p&gt;将这8位看作无符号整数，置换具有最小值的页&lt;/p&gt;
-&lt;h4 id=&#34;second-chance--clock&#34;&gt;Second chance / Clock&lt;/h4&gt;
-&lt;p&gt;Basic algorithm: FIFO&lt;/p&gt;
-&lt;p&gt;循环队列，指针向前移动直到找到一个引用位为0的页，在向前移动时，清除引用位。&lt;/p&gt;
-&lt;p&gt;如果所有位均已设置，会遍历整个队列。成了FIFO&lt;/p&gt;
-&lt;h4 id=&#34;enhanced-second-chance-algorithm&#34;&gt;Enhanced Second-Chance Algorithm&lt;/h4&gt;
-&lt;p&gt;(reference bit, modify bit)&lt;/p&gt;
-&lt;p&gt;(0,0)最好 (0,1) (1,0) (1,1)&lt;/p&gt;
-&lt;p&gt;降低IO&lt;/p&gt;
-&lt;h3 id=&#34;counting-based-page-replacement&#34;&gt;Counting-based page replacement&lt;/h3&gt;
-&lt;p&gt;每个页保留一个用于记录引用次数的计数器。&lt;/p&gt;
-&lt;p&gt;LFU: replaces page with the smallest count&lt;/p&gt;
-&lt;p&gt;MFU: page with the smallest count was probably just brought in and has yet to be used.&lt;/p&gt;
-&lt;h2 id=&#34;page-allocation-帧分配&#34;&gt;page allocation 帧分配&lt;/h2&gt;
-&lt;p&gt;分配至少最少数量的帧。必须有足够的帧容纳所有单个指令所引用的页。&lt;/p&gt;
-&lt;p&gt;每个进程的帧的最少数量由体系结构决定，最大数量由可用物理内存的数量决定。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;fixed allocation&lt;/p&gt;
-&lt;p&gt;高低优先级一样处理&lt;/p&gt;
-&lt;p&gt;when a page fault occurs, one of the pages of that process must be replaced. &amp;ndash; Local replacement&lt;/p&gt;
-&lt;p&gt;固定分配必须局部置换(置换自己进程里的页)&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;equal allocation&lt;/p&gt;
-&lt;p&gt;n个进程之间分配m个帧，每个m/n帧&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;proportional allocation&lt;/p&gt;
-&lt;p&gt;根据进程大小比例地分配内存&lt;/p&gt;
-&lt;p&gt;进程pi的虚拟内存大小si&lt;/p&gt;
-&lt;p&gt;a i = s i /S * m&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;priority allocation&lt;/p&gt;
-&lt;p&gt;Use a proportional allocation scheme using priorities rather than size, or on a combination of size and priority.&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Local replacement:  select for replacement one of its frames&lt;/p&gt;
-&lt;p&gt;​	分配每个进程的帧的数量不变&lt;/p&gt;
-&lt;p&gt;Global replacement:  select for replacement a frame from a process with lower priority number&lt;/p&gt;
-&lt;p&gt;​	易于实现。更好的系统吞吐量，常用。&lt;/p&gt;
-&lt;p&gt;​	OS keeps list of free frames.&lt;/p&gt;
-&lt;p&gt;​	进程不能控制其页错误率(受其他进程调页行为影响)&lt;/p&gt;
-&lt;h2 id=&#34;thrashing-系统颠簸&#34;&gt;thrashing 系统颠簸&lt;/h2&gt;
-&lt;p&gt;thrashing: 频繁的页调度行为&lt;/p&gt;
-&lt;p&gt;如果一个进程在换页上用的时间多于执行时间，这个进程就在颠簸&lt;/p&gt;
-&lt;p&gt;CPU调度程序发现CPU使用率降低，增加多道程序程度&amp;hellip;更多页错误，CPU使用率更低&lt;/p&gt;
-&lt;p&gt;颠簸时，为了增加CPU使用率和降低系统颠簸，必须降低多道程序的程度&lt;/p&gt;
-&lt;p&gt;采用局部置换，一个进程颠簸不会使其他进程颠簸&lt;/p&gt;
-&lt;p&gt;Why does thrashing occur? Σ locality size &amp;gt; total memory size&lt;/p&gt;
-&lt;p&gt;using a local (or priority) replacement algorithm, Can limit the effect of thrashing.&lt;/p&gt;
-&lt;p&gt;为了防止颠簸，必须提供进程所需的足够多的帧。&lt;/p&gt;
-&lt;p&gt;Locality: a set of pages that are actively used together. Process migrates from one locality to another. Localities may overlap.&lt;/p&gt;
-&lt;h3 id=&#34;working-set-model-工作集合模型&#34;&gt;Working-Set Model 工作集合模型&lt;/h3&gt;
-&lt;p&gt;基于局部性假设&lt;/p&gt;
-&lt;p&gt;参数Δ定义working-set window：a fixed number of page references&lt;/p&gt;
-&lt;p&gt;Working Set: the set of pages in the most recent Δ page references.&lt;/p&gt;
-&lt;p&gt;WSS i (working set size of Process P i ) : (varies in time) the number of pages in Working Set of process P i .&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577453374315.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
-&lt;p&gt;工作集合的精度与Δ的选择有关，太小不能包含整个局部，太大包含多个局部&lt;/p&gt;
-&lt;p&gt;总的帧需求量 D =Σ WSS i  总的需求大于帧的数量，会出现颠簸&lt;/p&gt;
-&lt;p&gt;OS跟踪每个进程的工作集合，如果D &amp;gt; m，暂停一个进程，该进程的页被写出，且其帧可分配给其他进程&lt;/p&gt;
-&lt;p&gt;通过固定定时中断(interval timer)和引用位(reference bit)可以近似模拟工作集合模型&lt;/p&gt;
-&lt;h3 id=&#34;page-fault-frequency-schemeppf-页错误频率&#34;&gt;Page-Fault Frequency Scheme(PPF) 页错误频率&lt;/h3&gt;
-&lt;p&gt;为所期望的页错误率设置上限和下限。超过上限，为进程分配更多的帧；低于下限，从该进程中移走帧。&lt;/p&gt;
-&lt;p&gt;如果页错误率增加且没有可用帧，必须选择一个进程暂停，可将释放的帧分配给具有高页错误率的进程&lt;/p&gt;
-- https://imfaye.me/post/os9/ - Faye</description>
         </item>
     
     
