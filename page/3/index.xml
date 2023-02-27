@@ -1,9 +1,9 @@
 <?xml-stylesheet href="/rss.xsl" type="text/xsl"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>好雪片片</title>
+    <title>著花未</title>
     <link>https://imfaye.me/</link>
-    <description>Recent content on 好雪片片</description>
+    <description>Recent content on 著花未</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Faye</copyright>
@@ -19,7 +19,7 @@
         <pubDate>Fri, 28 Feb 2020 13:11:24 +0000</pubDate>
         
         <guid>https://imfaye.me/post/os11/</guid>
-        <description>好雪片片 https://imfaye.me/post/os11/ -&lt;h2 id=&#34;文件系统结构&#34;&gt;文件系统结构&lt;/h2&gt;
+        <description>著花未 https://imfaye.me/post/os11/ -&lt;h2 id=&#34;文件系统结构&#34;&gt;文件系统结构&lt;/h2&gt;
 &lt;p&gt;磁盘特点：可以原地重写，可以直接访问任意一块。&lt;/p&gt;
 &lt;p&gt;内存和磁盘之间的IO以块为单位。每块为一个或多个扇区。扇区通常为512B&lt;/p&gt;
 &lt;p&gt;File system resides on secondary storage (disks) OS通过文件系统存储、定位、提取数据&lt;/p&gt;
@@ -178,7 +178,7 @@
         <pubDate>Fri, 28 Feb 2020 13:10:24 +0000</pubDate>
         
         <guid>https://imfaye.me/post/os10/</guid>
-        <description>好雪片片 https://imfaye.me/post/os10/ -&lt;h2 id=&#34;file-concept&#34;&gt;file concept&lt;/h2&gt;
+        <description>著花未 https://imfaye.me/post/os10/ -&lt;h2 id=&#34;file-concept&#34;&gt;file concept&lt;/h2&gt;
 &lt;p&gt;文件：记录在外存上的 相关信息的 具有名称的 集合，逻辑内存的最小分配单元&lt;/p&gt;
 &lt;p&gt;通常，文件表示程序和数据&lt;/p&gt;
 &lt;p&gt;free form or may be formatted rigidly&lt;/p&gt;
@@ -425,7 +425,7 @@
         <pubDate>Fri, 28 Feb 2020 13:09:24 +0000</pubDate>
         
         <guid>https://imfaye.me/post/os9/</guid>
-        <description>好雪片片 https://imfaye.me/post/os9/ -&lt;h2 id=&#34;background&#34;&gt;background&lt;/h2&gt;
+        <description>著花未 https://imfaye.me/post/os9/ -&lt;h2 id=&#34;background&#34;&gt;background&lt;/h2&gt;
 &lt;p&gt;CH8的内存管理方案需要将整个进程放入内存，动态载入只能减轻这一限制&lt;/p&gt;
 &lt;p&gt;Code needs to be in memory to execute, but entire program rarely used.&lt;/p&gt;
 &lt;p&gt;execute partially-loaded program&lt;/p&gt;
@@ -591,7 +591,7 @@
         <pubDate>Fri, 28 Feb 2020 13:08:24 +0000</pubDate>
         
         <guid>https://imfaye.me/post/os8/</guid>
-        <description>好雪片片 https://imfaye.me/post/os8/ -&lt;h2 id=&#34;background&#34;&gt;background&lt;/h2&gt;
+        <description>著花未 https://imfaye.me/post/os8/ -&lt;h2 id=&#34;background&#34;&gt;background&lt;/h2&gt;
 &lt;h3 id=&#34;基本硬件&#34;&gt;基本硬件&lt;/h3&gt;
 &lt;p&gt;CPU可直接访问的存储器只有 内存 和  处理器内的寄存器&lt;/p&gt;
 &lt;p&gt;​	CPU内置寄存器可在一个CPU时钟周期内完成访问，对于寄存器中的内容，CPU可以在一个周期内解析并执行多个指令&lt;/p&gt;
@@ -808,7 +808,7 @@
         <pubDate>Fri, 28 Feb 2020 13:07:24 +0000</pubDate>
         
         <guid>https://imfaye.me/post/os7/</guid>
-        <description>好雪片片 https://imfaye.me/post/os7/ -&lt;h2 id=&#34;deadlock-characteristics&#34;&gt;deadlock characteristics&lt;/h2&gt;
+        <description>著花未 https://imfaye.me/post/os7/ -&lt;h2 id=&#34;deadlock-characteristics&#34;&gt;deadlock characteristics&lt;/h2&gt;
 &lt;h3 id=&#34;necessary-conditions&#34;&gt;necessary conditions&lt;/h3&gt;
 &lt;p&gt;4个条件同时满足，引起死锁：&lt;/p&gt;
 &lt;ul&gt;
@@ -917,7 +917,7 @@
         <pubDate>Fri, 28 Feb 2020 13:06:24 +0000</pubDate>
         
         <guid>https://imfaye.me/post/os6/</guid>
-        <description>好雪片片 https://imfaye.me/post/os6/ -&lt;p&gt;race condition: 多个进程并发访问和操作同一数据，结果与访问顺序有关&lt;/p&gt;
+        <description>著花未 https://imfaye.me/post/os6/ -&lt;p&gt;race condition: 多个进程并发访问和操作同一数据，结果与访问顺序有关&lt;/p&gt;
 &lt;h2 id=&#34;critical-section&#34;&gt;critical section&lt;/h2&gt;
 &lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573274792092.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
 &lt;p&gt;critical section: 进程可能改变共同变量，更新表，写文件的代码段&lt;/p&gt;
@@ -954,7 +954,7 @@
         <pubDate>Fri, 28 Feb 2020 13:05:24 +0000</pubDate>
         
         <guid>https://imfaye.me/post/os5/</guid>
-        <description>好雪片片 https://imfaye.me/post/os5/ -&lt;p&gt;dispatcher: gives control of the CPU to the process selected by the short-term scheduler;&lt;/p&gt;
+        <description>著花未 https://imfaye.me/post/os5/ -&lt;p&gt;dispatcher: gives control of the CPU to the process selected by the short-term scheduler;&lt;/p&gt;
 &lt;p&gt;dispatch latency&lt;/p&gt;
 &lt;h2 id=&#34;scheduling-criteria&#34;&gt;scheduling criteria&lt;/h2&gt;
 &lt;ul&gt;
@@ -1071,7 +1071,7 @@
         <pubDate>Fri, 28 Feb 2020 13:04:24 +0000</pubDate>
         
         <guid>https://imfaye.me/post/os4/</guid>
-        <description>好雪片片 https://imfaye.me/post/os4/ -&lt;p&gt;Dispatching is referred to as a thread. Resource of ownership is referred to as a process or
+        <description>著花未 https://imfaye.me/post/os4/ -&lt;p&gt;Dispatching is referred to as a thread. Resource of ownership is referred to as a process or
 task.&lt;/p&gt;
 &lt;p&gt;对进程的swapping和termination都牵扯它所有线程&lt;/p&gt;
 &lt;p&gt;线程是CPU使用的基本单位。由thread ID, program counter, register set, stack组成&lt;/p&gt;
@@ -1164,7 +1164,7 @@ task.&lt;/p&gt;
         <pubDate>Fri, 28 Feb 2020 13:03:24 +0000</pubDate>
         
         <guid>https://imfaye.me/post/os3/</guid>
-        <description>好雪片片 https://imfaye.me/post/os3/ -&lt;h2 id=&#34;process-concepts&#34;&gt;process concepts&lt;/h2&gt;
+        <description>著花未 https://imfaye.me/post/os3/ -&lt;h2 id=&#34;process-concepts&#34;&gt;process concepts&lt;/h2&gt;
 &lt;p&gt;batch system: job; time-sharing system: program/task&lt;/p&gt;
 &lt;p&gt;Program is passive entity stored on disk (executable file), process is active.&lt;/p&gt;
 &lt;p&gt;a process includes&lt;/p&gt;
@@ -1341,7 +1341,7 @@ connection, it is assigned a port (greater than 1024) by its host computer.&lt;/
         <pubDate>Fri, 28 Feb 2020 13:01:24 +0000</pubDate>
         
         <guid>https://imfaye.me/post/os2/</guid>
-        <description>好雪片片 https://imfaye.me/post/os2/ -&lt;h2 id=&#34;ui&#34;&gt;UI&lt;/h2&gt;
+        <description>著花未 https://imfaye.me/post/os2/ -&lt;h2 id=&#34;ui&#34;&gt;UI&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;
 &lt;p&gt;CLI command-line / command interpreter&lt;/p&gt;
