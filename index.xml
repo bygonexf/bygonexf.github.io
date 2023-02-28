@@ -1,9 +1,9 @@
 <?xml-stylesheet href="/rss.xsl" type="text/xsl"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>著花未</title>
+    <title>个个里</title>
     <link>https://imfaye.me/</link>
-    <description>Recent content on 著花未</description>
+    <description>Recent content on 个个里</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Faye</copyright>
@@ -19,7 +19,7 @@
         <pubDate>Sat, 25 Feb 2023 23:25:36 +0800</pubDate>
         
         <guid>https://imfaye.me/post/nolstalgia2018/</guid>
-        <description>著花未 https://imfaye.me/post/nolstalgia2018/ -&lt;p&gt;备忘录里2018年9月3日记下的段落。&lt;/p&gt;
+        <description>个个里 https://imfaye.me/post/nolstalgia2018/ -&lt;p&gt;备忘录里2018年9月3日记下的段落。&lt;/p&gt;
 &lt;hr&gt;
 &lt;p&gt;被告知寒假回来后可能要搬到新家、甚是惶恐、遂用相机和纸笔大刀阔斧地记下周遭全貌和牵扯进的重要回忆。&lt;/p&gt;
 &lt;p&gt;以下陈列一些过程中还算特别的细枝末节。&lt;/p&gt;
@@ -45,7 +45,7 @@
         <pubDate>Sun, 15 Jan 2023 15:04:21 +0800</pubDate>
         
         <guid>https://imfaye.me/post/kawase-naomi/</guid>
-        <description>著花未 https://imfaye.me/post/kawase-naomi/ -&lt;h2 id=&#34;最近偏爱河濑直美&#34;&gt;最近偏爱河濑直美&lt;/h2&gt;
+        <description>个个里 https://imfaye.me/post/kawase-naomi/ -&lt;h2 id=&#34;最近偏爱河濑直美&#34;&gt;最近偏爱河濑直美&lt;/h2&gt;
 &lt;p&gt;很久之前就想看萌之朱雀，那段时间很喜欢超8mm摄像机的影片，目测剧情觉得相当工整并没第一时间看。前段时间偶然扫过沙罗双树的剧情简介，古都，双生子，神隐，祭典，这些词的意象以及剧照都相当吸引我。看完之后就开始沉迷河濑直美。&lt;/p&gt;
 &lt;p&gt;河濑直美确实是“一生只拍一部电影”的典型，始终徘徊在身世问题左右。想起她在东大入学仪式的致辞，也说了一直一直只盯着一扇窗，这一扇窗和世界的联结又也能让她和世界上众多的人相遇。身世，原生家庭，童年，似乎很多人长久执着于这些母题，有的时候我在想，是不是就算长大以后，我们作为人类的理解力也就只能帮助我们消化自我到青春期以前的这个节点。&lt;/p&gt;
 &lt;p&gt;我无限偏爱她抒情化的空镜头，泛出的柔光、环境音、易碎的颤动感。她镜头下的静物，和静止的相片相比，动人的正是时间穿行而过的窸窣感，柔光下的树木枝叶，风摇动的粼粼的光与阴影，触碰窗沿结着的雨珠，水的滴落，碗中浸泡的青豆浮动的光泽，晾晒的衣物被吹起的摆动，空转的圆盘形衣架。有某种薄如蝉翼的果冻一般的轻颤。&lt;/p&gt;
@@ -94,7 +94,7 @@
         <pubDate>Fri, 23 Dec 2022 15:04:21 +0800</pubDate>
         
         <guid>https://imfaye.me/post/heriters/</guid>
-        <description>著花未 https://imfaye.me/post/heriters/ -&lt;h2 id=&#34;我的废话&#34;&gt;我的废话&lt;/h2&gt;
+        <description>个个里 https://imfaye.me/post/heriters/ -&lt;h2 id=&#34;我的废话&#34;&gt;我的废话&lt;/h2&gt;
 &lt;p&gt;第一次读布尔迪厄。感觉自己高中阶段和父亲的争执、本科时期感受到的大学本身的矛盾性、关于小镇做题家的迷思，全都得到了解答。&lt;/p&gt;
 &lt;h2 id=&#34;ch1-中选者的选择&#34;&gt;CH1 中选者的选择&lt;/h2&gt;
 &lt;p&gt;对社会地位最低的人来说，接受高等教育的主观愿望比客观机会还要小。&lt;/p&gt;
@@ -167,7 +167,7 @@
         <pubDate>Sun, 10 Jul 2022 23:43:59 +0000</pubDate>
         
         <guid>https://imfaye.me/post/vae/</guid>
-        <description>著花未 https://imfaye.me/post/vae/ -&lt;h1 id=&#34;引子&#34;&gt;引子&lt;/h1&gt;
+        <description>个个里 https://imfaye.me/post/vae/ -&lt;h1 id=&#34;引子&#34;&gt;引子&lt;/h1&gt;
 &lt;h2 id=&#34;生成模型&#34;&gt;生成模型&lt;/h2&gt;
 &lt;p&gt;能从可学习的概率分布中采样得到样本的模型。&lt;/p&gt;
 &lt;p&gt;在一些生成模型中，样本通过将随机的隐层变量送入网络生成得到。&lt;/p&gt;
@@ -221,7 +221,7 @@
         <pubDate>Wed, 20 Apr 2022 17:04:37 +0800</pubDate>
         
         <guid>https://imfaye.me/post/e2e-entropy-model/</guid>
-        <description>著花未 https://imfaye.me/post/e2e-entropy-model/ -&lt;h2 id=&#34;概率分布与熵编码&#34;&gt;概率分布与熵编码&lt;/h2&gt;
+        <description>个个里 https://imfaye.me/post/e2e-entropy-model/ -&lt;h2 id=&#34;概率分布与熵编码&#34;&gt;概率分布与熵编码&lt;/h2&gt;
 &lt;p&gt;在端到端图像/视频压缩模型中，我们需要去尽可能精准地模拟待编码元素值的概率分布。一方面是为了更精确地进行码率估计，另一方面也是因为更精准的概率分布建模能使得熵编码环节更好地消除统计冗余节省码字。&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/2023/02/upgit_20230224_1677253790.png&#34; alt=&#34;image-20230224234946517&#34;&gt;&lt;/p&gt;
 &lt;p&gt;建模出概率分布后，在实际熵编码中，就可以通过概率分布生成熵编码器所需要的概率表。&lt;/p&gt;
@@ -345,7 +345,7 @@
         <pubDate>Sun, 20 Feb 2022 17:04:37 +0800</pubDate>
         
         <guid>https://imfaye.me/post/dcn-and-optical-flow/</guid>
-        <description>著花未 https://imfaye.me/post/dcn-and-optical-flow/ -&lt;h2 id=&#34;可变形卷积代码篇&#34;&gt;可变形卷积代码篇&lt;/h2&gt;
+        <description>个个里 https://imfaye.me/post/dcn-and-optical-flow/ -&lt;h2 id=&#34;可变形卷积代码篇&#34;&gt;可变形卷积代码篇&lt;/h2&gt;
 &lt;p&gt;一个调用 &lt;code&gt;from mmcv.ops import ModulatedDeformConv2d&lt;/code&gt; 的例子：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;forward&lt;/span&gt;(self, &lt;span style=&#34;color:#658b00&#34;&gt;input&lt;/span&gt;):
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        x = self.offset_mask_conv(&lt;span style=&#34;color:#658b00&#34;&gt;input&lt;/span&gt;)
@@ -392,7 +392,7 @@
         <pubDate>Sun, 05 Dec 2021 13:09:24 +0000</pubDate>
         
         <guid>https://imfaye.me/post/entropy-coding/</guid>
-        <description>著花未 https://imfaye.me/post/entropy-coding/ -&lt;h1 id=&#34;传统熵模型&#34;&gt;传统熵模型&lt;/h1&gt;
+        <description>个个里 https://imfaye.me/post/entropy-coding/ -&lt;h1 id=&#34;传统熵模型&#34;&gt;传统熵模型&lt;/h1&gt;
 &lt;h2 id=&#34;算术编码-arithmetic-coding&#34;&gt;算术编码 (Arithmetic Coding)&lt;/h2&gt;
 &lt;h3 id=&#34;流程&#34;&gt;流程&lt;/h3&gt;
 &lt;p&gt;（以静态模型举例）&lt;/p&gt;
@@ -451,7 +451,7 @@
         <pubDate>Thu, 02 Dec 2021 23:35:47 +0000</pubDate>
         
         <guid>https://imfaye.me/post/image-quality-evaluation-metrics/</guid>
-        <description>著花未 https://imfaye.me/post/image-quality-evaluation-metrics/ -&lt;p&gt;如何评价重建图像的质量：比较重建图像与原始图像的可视误差。&lt;/p&gt;
+        <description>个个里 https://imfaye.me/post/image-quality-evaluation-metrics/ -&lt;p&gt;如何评价重建图像的质量：比较重建图像与原始图像的可视误差。&lt;/p&gt;
 &lt;h2 id=&#34;mse&#34;&gt;MSE&lt;/h2&gt;
 &lt;p&gt;Mean Squared Error, 均方误差&lt;/p&gt;
 &lt;p&gt;$MSE = \frac{1}{N}\sum\limits_{i=1}^{N}(x_i-y_i)^2$&lt;/p&gt;
@@ -496,7 +496,7 @@
         <pubDate>Thu, 01 Apr 2021 17:28:29 +0000</pubDate>
         
         <guid>https://imfaye.me/post/avs3-bitstream/</guid>
-        <description>著花未 https://imfaye.me/post/avs3-bitstream/ -&lt;h2 id=&#34;概述&#34;&gt;概述&lt;/h2&gt;
+        <description>个个里 https://imfaye.me/post/avs3-bitstream/ -&lt;h2 id=&#34;概述&#34;&gt;概述&lt;/h2&gt;
 &lt;p&gt;&lt;strong&gt;视频序列&lt;/strong&gt;是位流的最高层语法结构。&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;帧&lt;/strong&gt;由一个亮度样本矩阵和两个色度样本矩阵构成。&lt;strong&gt;场&lt;/strong&gt;由构成帧的三个样本矩阵中相间的行构成。奇数行构成顶场，偶数行构成底场。&lt;/p&gt;
 &lt;p&gt;视频序列头由视频序列起码码开始，后面跟着一串编码图像数据。序列头可在位流中重复出现，称为重复序列头。使用重复序列头的主要目的是支持对视频序列的随机访问。&lt;/p&gt;
@@ -564,7 +564,7 @@
         <pubDate>Wed, 31 Mar 2021 17:04:49 +0000</pubDate>
         
         <guid>https://imfaye.me/post/prediction-coding/</guid>
-        <description>著花未 https://imfaye.me/post/prediction-coding/ -&lt;h2 id=&#34;视频预测编码技术&#34;&gt;视频预测编码技术&lt;/h2&gt;
+        <description>个个里 https://imfaye.me/post/prediction-coding/ -&lt;h2 id=&#34;视频预测编码技术&#34;&gt;视频预测编码技术&lt;/h2&gt;
 &lt;p&gt;预测编码是指利用已编码的一个或几个样本值，根据某种模型或方法，对当前的样本值进行预测，并对样本真实值和预测值之间的差值进行编码。&lt;/p&gt;
 &lt;h3 id=&#34;帧内预测编码&#34;&gt;帧内预测编码&lt;/h3&gt;
 &lt;p&gt;随着离散余弦变换 (DCT) 在图像、视频编码中的广泛应用，帧内预测转为在频域进行，如相邻块 DC 系数的差分编码等。由 DCT 的性质可知，DC 系数仅能反映当前块像素值的平均大小，因此上述频域中基于 DC 系数的帧内预测无法反映出视频的纹理信息，这限制了频域帧内预测的发展。&lt;/p&gt;

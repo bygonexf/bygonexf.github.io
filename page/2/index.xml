@@ -1,9 +1,9 @@
 <?xml-stylesheet href="/rss.xsl" type="text/xsl"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>著花未</title>
+    <title>个个里</title>
     <link>https://imfaye.me/</link>
-    <description>Recent content on 著花未</description>
+    <description>Recent content on 个个里</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Faye</copyright>
@@ -19,7 +19,7 @@
         <pubDate>Wed, 31 Mar 2021 11:34:13 +0000</pubDate>
         
         <guid>https://imfaye.me/post/video-coding-structure/</guid>
-        <description>著花未 https://imfaye.me/post/video-coding-structure/ -&lt;h2 id=&#34;名词一览&#34;&gt;名词一览&lt;/h2&gt;
+        <description>个个里 https://imfaye.me/post/video-coding-structure/ -&lt;h2 id=&#34;名词一览&#34;&gt;名词一览&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;GOP (Group of Pictures) - 图像组&lt;/li&gt;
 &lt;li&gt;IDR (Instantaneous Decoding Refresh) - 即时解码刷新&lt;/li&gt;
@@ -131,7 +131,7 @@
         <pubDate>Mon, 29 Mar 2021 15:10:25 +0000</pubDate>
         
         <guid>https://imfaye.me/post/multimedia-basics/</guid>
-        <description>著花未 https://imfaye.me/post/multimedia-basics/ -&lt;h2 id=&#34;图像数值表示&#34;&gt;图像数值表示&lt;/h2&gt;
+        <description>个个里 https://imfaye.me/post/multimedia-basics/ -&lt;h2 id=&#34;图像数值表示&#34;&gt;图像数值表示&lt;/h2&gt;
 &lt;h3 id=&#34;分辨率&#34;&gt;分辨率&lt;/h3&gt;
 &lt;p&gt;分辨率的基础单位是像素。1280 * 720 P 的分辨率代表共有 1280 * 720 个像素点。&lt;/p&gt;
 &lt;p&gt;一台物理设备出厂时就已经定下了它所能拥有的最大像素点是多少。电脑显示屏调整分辨率是系统通过运算来给出模拟色彩块填充适配的。&lt;/p&gt;
@@ -262,7 +262,7 @@ B = Y + 2.03 * U
         <pubDate>Sun, 21 Mar 2021 20:29:24 +0000</pubDate>
         
         <guid>https://imfaye.me/post/wsl/</guid>
-        <description>著花未 https://imfaye.me/post/wsl/ -&lt;h2 id=&#34;网络代理配置&#34;&gt;网络代理配置&lt;/h2&gt;
+        <description>个个里 https://imfaye.me/post/wsl/ -&lt;h2 id=&#34;网络代理配置&#34;&gt;网络代理配置&lt;/h2&gt;
 &lt;p&gt;刚开始用 &lt;code&gt;apt-get&lt;/code&gt; 就被卡到。&lt;/p&gt;
 &lt;p&gt;WSL1 的时候，Linux 子系统和 Windows 主机是共享一个 localhost 的。WSL2 由于通过虚拟机实现，若要访问 Windows 主机的网络，需要使用主机的 IP 地址（IP 地址可以用 &lt;code&gt;ipconfig&lt;/code&gt; 命令查看）。&lt;/p&gt;
 &lt;h3 id=&#34;wsl2-环境变量配置&#34;&gt;WSL2 环境变量配置&lt;/h3&gt;
@@ -295,7 +295,7 @@ B = Y + 2.03 * U
         <pubDate>Sun, 19 Apr 2020 21:48:42 +0000</pubDate>
         
         <guid>https://imfaye.me/post/dear-diary/</guid>
-        <description>著花未 https://imfaye.me/post/dear-diary/ -&lt;p&gt;果然，日记吧&amp;hellip;不是能全部坦诚相待的东西。这里只是一部分的真实的我。&lt;/p&gt;
+        <description>个个里 https://imfaye.me/post/dear-diary/ -&lt;p&gt;果然，日记吧&amp;hellip;不是能全部坦诚相待的东西。这里只是一部分的真实的我。&lt;/p&gt;
 &lt;h1 id=&#34;2020&#34;&gt;2020&lt;/h1&gt;
 &lt;h2 id=&#34;20204&#34;&gt;2020/4&lt;/h2&gt;
 &lt;h3 id=&#34;418&#34;&gt;4/18&lt;/h3&gt;
@@ -783,7 +783,7 @@ B = Y + 2.03 * U
         <pubDate>Sun, 19 Apr 2020 18:13:57 +0000</pubDate>
         
         <guid>https://imfaye.me/post/pat-1038/</guid>
-        <description>著花未 https://imfaye.me/post/pat-1038/ -&lt;p&gt;Recover the Smallest Number&lt;/p&gt;
+        <description>个个里 https://imfaye.me/post/pat-1038/ -&lt;p&gt;Recover the Smallest Number&lt;/p&gt;
 &lt;!-- raw HTML omitted --&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-c++&#34; data-lang=&#34;c++&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;iostream&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;string.h&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
@@ -890,7 +890,7 @@ B = Y + 2.03 * U
         <pubDate>Sun, 19 Apr 2020 18:03:34 +0000</pubDate>
         
         <guid>https://imfaye.me/post/pat-1033/</guid>
-        <description>著花未 https://imfaye.me/post/pat-1033/ -&lt;p&gt;很有意思的一道贪心&lt;/p&gt;
+        <description>个个里 https://imfaye.me/post/pat-1033/ -&lt;p&gt;很有意思的一道贪心&lt;/p&gt;
 &lt;!-- raw HTML omitted --&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-c++&#34; data-lang=&#34;c++&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;iostream&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;string.h&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
@@ -1019,7 +1019,7 @@ B = Y + 2.03 * U
         <pubDate>Sat, 18 Apr 2020 15:04:21 +0800</pubDate>
         
         <guid>https://imfaye.me/post/zhenjiang/</guid>
-        <description>著花未 https://imfaye.me/post/zhenjiang/ -&lt;p&gt;也许是初高中还在用QQ空间的时候，转载的文章，像一首小小的诗。&lt;/p&gt;
+        <description>个个里 https://imfaye.me/post/zhenjiang/ -&lt;p&gt;也许是初高中还在用QQ空间的时候，转载的文章，像一首小小的诗。&lt;/p&gt;
 &lt;p&gt;我迷恋一切记录的形式，想精进一切记录的手段，写作和摄影都是。童年，故乡，记忆里的千禧年代。想自己写下一些城市志，我有太多想永远记住的物事。&lt;/p&gt;
 &lt;hr&gt;
 &lt;p&gt;新华书店的对面是新华影剧院&lt;/p&gt;
@@ -1081,7 +1081,7 @@ B = Y + 2.03 * U
         <pubDate>Sun, 05 Apr 2020 16:44:14 +0000</pubDate>
         
         <guid>https://imfaye.me/post/linguistics/</guid>
-        <description>著花未 https://imfaye.me/post/linguistics/ -&lt;h1 id=&#34;ch1-语言能力与语言系统&#34;&gt;CH1 语言能力与语言系统&lt;/h1&gt;
+        <description>个个里 https://imfaye.me/post/linguistics/ -&lt;h1 id=&#34;ch1-语言能力与语言系统&#34;&gt;CH1 语言能力与语言系统&lt;/h1&gt;
 &lt;h2 id=&#34;易境性&#34;&gt;易境性&lt;/h2&gt;
 &lt;p&gt;动物交流的特点：在场。在场与直接经验。人类不必在场传递经验，关键在语言。通过语言传递知识与经验，不必在场。&lt;/p&gt;
 &lt;h2 id=&#34;还原生成性&#34;&gt;还原生成性&lt;/h2&gt;
@@ -1137,7 +1137,7 @@ B = Y + 2.03 * U
         <pubDate>Fri, 28 Feb 2020 13:13:24 +0000</pubDate>
         
         <guid>https://imfaye.me/post/os13/</guid>
-        <description>著花未 https://imfaye.me/post/os13/ -&lt;p&gt;the kernel is structured to use device-driver modules.&lt;/p&gt;
+        <description>个个里 https://imfaye.me/post/os13/ -&lt;p&gt;the kernel is structured to use device-driver modules.&lt;/p&gt;
 &lt;p&gt;device driver为IO子系统提供了统一设备访问接口&lt;/p&gt;
 &lt;p&gt;两个趋势：接口日益标准化，设备多样性&lt;/p&gt;
 &lt;h2 id=&#34;io-硬件&#34;&gt;IO 硬件&lt;/h2&gt;
@@ -1264,7 +1264,7 @@ without the intervention of the CPU or the use of main memory. 直接实现两�
         <pubDate>Fri, 28 Feb 2020 13:12:24 +0000</pubDate>
         
         <guid>https://imfaye.me/post/os12/</guid>
-        <description>著花未 https://imfaye.me/post/os12/ -&lt;h3 id=&#34;磁盘&#34;&gt;磁盘&lt;/h3&gt;
+        <description>个个里 https://imfaye.me/post/os12/ -&lt;h3 id=&#34;磁盘&#34;&gt;磁盘&lt;/h3&gt;
 &lt;p&gt;扇区0是最外面柱面的第一个磁道的第一个扇区。映射先按磁道内扇区顺序，再按柱面内磁道顺序，最后按从外到内的柱面顺序来排序的。&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577512929633.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577513031964.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
