@@ -7,121 +7,9 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Faye</copyright>
-    <lastBuildDate>Sat, 25 Feb 2023 23:25:36 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 15 Jan 2023 15:04:21 +0800</lastBuildDate>
     
         <atom:link href="https://bygonexf.github.io/index.xml" rel="self" type="application/rss+xml" />
-    
-    
-    
-        <item>
-        <title>H.265/HEVC 编码结构 笔记</title>
-        <link>https://bygonexf.github.io/post/video-coding-structure/</link>
-        <pubDate>Wed, 31 Mar 2021 11:34:13 +0000</pubDate>
-        
-        <guid>https://bygonexf.github.io/post/video-coding-structure/</guid>
-        <description>Fxye. https://bygonexf.github.io/post/video-coding-structure/ -&lt;h2 id=&#34;名词一览&#34;&gt;名词一览&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;GOP (Group of Pictures) - 图像组&lt;/li&gt;
-&lt;li&gt;IDR (Instantaneous Decoding Refresh) - 即时解码刷新&lt;/li&gt;
-&lt;li&gt;Slice - 片&lt;/li&gt;
-&lt;li&gt;SS (Slice Segment) - 片段&lt;/li&gt;
-&lt;li&gt;CTU (Coding Tree Unit) - 树形结构单元&lt;/li&gt;
-&lt;li&gt;CTB (Coding Tree Block) - 树形编码块&lt;/li&gt;
-&lt;li&gt;CU (Coding Unit) - 编码单元&lt;/li&gt;
-&lt;li&gt;SPS (Sequence Parameter Set) - 序列参数集&lt;/li&gt;
-&lt;li&gt;PPS (Picture Parameter Set) - 图像参数集&lt;/li&gt;
-&lt;li&gt;CVS (Coded Video Sequence) - 一个 GOP 编码后生成的压缩数据&lt;/li&gt;
-&lt;li&gt;VPS (Video Parameter Set) - 视频参数集&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;编码结构概述&#34;&gt;编码结构概述&lt;/h2&gt;
-&lt;h3 id=&#34;编码结构&#34;&gt;编码结构&lt;/h3&gt;
-&lt;p&gt;&lt;strong&gt;视频序列&lt;/strong&gt;分隔为若干个图像组 (&lt;strong&gt;GOP&lt;/strong&gt;)。&lt;/p&gt;
-&lt;p&gt;存在两种 GOP 类型：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;封闭式 GOP&lt;/p&gt;
-&lt;p&gt;每一个 GOP 以 IDR 图像开始，各个 GOP 之间独立编解码。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;开放式 GOP&lt;/p&gt;
-&lt;p&gt;第一个 GOP 中的第一个帧内编码图像为 IDR 图像，后续 GOP 中的第一个帧内编码图像为 non-IDR 图像。后面 GOP 中的帧间编码图像可以使用前一个 GOP 的已编码图像作为参考图像。&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/20210331120920.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
-&lt;p&gt;每个 GOP 又被分为多个片 (&lt;strong&gt;Slice&lt;/strong&gt;)，片与片之间独立编解码。主要目的之一是在数据丢失的情况下进行重新同步。&lt;/p&gt;
-&lt;p&gt;每个片由一个或多个片段 (&lt;strong&gt;SS&lt;/strong&gt;, Slice Segment) 组成。&lt;/p&gt;
-&lt;p&gt;树形结构单元 (CTU) 类似传统的宏块。每个 CTU 包括一个亮度 CTB 和两个色差 CTB。&lt;/p&gt;
-&lt;p&gt;一个 SS 在编码时，先被分割为相同大小的 &lt;strong&gt;CTU&lt;/strong&gt;，每一个 CTU 按照四叉树分割方式被划分为不同类型的 &lt;strong&gt;CU&lt;/strong&gt;。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/20210331120838.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
-&lt;p&gt;以上即为编码时的分层处理架构。&lt;/p&gt;
-&lt;h3 id=&#34;码流结构&#34;&gt;码流结构&lt;/h3&gt;
-&lt;p&gt;码流结构上，H.265/HEVC 压缩数据采用了类似于 H.264/AVC 的分层结构。&lt;/p&gt;
-&lt;p&gt;将属于 GOP 层、Slice 层中共用的大部分语法元素游离出来，组成 SPS 和 PPS。&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;SPS&lt;/strong&gt; 中包含了一个 CVS 中所有图像共用的信息。SPS 中大致包括解码相关信息，如档次级别、分辨率、某档次中编码工具开关标识和涉及的参数、时域可分级信息等。&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;PPS&lt;/strong&gt; 中包含一副图像所用的公共参数，大致包括初始图像控制信息，如初始量化参数、分块信息等。一副图像中所有 SS 引用同一个 PPS。&lt;/p&gt;
-&lt;p&gt;此外，为了兼容在其他应用上的扩展，H.265/HEVC 的语法架构中增加了 &lt;strong&gt;VPS&lt;/strong&gt;，其内容大致包括多个子层共享的语法元素，其他不属于 SPS 的特定信息等。&lt;/p&gt;
-&lt;p&gt;对于一个 SS，通过引用它所使用的 PPS，该 PPS 又引用对应的 SPS，该 SPS 又引用对应的 VPS，最终得到 SS 的公用信息。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/20210331120942.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
-&lt;h2 id=&#34;片段层&#34;&gt;片段层&lt;/h2&gt;
-&lt;p&gt;一副图像可以被分割为一个或多个 Slice，每个 Slice 的压缩数据都是独立的，Slice 头信息无法通过前一个 Slice 的头信息推断得到。这就要求 Slice 不能跨过它的边界来进行帧内或帧间预测。&lt;/p&gt;
-&lt;p&gt;根据编码类型不同，Slice 可分为以下几部分：&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;
-&lt;p&gt;I Slice&lt;/p&gt;
-&lt;p&gt;该 Slice 中所有 CU 的编码过程都使用帧内预测&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;P Slice&lt;/p&gt;
-&lt;p&gt;在 I Slice 的基础上，该 Slice 中的 CU 还可以使用帧间预测，每个 PB（预测块）使用至多一个运动补偿预测信息。P Slice 只使用图像参考列表 list 0。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;B Slice&lt;/p&gt;
-&lt;p&gt;在 P Slice 的基础上，该 Slice 中的 CU也可以使用帧间预测，每个 PB（预测块）可以使用至多两个运动补偿预测信息。B Slice 可以使用图像参考列表 list 0 和 list 1。&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;一个独立的 Slice 可以被进一步划分为若干个 SS，包括一个独立 SS 和若干个依赖 SS，并且以独立 SS 作为该 Slice 的开始。&lt;/p&gt;
-&lt;p&gt;一个 SS 包含整数个 CTU（至少一个），并且这些 CTU 分布在同一个 NAL 单元中。SS 可以作为一个分组来传送视频编码数据。&lt;/p&gt;
-&lt;h2 id=&#34;tile-单元&#34;&gt;Tile 单元&lt;/h2&gt;
-&lt;h3 id=&#34;tile-单元描述&#34;&gt;Tile 单元描述&lt;/h3&gt;
-&lt;p&gt;一副图像不仅可以划分为若干个 Slice，也可以划分为若干个 Tile。即从水平和垂直方向将一个图像分割为若干个矩形区域，一个矩形区域就是一个 Tile。每个 Tile 包含整数个 CTU。&lt;/p&gt;
-&lt;p&gt;Tile 提供比 CTB 更大程度的并行，在使用时无须进行复杂的线程同步。&lt;/p&gt;
-&lt;p&gt;在同一幅图像中，可以存在某些 Slice 中包含多个 Tile 和某些 Tile 包含多个 Slice 的情况。&lt;/p&gt;
-&lt;h3 id=&#34;slice-和-tile&#34;&gt;Slice 和 Tile&lt;/h3&gt;
-&lt;p&gt;Tile 形装基本上为矩形，Slice 为条带状。&lt;/p&gt;
-&lt;p&gt;Slice 由一系列 SS 组成，一个 SS 由一系列 CTU 组成。Tile 则直接由一系列 CTU 组成。&lt;/p&gt;
-&lt;p&gt;每个 Slice/SS 和 Tile 至少要满足以下两个条件之一：&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;一个 Slice/SS 中的所有 CTU 属于同一个 Tile&lt;/li&gt;
-&lt;li&gt;一个 Tile 中的所有 CTU 属于同一个 Slice/SS&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h2 id=&#34;树形编码块&#34;&gt;树形编码块&lt;/h2&gt;
-&lt;p&gt;传统的视频编码基于宏块实现。考虑到高清视频 / 超高清视频的自身特性，H.265/HEVC 标准中引入了树形编码单元 CTU，其尺寸由编码器指定，且可大于宏块尺寸。&lt;/p&gt;
-&lt;p&gt;同一位置处的一个亮度 CTB 和两个色度 CTB，再加上相应的语法元素形成一个 CTU。在高分辨率视频的编码中，使用较大的 CTB 可以获得更好的压缩性能。&lt;/p&gt;
-&lt;p&gt;H.265/HEVC 为图像划分定义了一套全新的语法单元，包括编码单元 (CU)、预测单元 (PU)、变换单元  (TU)。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;CU 是进行预测、变换、量化和熵处理等处理的基本单元&lt;/li&gt;
-&lt;li&gt;PU 是进行帧内/帧间预测的基本单元&lt;/li&gt;
-&lt;li&gt;TU 是进行变换和量化的基本单元&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;编码单元&#34;&gt;编码单元&lt;/h3&gt;
-&lt;p&gt;大尺寸图像的一个特点是平缓区域的面积更大，用较大的块编码能极大提升编码效率。在 H.264/AVC 中，编码块的大小是固定的。而在 H.265/HEVC 中，一个 CTB 可以直接作为一个 CB，也可以进一步以四叉树的形式划分为多个小的 CB。大的 CB 可以使得平缓区域的编码效率提高，小 CB 能很好地处理图像局部的细节。&lt;/p&gt;
-&lt;p&gt;编码单元是否继续划分取决于分割标志位 Split Flag。&lt;/p&gt;
-&lt;h3 id=&#34;预测单元&#34;&gt;预测单元&lt;/h3&gt;
-&lt;p&gt;预测单元规定了编码单元的所有预测模式。帧内预测的方向、帧间预测的分割方式、运动矢量预测、帧间预测参考图像索引号都属于预测单元的范畴。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/20210331153821.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
-&lt;h3 id=&#34;变换单元&#34;&gt;变换单元&lt;/h3&gt;
-&lt;p&gt;TU 的大小依赖于 CU 模式，在一个 CU 内，允许 TU 跨越多个 PU，以四叉树的形式递归划分。对于一个 2N × 2N 的 CU，有一个标志位决定其是否划分为 4 个 N × N 的 TU，是否可以进一步划分由 SPS 中的 TU 最大划分深度决定。&lt;/p&gt;
-&lt;h2 id=&#34;档次层和级别&#34;&gt;档次、层和级别&lt;/h2&gt;
-&lt;p&gt;在 H.264 中就有对档次 (Profile) 和级别 (Level) 的划分，它们规定了比特流必须遵守的一些限制要求。而 H.265/HEVC 中在此基础上又新定义了一个概念：层 (Tile)。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Profile 主要规定编码器可采用哪些编码工具或算法&lt;/li&gt;
-&lt;li&gt;Level 是指根据解码端的负载和存储空间情况对关键参数加以限制&lt;/li&gt;
-&lt;li&gt;有些 Level 定义了两个 Tile: 主层 (Main Tile) 和高层 (High Tile)，主层用于大多数应用，高层用于那些最苛刻的应用&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;满足某一 Level 和 Tile 的解码器应当可以解码当前以及比当前更低的 Level 和 Tile 的所有码流。&lt;/p&gt;
-&lt;p&gt;满足某一 Profile 的解码器必须支持该 Profile 中的所有特性。编码器不必实现 Profile 中的所有特性，但生成的码流必须遵守标准规定。&lt;/p&gt;
-- https://bygonexf.github.io/post/video-coding-structure/ - Faye</description>
-        </item>
     
     
     
@@ -1006,68 +894,6 @@ B = Y + 2.03 * U
     
     
         <item>
-        <title>转录，故乡，镇江</title>
-        <link>https://bygonexf.github.io/post/zhenjiang/</link>
-        <pubDate>Sat, 18 Apr 2020 15:04:21 +0800</pubDate>
-        
-        <guid>https://bygonexf.github.io/post/zhenjiang/</guid>
-        <description>Fxye. https://bygonexf.github.io/post/zhenjiang/ -&lt;p&gt;也许是初高中还在用QQ空间的时候，转载的文章，像一首小小的诗。&lt;/p&gt;
-&lt;p&gt;我迷恋一切记录的形式，想精进一切记录的手段，写作和摄影都是。童年，故乡，记忆里的千禧年代。想自己写下一些城市志，我有太多想永远记住的物事。&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;新华书店的对面是新华影剧院&lt;/p&gt;
-&lt;p&gt;里面的影厅很久很久&lt;/p&gt;
-&lt;p&gt;座位上暗红色的绒布下黄色的海绵总是露出头&lt;/p&gt;
-&lt;p&gt;快要建好的苏宁广场拐角那边原本有一家很好吃的铁板鱿鱼&lt;/p&gt;
-&lt;p&gt;还有果汁和糖衣很厚的冰糖葫芦&lt;/p&gt;
-&lt;p&gt;大喇叭一直喊到夜色阑珊&lt;/p&gt;
-&lt;p&gt;国际饭店的顶上的尖尖不管在哪里都可以看见&lt;/p&gt;
-&lt;p&gt;零散的记忆里妈妈说那是镇江的中心&lt;/p&gt;
-&lt;p&gt;伯先公园的猴子好像养了很多很多年&lt;/p&gt;
-&lt;p&gt;久到也许是猴子们都安享晚年去了所以再也没见过它们&lt;/p&gt;
-&lt;p&gt;老焦山都码头很安静&lt;/p&gt;
-&lt;p&gt;大门到码头的路上郁郁葱葱的绿色&lt;/p&gt;
-&lt;p&gt;夹了桂花的香气沙沙摇了很多年&lt;/p&gt;
-&lt;p&gt;少年宫对面江滨公园还有露天摆放的沙画摊子&lt;/p&gt;
-&lt;p&gt;三块钱一小张五块钱一大张&lt;/p&gt;
-&lt;p&gt;从美少女战士到没嘴巴的 hellokitty&lt;/p&gt;
-&lt;p&gt;104 还在那里有站台&lt;/p&gt;
-&lt;p&gt;火车站好像很远很远很远&lt;/p&gt;
-&lt;p&gt;门口有拎着大包小包的路人&lt;/p&gt;
-&lt;p&gt;过年的时候熙熙攘攘&lt;/p&gt;
-&lt;p&gt;妈妈总是担心我被巨大的蛇皮袋挡住去路&lt;/p&gt;
-&lt;p&gt;商业城的东西好像很贵很贵&lt;/p&gt;
-&lt;p&gt;记忆中一直是堵住的实小门口&lt;/p&gt;
-&lt;p&gt;喇叭声和铃铛声还有争执声&lt;/p&gt;
-&lt;p&gt;只有4路有双层的车子&lt;/p&gt;
-&lt;p&gt;坐在上面摇摇晃晃 却每次都很感觉新奇&lt;/p&gt;
-&lt;p&gt;只有长江路上能看到对面一条线一样的扬州&lt;/p&gt;
-&lt;p&gt;晚上有点点灯火闪烁&lt;/p&gt;
-&lt;p&gt;江滨医院还只有很小的一块地盘&lt;/p&gt;
-&lt;p&gt;一楼的走廊有很多花草在路边&lt;/p&gt;
-&lt;p&gt;清晨和傍晚路口总是有穿着白色围裙的爷爷奶奶卖自己做的包子烧饼&lt;/p&gt;
-&lt;p&gt;茶叶蛋蹲在不锈钢的锅里&lt;/p&gt;
-&lt;p&gt;壳都是敲碎了的&lt;/p&gt;
-&lt;p&gt;黑褐色的汤汁咕嘟咕嘟翻着泡泡&lt;/p&gt;
-&lt;p&gt;路上没有这么多汽车&lt;/p&gt;
-&lt;p&gt;很多爸爸还骑着有横杠的老式自行车&lt;/p&gt;
-&lt;p&gt;孩子小小的坐在车后或是横杠上&lt;/p&gt;
-&lt;p&gt;妈妈会很细心地缝厚厚的坐垫绑在车后&lt;/p&gt;
-&lt;p&gt;颠的时候就不会觉得屁股裂成几片了&lt;/p&gt;
-&lt;p&gt;老式诺基亚说话声音要很大对面才能听清&lt;/p&gt;
-&lt;p&gt;短信还有字数限制&lt;/p&gt;
-&lt;p&gt;好像还是我闭着眼睛就能走完的镇江&lt;/p&gt;
-&lt;p&gt;但是好像走着走着&lt;/p&gt;
-&lt;p&gt;就把我的镇江丢进回忆里&lt;/p&gt;
-&lt;p&gt;一个漩涡泛起一个小小的气泡&lt;/p&gt;
-&lt;p&gt;连痕迹都无影无踪&lt;/p&gt;
-&lt;p&gt;却是真真切切存在的&lt;/p&gt;
-&lt;p&gt;我的小城&lt;/p&gt;
-- https://bygonexf.github.io/post/zhenjiang/ - Faye</description>
-        </item>
-    
-    
-    
-        <item>
         <title>语言学概论 笔记</title>
         <link>https://bygonexf.github.io/post/linguistics/</link>
         <pubDate>Sun, 05 Apr 2020 16:44:14 +0000</pubDate>
@@ -1364,6 +1190,412 @@ cache and the disk surface. Data transfer to the host, at fast electronic speeds
 &lt;p&gt;​	控制器维护一个磁盘坏块链表，控制器可用备用块来逻辑地替换坏块 sector sparing(forwarding)&lt;/p&gt;
 &lt;p&gt;​	sector slipping&lt;/p&gt;
 - https://bygonexf.github.io/post/os12/ - Faye</description>
+        </item>
+    
+    
+    
+        <item>
+        <title>操作系统笔记 CH11 File-System Implementation</title>
+        <link>https://bygonexf.github.io/post/os11/</link>
+        <pubDate>Fri, 28 Feb 2020 13:11:24 +0000</pubDate>
+        
+        <guid>https://bygonexf.github.io/post/os11/</guid>
+        <description>Fxye. https://bygonexf.github.io/post/os11/ -&lt;h2 id=&#34;文件系统结构&#34;&gt;文件系统结构&lt;/h2&gt;
+&lt;p&gt;磁盘特点：可以原地重写，可以直接访问任意一块。&lt;/p&gt;
+&lt;p&gt;内存和磁盘之间的IO以块为单位。每块为一个或多个扇区。扇区通常为512B&lt;/p&gt;
+&lt;p&gt;File system resides on secondary storage (disks) OS通过文件系统存储、定位、提取数据&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577502786991.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;IO control 最底层&lt;/p&gt;
+&lt;p&gt;由device driver 和 Interrupt handlers组成&lt;/p&gt;
+&lt;p&gt;实现内存和磁盘之间的信息传输。&lt;/p&gt;
+&lt;p&gt;device driver可作为翻译器。输入是高层命令，输出是底层的、硬件特定的命令。命令用于控制hardware controller&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577503036078.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;device driver控制一类设备&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;basic file system&lt;/p&gt;
+&lt;p&gt;Issue generic commands to the appropriate device driver to read and write physical blocks on the disk.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;file-organization module&lt;/p&gt;
+&lt;p&gt;将逻辑块地址 转换成 物理块地址&lt;/p&gt;
+&lt;p&gt;也包括空闲空间管理器&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;logical file system&lt;/p&gt;
+&lt;p&gt;管理metadata，元数据包括文件系统所有结构数据，而不包括实际数据&lt;/p&gt;
+&lt;p&gt;管理目录结构&lt;/p&gt;
+&lt;p&gt;通过FCB((inodes in UNIX))维护文件结构&lt;/p&gt;
+&lt;p&gt;负责保护和安全&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Layering useful for reducing complexity and redundancy, but adds overhead and can decrease performance.&lt;/p&gt;
+&lt;p&gt;绝大多数OS支持多个文件系统&lt;/p&gt;
+&lt;p&gt;UNIX使用UFS&lt;/p&gt;
+&lt;p&gt;标准的Linux文件系统是extende file system&lt;/p&gt;
+&lt;h2 id=&#34;文件系统实现&#34;&gt;文件系统实现&lt;/h2&gt;
+&lt;p&gt;每个卷的boot control block：从该卷引导OS需要的信息。如果没有OS，该块为空，通常为卷的第一块。UFS称之为boot block，NTFS称之为partition boot sector&lt;/p&gt;
+&lt;p&gt;每个卷的volume control blcok：包括卷(或分区)的详细信息，如分区的块数，块的大小&amp;hellip;UFS称之为superblock，NTFS中它存在master file table中&lt;/p&gt;
+&lt;p&gt;每个文件系统的目录结构用来组织文件。UFS中包含文件名和相关的inode号，NTFS中它存储在master file table中&lt;/p&gt;
+&lt;p&gt;每个文件的FCB。UFS中是inode，NTFS存在master file table中，每个文件占一行&lt;/p&gt;
+&lt;h3 id=&#34;in-memory-file-system-structures&#34;&gt;In-Memory File System Structures&lt;/h3&gt;
+&lt;p&gt;一个内存中的mount table(partition table)&lt;/p&gt;
+&lt;p&gt;一个内存中的director structure cache&lt;/p&gt;
+&lt;p&gt;system-wide open-file table: 包括每个打开文件的FCB副本&lt;/p&gt;
+&lt;p&gt;per-process open-file table: Contains a pointer to the appropriate entry in the system-wide open-file table.&lt;/p&gt;
+&lt;p&gt;buffers hold data blocks from secondary storage.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577507477227.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;对于访问打开文件表的索引：UNIX称之为file descriptor，Windows称之为file handle. 只要文件没有关闭，所有文件操作都是通过打开文件表来进行的&lt;/p&gt;
+&lt;h3 id=&#34;partitions-and-mounting-分区和安装&#34;&gt;partitions and mounting 分区和安装&lt;/h3&gt;
+&lt;p&gt;一个disk可以分为多个partition，一个partition可以横跨多个disk(作为RAID的一种形式比较合适)&lt;/p&gt;
+&lt;p&gt;分区可以是&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;raw 没有文件系统&lt;/li&gt;
+&lt;li&gt;cooked 含有文件系统&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;引导信息能保存在多个分区中，通常为一组有序块，并作为镜像文件读入内存&lt;/p&gt;
+&lt;p&gt;boot loader知道位于引导区的多个文件系统和多个操作系统，一旦装入，它可以引导位于磁盘上的一个操作系统。磁盘可以有多个分区，每个分区包含不同类型的文件系统和不同的操作系统。&lt;/p&gt;
+&lt;p&gt;root partiton包括操作系统内核或其他系统文件，在引导时装入内存。&lt;/p&gt;
+&lt;p&gt;内存中有Mount table – containing information about file systems that has been mounted.&lt;/p&gt;
+&lt;h3 id=&#34;virtual-file-system-vfs&#34;&gt;virtual file system (VFS)&lt;/h3&gt;
+&lt;p&gt;Virtual file system (VFS) on most OSes, including Unix, use object-oriented techniques to implement the file system. 用户甚至可以访问位于网络上的操作系统&lt;/p&gt;
+&lt;p&gt;VFS allows the same system call interface (the API) to be used for different types of file systems.&lt;/p&gt;
+&lt;p&gt;Implements vnodes which hold inodes or network file details.&lt;/p&gt;
+&lt;p&gt;The API is to the VFS interface, rather than any specific type of file system.&lt;/p&gt;
+&lt;p&gt;多个VFS接口的实现可以共存在同一台机器上&lt;/p&gt;
+&lt;p&gt;vnode表示位于整个网络范围内唯一的文件&lt;/p&gt;
+&lt;p&gt;Linux has four object types: inode, file, superblock, dentry&lt;/p&gt;
+&lt;p&gt;VFS defines a set of operations on the objects that must be implemented.&lt;/p&gt;
+&lt;h2 id=&#34;目录实现&#34;&gt;目录实现&lt;/h2&gt;
+&lt;h3 id=&#34;linear-list-线性列表&#34;&gt;linear list 线性列表&lt;/h3&gt;
+&lt;p&gt;linear search time费时&lt;/p&gt;
+&lt;p&gt;sorted list允许binary search&lt;/p&gt;
+&lt;p&gt;a balanced tree&lt;/p&gt;
+&lt;h3 id=&#34;hash-table&#34;&gt;hash table&lt;/h3&gt;
+&lt;p&gt;decreases directory search time&lt;/p&gt;
+&lt;p&gt;需要处理collision(两个文件名哈希到相同的位置)：chained-overflow&lt;/p&gt;
+&lt;p&gt;Difficulties: fixed size, hash function&lt;/p&gt;
+&lt;h2 id=&#34;分配方法&#34;&gt;分配方法&lt;/h2&gt;
+&lt;p&gt;how disk blocks are allocated for files&lt;/p&gt;
+&lt;h3 id=&#34;contiguous-allocation-连续分配&#34;&gt;Contiguous Allocation 连续分配&lt;/h3&gt;
+&lt;p&gt;每个文件在磁盘上占有一组连续的块&lt;/p&gt;
+&lt;p&gt;访问连续分配文件所需寻道数最少&lt;/p&gt;
+&lt;p&gt;用第一块的磁盘地址和连续块的数量来定义&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577509061560.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;sequential and direct access&lt;/p&gt;
+&lt;p&gt;Best performance in most cases&lt;/p&gt;
+&lt;p&gt;问题&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Difficult to find space for a new file: First-fit, best-fit&lt;/li&gt;
+&lt;li&gt;External fragmentation&lt;/li&gt;
+&lt;li&gt;compaction off-line (downtime) or on-line&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Extent-Based Systems, a modified contiguous allocation scheme 当空间不够时，另一块被称为扩展的连续空间会添加到原来的文件分配中&lt;/p&gt;
+&lt;h3 id=&#34;linked-allocation-链接分配&#34;&gt;Linked Allocation 链接分配&lt;/h3&gt;
+&lt;p&gt;每个文件是磁盘块的链表&lt;/p&gt;
+&lt;p&gt;目录包括文件第一块的指针和最后一块的指针。每一块都有下一块的指针。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577509383605.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;没有外部碎片&lt;/p&gt;
+&lt;p&gt;只要有空闲块，文件就可以增大&lt;/p&gt;
+&lt;p&gt;Disadvantages: 不能随机访问，指针需要空间，不可靠&lt;/p&gt;
+&lt;p&gt;对于指针需要空间，解决办法是将多个块组成簇(cluster)，代价是增加了内部碎片&lt;/p&gt;
+&lt;h4 id=&#34;fatfile-allocation-table文件分配表&#34;&gt;FAT(file-allocation table)文件分配表&lt;/h4&gt;
+&lt;p&gt;used by MS-DOS and OS/2&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577510977781.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;对FAT采用缓存&lt;/p&gt;
+&lt;p&gt;支持直接访问&lt;/p&gt;
+&lt;h3 id=&#34;indexed-allocation-索引分配&#34;&gt;Indexed Allocation 索引分配&lt;/h3&gt;
+&lt;p&gt;每个文件都有索引块，是一个磁盘块地址的数组&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577511076567.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;目录条目包括索引块的地址&lt;/p&gt;
+&lt;p&gt;支持直接访问&lt;/p&gt;
+&lt;p&gt;没有外部碎片&lt;/p&gt;
+&lt;p&gt;索引块应该多大&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;linked scheme&lt;/p&gt;
+&lt;p&gt;将多个索引块链接起来&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;two-level index&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;combined scheme&lt;/p&gt;
+&lt;p&gt;UNIX采用&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;性能&#34;&gt;性能&lt;/h3&gt;
+&lt;p&gt;contiguous great for sequential and random&lt;/p&gt;
+&lt;p&gt;linked good for sequential, not random&lt;/p&gt;
+&lt;p&gt;combine contiguous allocation with indexed allocation by using contiguous allocation for small files (up to three or four blocks), automatically switching to an indexed allocation if the file grows large.&lt;/p&gt;
+&lt;h3 id=&#34;free-space-management&#34;&gt;free-space management&lt;/h3&gt;
+&lt;p&gt;文件系统需要维护free-space list记录空闲磁盘空间(不一定是链表)&lt;/p&gt;
+&lt;h4 id=&#34;bit-map--bit-vector&#34;&gt;bit map / bit vector&lt;/h4&gt;
+&lt;p&gt;每块用一位表示。空闲-1，已分配-0&lt;/p&gt;
+&lt;p&gt;查找第一个和n个连续空闲块简单高效&lt;/p&gt;
+&lt;p&gt;Bit map requires extra space.&lt;/p&gt;
+&lt;p&gt;Easy to get contiguous files space.&lt;/p&gt;
+&lt;h4 id=&#34;linked-list-链表&#34;&gt;linked list 链表&lt;/h4&gt;
+&lt;p&gt;将所有空闲块用链表链接&lt;/p&gt;
+&lt;p&gt;将指向第一空闲块的指针缓存在内存&lt;/p&gt;
+&lt;p&gt;Cannot get contiguous space easily.&lt;/p&gt;
+&lt;h4 id=&#34;grouping&#34;&gt;grouping&lt;/h4&gt;
+&lt;p&gt;将n个空闲块的地址存在第一个空闲块里。(前n-1确实为空，最后一块包含另外n个空闲块的地址)&lt;/p&gt;
+&lt;p&gt;可以找到大量空闲块&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577512314875.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;h4 id=&#34;counting&#34;&gt;counting&lt;/h4&gt;
+&lt;p&gt;记录第一块的地址和紧跟第一块的连续的空闲块的数量n&lt;/p&gt;
+&lt;p&gt;can be stored in a balanced tree for efficiency&lt;/p&gt;
+- https://bygonexf.github.io/post/os11/ - Faye</description>
+        </item>
+    
+    
+    
+        <item>
+        <title>操作系统笔记 CH10 File-System Interface</title>
+        <link>https://bygonexf.github.io/post/os10/</link>
+        <pubDate>Fri, 28 Feb 2020 13:10:24 +0000</pubDate>
+        
+        <guid>https://bygonexf.github.io/post/os10/</guid>
+        <description>Fxye. https://bygonexf.github.io/post/os10/ -&lt;h2 id=&#34;file-concept&#34;&gt;file concept&lt;/h2&gt;
+&lt;p&gt;文件：记录在外存上的 相关信息的 具有名称的 集合，逻辑内存的最小分配单元&lt;/p&gt;
+&lt;p&gt;通常，文件表示程序和数据&lt;/p&gt;
+&lt;p&gt;free form or may be formatted rigidly&lt;/p&gt;
+&lt;h3 id=&#34;file-attributes&#34;&gt;file attributes&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;name: human-readable&lt;/li&gt;
+&lt;li&gt;identifier: a unique number, non-human-readable name&lt;/li&gt;
+&lt;li&gt;type&lt;/li&gt;
+&lt;li&gt;location&lt;/li&gt;
+&lt;li&gt;size&lt;/li&gt;
+&lt;li&gt;protection&lt;/li&gt;
+&lt;li&gt;time, date and user identification&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;文件的信息存在directory中，directory也存在外存上&lt;/p&gt;
+&lt;p&gt;A directory entry consists of the file&amp;rsquo;s name and its unique id. The id in turn locates the other file attributes.&lt;/p&gt;
+&lt;h3 id=&#34;file-operations&#34;&gt;file operations&lt;/h3&gt;
+&lt;p&gt;6个基本文件操作：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;create&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;write&lt;/p&gt;
+&lt;p&gt;write pointer&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;read&lt;/p&gt;
+&lt;p&gt;read pointer&lt;/p&gt;
+&lt;p&gt;A per-process current-file-position pointer&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;reposition&lt;/p&gt;
+&lt;p&gt;file seek, not need I/O&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;delete&lt;/p&gt;
+&lt;p&gt;release file space, erase directory entry&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;truncate&lt;/p&gt;
+&lt;p&gt;reset length to 0, release file space&lt;/p&gt;
+&lt;p&gt;只删除内容，保留属性&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;基本操作可以组合成其他操作&lt;/p&gt;
+&lt;p&gt;Most file operations involve searching the directory for the entry associated with the named file&lt;/p&gt;
+&lt;p&gt;首次使用文件时，使用系统调用open()&lt;/p&gt;
+&lt;p&gt;OS维护一个包含所有打开文件的信息表(open-file table)。当需要一个文件操作时，通过该表的一个索引指定文件，无需搜索。文件不再使用时，进程可关闭它，OS从open-file table删除这一条目。系统调用create和delete操作的是关闭文件，而不是打开文件。&lt;/p&gt;
+&lt;p&gt;系统调用open()返回一个指向open-file table中一个条目的指针。通过使用该指针，而不是真实文件名称，进行所有IO操作。also accept access mode information, such as create, read-only, read-write, append-only, etc.&lt;/p&gt;
+&lt;p&gt;close(Fi), move the content of entry Fi in open-file table to directory structure on disk.&lt;/p&gt;
+&lt;p&gt;多进程可能同时打开同一文件。OS采用两级内部表。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Process open-file table, a per-process table&lt;/p&gt;
+&lt;p&gt;该进程所使用的文件信息&lt;/p&gt;
+&lt;p&gt;单个进程表的每个条目相应地指向整个系统的打开文件表&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;System open-file table, a system-wide table&lt;/p&gt;
+&lt;p&gt;包含进程无关信息(如文件在磁盘上的位置，访问日期和文件大小)&lt;/p&gt;
+&lt;p&gt;一旦一个进程打开文件，System open-file table会增加相应条目，当另一个进程执行调用open()，在其Process open-file table增加一个条目，并指向System open-file table相应条目&lt;/p&gt;
+&lt;p&gt;每个文件有一个open count，记录多少进程打开了该文件。当open count=0，该文件条目可删除。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;每个打开文件有如下信息：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;file pointer&lt;/p&gt;
+&lt;p&gt;pointer to last read/write location&lt;/p&gt;
+&lt;p&gt;对每个进程唯一&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;file-open count&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;disk location of file&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;access rights&lt;/p&gt;
+&lt;p&gt;每个进程用一个访问模式打开文件&lt;/p&gt;
+&lt;p&gt;保存在单个进程打开文件表中&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;文件锁file-locks&#34;&gt;文件锁(file locks)&lt;/h4&gt;
+&lt;p&gt;shared lock: 多个进程并发获取&lt;/p&gt;
+&lt;p&gt;exclusive lock: 只有一个进程可以获取&lt;/p&gt;
+&lt;p&gt;加锁机制：&lt;/p&gt;
+&lt;p&gt;mandatory强制：一个进程获得锁，阻止其他进程访问已加锁的文件。access is denied depending on locks held and requested. &amp;ndash; Windows OS.&lt;/p&gt;
+&lt;p&gt;advisory建议：processes can find status of locks and decide what to do. &amp;ndash; Unix OS.&lt;/p&gt;
+&lt;h3 id=&#34;file-types&#34;&gt;file types&lt;/h3&gt;
+&lt;p&gt;实现文件类型的常用技术：在文件名称内包含类型。名称可分为两部分：name , extension&lt;/p&gt;
+&lt;p&gt;Some OS, each file has a type, and a creator attribute containing the name of the program that created it.&lt;/p&gt;
+&lt;p&gt;UNIX, a magic number stored at the beginning of some files to indicate roughly the type of the file.&lt;/p&gt;
+&lt;h2 id=&#34;access-methods&#34;&gt;access methods&lt;/h2&gt;
+&lt;p&gt;Criteria for File Organization: Rapid access, Ease of update, Economy of storage, Simple maintenance, Reliability&lt;/p&gt;
+&lt;h3 id=&#34;sequential-access-顺序访问&#34;&gt;sequential access 顺序访问&lt;/h3&gt;
+&lt;p&gt;基于文件的磁带模型。不仅适用于顺序访问设备，也适用于随机访问设备&lt;/p&gt;
+&lt;h3 id=&#34;direct-access-直接访问&#34;&gt;direct access 直接访问&lt;/h3&gt;
+&lt;p&gt;文件由固定长度的逻辑记录组成。基于文件的磁盘模型。可立即访问大量信息。数据库常采用这种类型的文件。&lt;/p&gt;
+&lt;p&gt;提供的是相对块号。&lt;/p&gt;
+&lt;p&gt;对直接访问文件，可容易地模拟顺序访问。反过来很低效。&lt;/p&gt;
+&lt;h3 id=&#34;其他访问方式&#34;&gt;其他访问方式&lt;/h3&gt;
+&lt;p&gt;通常涉及创建索引&lt;/p&gt;
+&lt;h2 id=&#34;directory-structure&#34;&gt;directory structure&lt;/h2&gt;
+&lt;p&gt;有时需要在一个磁盘上装多种文件系统&lt;/p&gt;
+&lt;p&gt;Disk can be subdivided into partitions.&lt;/p&gt;
+&lt;p&gt;Disk or partition can be used：&lt;/p&gt;
+&lt;p&gt;​	raw, without a file system, e.g. swap space&lt;/p&gt;
+&lt;p&gt;​	formatted with a file system&lt;/p&gt;
+&lt;p&gt;Volume: Entity containing file system&lt;/p&gt;
+&lt;p&gt;Each volume containing file system also tracks that file system&amp;rsquo;s info in device directory or volume table of contents.&lt;/p&gt;
+&lt;p&gt;Disks or partitions can be RAID protected against failure.&lt;/p&gt;
+&lt;p&gt;directory可看作符号表，将 文件名 转换成 目录条目&lt;/p&gt;
+&lt;p&gt;Both the directory structure and the files reside on disk.&lt;/p&gt;
+&lt;h3 id=&#34;single-level-directory&#34;&gt;Single-Level Directory&lt;/h3&gt;
+&lt;p&gt;所有文件包含在同一目录中&lt;/p&gt;
+&lt;p&gt;必须有唯一名称&lt;/p&gt;
+&lt;p&gt;naming problem , grouping problem&lt;/p&gt;
+&lt;h3 id=&#34;two-level-directory&#34;&gt;Two-Level Directory&lt;/h3&gt;
+&lt;p&gt;为每个用户创建独立目录&lt;/p&gt;
+&lt;p&gt;A master file directory(主文件目录MFD) and one user file directory(用户文件目录UFD) for each user.&lt;/p&gt;
+&lt;p&gt;UFD内文件名唯一即可&lt;/p&gt;
+&lt;p&gt;No grouping capability&lt;/p&gt;
+&lt;p&gt;File sharing怎么解决&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Path name. defined by a user name and a file name.&lt;/li&gt;
+&lt;li&gt;Special user directory, containing system files.&lt;/li&gt;
+&lt;li&gt;Search path, the sequence of directories searched.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;tree-structured-directories&#34;&gt;Tree-Structured Directories&lt;/h3&gt;
+&lt;p&gt;树有根目录，系统内的每个文件都有唯一路径名&lt;/p&gt;
+&lt;p&gt;One bit in each entry defines the entry as a file(0) or as a subdirectory(1).&lt;/p&gt;
+&lt;p&gt;Grouping Capability&lt;/p&gt;
+&lt;p&gt;每个进程有 Current directory (working directory) 当前目录 In accounting file, a pointer/the name of the user&amp;rsquo;s initial directory. Copied to a local variable for this user.&lt;/p&gt;
+&lt;p&gt;Absolute path name: 从根开始&lt;/p&gt;
+&lt;p&gt;relative path name: 从当前目录开始&lt;/p&gt;
+&lt;p&gt;创建子目录/新文件在当前目录下完成&lt;/p&gt;
+&lt;p&gt;Deleting a subdirectory&lt;/p&gt;
+&lt;p&gt;​	deleting a empty directory. &amp;ndash; MS-DOS 目录不为空不能删除&lt;/p&gt;
+&lt;p&gt;​	deleting all files and subdirectories that it contains.&amp;ndash; UNIX 所有该目录的文件和子目录可删除&lt;/p&gt;
+&lt;h3 id=&#34;acyclic-graph-directories-无环图&#34;&gt;Acyclic-Graph Directories 无环图&lt;/h3&gt;
+&lt;p&gt;树状结构禁止共享文件和目录&lt;/p&gt;
+&lt;p&gt;注意这里是共享文件而不是文件复制，共享文件任何改变为其他用户可见&lt;/p&gt;
+&lt;p&gt;Ways implementing shared files and subdirectories:&lt;/p&gt;
+&lt;p&gt;​	Create a new directory entry, called a link. &amp;ndash; UNIX  link, a pointer to another file or subdirectory. Resolve the link – follow pointer to locate the file.&lt;/p&gt;
+&lt;p&gt;​	duplicate all information about shared files in all sharing directories. 问题：维护一致性&lt;/p&gt;
+&lt;p&gt;当用户删除文件时就删除，会留下dangling pointer&lt;/p&gt;
+&lt;p&gt;​	对于link: Deletion of a link need not affectt he original file. Deletion of the file entry, leaving the links dangling.&lt;/p&gt;
+&lt;p&gt;​	对于duplication: File-reference list, Backpointers. 为每个文件保留一个引用列表或引用计数Backpointers, so we can delete all pointers.&lt;/p&gt;
+&lt;h3 id=&#34;general-graph-directory&#34;&gt;General Graph Directory&lt;/h3&gt;
+&lt;p&gt;允许环存在&lt;/p&gt;
+&lt;p&gt;为避免无限循环：强制限制在搜索时所访问目录的次数&lt;/p&gt;
+&lt;p&gt;何时可删除？因为有环，就算不存在引用，其引用计数也可能不为0，可能存在自我引用。解决办法：Garbage collection: The first pass, traversing the entire file system, marking everything that can be accessed.  The second pass, collects everything that is not marked onto a list of free space.&lt;/p&gt;
+&lt;p&gt;How to avoid cycles? Allow only links to file not subdirectories. Every time a new link is added use a cycle detection algorithm. A simpler algorithm, bypass links during directory traversal.&lt;/p&gt;
+&lt;h2 id=&#34;file-system-mounting-文件系统安装&#34;&gt;file system mounting 文件系统安装&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;OS需要知道 设备名称 和 安装点(mount point)&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;OS验证设备是否包含一个有效文件系统(通过device driver读入设备目录，验证目录是否具有期望格式)&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;OS在其目录结构记录下：一个文件系统已安装在给定安装点上&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Systems impose semantics to clarify functionality.&lt;/p&gt;
+&lt;h2 id=&#34;file-sharing&#34;&gt;file sharing&lt;/h2&gt;
+&lt;p&gt;多用户需要共享文件&lt;/p&gt;
+&lt;p&gt;Sharing may be done through a protection scheme.&lt;/p&gt;
+&lt;p&gt;More file and directory attributes are needed: File / directory owner; File / directory user, access rights; File / directory user groups, access rights&lt;/p&gt;
+&lt;p&gt;User IDs identify users, allowing permissions and protections to be per-user. Group IDs allow users to be in groups, permitting group access rights.&lt;/p&gt;
+&lt;h3 id=&#34;remote-file-system-远程文件系统&#34;&gt;remote file system 远程文件系统&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;通过程序(如ftp)在机器之间进行文件的人工传输&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;distributed file systems (DFS)&lt;/p&gt;
+&lt;p&gt;远程目录可从本机上直接访问&lt;/p&gt;
+&lt;p&gt;much tighter integration&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;via the World Wide Web(WWW)&lt;/p&gt;
+&lt;p&gt;A browser is needed. uses anonymous file exchange.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4 id=&#34;client-server-model&#34;&gt;Client-server model&lt;/h4&gt;
+&lt;p&gt;allows clients to mount remote file systems from servers.&lt;/p&gt;
+&lt;p&gt;Client and user-on-client identification is insecure or complicated.&lt;/p&gt;
+&lt;p&gt;​	client can be specified by a network name or other identifier, such as an IP address, Can be spoofed or imitated.&lt;/p&gt;
+&lt;p&gt;​	Secure authentication via encrypted keys. Ensuring compatibility of the client and server.&lt;/p&gt;
+&lt;p&gt;NFS: standard UNIX client-server file sharing protocol&lt;/p&gt;
+&lt;p&gt;CIFS(Common Internet File System): standard Windows protocol, uses active directory&lt;/p&gt;
+&lt;p&gt;Standard operating system file calls are translated into remote calls远程调用&lt;/p&gt;
+&lt;h4 id=&#34;distributed-information-systems&#34;&gt;Distributed Information Systems&lt;/h4&gt;
+&lt;p&gt;Providing unified access to the information needed for remote computing.&lt;/p&gt;
+&lt;p&gt;DNS (domain name system) provides host-name-to-network-address translations for entire internet.&lt;/p&gt;
+&lt;p&gt;NIS (network information service), yellow pages黄页, centralizes storage of user names, host names, printer information, and the like.&lt;/p&gt;
+&lt;p&gt;LDAP (lightweight directory-access protocol), used by industry as a secure distributed naming mechanism. secure single sign-on&lt;/p&gt;
+&lt;h4 id=&#34;failure-modes-故障模式&#34;&gt;Failure Modes 故障模式&lt;/h4&gt;
+&lt;p&gt;Remote file systems add new failure modes, due to network failure, server failure.&lt;/p&gt;
+&lt;p&gt;Recovery from failure can involve state information about status状态信息 of each remote request.&lt;/p&gt;
+&lt;p&gt;Stateless protocols such as NFS V3 include all information in each request, allowing easy recovery but less security.&lt;/p&gt;
+&lt;p&gt;In NFS V4, it is made stateful&lt;/p&gt;
+&lt;h3 id=&#34;consistency-semantics-一致性语义&#34;&gt;Consistency Semantics 一致性语义&lt;/h3&gt;
+&lt;p&gt;描述多用户同时访问共享文件时的语义。规定了一个用户所修改的数据何时对另一用户可见。&lt;/p&gt;
+&lt;p&gt;由于延迟，不适合类似进程同步那些复杂算法&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;AFS (Andrew File System) implemented complex remote file sharing semantics&lt;/p&gt;
+&lt;p&gt;server记录client的动作&lt;/p&gt;
+&lt;p&gt;When a client changes a file, the server notifies other clients with a call back promise technique&lt;/p&gt;
+&lt;p&gt;一个用户对打开文件的写不能立即被打开同一文件的其他用户看见。一旦文件关闭，其修改只能被以后打开的会话所见。&lt;/p&gt;
+&lt;p&gt;多个用户允许对自己的映像进行并发(没有延迟)的读写操作&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;UFS (Unix file system) implements&lt;/p&gt;
+&lt;p&gt;一个文件与单个物理映射相关联，该映射作为互斥资源访问。修改立即可见。竞争导致用户进程延迟。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Immutable shared files, declared by its creator. Read-only. 不可修改&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;protection&#34;&gt;protection&lt;/h2&gt;
+&lt;p&gt;高层功能可以用系统程序调用低层系统调用实现。保护可以只在低层提供。&lt;/p&gt;
+&lt;p&gt;Mode of access: read, write, execute&lt;/p&gt;
+&lt;p&gt;为每个文件和目录增加一个访问控制列表ACL(Access-control list)，给定每个用户名及其允许访问的类型&lt;/p&gt;
+&lt;p&gt;三种用户类型:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;owner&lt;/li&gt;
+&lt;li&gt;group&lt;/li&gt;
+&lt;li&gt;universe(public): all other users in the system&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;每个域三个位:RWX. 需要9个位&lt;/p&gt;
+- https://bygonexf.github.io/post/os10/ - Faye</description>
         </item>
     
     

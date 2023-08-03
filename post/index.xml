@@ -7,29 +7,7 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Faye</copyright>
-    <lastBuildDate>Sat, 25 Feb 2023 23:25:36 +0800</lastBuildDate><atom:link href="https://bygonexf.github.io/post/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>2018年9月，我想记下的旧家</title>
-      <link>https://bygonexf.github.io/post/nolstalgia2018/</link>
-      <pubDate>Sat, 25 Feb 2023 23:25:36 +0800</pubDate>
-      
-      <guid>https://bygonexf.github.io/post/nolstalgia2018/</guid>
-      <description>备忘录里2018年9月3日记下的段落。
-被告知寒假回来后可能要搬到新家、甚是惶恐、遂用相机和纸笔大刀阔斧地记下周遭全貌和牵扯进的重要回忆。
-以下陈列一些过程中还算特别的细枝末节。
-相较而言奇怪地多的物件，一是电脑，二是风铃。（大学以前，好像送人生日礼物，不是书和文具，就是风铃）。
-床头柜至今仍贴着“明石浦朝雾蒙蒙，岛隐思行船”的便签，貌似是小学在图书馆借了一本奇怪的书说睡前默念三遍第二天可以早起的咒语。
-从前在家的时候，每年圣诞节都会买装饰物挂在卧室的灯上，春节也会挂，然而涉及到生肖一年到头便会换，圣诞买的却一直留下来了，以至于看自己卧室的灯看出圣诞树的感觉（彩条雪球星星雪花风铃&amp;hellip;全有）。
-书房的印象是墙上的中国和世界地图（伦敦处画了个红圈），和我打印的贝克街照片（那时我的梦想还是当个侦探，现在&amp;hellip;其实想想本质对杂学家的兴趣也没变）。
-屯了一柜子的东西，除了正经书（这大概是好几柜子&amp;hellip;），都有被我妈无情丢弃的趋势，高中去南京读书回来发现自己一柜子精挑细选从小学留下来的少年文艺儿童文学全被当废纸卖了非常心痛，大学回来发现又一柜子的推理杂志和书也无踪无影了。多少有些可惜。
-很喜欢火车经过的声音，睡不着时那种宫泽贤治的银河铁道之夜似的美感非常治愈。
-周遭极适合探险，小学和邻居干过的熊孩子事包括但不仅限：烧草坪和莫名其妙从楼上砸下来的一袋豆腐、利用凸透镜聚光生火灼树叶做出艺术品、暴雪那年越过铁门跑到铁路上尽享无人踩踏的大片雪地、卧（废弃的）轨。
-高中时模考写过一次巷子，范文印出来被隔壁班镇江老乡看见说想去我家参观。
-什么扑簌扑簌的泡桐花、神秘的塔楼、满面高墙的爬山虎、一路毛茸茸的狗尾巴草和蒲公英、远山和青松、街巷文化里的烟火气、都是真的。
-现实是那篇文章描述之上的美好程度。
-谨以彼时作文、未公开的诗作、拍下并用力记住的照片，不成体统地感谢给予我完美童年的这个家。</description>
-    </item>
-    
+    <lastBuildDate>Sun, 15 Jan 2023 15:04:21 +0800</lastBuildDate><atom:link href="https://bygonexf.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>我所喜欢的河濑直美</title>
       <link>https://bygonexf.github.io/post/kawase-naomi/</link>
@@ -361,64 +339,6 @@ git config --global http.proxy &amp;#34;socks5://&amp;lt;windows_ip&amp;gt;:&amp
       <guid>https://bygonexf.github.io/post/pat-1033/</guid>
       <description>很有意思的一道贪心
 #include &amp;lt;iostream&amp;gt; #include &amp;lt;string.h&amp;gt; #include &amp;lt;algorithm&amp;gt; using namespace std; double cmax, davg, dall; int n; struct Node { double price; double dis; }sta[505]; bool cmp1(Node a, Node b) { return a.dis &amp;lt; b.dis; } int main() { scanf(&amp;#34;%lf%lf%lf%d&amp;#34;, &amp;amp;cmax, &amp;amp;dall, &amp;amp;davg, &amp;amp;n); for (int i = 0; i &amp;lt; n; ++i) { scanf(&amp;#34;%lf%lf&amp;#34;, &amp;amp;sta[i].price, &amp;amp;sta[i].dis); } sort(sta, sta + n, cmp1); bool flag = false; double far = 0; int ns = 0; int i1 = 0; double min1 = 9999999; double cost = 0; double cnow = 0; double bestprice; while (sta[i1].</description>
-    </item>
-    
-    <item>
-      <title>转录，故乡，镇江</title>
-      <link>https://bygonexf.github.io/post/zhenjiang/</link>
-      <pubDate>Sat, 18 Apr 2020 15:04:21 +0800</pubDate>
-      
-      <guid>https://bygonexf.github.io/post/zhenjiang/</guid>
-      <description>也许是初高中还在用QQ空间的时候，转载的文章，像一首小小的诗。
-我迷恋一切记录的形式，想精进一切记录的手段，写作和摄影都是。童年，故乡，记忆里的千禧年代。想自己写下一些城市志，我有太多想永远记住的物事。
-新华书店的对面是新华影剧院
-里面的影厅很久很久
-座位上暗红色的绒布下黄色的海绵总是露出头
-快要建好的苏宁广场拐角那边原本有一家很好吃的铁板鱿鱼
-还有果汁和糖衣很厚的冰糖葫芦
-大喇叭一直喊到夜色阑珊
-国际饭店的顶上的尖尖不管在哪里都可以看见
-零散的记忆里妈妈说那是镇江的中心
-伯先公园的猴子好像养了很多很多年
-久到也许是猴子们都安享晚年去了所以再也没见过它们
-老焦山都码头很安静
-大门到码头的路上郁郁葱葱的绿色
-夹了桂花的香气沙沙摇了很多年
-少年宫对面江滨公园还有露天摆放的沙画摊子
-三块钱一小张五块钱一大张
-从美少女战士到没嘴巴的 hellokitty
-104 还在那里有站台
-火车站好像很远很远很远
-门口有拎着大包小包的路人
-过年的时候熙熙攘攘
-妈妈总是担心我被巨大的蛇皮袋挡住去路
-商业城的东西好像很贵很贵
-记忆中一直是堵住的实小门口
-喇叭声和铃铛声还有争执声
-只有4路有双层的车子
-坐在上面摇摇晃晃 却每次都很感觉新奇
-只有长江路上能看到对面一条线一样的扬州
-晚上有点点灯火闪烁
-江滨医院还只有很小的一块地盘
-一楼的走廊有很多花草在路边
-清晨和傍晚路口总是有穿着白色围裙的爷爷奶奶卖自己做的包子烧饼
-茶叶蛋蹲在不锈钢的锅里
-壳都是敲碎了的
-黑褐色的汤汁咕嘟咕嘟翻着泡泡
-路上没有这么多汽车
-很多爸爸还骑着有横杠的老式自行车
-孩子小小的坐在车后或是横杠上
-妈妈会很细心地缝厚厚的坐垫绑在车后
-颠的时候就不会觉得屁股裂成几片了
-老式诺基亚说话声音要很大对面才能听清
-短信还有字数限制
-好像还是我闭着眼睛就能走完的镇江
-但是好像走着走着
-就把我的镇江丢进回忆里
-一个漩涡泛起一个小小的气泡
-连痕迹都无影无踪
-却是真真切切存在的
-我的小城</description>
     </item>
     
     <item>
