@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>有情笔记 on 个个里</title>
-    <link>https://imfaye.me/categories/%E6%9C%89%E6%83%85%E7%AC%94%E8%AE%B0/</link>
-    <description>Recent content in 有情笔记 on 个个里</description>
+    <title>有情笔记 on Fxye.</title>
+    <link>https://bygonexf.github.io/categories/%E6%9C%89%E6%83%85%E7%AC%94%E8%AE%B0/</link>
+    <description>Recent content in 有情笔记 on Fxye.</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Faye</copyright>
-    <lastBuildDate>Sun, 10 Jul 2022 23:43:59 +0000</lastBuildDate><atom:link href="https://imfaye.me/categories/%E6%9C%89%E6%83%85%E7%AC%94%E8%AE%B0/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 10 Jul 2022 23:43:59 +0000</lastBuildDate><atom:link href="https://bygonexf.github.io/categories/%E6%9C%89%E6%83%85%E7%AC%94%E8%AE%B0/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>耶，VAE</title>
-      <link>https://imfaye.me/post/vae/</link>
+      <link>https://bygonexf.github.io/post/vae/</link>
       <pubDate>Sun, 10 Jul 2022 23:43:59 +0000</pubDate>
       
-      <guid>https://imfaye.me/post/vae/</guid>
+      <guid>https://bygonexf.github.io/post/vae/</guid>
       <description>引子 生成模型 能从可学习的概率分布中采样得到样本的模型。
 在一些生成模型中，样本通过将随机的隐层变量送入网络生成得到。
 自编码器 AE 自编码器通过学习从输入到隐层和从隐层到输出的映射来重建信号/图像。
@@ -32,10 +32,10 @@ $\mathop{min}\limits_{\theta, \phi} \sum\limits_{i=1}^n||D_\theta(E_\phi(X_i))-X
     
     <item>
       <title>端到端图像/视频压缩里的熵模型</title>
-      <link>https://imfaye.me/post/e2e-entropy-model/</link>
+      <link>https://bygonexf.github.io/post/e2e-entropy-model/</link>
       <pubDate>Wed, 20 Apr 2022 17:04:37 +0800</pubDate>
       
-      <guid>https://imfaye.me/post/e2e-entropy-model/</guid>
+      <guid>https://bygonexf.github.io/post/e2e-entropy-model/</guid>
       <description>概率分布与熵编码 在端到端图像/视频压缩模型中，我们需要去尽可能精准地模拟待编码元素值的概率分布。一方面是为了更精确地进行码率估计，另一方面也是因为更精准的概率分布建模能使得熵编码环节更好地消除统计冗余节省码字。
 建模出概率分布后，在实际熵编码中，就可以通过概率分布生成熵编码器所需要的概率表。
 多说一句，在传统编解码里，通常熵编码会采用自适应模型，即随着编码字符的输入，不断更新概率分布（自适应模型相比静态模型效率更高，符合局部性原理，适应符号概率忽大忽小的波动，如果能合理地利用上下文信息压缩效率可以远超静态模型）。然而在端到端压缩模型里，通常直接通过网络生成独立的概率分布的参数，不会随着编码过程更新概率表。
@@ -56,10 +56,10 @@ def forward( self, inputs: Tensor, scales: Tensor, means: Optional[Tensor] = Non
     
     <item>
       <title>可变形卷积与光流</title>
-      <link>https://imfaye.me/post/dcn-and-optical-flow/</link>
+      <link>https://bygonexf.github.io/post/dcn-and-optical-flow/</link>
       <pubDate>Sun, 20 Feb 2022 17:04:37 +0800</pubDate>
       
-      <guid>https://imfaye.me/post/dcn-and-optical-flow/</guid>
+      <guid>https://bygonexf.github.io/post/dcn-and-optical-flow/</guid>
       <description>可变形卷积代码篇 一个调用 from mmcv.ops import ModulatedDeformConv2d 的例子：
 def forward(self, input): x = self.offset_mask_conv(input) o1, o2, mask = torch.chunk(x, 3, dim=1) offset = torch.cat((o1, o2), dim=1) mask = torch.sigmoid(mask) output = self.dcnv2(input, offset, mask) return output 总而言之 offset 的 size 就是 2*kernel[0]*kernel[1] ，想一想，原来我们求偏移的时候，会把 B*H*W*C 的图像送入普通卷积得到 B*H*W*2C 得到偏移，也就是每个通道每个位置点都有 x 和 y 两个方向的偏移量。
 对 DCN 来说，每个通道都做一样的处理，也就是只需要对每个位置点存卷积核每个点的 x 和 y 的偏移，所以就是 B*H*W*(2*kernel_size) 。

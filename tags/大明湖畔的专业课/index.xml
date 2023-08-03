@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>大明湖畔的专业课 on 个个里</title>
-    <link>https://imfaye.me/tags/%E5%A4%A7%E6%98%8E%E6%B9%96%E7%95%94%E7%9A%84%E4%B8%93%E4%B8%9A%E8%AF%BE/</link>
-    <description>Recent content in 大明湖畔的专业课 on 个个里</description>
+    <title>大明湖畔的专业课 on Fxye.</title>
+    <link>https://bygonexf.github.io/tags/%E5%A4%A7%E6%98%8E%E6%B9%96%E7%95%94%E7%9A%84%E4%B8%93%E4%B8%9A%E8%AF%BE/</link>
+    <description>Recent content in 大明湖畔的专业课 on Fxye.</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Faye</copyright>
-    <lastBuildDate>Fri, 28 Feb 2020 13:13:24 +0000</lastBuildDate><atom:link href="https://imfaye.me/tags/%E5%A4%A7%E6%98%8E%E6%B9%96%E7%95%94%E7%9A%84%E4%B8%93%E4%B8%9A%E8%AF%BE/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 28 Feb 2020 13:13:24 +0000</lastBuildDate><atom:link href="https://bygonexf.github.io/tags/%E5%A4%A7%E6%98%8E%E6%B9%96%E7%95%94%E7%9A%84%E4%B8%93%E4%B8%9A%E8%AF%BE/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>操作系统笔记 CH13 I/O Systems</title>
-      <link>https://imfaye.me/post/os13/</link>
+      <link>https://bygonexf.github.io/post/os13/</link>
       <pubDate>Fri, 28 Feb 2020 13:13:24 +0000</pubDate>
       
-      <guid>https://imfaye.me/post/os13/</guid>
+      <guid>https://bygonexf.github.io/post/os13/</guid>
       <description>the kernel is structured to use device-driver modules.
 device driver为IO子系统提供了统一设备访问接口
 两个趋势：接口日益标准化，设备多样性
@@ -32,10 +32,10 @@ status control data-in data-out Techniques for Performing I/O</description>
     
     <item>
       <title>操作系统笔记 CH12 Mass-Storage Structure</title>
-      <link>https://imfaye.me/post/os12/</link>
+      <link>https://bygonexf.github.io/post/os12/</link>
       <pubDate>Fri, 28 Feb 2020 13:12:24 +0000</pubDate>
       
-      <guid>https://imfaye.me/post/os12/</guid>
+      <guid>https://bygonexf.github.io/post/os12/</guid>
       <description>磁盘 扇区0是最外面柱面的第一个磁道的第一个扇区。映射先按磁道内扇区顺序，再按柱面内磁道顺序，最后按从外到内的柱面顺序来排序的。
 Head crash results from disk head making contact with the disk surface. Cannot be repaired, the entire disk must be replaced.
 Disks can be removable
@@ -46,10 +46,10 @@ Disk controllers have a built-in cache. Data transfer at the disk drive happens 
     
     <item>
       <title>操作系统笔记 CH11 File-System Implementation</title>
-      <link>https://imfaye.me/post/os11/</link>
+      <link>https://bygonexf.github.io/post/os11/</link>
       <pubDate>Fri, 28 Feb 2020 13:11:24 +0000</pubDate>
       
-      <guid>https://imfaye.me/post/os11/</guid>
+      <guid>https://bygonexf.github.io/post/os11/</guid>
       <description>文件系统结构 磁盘特点：可以原地重写，可以直接访问任意一块。
 内存和磁盘之间的IO以块为单位。每块为一个或多个扇区。扇区通常为512B
 File system resides on secondary storage (disks) OS通过文件系统存储、定位、提取数据
@@ -73,10 +73,10 @@ Layering useful for reducing complexity and redundancy, but adds overhead and ca
     
     <item>
       <title>操作系统笔记 CH10 File-System Interface</title>
-      <link>https://imfaye.me/post/os10/</link>
+      <link>https://bygonexf.github.io/post/os10/</link>
       <pubDate>Fri, 28 Feb 2020 13:10:24 +0000</pubDate>
       
-      <guid>https://imfaye.me/post/os10/</guid>
+      <guid>https://bygonexf.github.io/post/os10/</guid>
       <description>file concept 文件：记录在外存上的 相关信息的 具有名称的 集合，逻辑内存的最小分配单元
 通常，文件表示程序和数据
 free form or may be formatted rigidly
@@ -94,10 +94,10 @@ reposition</description>
     
     <item>
       <title>操作系统笔记 CH9 Virtual Memory</title>
-      <link>https://imfaye.me/post/os9/</link>
+      <link>https://bygonexf.github.io/post/os9/</link>
       <pubDate>Fri, 28 Feb 2020 13:09:24 +0000</pubDate>
       
-      <guid>https://imfaye.me/post/os9/</guid>
+      <guid>https://bygonexf.github.io/post/os9/</guid>
       <description>background CH8的内存管理方案需要将整个进程放入内存，动态载入只能减轻这一限制
 Code needs to be in memory to execute, but entire program rarely used.
 execute partially-loaded program
@@ -111,10 +111,10 @@ demand paging demand segmentation demand paging 按需调页 Lazy swapper: never
     
     <item>
       <title>操作系统笔记 CH8 Main Memory</title>
-      <link>https://imfaye.me/post/os8/</link>
+      <link>https://bygonexf.github.io/post/os8/</link>
       <pubDate>Fri, 28 Feb 2020 13:08:24 +0000</pubDate>
       
-      <guid>https://imfaye.me/post/os8/</guid>
+      <guid>https://bygonexf.github.io/post/os8/</guid>
       <description>background 基本硬件 CPU可直接访问的存储器只有 内存 和 处理器内的寄存器
 ​	CPU内置寄存器可在一个CPU时钟周期内完成访问，对于寄存器中的内容，CPU可以在一个周期内解析并执行多个指令
 ​	对于内存，访存可能需要多个时钟周期。没有数据时，要暂停(stall)
@@ -144,10 +144,10 @@ logical vs.</description>
     
     <item>
       <title>操作系统笔记 CH7 Deadlocks</title>
-      <link>https://imfaye.me/post/os7/</link>
+      <link>https://bygonexf.github.io/post/os7/</link>
       <pubDate>Fri, 28 Feb 2020 13:07:24 +0000</pubDate>
       
-      <guid>https://imfaye.me/post/os7/</guid>
+      <guid>https://bygonexf.github.io/post/os7/</guid>
       <description>deadlock characteristics necessary conditions 4个条件同时满足，引起死锁：
 mutual exclusion
 至少有一个资源处于非共享模式，一次只能有一个进程使用
@@ -185,10 +185,10 @@ a system is in a safe state only if there exists a safe sequence</description>
     
     <item>
       <title>操作系统笔记 CH6 Process Synchronization</title>
-      <link>https://imfaye.me/post/os6/</link>
+      <link>https://bygonexf.github.io/post/os6/</link>
       <pubDate>Fri, 28 Feb 2020 13:06:24 +0000</pubDate>
       
-      <guid>https://imfaye.me/post/os6/</guid>
+      <guid>https://bygonexf.github.io/post/os6/</guid>
       <description>race condition: 多个进程并发访问和操作同一数据，结果与访问顺序有关
 critical section critical section: 进程可能改变共同变量，更新表，写文件的代码段
 entry section: 实现请求进入其临界区的代码段
@@ -206,10 +206,10 @@ TestAndSet()
     
     <item>
       <title>操作系统笔记 CH5 CPU Scheduling</title>
-      <link>https://imfaye.me/post/os5/</link>
+      <link>https://bygonexf.github.io/post/os5/</link>
       <pubDate>Fri, 28 Feb 2020 13:05:24 +0000</pubDate>
       
-      <guid>https://imfaye.me/post/os5/</guid>
+      <guid>https://bygonexf.github.io/post/os5/</guid>
       <description>dispatcher: gives control of the CPU to the process selected by the short-term scheduler;
 dispatch latency
 scheduling criteria CPU utilization,
@@ -231,10 +231,10 @@ shortest next CPU burst</description>
     
     <item>
       <title>操作系统笔记 CH4 Threads</title>
-      <link>https://imfaye.me/post/os4/</link>
+      <link>https://bygonexf.github.io/post/os4/</link>
       <pubDate>Fri, 28 Feb 2020 13:04:24 +0000</pubDate>
       
-      <guid>https://imfaye.me/post/os4/</guid>
+      <guid>https://bygonexf.github.io/post/os4/</guid>
       <description>Dispatching is referred to as a thread. Resource of ownership is referred to as a process or task.
 对进程的swapping和termination都牵扯它所有线程
 线程是CPU使用的基本单位。由thread ID, program counter, register set, stack组成
@@ -252,10 +252,10 @@ When a thread performs a blocking system call, the kernel can schedule another t
     
     <item>
       <title>操作系统笔记 CH3 Process</title>
-      <link>https://imfaye.me/post/os3/</link>
+      <link>https://bygonexf.github.io/post/os3/</link>
       <pubDate>Fri, 28 Feb 2020 13:03:24 +0000</pubDate>
       
-      <guid>https://imfaye.me/post/os3/</guid>
+      <guid>https://bygonexf.github.io/post/os3/</guid>
       <description>process concepts batch system: job; time-sharing system: program/task
 Program is passive entity stored on disk (executable file), process is active.
 a process includes
@@ -265,10 +265,10 @@ new: being created running: instructions are being executed waiting/limiting: wa
     
     <item>
       <title>操作系统笔记 CH2 OS structures</title>
-      <link>https://imfaye.me/post/os2/</link>
+      <link>https://bygonexf.github.io/post/os2/</link>
       <pubDate>Fri, 28 Feb 2020 13:01:24 +0000</pubDate>
       
-      <guid>https://imfaye.me/post/os2/</guid>
+      <guid>https://bygonexf.github.io/post/os2/</guid>
       <description>UI CLI command-line / command interpreter
 implemented in kernel (MS-DOS)
 by systems program (Windows / UNIX)
@@ -284,10 +284,10 @@ Mostly accessed by programs via a high-level Application Program Interface (API)
     
     <item>
       <title>操作系统笔记 CH1 Intro</title>
-      <link>https://imfaye.me/post/os1/</link>
+      <link>https://bygonexf.github.io/post/os1/</link>
       <pubDate>Fri, 28 Feb 2020 13:00:24 +0000</pubDate>
       
-      <guid>https://imfaye.me/post/os1/</guid>
+      <guid>https://bygonexf.github.io/post/os1/</guid>
       <description>What OS do 操作系统是管理计算机硬件的程序
 computer system: hardware, operating system, application programs, users
 ​	hardware: CPU, memory, I/O devices

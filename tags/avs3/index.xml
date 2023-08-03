@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>AVS3 on 个个里</title>
-    <link>https://imfaye.me/tags/avs3/</link>
-    <description>Recent content in AVS3 on 个个里</description>
+    <title>AVS3 on Fxye.</title>
+    <link>https://bygonexf.github.io/tags/avs3/</link>
+    <description>Recent content in AVS3 on Fxye.</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Faye</copyright>
-    <lastBuildDate>Thu, 01 Apr 2021 17:28:29 +0000</lastBuildDate><atom:link href="https://imfaye.me/tags/avs3/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 01 Apr 2021 17:28:29 +0000</lastBuildDate><atom:link href="https://bygonexf.github.io/tags/avs3/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>AVS3 编码位流</title>
-      <link>https://imfaye.me/post/avs3-bitstream/</link>
+      <link>https://bygonexf.github.io/post/avs3-bitstream/</link>
       <pubDate>Thu, 01 Apr 2021 17:28:29 +0000</pubDate>
       
-      <guid>https://imfaye.me/post/avs3-bitstream/</guid>
+      <guid>https://bygonexf.github.io/post/avs3-bitstream/</guid>
       <description>概述 视频序列是位流的最高层语法结构。
 帧由一个亮度样本矩阵和两个色度样本矩阵构成。场由构成帧的三个样本矩阵中相间的行构成。奇数行构成顶场，偶数行构成底场。
 视频序列头由视频序列起码码开始，后面跟着一串编码图像数据。序列头可在位流中重复出现，称为重复序列头。使用重复序列头的主要目的是支持对视频序列的随机访问。

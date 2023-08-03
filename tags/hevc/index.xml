@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>HEVC on 个个里</title>
-    <link>https://imfaye.me/tags/hevc/</link>
-    <description>Recent content in HEVC on 个个里</description>
+    <title>HEVC on Fxye.</title>
+    <link>https://bygonexf.github.io/tags/hevc/</link>
+    <description>Recent content in HEVC on Fxye.</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Faye</copyright>
-    <lastBuildDate>Wed, 31 Mar 2021 17:04:49 +0000</lastBuildDate><atom:link href="https://imfaye.me/tags/hevc/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 31 Mar 2021 17:04:49 +0000</lastBuildDate><atom:link href="https://bygonexf.github.io/tags/hevc/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>H.265/HEVC 预测编码 笔记</title>
-      <link>https://imfaye.me/post/prediction-coding/</link>
+      <link>https://bygonexf.github.io/post/prediction-coding/</link>
       <pubDate>Wed, 31 Mar 2021 17:04:49 +0000</pubDate>
       
-      <guid>https://imfaye.me/post/prediction-coding/</guid>
+      <guid>https://bygonexf.github.io/post/prediction-coding/</guid>
       <description>视频预测编码技术 预测编码是指利用已编码的一个或几个样本值，根据某种模型或方法，对当前的样本值进行预测，并对样本真实值和预测值之间的差值进行编码。
 帧内预测编码 随着离散余弦变换 (DCT) 在图像、视频编码中的广泛应用，帧内预测转为在频域进行，如相邻块 DC 系数的差分编码等。由 DCT 的性质可知，DC 系数仅能反映当前块像素值的平均大小，因此上述频域中基于 DC 系数的帧内预测无法反映出视频的纹理信息，这限制了频域帧内预测的发展。
 H.264/AVC 标准中使用基于块的空域帧内预测方法，规定了若干种预测模式，每种模式都对应一种纹理方向（DC 模式除外），当前块预测像素由其预测方向上相邻块的边界重建像素生成。该方法使得编码器能根据视频内容特征自适应地选择预测模式。
@@ -24,10 +24,10 @@ H.264/AVC 标准及后来的 FRExt 扩展层一共规定了 3 种大小的亮度
     
     <item>
       <title>H.265/HEVC 编码结构 笔记</title>
-      <link>https://imfaye.me/post/video-coding-structure/</link>
+      <link>https://bygonexf.github.io/post/video-coding-structure/</link>
       <pubDate>Wed, 31 Mar 2021 11:34:13 +0000</pubDate>
       
-      <guid>https://imfaye.me/post/video-coding-structure/</guid>
+      <guid>https://bygonexf.github.io/post/video-coding-structure/</guid>
       <description>名词一览 GOP (Group of Pictures) - 图像组 IDR (Instantaneous Decoding Refresh) - 即时解码刷新 Slice - 片 SS (Slice Segment) - 片段 CTU (Coding Tree Unit) - 树形结构单元 CTB (Coding Tree Block) - 树形编码块 CU (Coding Unit) - 编码单元 SPS (Sequence Parameter Set) - 序列参数集 PPS (Picture Parameter Set) - 图像参数集 CVS (Coded Video Sequence) - 一个 GOP 编码后生成的压缩数据 VPS (Video Parameter Set) - 视频参数集 编码结构概述 编码结构 视频序列分隔为若干个图像组 (GOP)。
 存在两种 GOP 类型：</description>
     </item>

@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>视频编码 on 个个里</title>
-    <link>https://imfaye.me/tags/%E8%A7%86%E9%A2%91%E7%BC%96%E7%A0%81/</link>
-    <description>Recent content in 视频编码 on 个个里</description>
+    <title>视频编码 on Fxye.</title>
+    <link>https://bygonexf.github.io/tags/%E8%A7%86%E9%A2%91%E7%BC%96%E7%A0%81/</link>
+    <description>Recent content in 视频编码 on Fxye.</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Faye</copyright>
-    <lastBuildDate>Wed, 20 Apr 2022 17:04:37 +0800</lastBuildDate><atom:link href="https://imfaye.me/tags/%E8%A7%86%E9%A2%91%E7%BC%96%E7%A0%81/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 20 Apr 2022 17:04:37 +0800</lastBuildDate><atom:link href="https://bygonexf.github.io/tags/%E8%A7%86%E9%A2%91%E7%BC%96%E7%A0%81/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>端到端图像/视频压缩里的熵模型</title>
-      <link>https://imfaye.me/post/e2e-entropy-model/</link>
+      <link>https://bygonexf.github.io/post/e2e-entropy-model/</link>
       <pubDate>Wed, 20 Apr 2022 17:04:37 +0800</pubDate>
       
-      <guid>https://imfaye.me/post/e2e-entropy-model/</guid>
+      <guid>https://bygonexf.github.io/post/e2e-entropy-model/</guid>
       <description>概率分布与熵编码 在端到端图像/视频压缩模型中，我们需要去尽可能精准地模拟待编码元素值的概率分布。一方面是为了更精确地进行码率估计，另一方面也是因为更精准的概率分布建模能使得熵编码环节更好地消除统计冗余节省码字。
 建模出概率分布后，在实际熵编码中，就可以通过概率分布生成熵编码器所需要的概率表。
 多说一句，在传统编解码里，通常熵编码会采用自适应模型，即随着编码字符的输入，不断更新概率分布（自适应模型相比静态模型效率更高，符合局部性原理，适应符号概率忽大忽小的波动，如果能合理地利用上下文信息压缩效率可以远超静态模型）。然而在端到端压缩模型里，通常直接通过网络生成独立的概率分布的参数，不会随着编码过程更新概率表。
@@ -34,10 +34,10 @@ def forward( self, inputs: Tensor, scales: Tensor, means: Optional[Tensor] = Non
     
     <item>
       <title>可变形卷积与光流</title>
-      <link>https://imfaye.me/post/dcn-and-optical-flow/</link>
+      <link>https://bygonexf.github.io/post/dcn-and-optical-flow/</link>
       <pubDate>Sun, 20 Feb 2022 17:04:37 +0800</pubDate>
       
-      <guid>https://imfaye.me/post/dcn-and-optical-flow/</guid>
+      <guid>https://bygonexf.github.io/post/dcn-and-optical-flow/</guid>
       <description>可变形卷积代码篇 一个调用 from mmcv.ops import ModulatedDeformConv2d 的例子：
 def forward(self, input): x = self.offset_mask_conv(input) o1, o2, mask = torch.chunk(x, 3, dim=1) offset = torch.cat((o1, o2), dim=1) mask = torch.sigmoid(mask) output = self.dcnv2(input, offset, mask) return output 总而言之 offset 的 size 就是 2*kernel[0]*kernel[1] ，想一想，原来我们求偏移的时候，会把 B*H*W*C 的图像送入普通卷积得到 B*H*W*2C 得到偏移，也就是每个通道每个位置点都有 x 和 y 两个方向的偏移量。
 对 DCN 来说，每个通道都做一样的处理，也就是只需要对每个位置点存卷积核每个点的 x 和 y 的偏移，所以就是 B*H*W*(2*kernel_size) 。
@@ -48,10 +48,10 @@ def forward(self, input): x = self.offset_mask_conv(input) o1, o2, mask = torch.
     
     <item>
       <title>一些传统的熵编码方法</title>
-      <link>https://imfaye.me/post/entropy-coding/</link>
+      <link>https://bygonexf.github.io/post/entropy-coding/</link>
       <pubDate>Sun, 05 Dec 2021 13:09:24 +0000</pubDate>
       
-      <guid>https://imfaye.me/post/entropy-coding/</guid>
+      <guid>https://bygonexf.github.io/post/entropy-coding/</guid>
       <description>传统熵模型 算术编码 (Arithmetic Coding) 流程 （以静态模型举例）
 假设有一段数据需要编码，统计里面所有的字符和出现的次数。编码从初始区间 (0, 1] 开始。 在当前区间内根据各字符概率划分子区间。 读入字符，找到该字符落入的子区间，将区间更新为该子区间，并重复 2, 3 步骤 最后得到的区间 [low, high) 中任意一个小数以二进制形式输出即得到编码的数据 例子如下：
 实现细节 最后结果是一个小数，我们不能简单地用一个 double 类型去表示和计算这个小数，因为根据数据的复杂程度，这个小数可能任意长，小数点后可能会有成千上万位。
@@ -74,10 +74,10 @@ CABAC虽然性能很好，但也存在以下几点不足：
     
     <item>
       <title>图像质量评价指标(MSE, PSNR, MS-SSIM)</title>
-      <link>https://imfaye.me/post/image-quality-evaluation-metrics/</link>
+      <link>https://bygonexf.github.io/post/image-quality-evaluation-metrics/</link>
       <pubDate>Thu, 02 Dec 2021 23:35:47 +0000</pubDate>
       
-      <guid>https://imfaye.me/post/image-quality-evaluation-metrics/</guid>
+      <guid>https://bygonexf.github.io/post/image-quality-evaluation-metrics/</guid>
       <description>如何评价重建图像的质量：比较重建图像与原始图像的可视误差。
 MSE Mean Squared Error, 均方误差
 $MSE = \frac{1}{N}\sum\limits_{i=1}^{N}(x_i-y_i)^2$
@@ -94,10 +94,10 @@ SSIM 由三部分组成：
     
     <item>
       <title>AVS3 编码位流</title>
-      <link>https://imfaye.me/post/avs3-bitstream/</link>
+      <link>https://bygonexf.github.io/post/avs3-bitstream/</link>
       <pubDate>Thu, 01 Apr 2021 17:28:29 +0000</pubDate>
       
-      <guid>https://imfaye.me/post/avs3-bitstream/</guid>
+      <guid>https://bygonexf.github.io/post/avs3-bitstream/</guid>
       <description>概述 视频序列是位流的最高层语法结构。
 帧由一个亮度样本矩阵和两个色度样本矩阵构成。场由构成帧的三个样本矩阵中相间的行构成。奇数行构成顶场，偶数行构成底场。
 视频序列头由视频序列起码码开始，后面跟着一串编码图像数据。序列头可在位流中重复出现，称为重复序列头。使用重复序列头的主要目的是支持对视频序列的随机访问。
@@ -128,10 +128,10 @@ SSIM 由三部分组成：
     
     <item>
       <title>H.265/HEVC 预测编码 笔记</title>
-      <link>https://imfaye.me/post/prediction-coding/</link>
+      <link>https://bygonexf.github.io/post/prediction-coding/</link>
       <pubDate>Wed, 31 Mar 2021 17:04:49 +0000</pubDate>
       
-      <guid>https://imfaye.me/post/prediction-coding/</guid>
+      <guid>https://bygonexf.github.io/post/prediction-coding/</guid>
       <description>视频预测编码技术 预测编码是指利用已编码的一个或几个样本值，根据某种模型或方法，对当前的样本值进行预测，并对样本真实值和预测值之间的差值进行编码。
 帧内预测编码 随着离散余弦变换 (DCT) 在图像、视频编码中的广泛应用，帧内预测转为在频域进行，如相邻块 DC 系数的差分编码等。由 DCT 的性质可知，DC 系数仅能反映当前块像素值的平均大小，因此上述频域中基于 DC 系数的帧内预测无法反映出视频的纹理信息，这限制了频域帧内预测的发展。
 H.264/AVC 标准中使用基于块的空域帧内预测方法，规定了若干种预测模式，每种模式都对应一种纹理方向（DC 模式除外），当前块预测像素由其预测方向上相邻块的边界重建像素生成。该方法使得编码器能根据视频内容特征自适应地选择预测模式。
@@ -142,20 +142,20 @@ H.264/AVC 标准及后来的 FRExt 扩展层一共规定了 3 种大小的亮度
     
     <item>
       <title>H.265/HEVC 编码结构 笔记</title>
-      <link>https://imfaye.me/post/video-coding-structure/</link>
+      <link>https://bygonexf.github.io/post/video-coding-structure/</link>
       <pubDate>Wed, 31 Mar 2021 11:34:13 +0000</pubDate>
       
-      <guid>https://imfaye.me/post/video-coding-structure/</guid>
+      <guid>https://bygonexf.github.io/post/video-coding-structure/</guid>
       <description>名词一览 GOP (Group of Pictures) - 图像组 IDR (Instantaneous Decoding Refresh) - 即时解码刷新 Slice - 片 SS (Slice Segment) - 片段 CTU (Coding Tree Unit) - 树形结构单元 CTB (Coding Tree Block) - 树形编码块 CU (Coding Unit) - 编码单元 SPS (Sequence Parameter Set) - 序列参数集 PPS (Picture Parameter Set) - 图像参数集 CVS (Coded Video Sequence) - 一个 GOP 编码后生成的压缩数据 VPS (Video Parameter Set) - 视频参数集 编码结构概述 编码结构 视频序列分隔为若干个图像组 (GOP)。
 存在两种 GOP 类型：</description>
     </item>
     
     <item>
       <title>多媒体基础知识</title>
-      <link>https://imfaye.me/post/multimedia-basics/</link>
+      <link>https://bygonexf.github.io/post/multimedia-basics/</link>
       <pubDate>Mon, 29 Mar 2021 15:10:25 +0000</pubDate>
       
-      <guid>https://imfaye.me/post/multimedia-basics/</guid>
+      <guid>https://bygonexf.github.io/post/multimedia-basics/</guid>
       <description>图像数值表示 分辨率 分辨率的基础单位是像素。1280 * 720 P 的分辨率代表共有 1280 * 720 个像素点。
 一台物理设备出厂时就已经定下了它所能拥有的最大像素点是多少。电脑显示屏调整分辨率是系统通过运算来给出模拟色彩块填充适配的。
 下述像素排列方式内容为 expansion pack，可略过。

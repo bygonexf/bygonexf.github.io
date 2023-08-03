@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>WSL on 个个里</title>
-    <link>https://imfaye.me/tags/wsl/</link>
-    <description>Recent content in WSL on 个个里</description>
+    <title>WSL on Fxye.</title>
+    <link>https://bygonexf.github.io/tags/wsl/</link>
+    <description>Recent content in WSL on Fxye.</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Faye</copyright>
-    <lastBuildDate>Sun, 21 Mar 2021 20:29:24 +0000</lastBuildDate><atom:link href="https://imfaye.me/tags/wsl/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 21 Mar 2021 20:29:24 +0000</lastBuildDate><atom:link href="https://bygonexf.github.io/tags/wsl/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Win10 下 Linux 子系统 (WSL) 配置小记</title>
-      <link>https://imfaye.me/post/wsl/</link>
+      <link>https://bygonexf.github.io/post/wsl/</link>
       <pubDate>Sun, 21 Mar 2021 20:29:24 +0000</pubDate>
       
-      <guid>https://imfaye.me/post/wsl/</guid>
+      <guid>https://bygonexf.github.io/post/wsl/</guid>
       <description>网络代理配置 刚开始用 apt-get 就被卡到。
 WSL1 的时候，Linux 子系统和 Windows 主机是共享一个 localhost 的。WSL2 由于通过虚拟机实现，若要访问 Windows 主机的网络，需要使用主机的 IP 地址（IP 地址可以用 ipconfig 命令查看）。
 WSL2 环境变量配置 如果是 V2rayX 的话，默认 socks5 端口是 10808，默认 http 端口是 10809。

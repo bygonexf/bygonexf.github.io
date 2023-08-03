@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>PAT on 个个里</title>
-    <link>https://imfaye.me/tags/pat/</link>
-    <description>Recent content in PAT on 个个里</description>
+    <title>PAT on Fxye.</title>
+    <link>https://bygonexf.github.io/tags/pat/</link>
+    <description>Recent content in PAT on Fxye.</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Faye</copyright>
-    <lastBuildDate>Sun, 19 Apr 2020 18:13:57 +0000</lastBuildDate><atom:link href="https://imfaye.me/tags/pat/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 19 Apr 2020 18:13:57 +0000</lastBuildDate><atom:link href="https://bygonexf.github.io/tags/pat/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>PAT刷题记录 1038 Recover the Smallest Number</title>
-      <link>https://imfaye.me/post/pat-1038/</link>
+      <link>https://bygonexf.github.io/post/pat-1038/</link>
       <pubDate>Sun, 19 Apr 2020 18:13:57 +0000</pubDate>
       
-      <guid>https://imfaye.me/post/pat-1038/</guid>
+      <guid>https://bygonexf.github.io/post/pat-1038/</guid>
       <description>Recover the Smallest Number
 #include &amp;lt;iostream&amp;gt; #include &amp;lt;string.h&amp;gt; #include &amp;lt;algorithm&amp;gt; #include &amp;lt;map&amp;gt; #include &amp;lt;vector&amp;gt; using namespace std; vector&amp;lt;string&amp;gt; num; bool cmp1(string a, string b) { int la = a.length(), lb = b.length(); string temp; if (la == lb) return a &amp;lt;= b; else if (la &amp;lt; lb) //自己重新定义字符串比较的定义 { if (a.compare(b.substr(0, la)) == 0) { temp = b.substr(la) + a; if (temp &amp;lt;= b) return false; else return true; } else return a &amp;lt;= b; } else if (la &amp;gt; lb) { if (b.</description>
     </item>
     
     <item>
       <title>PAT刷题记录 1033 To Fill or Not to Fill</title>
-      <link>https://imfaye.me/post/pat-1033/</link>
+      <link>https://bygonexf.github.io/post/pat-1033/</link>
       <pubDate>Sun, 19 Apr 2020 18:03:34 +0000</pubDate>
       
-      <guid>https://imfaye.me/post/pat-1033/</guid>
+      <guid>https://bygonexf.github.io/post/pat-1033/</guid>
       <description>很有意思的一道贪心
 #include &amp;lt;iostream&amp;gt; #include &amp;lt;string.h&amp;gt; #include &amp;lt;algorithm&amp;gt; using namespace std; double cmax, davg, dall; int n; struct Node { double price; double dis; }sta[505]; bool cmp1(Node a, Node b) { return a.dis &amp;lt; b.dis; } int main() { scanf(&amp;#34;%lf%lf%lf%d&amp;#34;, &amp;amp;cmax, &amp;amp;dall, &amp;amp;davg, &amp;amp;n); for (int i = 0; i &amp;lt; n; ++i) { scanf(&amp;#34;%lf%lf&amp;#34;, &amp;amp;sta[i].price, &amp;amp;sta[i].dis); } sort(sta, sta + n, cmp1); bool flag = false; double far = 0; int ns = 0; int i1 = 0; double min1 = 9999999; double cost = 0; double cnow = 0; double bestprice; while (sta[i1].</description>
     </item>

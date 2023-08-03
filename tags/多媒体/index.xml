@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>多媒体 on 个个里</title>
-    <link>https://imfaye.me/tags/%E5%A4%9A%E5%AA%92%E4%BD%93/</link>
-    <description>Recent content in 多媒体 on 个个里</description>
+    <title>多媒体 on Fxye.</title>
+    <link>https://bygonexf.github.io/tags/%E5%A4%9A%E5%AA%92%E4%BD%93/</link>
+    <description>Recent content in 多媒体 on Fxye.</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Faye</copyright>
-    <lastBuildDate>Mon, 29 Mar 2021 15:10:25 +0000</lastBuildDate><atom:link href="https://imfaye.me/tags/%E5%A4%9A%E5%AA%92%E4%BD%93/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 29 Mar 2021 15:10:25 +0000</lastBuildDate><atom:link href="https://bygonexf.github.io/tags/%E5%A4%9A%E5%AA%92%E4%BD%93/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>多媒体基础知识</title>
-      <link>https://imfaye.me/post/multimedia-basics/</link>
+      <link>https://bygonexf.github.io/post/multimedia-basics/</link>
       <pubDate>Mon, 29 Mar 2021 15:10:25 +0000</pubDate>
       
-      <guid>https://imfaye.me/post/multimedia-basics/</guid>
+      <guid>https://bygonexf.github.io/post/multimedia-basics/</guid>
       <description>图像数值表示 分辨率 分辨率的基础单位是像素。1280 * 720 P 的分辨率代表共有 1280 * 720 个像素点。
 一台物理设备出厂时就已经定下了它所能拥有的最大像素点是多少。电脑显示屏调整分辨率是系统通过运算来给出模拟色彩块填充适配的。
 下述像素排列方式内容为 expansion pack，可略过。

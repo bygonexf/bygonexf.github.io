@@ -1,25 +1,25 @@
 <?xml-stylesheet href="/rss.xsl" type="text/xsl"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>个个里</title>
-    <link>https://imfaye.me/</link>
-    <description>Recent content on 个个里</description>
+    <title>Fxye.</title>
+    <link>https://bygonexf.github.io/</link>
+    <description>Recent content on Fxye.</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Faye</copyright>
     <lastBuildDate>Sat, 25 Feb 2023 23:25:36 +0800</lastBuildDate>
     
-        <atom:link href="https://imfaye.me/index.xml" rel="self" type="application/rss+xml" />
+        <atom:link href="https://bygonexf.github.io/index.xml" rel="self" type="application/rss+xml" />
     
     
     
         <item>
         <title>操作系统笔记 CH11 File-System Implementation</title>
-        <link>https://imfaye.me/post/os11/</link>
+        <link>https://bygonexf.github.io/post/os11/</link>
         <pubDate>Fri, 28 Feb 2020 13:11:24 +0000</pubDate>
         
-        <guid>https://imfaye.me/post/os11/</guid>
-        <description>个个里 https://imfaye.me/post/os11/ -&lt;h2 id=&#34;文件系统结构&#34;&gt;文件系统结构&lt;/h2&gt;
+        <guid>https://bygonexf.github.io/post/os11/</guid>
+        <description>Fxye. https://bygonexf.github.io/post/os11/ -&lt;h2 id=&#34;文件系统结构&#34;&gt;文件系统结构&lt;/h2&gt;
 &lt;p&gt;磁盘特点：可以原地重写，可以直接访问任意一块。&lt;/p&gt;
 &lt;p&gt;内存和磁盘之间的IO以块为单位。每块为一个或多个扇区。扇区通常为512B&lt;/p&gt;
 &lt;p&gt;File system resides on secondary storage (disks) OS通过文件系统存储、定位、提取数据&lt;/p&gt;
@@ -167,18 +167,18 @@
 &lt;h4 id=&#34;counting&#34;&gt;counting&lt;/h4&gt;
 &lt;p&gt;记录第一块的地址和紧跟第一块的连续的空闲块的数量n&lt;/p&gt;
 &lt;p&gt;can be stored in a balanced tree for efficiency&lt;/p&gt;
-- https://imfaye.me/post/os11/ - Faye</description>
+- https://bygonexf.github.io/post/os11/ - Faye</description>
         </item>
     
     
     
         <item>
         <title>操作系统笔记 CH10 File-System Interface</title>
-        <link>https://imfaye.me/post/os10/</link>
+        <link>https://bygonexf.github.io/post/os10/</link>
         <pubDate>Fri, 28 Feb 2020 13:10:24 +0000</pubDate>
         
-        <guid>https://imfaye.me/post/os10/</guid>
-        <description>个个里 https://imfaye.me/post/os10/ -&lt;h2 id=&#34;file-concept&#34;&gt;file concept&lt;/h2&gt;
+        <guid>https://bygonexf.github.io/post/os10/</guid>
+        <description>Fxye. https://bygonexf.github.io/post/os10/ -&lt;h2 id=&#34;file-concept&#34;&gt;file concept&lt;/h2&gt;
 &lt;p&gt;文件：记录在外存上的 相关信息的 具有名称的 集合，逻辑内存的最小分配单元&lt;/p&gt;
 &lt;p&gt;通常，文件表示程序和数据&lt;/p&gt;
 &lt;p&gt;free form or may be formatted rigidly&lt;/p&gt;
@@ -414,18 +414,18 @@
 &lt;li&gt;universe(public): all other users in the system&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;每个域三个位:RWX. 需要9个位&lt;/p&gt;
-- https://imfaye.me/post/os10/ - Faye</description>
+- https://bygonexf.github.io/post/os10/ - Faye</description>
         </item>
     
     
     
         <item>
         <title>操作系统笔记 CH9 Virtual Memory</title>
-        <link>https://imfaye.me/post/os9/</link>
+        <link>https://bygonexf.github.io/post/os9/</link>
         <pubDate>Fri, 28 Feb 2020 13:09:24 +0000</pubDate>
         
-        <guid>https://imfaye.me/post/os9/</guid>
-        <description>个个里 https://imfaye.me/post/os9/ -&lt;h2 id=&#34;background&#34;&gt;background&lt;/h2&gt;
+        <guid>https://bygonexf.github.io/post/os9/</guid>
+        <description>Fxye. https://bygonexf.github.io/post/os9/ -&lt;h2 id=&#34;background&#34;&gt;background&lt;/h2&gt;
 &lt;p&gt;CH8的内存管理方案需要将整个进程放入内存，动态载入只能减轻这一限制&lt;/p&gt;
 &lt;p&gt;Code needs to be in memory to execute, but entire program rarely used.&lt;/p&gt;
 &lt;p&gt;execute partially-loaded program&lt;/p&gt;
@@ -580,18 +580,18 @@
 &lt;h3 id=&#34;page-fault-frequency-schemeppf-页错误频率&#34;&gt;Page-Fault Frequency Scheme(PPF) 页错误频率&lt;/h3&gt;
 &lt;p&gt;为所期望的页错误率设置上限和下限。超过上限，为进程分配更多的帧；低于下限，从该进程中移走帧。&lt;/p&gt;
 &lt;p&gt;如果页错误率增加且没有可用帧，必须选择一个进程暂停，可将释放的帧分配给具有高页错误率的进程&lt;/p&gt;
-- https://imfaye.me/post/os9/ - Faye</description>
+- https://bygonexf.github.io/post/os9/ - Faye</description>
         </item>
     
     
     
         <item>
         <title>操作系统笔记 CH8 Main Memory</title>
-        <link>https://imfaye.me/post/os8/</link>
+        <link>https://bygonexf.github.io/post/os8/</link>
         <pubDate>Fri, 28 Feb 2020 13:08:24 +0000</pubDate>
         
-        <guid>https://imfaye.me/post/os8/</guid>
-        <description>个个里 https://imfaye.me/post/os8/ -&lt;h2 id=&#34;background&#34;&gt;background&lt;/h2&gt;
+        <guid>https://bygonexf.github.io/post/os8/</guid>
+        <description>Fxye. https://bygonexf.github.io/post/os8/ -&lt;h2 id=&#34;background&#34;&gt;background&lt;/h2&gt;
 &lt;h3 id=&#34;基本硬件&#34;&gt;基本硬件&lt;/h3&gt;
 &lt;p&gt;CPU可直接访问的存储器只有 内存 和  处理器内的寄存器&lt;/p&gt;
 &lt;p&gt;​	CPU内置寄存器可在一个CPU时钟周期内完成访问，对于寄存器中的内容，CPU可以在一个周期内解析并执行多个指令&lt;/p&gt;
@@ -797,18 +797,18 @@
 &lt;p&gt;STLR(segment-table limit register): indicates number of segments used by a program&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577429459185.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577429477972.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
-- https://imfaye.me/post/os8/ - Faye</description>
+- https://bygonexf.github.io/post/os8/ - Faye</description>
         </item>
     
     
     
         <item>
         <title>操作系统笔记 CH7 Deadlocks</title>
-        <link>https://imfaye.me/post/os7/</link>
+        <link>https://bygonexf.github.io/post/os7/</link>
         <pubDate>Fri, 28 Feb 2020 13:07:24 +0000</pubDate>
         
-        <guid>https://imfaye.me/post/os7/</guid>
-        <description>个个里 https://imfaye.me/post/os7/ -&lt;h2 id=&#34;deadlock-characteristics&#34;&gt;deadlock characteristics&lt;/h2&gt;
+        <guid>https://bygonexf.github.io/post/os7/</guid>
+        <description>Fxye. https://bygonexf.github.io/post/os7/ -&lt;h2 id=&#34;deadlock-characteristics&#34;&gt;deadlock characteristics&lt;/h2&gt;
 &lt;h3 id=&#34;necessary-conditions&#34;&gt;necessary conditions&lt;/h3&gt;
 &lt;p&gt;4个条件同时满足，引起死锁：&lt;/p&gt;
 &lt;ul&gt;
@@ -906,18 +906,18 @@
 &lt;p&gt;select a victim: which resources and which processes are to be preempted 代价因素 cost factors&lt;/p&gt;
 &lt;p&gt;rollback: 抢占资源后对进程做什么安排 roll back to some safe state. simplest: total rollback&lt;/p&gt;
 &lt;p&gt;starvation: 如何保证资源总是从一个进程抢占 在代价因素中加上回滚次数&lt;/p&gt;
-- https://imfaye.me/post/os7/ - Faye</description>
+- https://bygonexf.github.io/post/os7/ - Faye</description>
         </item>
     
     
     
         <item>
         <title>操作系统笔记 CH6 Process Synchronization</title>
-        <link>https://imfaye.me/post/os6/</link>
+        <link>https://bygonexf.github.io/post/os6/</link>
         <pubDate>Fri, 28 Feb 2020 13:06:24 +0000</pubDate>
         
-        <guid>https://imfaye.me/post/os6/</guid>
-        <description>个个里 https://imfaye.me/post/os6/ -&lt;p&gt;race condition: 多个进程并发访问和操作同一数据，结果与访问顺序有关&lt;/p&gt;
+        <guid>https://bygonexf.github.io/post/os6/</guid>
+        <description>Fxye. https://bygonexf.github.io/post/os6/ -&lt;p&gt;race condition: 多个进程并发访问和操作同一数据，结果与访问顺序有关&lt;/p&gt;
 &lt;h2 id=&#34;critical-section&#34;&gt;critical section&lt;/h2&gt;
 &lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573274792092.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
 &lt;p&gt;critical section: 进程可能改变共同变量，更新表，写文件的代码段&lt;/p&gt;
@@ -943,18 +943,18 @@
 &lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573284042418.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
 &lt;p&gt;实现有限等待互斥：&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573284642763.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
-- https://imfaye.me/post/os6/ - Faye</description>
+- https://bygonexf.github.io/post/os6/ - Faye</description>
         </item>
     
     
     
         <item>
         <title>操作系统笔记 CH5 CPU Scheduling</title>
-        <link>https://imfaye.me/post/os5/</link>
+        <link>https://bygonexf.github.io/post/os5/</link>
         <pubDate>Fri, 28 Feb 2020 13:05:24 +0000</pubDate>
         
-        <guid>https://imfaye.me/post/os5/</guid>
-        <description>个个里 https://imfaye.me/post/os5/ -&lt;p&gt;dispatcher: gives control of the CPU to the process selected by the short-term scheduler;&lt;/p&gt;
+        <guid>https://bygonexf.github.io/post/os5/</guid>
+        <description>Fxye. https://bygonexf.github.io/post/os5/ -&lt;p&gt;dispatcher: gives control of the CPU to the process selected by the short-term scheduler;&lt;/p&gt;
 &lt;p&gt;dispatch latency&lt;/p&gt;
 &lt;h2 id=&#34;scheduling-criteria&#34;&gt;scheduling criteria&lt;/h2&gt;
 &lt;ul&gt;
@@ -1060,18 +1060,18 @@
 &lt;p&gt;queueing-network-analysis:&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1573271651221.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
 &lt;p&gt;simulation模拟 trace tape&lt;/p&gt;
-- https://imfaye.me/post/os5/ - Faye</description>
+- https://bygonexf.github.io/post/os5/ - Faye</description>
         </item>
     
     
     
         <item>
         <title>操作系统笔记 CH4 Threads</title>
-        <link>https://imfaye.me/post/os4/</link>
+        <link>https://bygonexf.github.io/post/os4/</link>
         <pubDate>Fri, 28 Feb 2020 13:04:24 +0000</pubDate>
         
-        <guid>https://imfaye.me/post/os4/</guid>
-        <description>个个里 https://imfaye.me/post/os4/ -&lt;p&gt;Dispatching is referred to as a thread. Resource of ownership is referred to as a process or
+        <guid>https://bygonexf.github.io/post/os4/</guid>
+        <description>Fxye. https://bygonexf.github.io/post/os4/ -&lt;p&gt;Dispatching is referred to as a thread. Resource of ownership is referred to as a process or
 task.&lt;/p&gt;
 &lt;p&gt;对进程的swapping和termination都牵扯它所有线程&lt;/p&gt;
 &lt;p&gt;线程是CPU使用的基本单位。由thread ID, program counter, register set, stack组成&lt;/p&gt;
@@ -1153,18 +1153,18 @@ task.&lt;/p&gt;
 &lt;p&gt;ETHREAD (in kernel space), KTHREAD (in kernel space), TEB (in user space)&lt;/p&gt;
 &lt;h2 id=&#34;linux-threads---tasks&#34;&gt;Linux threads - tasks&lt;/h2&gt;
 &lt;p&gt;clone() system call&lt;/p&gt;
-- https://imfaye.me/post/os4/ - Faye</description>
+- https://bygonexf.github.io/post/os4/ - Faye</description>
         </item>
     
     
     
         <item>
         <title>操作系统笔记 CH3 Process</title>
-        <link>https://imfaye.me/post/os3/</link>
+        <link>https://bygonexf.github.io/post/os3/</link>
         <pubDate>Fri, 28 Feb 2020 13:03:24 +0000</pubDate>
         
-        <guid>https://imfaye.me/post/os3/</guid>
-        <description>个个里 https://imfaye.me/post/os3/ -&lt;h2 id=&#34;process-concepts&#34;&gt;process concepts&lt;/h2&gt;
+        <guid>https://bygonexf.github.io/post/os3/</guid>
+        <description>Fxye. https://bygonexf.github.io/post/os3/ -&lt;h2 id=&#34;process-concepts&#34;&gt;process concepts&lt;/h2&gt;
 &lt;p&gt;batch system: job; time-sharing system: program/task&lt;/p&gt;
 &lt;p&gt;Program is passive entity stored on disk (executable file), process is active.&lt;/p&gt;
 &lt;p&gt;a process includes&lt;/p&gt;
@@ -1330,18 +1330,18 @@ connection, it is assigned a port (greater than 1024) by its host computer.&lt;/
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-- https://imfaye.me/post/os3/ - Faye</description>
+- https://bygonexf.github.io/post/os3/ - Faye</description>
         </item>
     
     
     
         <item>
         <title>操作系统笔记 CH2 OS structures</title>
-        <link>https://imfaye.me/post/os2/</link>
+        <link>https://bygonexf.github.io/post/os2/</link>
         <pubDate>Fri, 28 Feb 2020 13:01:24 +0000</pubDate>
         
-        <guid>https://imfaye.me/post/os2/</guid>
-        <description>个个里 https://imfaye.me/post/os2/ -&lt;h2 id=&#34;ui&#34;&gt;UI&lt;/h2&gt;
+        <guid>https://bygonexf.github.io/post/os2/</guid>
+        <description>Fxye. https://bygonexf.github.io/post/os2/ -&lt;h2 id=&#34;ui&#34;&gt;UI&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;
 &lt;p&gt;CLI command-line / command interpreter&lt;/p&gt;
@@ -1522,7 +1522,7 @@ connection, it is assigned a port (greater than 1024) by its host computer.&lt;/
 &lt;p&gt;loads the entire OS into memory and begin its execution&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
-- https://imfaye.me/post/os2/ - Faye</description>
+- https://bygonexf.github.io/post/os2/ - Faye</description>
         </item>
     
     

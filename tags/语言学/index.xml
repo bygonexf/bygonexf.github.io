@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>语言学 on 个个里</title>
-    <link>https://imfaye.me/tags/%E8%AF%AD%E8%A8%80%E5%AD%A6/</link>
-    <description>Recent content in 语言学 on 个个里</description>
+    <title>语言学 on Fxye.</title>
+    <link>https://bygonexf.github.io/tags/%E8%AF%AD%E8%A8%80%E5%AD%A6/</link>
+    <description>Recent content in 语言学 on Fxye.</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Faye</copyright>
-    <lastBuildDate>Sun, 05 Apr 2020 16:44:14 +0000</lastBuildDate><atom:link href="https://imfaye.me/tags/%E8%AF%AD%E8%A8%80%E5%AD%A6/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 05 Apr 2020 16:44:14 +0000</lastBuildDate><atom:link href="https://bygonexf.github.io/tags/%E8%AF%AD%E8%A8%80%E5%AD%A6/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>语言学概论 笔记</title>
-      <link>https://imfaye.me/post/linguistics/</link>
+      <link>https://bygonexf.github.io/post/linguistics/</link>
       <pubDate>Sun, 05 Apr 2020 16:44:14 +0000</pubDate>
       
-      <guid>https://imfaye.me/post/linguistics/</guid>
+      <guid>https://bygonexf.github.io/post/linguistics/</guid>
       <description>CH1 语言能力与语言系统 易境性 动物交流的特点：在场。在场与直接经验。人类不必在场传递经验，关键在语言。通过语言传递知识与经验，不必在场。
 还原生成性 基于类推原则的还原生成能力。从单词到句子，是一种创造性行为。乔姆斯基：语言是有限规则和单位生成无限的句子。
 还原生成能力：通过有限的句子还原出有限的规则和单位，并通过这些单位生成无限的句子。
@@ -37,8 +37,7 @@
 两层性意味着可以用有限的手段(主要是语音)产生无限的符号形式(和有限的符号产生无限的符号组合不一样)
 人类自然语音从低到高有音位层、音节层、语素层、词汇层、词组层、句子层。音位系统是区别意义层，语素系统是表达意义层。
 一般认为汉语中有27个音质音位。
-语音是人类社会的一部分。是我们先天还是后天的能力。即使有先天的语言能力，必须有后天的交流环境，语言系统。语言学习关键期。
-CH2 语言和思维 </description>
+语音是人类社会的一部分。是我们先天还是后天的能力。即使有先天的语言能力，必须有后天的交流环境，语言系统。语言学习关键期。</description>
     </item>
     
   </channel>

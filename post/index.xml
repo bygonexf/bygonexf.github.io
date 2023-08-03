@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Posts on 个个里</title>
-    <link>https://imfaye.me/post/</link>
-    <description>Recent content in Posts on 个个里</description>
+    <title>Posts on Fxye.</title>
+    <link>https://bygonexf.github.io/post/</link>
+    <description>Recent content in Posts on Fxye.</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Faye</copyright>
-    <lastBuildDate>Sat, 25 Feb 2023 23:25:36 +0800</lastBuildDate><atom:link href="https://imfaye.me/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 25 Feb 2023 23:25:36 +0800</lastBuildDate><atom:link href="https://bygonexf.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>2018年9月，我想记下的旧家</title>
-      <link>https://imfaye.me/post/nolstalgia2018/</link>
+      <link>https://bygonexf.github.io/post/nolstalgia2018/</link>
       <pubDate>Sat, 25 Feb 2023 23:25:36 +0800</pubDate>
       
-      <guid>https://imfaye.me/post/nolstalgia2018/</guid>
+      <guid>https://bygonexf.github.io/post/nolstalgia2018/</guid>
       <description>备忘录里2018年9月3日记下的段落。
 被告知寒假回来后可能要搬到新家、甚是惶恐、遂用相机和纸笔大刀阔斧地记下周遭全貌和牵扯进的重要回忆。
 以下陈列一些过程中还算特别的细枝末节。
@@ -32,10 +32,10 @@
     
     <item>
       <title>我所喜欢的河濑直美</title>
-      <link>https://imfaye.me/post/kawase-naomi/</link>
+      <link>https://bygonexf.github.io/post/kawase-naomi/</link>
       <pubDate>Sun, 15 Jan 2023 15:04:21 +0800</pubDate>
       
-      <guid>https://imfaye.me/post/kawase-naomi/</guid>
+      <guid>https://bygonexf.github.io/post/kawase-naomi/</guid>
       <description>最近偏爱河濑直美 很久之前就想看萌之朱雀，那段时间很喜欢超8mm摄像机的影片，目测剧情觉得相当工整并没第一时间看。前段时间偶然扫过沙罗双树的剧情简介，古都，双生子，神隐，祭典，这些词的意象以及剧照都相当吸引我。看完之后就开始沉迷河濑直美。
 河濑直美确实是“一生只拍一部电影”的典型，始终徘徊在身世问题左右。想起她在东大入学仪式的致辞，也说了一直一直只盯着一扇窗，这一扇窗和世界的联结又也能让她和世界上众多的人相遇。身世，原生家庭，童年，似乎很多人长久执着于这些母题，有的时候我在想，是不是就算长大以后，我们作为人类的理解力也就只能帮助我们消化自我到青春期以前的这个节点。
 我无限偏爱她抒情化的空镜头，泛出的柔光、环境音、易碎的颤动感。她镜头下的静物，和静止的相片相比，动人的正是时间穿行而过的窸窣感，柔光下的树木枝叶，风摇动的粼粼的光与阴影，触碰窗沿结着的雨珠，水的滴落，碗中浸泡的青豆浮动的光泽，晾晒的衣物被吹起的摆动，空转的圆盘形衣架。有某种薄如蝉翼的果冻一般的轻颤。
@@ -50,11 +50,11 @@
     </item>
     
     <item>
-      <title>布尔迪厄-《继承人：大学生与文化》 笔记</title>
-      <link>https://imfaye.me/post/heriters/</link>
+      <title>布尔迪厄《继承人：大学生与文化》 笔记</title>
+      <link>https://bygonexf.github.io/post/heriters/</link>
       <pubDate>Fri, 23 Dec 2022 15:04:21 +0800</pubDate>
       
-      <guid>https://imfaye.me/post/heriters/</guid>
+      <guid>https://bygonexf.github.io/post/heriters/</guid>
       <description>我的废话 第一次读布尔迪厄。感觉自己高中阶段和父亲的争执、本科时期感受到的大学本身的矛盾性、关于小镇做题家的迷思，全都得到了解答。
 CH1 中选者的选择 对社会地位最低的人来说，接受高等教育的主观愿望比客观机会还要小。
 出身越高，选择分科时更遵循家庭建议。
@@ -93,10 +93,10 @@ CH4 结论 这样，学校的具有合法化作用的权威可以加重社会方
     
     <item>
       <title>耶，VAE</title>
-      <link>https://imfaye.me/post/vae/</link>
+      <link>https://bygonexf.github.io/post/vae/</link>
       <pubDate>Sun, 10 Jul 2022 23:43:59 +0000</pubDate>
       
-      <guid>https://imfaye.me/post/vae/</guid>
+      <guid>https://bygonexf.github.io/post/vae/</guid>
       <description>引子 生成模型 能从可学习的概率分布中采样得到样本的模型。
 在一些生成模型中，样本通过将随机的隐层变量送入网络生成得到。
 自编码器 AE 自编码器通过学习从输入到隐层和从隐层到输出的映射来重建信号/图像。
@@ -115,10 +115,10 @@ $\mathop{min}\limits_{\theta, \phi} \sum\limits_{i=1}^n||D_\theta(E_\phi(X_i))-X
     
     <item>
       <title>端到端图像/视频压缩里的熵模型</title>
-      <link>https://imfaye.me/post/e2e-entropy-model/</link>
+      <link>https://bygonexf.github.io/post/e2e-entropy-model/</link>
       <pubDate>Wed, 20 Apr 2022 17:04:37 +0800</pubDate>
       
-      <guid>https://imfaye.me/post/e2e-entropy-model/</guid>
+      <guid>https://bygonexf.github.io/post/e2e-entropy-model/</guid>
       <description>概率分布与熵编码 在端到端图像/视频压缩模型中，我们需要去尽可能精准地模拟待编码元素值的概率分布。一方面是为了更精确地进行码率估计，另一方面也是因为更精准的概率分布建模能使得熵编码环节更好地消除统计冗余节省码字。
 建模出概率分布后，在实际熵编码中，就可以通过概率分布生成熵编码器所需要的概率表。
 多说一句，在传统编解码里，通常熵编码会采用自适应模型，即随着编码字符的输入，不断更新概率分布（自适应模型相比静态模型效率更高，符合局部性原理，适应符号概率忽大忽小的波动，如果能合理地利用上下文信息压缩效率可以远超静态模型）。然而在端到端压缩模型里，通常直接通过网络生成独立的概率分布的参数，不会随着编码过程更新概率表。
@@ -139,10 +139,10 @@ def forward( self, inputs: Tensor, scales: Tensor, means: Optional[Tensor] = Non
     
     <item>
       <title>可变形卷积与光流</title>
-      <link>https://imfaye.me/post/dcn-and-optical-flow/</link>
+      <link>https://bygonexf.github.io/post/dcn-and-optical-flow/</link>
       <pubDate>Sun, 20 Feb 2022 17:04:37 +0800</pubDate>
       
-      <guid>https://imfaye.me/post/dcn-and-optical-flow/</guid>
+      <guid>https://bygonexf.github.io/post/dcn-and-optical-flow/</guid>
       <description>可变形卷积代码篇 一个调用 from mmcv.ops import ModulatedDeformConv2d 的例子：
 def forward(self, input): x = self.offset_mask_conv(input) o1, o2, mask = torch.chunk(x, 3, dim=1) offset = torch.cat((o1, o2), dim=1) mask = torch.sigmoid(mask) output = self.dcnv2(input, offset, mask) return output 总而言之 offset 的 size 就是 2*kernel[0]*kernel[1] ，想一想，原来我们求偏移的时候，会把 B*H*W*C 的图像送入普通卷积得到 B*H*W*2C 得到偏移，也就是每个通道每个位置点都有 x 和 y 两个方向的偏移量。
 对 DCN 来说，每个通道都做一样的处理，也就是只需要对每个位置点存卷积核每个点的 x 和 y 的偏移，所以就是 B*H*W*(2*kernel_size) 。
@@ -153,10 +153,10 @@ def forward(self, input): x = self.offset_mask_conv(input) o1, o2, mask = torch.
     
     <item>
       <title>一些传统的熵编码方法</title>
-      <link>https://imfaye.me/post/entropy-coding/</link>
+      <link>https://bygonexf.github.io/post/entropy-coding/</link>
       <pubDate>Sun, 05 Dec 2021 13:09:24 +0000</pubDate>
       
-      <guid>https://imfaye.me/post/entropy-coding/</guid>
+      <guid>https://bygonexf.github.io/post/entropy-coding/</guid>
       <description>传统熵模型 算术编码 (Arithmetic Coding) 流程 （以静态模型举例）
 假设有一段数据需要编码，统计里面所有的字符和出现的次数。编码从初始区间 (0, 1] 开始。 在当前区间内根据各字符概率划分子区间。 读入字符，找到该字符落入的子区间，将区间更新为该子区间，并重复 2, 3 步骤 最后得到的区间 [low, high) 中任意一个小数以二进制形式输出即得到编码的数据 例子如下：
 实现细节 最后结果是一个小数，我们不能简单地用一个 double 类型去表示和计算这个小数，因为根据数据的复杂程度，这个小数可能任意长，小数点后可能会有成千上万位。
@@ -179,10 +179,10 @@ CABAC虽然性能很好，但也存在以下几点不足：
     
     <item>
       <title>图像质量评价指标(MSE, PSNR, MS-SSIM)</title>
-      <link>https://imfaye.me/post/image-quality-evaluation-metrics/</link>
+      <link>https://bygonexf.github.io/post/image-quality-evaluation-metrics/</link>
       <pubDate>Thu, 02 Dec 2021 23:35:47 +0000</pubDate>
       
-      <guid>https://imfaye.me/post/image-quality-evaluation-metrics/</guid>
+      <guid>https://bygonexf.github.io/post/image-quality-evaluation-metrics/</guid>
       <description>如何评价重建图像的质量：比较重建图像与原始图像的可视误差。
 MSE Mean Squared Error, 均方误差
 $MSE = \frac{1}{N}\sum\limits_{i=1}^{N}(x_i-y_i)^2$
@@ -199,10 +199,10 @@ SSIM 由三部分组成：
     
     <item>
       <title>AVS3 编码位流</title>
-      <link>https://imfaye.me/post/avs3-bitstream/</link>
+      <link>https://bygonexf.github.io/post/avs3-bitstream/</link>
       <pubDate>Thu, 01 Apr 2021 17:28:29 +0000</pubDate>
       
-      <guid>https://imfaye.me/post/avs3-bitstream/</guid>
+      <guid>https://bygonexf.github.io/post/avs3-bitstream/</guid>
       <description>概述 视频序列是位流的最高层语法结构。
 帧由一个亮度样本矩阵和两个色度样本矩阵构成。场由构成帧的三个样本矩阵中相间的行构成。奇数行构成顶场，偶数行构成底场。
 视频序列头由视频序列起码码开始，后面跟着一串编码图像数据。序列头可在位流中重复出现，称为重复序列头。使用重复序列头的主要目的是支持对视频序列的随机访问。
@@ -233,10 +233,10 @@ SSIM 由三部分组成：
     
     <item>
       <title>H.265/HEVC 预测编码 笔记</title>
-      <link>https://imfaye.me/post/prediction-coding/</link>
+      <link>https://bygonexf.github.io/post/prediction-coding/</link>
       <pubDate>Wed, 31 Mar 2021 17:04:49 +0000</pubDate>
       
-      <guid>https://imfaye.me/post/prediction-coding/</guid>
+      <guid>https://bygonexf.github.io/post/prediction-coding/</guid>
       <description>视频预测编码技术 预测编码是指利用已编码的一个或几个样本值，根据某种模型或方法，对当前的样本值进行预测，并对样本真实值和预测值之间的差值进行编码。
 帧内预测编码 随着离散余弦变换 (DCT) 在图像、视频编码中的广泛应用，帧内预测转为在频域进行，如相邻块 DC 系数的差分编码等。由 DCT 的性质可知，DC 系数仅能反映当前块像素值的平均大小，因此上述频域中基于 DC 系数的帧内预测无法反映出视频的纹理信息，这限制了频域帧内预测的发展。
 H.264/AVC 标准中使用基于块的空域帧内预测方法，规定了若干种预测模式，每种模式都对应一种纹理方向（DC 模式除外），当前块预测像素由其预测方向上相邻块的边界重建像素生成。该方法使得编码器能根据视频内容特征自适应地选择预测模式。
@@ -247,20 +247,20 @@ H.264/AVC 标准及后来的 FRExt 扩展层一共规定了 3 种大小的亮度
     
     <item>
       <title>H.265/HEVC 编码结构 笔记</title>
-      <link>https://imfaye.me/post/video-coding-structure/</link>
+      <link>https://bygonexf.github.io/post/video-coding-structure/</link>
       <pubDate>Wed, 31 Mar 2021 11:34:13 +0000</pubDate>
       
-      <guid>https://imfaye.me/post/video-coding-structure/</guid>
+      <guid>https://bygonexf.github.io/post/video-coding-structure/</guid>
       <description>名词一览 GOP (Group of Pictures) - 图像组 IDR (Instantaneous Decoding Refresh) - 即时解码刷新 Slice - 片 SS (Slice Segment) - 片段 CTU (Coding Tree Unit) - 树形结构单元 CTB (Coding Tree Block) - 树形编码块 CU (Coding Unit) - 编码单元 SPS (Sequence Parameter Set) - 序列参数集 PPS (Picture Parameter Set) - 图像参数集 CVS (Coded Video Sequence) - 一个 GOP 编码后生成的压缩数据 VPS (Video Parameter Set) - 视频参数集 编码结构概述 编码结构 视频序列分隔为若干个图像组 (GOP)。
 存在两种 GOP 类型：</description>
     </item>
     
     <item>
       <title>多媒体基础知识</title>
-      <link>https://imfaye.me/post/multimedia-basics/</link>
+      <link>https://bygonexf.github.io/post/multimedia-basics/</link>
       <pubDate>Mon, 29 Mar 2021 15:10:25 +0000</pubDate>
       
-      <guid>https://imfaye.me/post/multimedia-basics/</guid>
+      <guid>https://bygonexf.github.io/post/multimedia-basics/</guid>
       <description>图像数值表示 分辨率 分辨率的基础单位是像素。1280 * 720 P 的分辨率代表共有 1280 * 720 个像素点。
 一台物理设备出厂时就已经定下了它所能拥有的最大像素点是多少。电脑显示屏调整分辨率是系统通过运算来给出模拟色彩块填充适配的。
 下述像素排列方式内容为 expansion pack，可略过。
@@ -274,10 +274,10 @@ Y 表示明亮度 (Luminance / Luma)，即灰阶值 U、V 表示色度 (Chromina
     
     <item>
       <title>Win10 下 Linux 子系统 (WSL) 配置小记</title>
-      <link>https://imfaye.me/post/wsl/</link>
+      <link>https://bygonexf.github.io/post/wsl/</link>
       <pubDate>Sun, 21 Mar 2021 20:29:24 +0000</pubDate>
       
-      <guid>https://imfaye.me/post/wsl/</guid>
+      <guid>https://bygonexf.github.io/post/wsl/</guid>
       <description>网络代理配置 刚开始用 apt-get 就被卡到。
 WSL1 的时候，Linux 子系统和 Windows 主机是共享一个 localhost 的。WSL2 由于通过虚拟机实现，若要访问 Windows 主机的网络，需要使用主机的 IP 地址（IP 地址可以用 ipconfig 命令查看）。
 WSL2 环境变量配置 如果是 V2rayX 的话，默认 socks5 端口是 10808，默认 http 端口是 10809。
@@ -290,20 +290,20 @@ git config --global http.proxy &amp;#34;socks5://&amp;lt;windows_ip&amp;gt;:&amp
     
     <item>
       <title>一部分的日记(2019.9至2020.4)</title>
-      <link>https://imfaye.me/post/dear-diary/</link>
+      <link>https://bygonexf.github.io/post/dear-diary/</link>
       <pubDate>Sun, 19 Apr 2020 21:48:42 +0000</pubDate>
       
-      <guid>https://imfaye.me/post/dear-diary/</guid>
+      <guid>https://bygonexf.github.io/post/dear-diary/</guid>
       <description>果然，日记吧&amp;hellip;不是能全部坦诚相待的东西。这里只是一部分的真实的我。
 2020 2020/4 4/18 晚上和爸爸妈妈一起去走南山绿道。刚下完雨，空气里完全是水汽。能闻到那种水汽的味道。天空暗下来，旁边是茂密的树林或竹林，有绿色的灯照出雾气，路上谁都没有。聊起了以前出去旅游的事情。去木桥那打手机的手电筒看一大片山谷里的杜鹃花。路上有小学经常闻的那种野花的幽香。后来回来半路又下雨了。淋了一场雨一起回家。爸爸说淋一场春雨不是很好吗。
 回来之后，洗完澡一边喝牛奶一边和妈妈看快乐大本营。
 我真的只想有一些这样的温馨和细小的满足就行了。像小时候一样。
 4/17 想起了之前听随机波动。新闻的关注全都给了可以被数据可视化的内容。没有办法呈现出一个一目了然又蕴含爆炸性信息的东西，可能完全不会被分到注意力，也完全不会被新闻从事者所费力去挖掘。那么长的叙事，平淡的，无法给你颠覆性的视觉冲击的东西，就注定要被人忽略吗。
 靥足。
-4/14 上午把钢炼看完了。哭了。
+4/14 上午把钢炼看完了。
 后来心情还是不好。一直在看月曜。
 4/13 感觉好久没上课了一样。
-妈妈买了很多吃的回来，还买了香水百合放在餐厅。外面阳光超好。我都有点想哭。
+妈妈买了很多吃的回来，还买了香水百合放在餐厅。外面阳光超好。
 晚上一直在看钢炼。
 4/11 晚上菊梅姐姐他们来我们家，和妮妮聊了很久，妮妮真的成熟了好多。一起看电视，名侦，柯南什么的。晚饭的时候，我还炒了刀豆丝。
 说一下最近查资料有意思的事情。
@@ -312,7 +312,7 @@ git config --global http.proxy &amp;#34;socks5://&amp;lt;windows_ip&amp;gt;:&amp
 4/3 早上竟然就在床上听完了机器学习。这个老师好憨。
 看了一些语言学的视频。
 下午看了看瑞幸那事。想起之前听的剩余价值了。资本真的在侵压我们所有的生活空间的小角落，从公到私。压榨剩余价值，侵入，一切追求效率利润最大化。我还是觉得，它应当只作为被提供的选择出现，而不是强制性地挤压所有弹性空间。小商小贩，我们的个性化的充满生活气息的小角落，不得不和巨型资本融合。我们真的需要那么强的便利性吗，我们只是一味地被市场投喂，靥足之后进化出妖怪一样的欲望。
-听剩余价值，这期聊足球。
+听播客，这期聊足球。
 英国两大工业城市，曼彻斯特，利物浦。所以曼联和利物浦一直是宿敌。
 有球能力和无球能力。梅西有球能力强，C罗无球能力强。而电视转播通常视线是围绕着球的，难看见无球能力。
 4/2 N号房 色情 和纸片人 和真人(可是随着以后技术的发展，纸片人的同意与否是否需要被考虑) 限制级，因为小孩子分不清虚拟和现实 想象力不能被取缔
@@ -345,30 +345,30 @@ git config --global http.proxy &amp;#34;socks5://&amp;lt;windows_ip&amp;gt;:&amp
     
     <item>
       <title>PAT刷题记录 1038 Recover the Smallest Number</title>
-      <link>https://imfaye.me/post/pat-1038/</link>
+      <link>https://bygonexf.github.io/post/pat-1038/</link>
       <pubDate>Sun, 19 Apr 2020 18:13:57 +0000</pubDate>
       
-      <guid>https://imfaye.me/post/pat-1038/</guid>
+      <guid>https://bygonexf.github.io/post/pat-1038/</guid>
       <description>Recover the Smallest Number
 #include &amp;lt;iostream&amp;gt; #include &amp;lt;string.h&amp;gt; #include &amp;lt;algorithm&amp;gt; #include &amp;lt;map&amp;gt; #include &amp;lt;vector&amp;gt; using namespace std; vector&amp;lt;string&amp;gt; num; bool cmp1(string a, string b) { int la = a.length(), lb = b.length(); string temp; if (la == lb) return a &amp;lt;= b; else if (la &amp;lt; lb) //自己重新定义字符串比较的定义 { if (a.compare(b.substr(0, la)) == 0) { temp = b.substr(la) + a; if (temp &amp;lt;= b) return false; else return true; } else return a &amp;lt;= b; } else if (la &amp;gt; lb) { if (b.</description>
     </item>
     
     <item>
       <title>PAT刷题记录 1033 To Fill or Not to Fill</title>
-      <link>https://imfaye.me/post/pat-1033/</link>
+      <link>https://bygonexf.github.io/post/pat-1033/</link>
       <pubDate>Sun, 19 Apr 2020 18:03:34 +0000</pubDate>
       
-      <guid>https://imfaye.me/post/pat-1033/</guid>
+      <guid>https://bygonexf.github.io/post/pat-1033/</guid>
       <description>很有意思的一道贪心
 #include &amp;lt;iostream&amp;gt; #include &amp;lt;string.h&amp;gt; #include &amp;lt;algorithm&amp;gt; using namespace std; double cmax, davg, dall; int n; struct Node { double price; double dis; }sta[505]; bool cmp1(Node a, Node b) { return a.dis &amp;lt; b.dis; } int main() { scanf(&amp;#34;%lf%lf%lf%d&amp;#34;, &amp;amp;cmax, &amp;amp;dall, &amp;amp;davg, &amp;amp;n); for (int i = 0; i &amp;lt; n; ++i) { scanf(&amp;#34;%lf%lf&amp;#34;, &amp;amp;sta[i].price, &amp;amp;sta[i].dis); } sort(sta, sta + n, cmp1); bool flag = false; double far = 0; int ns = 0; int i1 = 0; double min1 = 9999999; double cost = 0; double cnow = 0; double bestprice; while (sta[i1].</description>
     </item>
     
     <item>
       <title>转录，故乡，镇江</title>
-      <link>https://imfaye.me/post/zhenjiang/</link>
+      <link>https://bygonexf.github.io/post/zhenjiang/</link>
       <pubDate>Sat, 18 Apr 2020 15:04:21 +0800</pubDate>
       
-      <guid>https://imfaye.me/post/zhenjiang/</guid>
+      <guid>https://bygonexf.github.io/post/zhenjiang/</guid>
       <description>也许是初高中还在用QQ空间的时候，转载的文章，像一首小小的诗。
 我迷恋一切记录的形式，想精进一切记录的手段，写作和摄影都是。童年，故乡，记忆里的千禧年代。想自己写下一些城市志，我有太多想永远记住的物事。
 新华书店的对面是新华影剧院
@@ -423,10 +423,10 @@ git config --global http.proxy &amp;#34;socks5://&amp;lt;windows_ip&amp;gt;:&amp
     
     <item>
       <title>语言学概论 笔记</title>
-      <link>https://imfaye.me/post/linguistics/</link>
+      <link>https://bygonexf.github.io/post/linguistics/</link>
       <pubDate>Sun, 05 Apr 2020 16:44:14 +0000</pubDate>
       
-      <guid>https://imfaye.me/post/linguistics/</guid>
+      <guid>https://bygonexf.github.io/post/linguistics/</guid>
       <description>CH1 语言能力与语言系统 易境性 动物交流的特点：在场。在场与直接经验。人类不必在场传递经验，关键在语言。通过语言传递知识与经验，不必在场。
 还原生成性 基于类推原则的还原生成能力。从单词到句子，是一种创造性行为。乔姆斯基：语言是有限规则和单位生成无限的句子。
 还原生成能力：通过有限的句子还原出有限的规则和单位，并通过这些单位生成无限的句子。
@@ -450,16 +450,15 @@ git config --global http.proxy &amp;#34;socks5://&amp;lt;windows_ip&amp;gt;:&amp
 两层性意味着可以用有限的手段(主要是语音)产生无限的符号形式(和有限的符号产生无限的符号组合不一样)
 人类自然语音从低到高有音位层、音节层、语素层、词汇层、词组层、句子层。音位系统是区别意义层，语素系统是表达意义层。
 一般认为汉语中有27个音质音位。
-语音是人类社会的一部分。是我们先天还是后天的能力。即使有先天的语言能力，必须有后天的交流环境，语言系统。语言学习关键期。
-CH2 语言和思维 </description>
+语音是人类社会的一部分。是我们先天还是后天的能力。即使有先天的语言能力，必须有后天的交流环境，语言系统。语言学习关键期。</description>
     </item>
     
     <item>
       <title>操作系统笔记 CH13 I/O Systems</title>
-      <link>https://imfaye.me/post/os13/</link>
+      <link>https://bygonexf.github.io/post/os13/</link>
       <pubDate>Fri, 28 Feb 2020 13:13:24 +0000</pubDate>
       
-      <guid>https://imfaye.me/post/os13/</guid>
+      <guid>https://bygonexf.github.io/post/os13/</guid>
       <description>the kernel is structured to use device-driver modules.
 device driver为IO子系统提供了统一设备访问接口
 两个趋势：接口日益标准化，设备多样性
@@ -478,10 +477,10 @@ status control data-in data-out Techniques for Performing I/O</description>
     
     <item>
       <title>操作系统笔记 CH12 Mass-Storage Structure</title>
-      <link>https://imfaye.me/post/os12/</link>
+      <link>https://bygonexf.github.io/post/os12/</link>
       <pubDate>Fri, 28 Feb 2020 13:12:24 +0000</pubDate>
       
-      <guid>https://imfaye.me/post/os12/</guid>
+      <guid>https://bygonexf.github.io/post/os12/</guid>
       <description>磁盘 扇区0是最外面柱面的第一个磁道的第一个扇区。映射先按磁道内扇区顺序，再按柱面内磁道顺序，最后按从外到内的柱面顺序来排序的。
 Head crash results from disk head making contact with the disk surface. Cannot be repaired, the entire disk must be replaced.
 Disks can be removable
@@ -492,10 +491,10 @@ Disk controllers have a built-in cache. Data transfer at the disk drive happens 
     
     <item>
       <title>操作系统笔记 CH11 File-System Implementation</title>
-      <link>https://imfaye.me/post/os11/</link>
+      <link>https://bygonexf.github.io/post/os11/</link>
       <pubDate>Fri, 28 Feb 2020 13:11:24 +0000</pubDate>
       
-      <guid>https://imfaye.me/post/os11/</guid>
+      <guid>https://bygonexf.github.io/post/os11/</guid>
       <description>文件系统结构 磁盘特点：可以原地重写，可以直接访问任意一块。
 内存和磁盘之间的IO以块为单位。每块为一个或多个扇区。扇区通常为512B
 File system resides on secondary storage (disks) OS通过文件系统存储、定位、提取数据
@@ -519,10 +518,10 @@ Layering useful for reducing complexity and redundancy, but adds overhead and ca
     
     <item>
       <title>操作系统笔记 CH10 File-System Interface</title>
-      <link>https://imfaye.me/post/os10/</link>
+      <link>https://bygonexf.github.io/post/os10/</link>
       <pubDate>Fri, 28 Feb 2020 13:10:24 +0000</pubDate>
       
-      <guid>https://imfaye.me/post/os10/</guid>
+      <guid>https://bygonexf.github.io/post/os10/</guid>
       <description>file concept 文件：记录在外存上的 相关信息的 具有名称的 集合，逻辑内存的最小分配单元
 通常，文件表示程序和数据
 free form or may be formatted rigidly
@@ -540,10 +539,10 @@ reposition</description>
     
     <item>
       <title>操作系统笔记 CH9 Virtual Memory</title>
-      <link>https://imfaye.me/post/os9/</link>
+      <link>https://bygonexf.github.io/post/os9/</link>
       <pubDate>Fri, 28 Feb 2020 13:09:24 +0000</pubDate>
       
-      <guid>https://imfaye.me/post/os9/</guid>
+      <guid>https://bygonexf.github.io/post/os9/</guid>
       <description>background CH8的内存管理方案需要将整个进程放入内存，动态载入只能减轻这一限制
 Code needs to be in memory to execute, but entire program rarely used.
 execute partially-loaded program
@@ -557,10 +556,10 @@ demand paging demand segmentation demand paging 按需调页 Lazy swapper: never
     
     <item>
       <title>操作系统笔记 CH8 Main Memory</title>
-      <link>https://imfaye.me/post/os8/</link>
+      <link>https://bygonexf.github.io/post/os8/</link>
       <pubDate>Fri, 28 Feb 2020 13:08:24 +0000</pubDate>
       
-      <guid>https://imfaye.me/post/os8/</guid>
+      <guid>https://bygonexf.github.io/post/os8/</guid>
       <description>background 基本硬件 CPU可直接访问的存储器只有 内存 和 处理器内的寄存器
 ​	CPU内置寄存器可在一个CPU时钟周期内完成访问，对于寄存器中的内容，CPU可以在一个周期内解析并执行多个指令
 ​	对于内存，访存可能需要多个时钟周期。没有数据时，要暂停(stall)
@@ -590,10 +589,10 @@ logical vs.</description>
     
     <item>
       <title>操作系统笔记 CH7 Deadlocks</title>
-      <link>https://imfaye.me/post/os7/</link>
+      <link>https://bygonexf.github.io/post/os7/</link>
       <pubDate>Fri, 28 Feb 2020 13:07:24 +0000</pubDate>
       
-      <guid>https://imfaye.me/post/os7/</guid>
+      <guid>https://bygonexf.github.io/post/os7/</guid>
       <description>deadlock characteristics necessary conditions 4个条件同时满足，引起死锁：
 mutual exclusion
 至少有一个资源处于非共享模式，一次只能有一个进程使用
@@ -631,10 +630,10 @@ a system is in a safe state only if there exists a safe sequence</description>
     
     <item>
       <title>操作系统笔记 CH6 Process Synchronization</title>
-      <link>https://imfaye.me/post/os6/</link>
+      <link>https://bygonexf.github.io/post/os6/</link>
       <pubDate>Fri, 28 Feb 2020 13:06:24 +0000</pubDate>
       
-      <guid>https://imfaye.me/post/os6/</guid>
+      <guid>https://bygonexf.github.io/post/os6/</guid>
       <description>race condition: 多个进程并发访问和操作同一数据，结果与访问顺序有关
 critical section critical section: 进程可能改变共同变量，更新表，写文件的代码段
 entry section: 实现请求进入其临界区的代码段
@@ -652,10 +651,10 @@ TestAndSet()
     
     <item>
       <title>操作系统笔记 CH5 CPU Scheduling</title>
-      <link>https://imfaye.me/post/os5/</link>
+      <link>https://bygonexf.github.io/post/os5/</link>
       <pubDate>Fri, 28 Feb 2020 13:05:24 +0000</pubDate>
       
-      <guid>https://imfaye.me/post/os5/</guid>
+      <guid>https://bygonexf.github.io/post/os5/</guid>
       <description>dispatcher: gives control of the CPU to the process selected by the short-term scheduler;
 dispatch latency
 scheduling criteria CPU utilization,
@@ -677,10 +676,10 @@ shortest next CPU burst</description>
     
     <item>
       <title>操作系统笔记 CH4 Threads</title>
-      <link>https://imfaye.me/post/os4/</link>
+      <link>https://bygonexf.github.io/post/os4/</link>
       <pubDate>Fri, 28 Feb 2020 13:04:24 +0000</pubDate>
       
-      <guid>https://imfaye.me/post/os4/</guid>
+      <guid>https://bygonexf.github.io/post/os4/</guid>
       <description>Dispatching is referred to as a thread. Resource of ownership is referred to as a process or task.
 对进程的swapping和termination都牵扯它所有线程
 线程是CPU使用的基本单位。由thread ID, program counter, register set, stack组成
@@ -698,10 +697,10 @@ When a thread performs a blocking system call, the kernel can schedule another t
     
     <item>
       <title>操作系统笔记 CH3 Process</title>
-      <link>https://imfaye.me/post/os3/</link>
+      <link>https://bygonexf.github.io/post/os3/</link>
       <pubDate>Fri, 28 Feb 2020 13:03:24 +0000</pubDate>
       
-      <guid>https://imfaye.me/post/os3/</guid>
+      <guid>https://bygonexf.github.io/post/os3/</guid>
       <description>process concepts batch system: job; time-sharing system: program/task
 Program is passive entity stored on disk (executable file), process is active.
 a process includes
@@ -711,10 +710,10 @@ new: being created running: instructions are being executed waiting/limiting: wa
     
     <item>
       <title>操作系统笔记 CH2 OS structures</title>
-      <link>https://imfaye.me/post/os2/</link>
+      <link>https://bygonexf.github.io/post/os2/</link>
       <pubDate>Fri, 28 Feb 2020 13:01:24 +0000</pubDate>
       
-      <guid>https://imfaye.me/post/os2/</guid>
+      <guid>https://bygonexf.github.io/post/os2/</guid>
       <description>UI CLI command-line / command interpreter
 implemented in kernel (MS-DOS)
 by systems program (Windows / UNIX)
@@ -730,10 +729,10 @@ Mostly accessed by programs via a high-level Application Program Interface (API)
     
     <item>
       <title>操作系统笔记 CH1 Intro</title>
-      <link>https://imfaye.me/post/os1/</link>
+      <link>https://bygonexf.github.io/post/os1/</link>
       <pubDate>Fri, 28 Feb 2020 13:00:24 +0000</pubDate>
       
-      <guid>https://imfaye.me/post/os1/</guid>
+      <guid>https://bygonexf.github.io/post/os1/</guid>
       <description>What OS do 操作系统是管理计算机硬件的程序
 computer system: hardware, operating system, application programs, users
 ​	hardware: CPU, memory, I/O devices
@@ -754,10 +753,10 @@ arithmetic overflow, accesss forbidden memory locations
     
     <item>
       <title>也许是什么的开始...</title>
-      <link>https://imfaye.me/post/beginning/</link>
+      <link>https://bygonexf.github.io/post/beginning/</link>
       <pubDate>Sat, 07 Sep 2019 00:23:06 +0000</pubDate>
       
-      <guid>https://imfaye.me/post/beginning/</guid>
+      <guid>https://bygonexf.github.io/post/beginning/</guid>
       <description>最近很迷茫呢&amp;hellip;
 感觉自己不学无术&amp;hellip;
 夜里12点了，在宿舍床上的电脑桌上敲我的第一篇博客。
