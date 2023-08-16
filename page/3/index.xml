@@ -7,175 +7,9 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Faye</copyright>
-    <lastBuildDate>Sun, 15 Jan 2023 15:04:21 +0800</lastBuildDate>
+    <lastBuildDate>Fri, 23 Dec 2022 15:04:21 +0800</lastBuildDate>
     
         <atom:link href="https://bygonexf.github.io/index.xml" rel="self" type="application/rss+xml" />
-    
-    
-    
-        <item>
-        <title>操作系统笔记 CH9 Virtual Memory</title>
-        <link>https://bygonexf.github.io/post/os9/</link>
-        <pubDate>Fri, 28 Feb 2020 13:09:24 +0000</pubDate>
-        
-        <guid>https://bygonexf.github.io/post/os9/</guid>
-        <description>Fxye. https://bygonexf.github.io/post/os9/ -&lt;h2 id=&#34;background&#34;&gt;background&lt;/h2&gt;
-&lt;p&gt;CH8的内存管理方案需要将整个进程放入内存，动态载入只能减轻这一限制&lt;/p&gt;
-&lt;p&gt;Code needs to be in memory to execute, but entire program rarely used.&lt;/p&gt;
-&lt;p&gt;execute partially-loaded program&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;程序不受现有物理内存大小限制，可以为virtual address space编写程序&lt;/li&gt;
-&lt;li&gt;更多程序可以同时执行，CPU利用率增加，而响应时间、周转时间不增加&lt;/li&gt;
-&lt;li&gt;载入或交换程序所需IO变少，用户程序运行更快&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Virtual memory – separation of user logical memory from physical memory.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577436249080.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
-&lt;p&gt;动态内存分配，堆向上增长；子程序调用，栈向下增长。包括洞的虚拟地址空间是稀地址空间。&lt;/p&gt;
-&lt;p&gt;Enables sparse address spaces with holes left for growth, dynamically linked libraries, etc.&lt;/p&gt;
-&lt;p&gt;Virtual memory allows files and memory to be shared by two or more processes through page sharing.&lt;/p&gt;
-&lt;p&gt;虚拟内存实现：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;demand paging&lt;/li&gt;
-&lt;li&gt;demand segmentation&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;demand-paging-按需调页&#34;&gt;demand paging 按需调页&lt;/h2&gt;
-&lt;p&gt;Lazy swapper: never swaps a page into memory unless that page will be needed.&lt;/p&gt;
-&lt;p&gt;swapper对整个进程进行操作，pager只对进程的单个页进行操作&lt;/p&gt;
-&lt;p&gt;页表条目，valid-invalid bit: valid-合法也在内存 invalid-无效(不在逻辑地址空间) 或 有效但在磁盘&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577443877399.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577444151280.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577444186893.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
-&lt;p&gt;pure demand paging: 只有在需要时才将页调入内存&lt;/p&gt;
-&lt;p&gt;单个指令可能访问多个页的内存(一页指令，其他页数据)，一个指令可能产生多个page fault. 不过由于locality of reference, 按需调页的性能还算合理。&lt;/p&gt;
-&lt;p&gt;按需调页的硬件支持：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Page table with valid-Invalid bit&lt;/li&gt;
-&lt;li&gt;Secondary memory (swap device with swap space)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;请求调页的关键要求是能够在页错误后instruction restart&lt;/p&gt;
-&lt;p&gt;如果页错误在获取操作数时，再次获取指令，再次译码指令，再次获取操作数。&lt;/p&gt;
-&lt;p&gt;一个指令可能改变多个不同位置。若源和目的块有重叠，源块可能已修改，不能简单地再次执行。(微码计算试图访问两块的两端；临时寄存器保存覆盖位置的值)&lt;/p&gt;
-&lt;p&gt;EAT = (1– p) * memory access time + p * page fault service time&lt;/p&gt;
-&lt;p&gt;page fault service time = page fault overhead+[ swap page out ]+swap page in+restart overhead&lt;/p&gt;
-&lt;p&gt;处理页错误中断和重新启动进程可以通过仔细编码降低开销&lt;/p&gt;
-&lt;p&gt;EAT与页错误率直接相关&lt;/p&gt;
-&lt;p&gt;与文件无关的页需要使用交换空间&lt;/p&gt;
-&lt;h2 id=&#34;copy-on-write-写时复制&#34;&gt;Copy-on-Write 写时复制&lt;/h2&gt;
-&lt;p&gt;fork()使用写时复制技术&lt;/p&gt;
-&lt;p&gt;父子进程开始时共享同一页面。这些页面标记为写时复制页(只有可能修改的页需要标记)。如果任一进程对页进行写，创建一个共享页的副本。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577445363016.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
-&lt;p&gt;COW allows more efficient process creation as only modified pages are copied.&lt;/p&gt;
-&lt;p&gt;free pages are allocated from a pool of free pages. 采用按需填零(zero-fill-on-demand)技术分配这些页，需要分配前先填零，因此清除了以前的内容。&lt;/p&gt;
-&lt;p&gt;vfork()，不采用copy-on-write，vfork()将父进程挂起，子进程使用父进程的地址空间。如果子进程修改父进程地址空间的任何页， 父进程重启时可见。主要用于子进程被创建后立即调用exec()的情况。比较高效。用于实现UNIX命令行shell的接口。&lt;/p&gt;
-&lt;h2 id=&#34;page-replacement&#34;&gt;page replacement&lt;/h2&gt;
-&lt;p&gt;Use modify bit (dirty bit) to reduce overhead of page transfers. 不修改的话不需要写回磁盘&lt;/p&gt;
-&lt;p&gt;Page replacement completes separation between logical memory and physical memory.&lt;/p&gt;
-&lt;p&gt;frame-allocation algorithm&lt;/p&gt;
-&lt;p&gt;page replacement algorithm&lt;/p&gt;
-&lt;p&gt;reference string: 内存的引用序列&lt;/p&gt;
-&lt;h3 id=&#34;fifo&#34;&gt;FIFO&lt;/h3&gt;
-&lt;p&gt;Belady&amp;rsquo;s anomaly: 页错误率可能会随着所分配的帧数的增加而增加&lt;/p&gt;
-&lt;h3 id=&#34;optmin&#34;&gt;OPT/MIN&lt;/h3&gt;
-&lt;p&gt;置换最长时间不会使用的页&lt;/p&gt;
-&lt;p&gt;未来知识&lt;/p&gt;
-&lt;h3 id=&#34;lru&#34;&gt;LRU&lt;/h3&gt;
-&lt;p&gt;最长时间没有使用的页&lt;/p&gt;
-&lt;p&gt;By the principle of locality, this should be the page least likely to be referenced in the near future.&lt;/p&gt;
-&lt;p&gt;Associates with each page the time of that page’s last use.&lt;/p&gt;
-&lt;p&gt;两种可行实现：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;counter&lt;/p&gt;
-&lt;p&gt;每个页表项关联一个使用时间域。对每次引用，计数器增加。置换具有最小时间的页。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;stack&lt;/p&gt;
-&lt;p&gt;没引用一个页，页就从栈中删除并放在顶部&lt;/p&gt;
-&lt;p&gt;No search for replacement, LRU page is at the bottom.&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;lru-approximation-algorithms&#34;&gt;LRU Approximation Algorithms&lt;/h3&gt;
-&lt;p&gt;LRU needs special hardware and still slow.所以用近似算法&lt;/p&gt;
-&lt;p&gt;页表每项都关联一个reference bit, 每引用一个页(读or写)，引用位被硬件置1&lt;/p&gt;
-&lt;h4 id=&#34;reference-bit-algorithm&#34;&gt;Reference bit algorithm&lt;/h4&gt;
-&lt;p&gt;When page is referenced, the bit is set to 1 by the hardware.&lt;/p&gt;
-&lt;p&gt;Replace the one which is 0 (if one exists).&lt;/p&gt;
-&lt;p&gt;Problem ：We do not know the order.&lt;/p&gt;
-&lt;h4 id=&#34;additional-reference-bits-algorithm&#34;&gt;Additional-reference-bits algorithm&lt;/h4&gt;
-&lt;p&gt;Keep an 8-bit byte for each page in a table in memory.&lt;/p&gt;
-&lt;p&gt;规定时间间隔里记录引用位&lt;/p&gt;
-&lt;p&gt;At regular intervals, a timer interrupts, OS shifts the reference bit for each page into the high-order bit of its 8- bit byte, shifting the other bits right by 1 bit and discarding the low-order bit.&lt;/p&gt;
-&lt;p&gt;将这8位看作无符号整数，置换具有最小值的页&lt;/p&gt;
-&lt;h4 id=&#34;second-chance--clock&#34;&gt;Second chance / Clock&lt;/h4&gt;
-&lt;p&gt;Basic algorithm: FIFO&lt;/p&gt;
-&lt;p&gt;循环队列，指针向前移动直到找到一个引用位为0的页，在向前移动时，清除引用位。&lt;/p&gt;
-&lt;p&gt;如果所有位均已设置，会遍历整个队列。成了FIFO&lt;/p&gt;
-&lt;h4 id=&#34;enhanced-second-chance-algorithm&#34;&gt;Enhanced Second-Chance Algorithm&lt;/h4&gt;
-&lt;p&gt;(reference bit, modify bit)&lt;/p&gt;
-&lt;p&gt;(0,0)最好 (0,1) (1,0) (1,1)&lt;/p&gt;
-&lt;p&gt;降低IO&lt;/p&gt;
-&lt;h3 id=&#34;counting-based-page-replacement&#34;&gt;Counting-based page replacement&lt;/h3&gt;
-&lt;p&gt;每个页保留一个用于记录引用次数的计数器。&lt;/p&gt;
-&lt;p&gt;LFU: replaces page with the smallest count&lt;/p&gt;
-&lt;p&gt;MFU: page with the smallest count was probably just brought in and has yet to be used.&lt;/p&gt;
-&lt;h2 id=&#34;page-allocation-帧分配&#34;&gt;page allocation 帧分配&lt;/h2&gt;
-&lt;p&gt;分配至少最少数量的帧。必须有足够的帧容纳所有单个指令所引用的页。&lt;/p&gt;
-&lt;p&gt;每个进程的帧的最少数量由体系结构决定，最大数量由可用物理内存的数量决定。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;fixed allocation&lt;/p&gt;
-&lt;p&gt;高低优先级一样处理&lt;/p&gt;
-&lt;p&gt;when a page fault occurs, one of the pages of that process must be replaced. &amp;ndash; Local replacement&lt;/p&gt;
-&lt;p&gt;固定分配必须局部置换(置换自己进程里的页)&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;equal allocation&lt;/p&gt;
-&lt;p&gt;n个进程之间分配m个帧，每个m/n帧&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;proportional allocation&lt;/p&gt;
-&lt;p&gt;根据进程大小比例地分配内存&lt;/p&gt;
-&lt;p&gt;进程pi的虚拟内存大小si&lt;/p&gt;
-&lt;p&gt;a i = s i /S * m&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;priority allocation&lt;/p&gt;
-&lt;p&gt;Use a proportional allocation scheme using priorities rather than size, or on a combination of size and priority.&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Local replacement:  select for replacement one of its frames&lt;/p&gt;
-&lt;p&gt;​	分配每个进程的帧的数量不变&lt;/p&gt;
-&lt;p&gt;Global replacement:  select for replacement a frame from a process with lower priority number&lt;/p&gt;
-&lt;p&gt;​	易于实现。更好的系统吞吐量，常用。&lt;/p&gt;
-&lt;p&gt;​	OS keeps list of free frames.&lt;/p&gt;
-&lt;p&gt;​	进程不能控制其页错误率(受其他进程调页行为影响)&lt;/p&gt;
-&lt;h2 id=&#34;thrashing-系统颠簸&#34;&gt;thrashing 系统颠簸&lt;/h2&gt;
-&lt;p&gt;thrashing: 频繁的页调度行为&lt;/p&gt;
-&lt;p&gt;如果一个进程在换页上用的时间多于执行时间，这个进程就在颠簸&lt;/p&gt;
-&lt;p&gt;CPU调度程序发现CPU使用率降低，增加多道程序程度&amp;hellip;更多页错误，CPU使用率更低&lt;/p&gt;
-&lt;p&gt;颠簸时，为了增加CPU使用率和降低系统颠簸，必须降低多道程序的程度&lt;/p&gt;
-&lt;p&gt;采用局部置换，一个进程颠簸不会使其他进程颠簸&lt;/p&gt;
-&lt;p&gt;Why does thrashing occur? Σ locality size &amp;gt; total memory size&lt;/p&gt;
-&lt;p&gt;using a local (or priority) replacement algorithm, Can limit the effect of thrashing.&lt;/p&gt;
-&lt;p&gt;为了防止颠簸，必须提供进程所需的足够多的帧。&lt;/p&gt;
-&lt;p&gt;Locality: a set of pages that are actively used together. Process migrates from one locality to another. Localities may overlap.&lt;/p&gt;
-&lt;h3 id=&#34;working-set-model-工作集合模型&#34;&gt;Working-Set Model 工作集合模型&lt;/h3&gt;
-&lt;p&gt;基于局部性假设&lt;/p&gt;
-&lt;p&gt;参数Δ定义working-set window：a fixed number of page references&lt;/p&gt;
-&lt;p&gt;Working Set: the set of pages in the most recent Δ page references.&lt;/p&gt;
-&lt;p&gt;WSS i (working set size of Process P i ) : (varies in time) the number of pages in Working Set of process P i .&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/bygonexf/Blog-Images/master/1577453374315.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
-&lt;p&gt;工作集合的精度与Δ的选择有关，太小不能包含整个局部，太大包含多个局部&lt;/p&gt;
-&lt;p&gt;总的帧需求量 D =Σ WSS i  总的需求大于帧的数量，会出现颠簸&lt;/p&gt;
-&lt;p&gt;OS跟踪每个进程的工作集合，如果D &amp;gt; m，暂停一个进程，该进程的页被写出，且其帧可分配给其他进程&lt;/p&gt;
-&lt;p&gt;通过固定定时中断(interval timer)和引用位(reference bit)可以近似模拟工作集合模型&lt;/p&gt;
-&lt;h3 id=&#34;page-fault-frequency-schemeppf-页错误频率&#34;&gt;Page-Fault Frequency Scheme(PPF) 页错误频率&lt;/h3&gt;
-&lt;p&gt;为所期望的页错误率设置上限和下限。超过上限，为进程分配更多的帧；低于下限，从该进程中移走帧。&lt;/p&gt;
-&lt;p&gt;如果页错误率增加且没有可用帧，必须选择一个进程暂停，可将释放的帧分配给具有高页错误率的进程&lt;/p&gt;
-- https://bygonexf.github.io/post/os9/ - Faye</description>
-        </item>
     
     
     
@@ -1410,6 +1244,22 @@ bootsrap program: stored in ROM/EEPROM, AKA firmware&lt;/p&gt;
 &lt;hr&gt;
 &lt;p&gt;最后留个邮箱：faye#stu.pku.edu.cn (请将#替换为@)&lt;/p&gt;
 - https://bygonexf.github.io/about/ - Faye</description>
+        </item>
+    
+    
+    
+        <item>
+        <title>也许是什么的开始...</title>
+        <link>https://bygonexf.github.io/post/beginning/</link>
+        <pubDate>Sat, 07 Sep 2019 00:23:06 +0000</pubDate>
+        
+        <guid>https://bygonexf.github.io/post/beginning/</guid>
+        <description>Fxye. https://bygonexf.github.io/post/beginning/ -&lt;p&gt;最近很迷茫呢&amp;hellip;&lt;/p&gt;
+&lt;p&gt;感觉自己不学无术&amp;hellip;&lt;/p&gt;
+&lt;p&gt;夜里12点了，在宿舍床上的电脑桌上敲我的第一篇博客。&lt;/p&gt;
+&lt;p&gt;如题，希望是什么的开始。&lt;/p&gt;
+&lt;p&gt;TBC&lt;/p&gt;
+- https://bygonexf.github.io/post/beginning/ - Faye</description>
         </item>
     
     
