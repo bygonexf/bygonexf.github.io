@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>有情笔记 on fxye.</title><link>https://bygonexf.github.io/categories/%E6%9C%89%E6%83%85%E7%AC%94%E8%AE%B0/</link><description>Recent content in 有情笔记 on fxye.</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sun, 10 Jul 2022 23:43:59 +0800</lastBuildDate><atom:link href="https://bygonexf.github.io/categories/%E6%9C%89%E6%83%85%E7%AC%94%E8%AE%B0/index.xml" rel="self" type="application/rss+xml"/><item><title>耶，VAE</title><link>https://bygonexf.github.io/p/%E8%80%B6vae/</link><pubDate>Sun, 10 Jul 2022 23:43:59 +0800</pubDate><guid>https://bygonexf.github.io/p/%E8%80%B6vae/</guid><description>&lt;h2 id="引子">引子
+&lt;/h2>&lt;h3 id="生成模型">生成模型
+&lt;/h3>&lt;p>能从可学习的概率分布中采样得到样本的模型。&lt;/p>
+&lt;p>在一些生成模型中，样本通过将随机的隐层变量送入网络生成得到。&lt;/p>
+&lt;p>&lt;img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/image-20220727234631635.png"
+loading="lazy"
+>&lt;/p>
+&lt;h3 id="自编码器-ae">自编码器 AE
+&lt;/h3>&lt;p>自编码器通过学习从输入到隐层和从隐层到输出的映射来重建信号/图像。&lt;/p>
+&lt;p>目标：$X&amp;rsquo; = D_\theta(E_\phi(X)) \approx X$&lt;/p>
+&lt;p>$\mathop{min}\limits_{\theta, \phi} \sum\limits_{i=1}^n||D_\theta(E_\phi(X_i))-X_i||^2$，其中 ${{X_i}}_{i=1\cdots n}$ 为数据集。&lt;/p>
+&lt;p>自编码器并不是一种生成模型，因为它并没有定义一个概率分布，无法采样。&lt;/p>
+&lt;p>&lt;strong>自编码器 → 生成模型？&lt;/strong>&lt;/p>
+&lt;p>我们会有一个很自然的做生成模型的想法，那就是训练一个从低维隐层变量生成观测样本的生成模型，最大化观测数据似然。&lt;/p>
+&lt;p>假设这个生成模型为 $G_{\theta}:\mathbb{R}^k \rightarrow \mathbb{R}^d$，其中 $k &amp;lt; d$，将隐层变量 $Z$ 映射为样本 $X$，那么其实在样本空间里几乎大部分区域 $p(X)=0$。&lt;/p>
+&lt;p>&lt;img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/image-20220727234646078.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>如果我们从样本空间看，在这个高维空间只会有非常小的一个低维空间子集 $p(X)$ 是有值的，并且我们在训练的时候其实是不知道这个子集的分布的，而其余大部分区域 $p(X)=0$，也就意味着我们很难直接优化似然。&lt;/p>
+&lt;p>但是有一种方法可以让我们在每一处都得到非零值，那就是在已有先验 $p(Z)$ 的条件下，定义一个有噪声的观测模型 $p_\theta(X|Z)=\mathcal{N}(X;G_\theta(Z), \eta I)$ (其中 $\eta$ 是可调整的参数，$I$ 是单位矩阵)。&lt;/p>
+&lt;p>所以 $p(X) = \int p(Z)p(X|Z)\mathrm{d}Z$，这个值也很难去计算，所以我们不是去优化 $p(X)$ 而是去优化 $p(X)$ 的下限（变分推断里的证据下限 ELBO，后面会证明）。&lt;/p>
+&lt;p>那么这其实就是 VAE 的雏形了。&lt;/p>
+&lt;h2 id="变分自编码器-vae">变分自编码器 VAE
+&lt;/h2>&lt;p>&lt;img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/image-20220727234659598.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>上面的图是 VAE 的整体思路，生成的部分也是也就是 decoder 的部分，我们会假设 $Z$ 服从一个简单的先验分布 $p(Z)$，这个分布可以是一个标准正态分布。通过 decoder 会得到高维图像空间的&lt;strong>一个概率分布&lt;/strong>。&lt;/p>
+&lt;p>而 encoder 端，注意 VAE 有一个很重要的想法是，我们不去直接计算难以计算的 $p_\theta(Z|X)$，而是用另外单独学习的网络去模拟一个 $q_\phi(Z|X)$，它其实是 $p_\theta(Z|X)$ 的一个近似。&lt;/p>
+&lt;h3 id="p_thetax-推导">$p_\theta(X)$ 推导
+&lt;/h3>&lt;p>&lt;img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/image-20220727234713512.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>再看一下 $p_\theta(X)$ 下界的推导过程。①：因为 $p_\theta(X)$ 是独立于 $Z$ 的，所以我们可以去计算它在 $Z$ 上的期望；②：条件概率公式；③：上下约一个 $q_\phi(Z|X)$；④：右边的项其实就是 $q_\phi(Z|X)$ 和 $p_\theta(Z|X)$ 的 KL 散度，KL 散度衡量的是两个概率分布之间的相似性，两者差异越小，KL 散度越小，两分布完全一致时 KL 散度才为 0，所以因为右项恒大于等于 0，我们可以把左项视为 $log\space p_\theta(X)$ 的下界。之后就不直接优化 $log\space p_\theta(X)$，而是优化这个下界。&lt;/p>
+&lt;h3 id="variational-lower-bound-的直观解释">Variational Lower Bound 的直观解释
+&lt;/h3>&lt;p>&lt;img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/image-20220727234726362.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>再来看一下怎么理解这个变分下界，注意我们的目标是最大化这个下界。首先用条件概率公式替换一下，之后把式子拆成两部分，下面来解释一下为什么第一项是重建误差，第二项是正则项。&lt;/p>
+&lt;p>&lt;img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/image-20220727234737121.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>之前说了我们建立了一个有噪声的观测模型 $p_\theta(X|Z)=\mathcal{N}(X;G_\theta(Z), \eta I)$ (就是 $Z$ 通过 decoder 后得到的那个高维图像空间的分布)，正态分布的公式不用说了吧，代入一下就会发现第一项是一个 L2 距离，最大化这个负的 L2 距离就是在减小重建误差，encourage $q_\phi$ to be point mass，这句话我是这么理解的，point mass 其实是离散的概率分布，减小重建误差就是在消除我们加的这个高斯噪声，让它成为类似于我们最先讲的那个被舍弃的点到点的离散概率模型（但注意它又是连续概率，所以就是接近奇异分布？）。&lt;/p>
+&lt;p>&lt;img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/image-20220727234745973.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>再看第二项，这一项可以写成一个 KL 散度，我们最大化负的这个 KL 散度就是在让 $q_\phi(Z|X)$ 和 $p(Z)$ 两个概率分布尽可能接近。上一项重建损失是鼓励 $q_\phi$ 去成为 point mass，这里则是平滑 $q_\phi$ 去使它尽可能接近标准正态分布。&lt;/p>
+&lt;p>可以看到两项之间存在相驳的张力，前一项试图让 $q_\phi$ 成为奇异分布，后一项则试图让 $q_\phi$ 不要成为奇异分布。可以理解为前者鼓励它准，后者鼓励它具有更强的生成性。&lt;/p>
+&lt;h3 id="vae-架构">VAE 架构
+&lt;/h3>&lt;p>&lt;img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/image-20220727234755246.png"
+loading="lazy"
+>&lt;/p>
+&lt;p>再来看一下 VAE 的实际架构。主要有两点值得细说。&lt;/p>
+&lt;p>第一点是，如果我们对每个 $X_i$ 找最最佳的 $q_\phi(Z|X_i)$，然后优化 $\phi$，这样的更新代价会很大。所以我们不这么做，而是去学习一个 inference 网络预测这个 $q_\phi(Z|X_i)$ 的均值和方差（实际上预测的是 $\mu$ 和 $log \space \sigma$），这样 inference 阶段的模型参数对于所有的数据参数是共享的，就可以分摊学习和更新的成本。&lt;/p>
+&lt;p>第二点是，采样的操作本身是不能反向传播的，所以采样这里用到了重参数化的技巧，也就是从 $\mathcal{N}(0,1)$ 中采样一个 $\varepsilon$，然后让 $Z=\mu + \varepsilon \times \sigma$，这样采样的操作就可以独立于网络之外，其他所有环节都能进行反向传播。&lt;/p>
+&lt;h3 id="stochastic-gradient-optimization-of-vlb">Stochastic Gradient Optimization of VLB
+&lt;/h3>&lt;p>Todo…&lt;/p>
+&lt;h2 id="参考">参考
+&lt;/h2>&lt;p>&lt;a class="link" href="https://khoury.northeastern.edu/home/hand/teaching/cs7150-summer-2020/Variational_Autoencoders.pdf" target="_blank" rel="noopener"
+>https://khoury.northeastern.edu/home/hand/teaching/cs7150-summer-2020/Variational_Autoencoders.pdf&lt;/a>&lt;/p>
+&lt;p>&lt;a class="link" href="https://www.youtube.com/watch?v=c27SHdQr4lw" target="_blank" rel="noopener"
+>https://www.youtube.com/watch?v=c27SHdQr4lw&lt;/a> （力荐 👍）&lt;/p></description></item><item><title>端到端图像/视频压缩里的熵模型</title><link>https://bygonexf.github.io/p/%E7%AB%AF%E5%88%B0%E7%AB%AF%E5%9B%BE%E5%83%8F/%E8%A7%86%E9%A2%91%E5%8E%8B%E7%BC%A9%E9%87%8C%E7%9A%84%E7%86%B5%E6%A8%A1%E5%9E%8B/</link><pubDate>Wed, 20 Apr 2022 17:04:37 +0800</pubDate><guid>https://bygonexf.github.io/p/%E7%AB%AF%E5%88%B0%E7%AB%AF%E5%9B%BE%E5%83%8F/%E8%A7%86%E9%A2%91%E5%8E%8B%E7%BC%A9%E9%87%8C%E7%9A%84%E7%86%B5%E6%A8%A1%E5%9E%8B/</guid><description>&lt;h2 id="概率分布与熵编码">概率分布与熵编码
+&lt;/h2>&lt;p>在端到端图像/视频压缩模型中，我们需要去尽可能精准地模拟待编码元素值的概率分布。一方面是为了更精确地进行码率估计，另一方面也是因为更精准的概率分布建模能使得熵编码环节更好地消除统计冗余节省码字。&lt;/p>
+&lt;p>&lt;img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/2023/02/upgit_20230224_1677253790.png"
+loading="lazy"
+alt="image-20230224234946517"
+>&lt;/p>
+&lt;p>建模出概率分布后，在实际熵编码中，就可以通过概率分布生成熵编码器所需要的概率表。&lt;/p>
+&lt;p>多说一句，在传统编解码里，通常熵编码会采用自适应模型，即随着编码字符的输入，不断更新概率分布（自适应模型相比静态模型效率更高，符合局部性原理，适应符号概率忽大忽小的波动，如果能合理地利用上下文信息压缩效率可以远超静态模型）。然而在端到端压缩模型里，通常直接通过网络生成独立的概率分布的参数，不会随着编码过程更新概率表。&lt;/p>
+&lt;h2 id="量化不可导">量化不可导
+&lt;/h2>&lt;p>这个没什么好说的，量化四舍五入的取整操作显然是不可导的，所以在训练的时候可以通过加均匀噪声来替换四舍五入的操作。&lt;/p>
+&lt;p>&lt;img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/2023/02/upgit_20230225_1677299134.png"
+loading="lazy"
+alt="image-20230225122531069"
+>&lt;/p>
+&lt;p>在训练阶段，我们会通过给待编码元素值加上-0.5到0.5的均匀噪声来替代量化操作。而实际推理的时候，就正常进行量化。&lt;/p>
+&lt;h2 id="均匀噪声涉及到的概率关系">均匀噪声涉及到的概率关系
+&lt;/h2>&lt;p>&lt;img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/2023/02/upgit_20230225_1677304856.png"
+loading="lazy"
+alt="image-20230225124013214"
+>&lt;/p>
+&lt;p>首先明确一下这几条线分布代表什么。&lt;/p>
+&lt;p>$p_{y_i}$：编码空间元素值的概率密度函数&lt;/p>
+&lt;p>$p_{\tilde{y_i}}$：$y_i$ 加上均匀噪声后的概率密度函数&lt;/p>
+&lt;p>$p_{\hat{y_i}}$：$y_i$量化后的概率质量函数（量化后就成了离散型变量了）&lt;/p>
+&lt;p>均匀噪声其实就是均匀分布 $U(-0.5, 0.5)$，$y_i$ 加上均匀噪声得到 $\tilde{y_i}$，两个独立的连续随机变量的和的概率分布公式是 $f_{X+Y}(z) = \int_{-\infty}^{\infty} f_X(x) f_Y(z-x) ,\mathrm{d}x$，直观来说也很好理解，对于任意 $\tilde{y_i}$ 值为 $c$，可能加均匀噪声得到 $c$ 的 $y_i$ 取值范围其实就是 $c-0.5$ 到 $c+0.5$，$p_{\tilde{y_i}}$ 在 $c$ 点的值其实就可以通过 $p_{y_i}$ 在 $c-0.5$ 到 $c+0.5$ 的积分得出。&lt;/p>
+&lt;p>对于每个整数点，也自然符合上述描述。&lt;/p>
+&lt;p>&lt;img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/2023/02/upgit_20230225_1677304320.png"
+loading="lazy"
+alt="image-20230225135158633"
+>&lt;/p>
+&lt;p>而这样一来，加均匀噪声得到的 $p_{\tilde{y_i}}$ 最妙的性质就在于，在每个整数点 $p_{\tilde{y_i}}$ 的值和实际量化得到的离散变量 $p_{\hat{y_i}}$ 在这一点的概率质量相等。&lt;/p>
+&lt;p>所以说，加均匀噪声这一操作，本质上类似于在给 $p_{\hat{y_i}}$ 的概率质量函数作插值，类似于一个连续松弛 (continuous relaxation) 的操作。&lt;/p>
+&lt;p>此外，我们在端到端模型里通常去建模的也就是这个 $p_{y_i}$，而这里其实是假设 $p_{y_i}$ 近似一个拉普拉斯分布，实际代码实现中，有一部分模型采用拉普拉斯分布去建模，也有一部分模型，比如 CompressAI，是采用高斯分布去建模的。&lt;/p>
+&lt;h2 id="compressai-代码中的熵模型">CompressAI 代码中的熵模型
+&lt;/h2>&lt;p>以其中的 GaussianConditional 熵模型为例，稍微讲一下实际实现的时候一些常见操作。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl"> &lt;span class="k">def&lt;/span> &lt;span class="nf">forward&lt;/span>&lt;span class="p">(&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="bp">self&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">inputs&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="n">Tensor&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">scales&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="n">Tensor&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">means&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="n">Optional&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">Tensor&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="kc">None&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">training&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="n">Optional&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="nb">bool&lt;/span>&lt;span class="p">]&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="kc">None&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">)&lt;/span> &lt;span class="o">-&amp;gt;&lt;/span> &lt;span class="n">Tuple&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">Tensor&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">Tensor&lt;/span>&lt;span class="p">]:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="n">training&lt;/span> &lt;span class="ow">is&lt;/span> &lt;span class="kc">None&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">training&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">training&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">outputs&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">quantize&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">inputs&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s2">&amp;#34;noise&amp;#34;&lt;/span> &lt;span class="k">if&lt;/span> &lt;span class="n">training&lt;/span> &lt;span class="k">else&lt;/span> &lt;span class="s2">&amp;#34;dequantize&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">means&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">likelihood&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">_likelihood&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">outputs&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">scales&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">means&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">use_likelihood_bound&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">likelihood&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">likelihood_lower_bound&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">likelihood&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="n">outputs&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">likelihood&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>训练的时候和上面说的一样，通过加均匀噪声替代量化操作。&lt;/p>
+&lt;p>而其中这个 &lt;code>likelihood&lt;/code> 其实就是用于码率估计的，网络会输出 $y_i$ 值，然后我们叠加均匀噪声，而网络也会输出 $p_{y_i}$ 建模为高斯分布的 $\mu$ 和 $\sigma$ 值，这样其实我们就能计算出当前条件下 $p_{\tilde{y_i}}$ 的特定取值。后面再用 $-log_2 x$ 就能算出估计出的码字比特大小。&lt;/p>
+&lt;p>再来看一下实际熵编解码的实现，以编码为例。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;span class="lnt">28
+&lt;/span>&lt;span class="lnt">29
+&lt;/span>&lt;span class="lnt">30
+&lt;/span>&lt;span class="lnt">31
+&lt;/span>&lt;span class="lnt">32
+&lt;/span>&lt;span class="lnt">33
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl"> &lt;span class="k">def&lt;/span> &lt;span class="nf">compress&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">inputs&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">indexes&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">means&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="kc">None&lt;/span>&lt;span class="p">):&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="s2">&amp;#34;&amp;#34;&amp;#34;
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="s2"> Compress input tensors to char strings.
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="s2"> Args:
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="s2"> inputs (torch.Tensor): input tensors
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="s2"> indexes (torch.IntTensor): tensors CDF indexes
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="s2"> means (torch.Tensor, optional): optional tensor means
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="s2"> &amp;#34;&amp;#34;&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">symbols&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">quantize&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">inputs&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s2">&amp;#34;symbols&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">means&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="nb">len&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">inputs&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">size&lt;/span>&lt;span class="p">())&lt;/span> &lt;span class="o">&amp;lt;&lt;/span> &lt;span class="mi">2&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">raise&lt;/span> &lt;span class="ne">ValueError&lt;/span>&lt;span class="p">(&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="s2">&amp;#34;Invalid `inputs` size. Expected a tensor with at least 2 dimensions.&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="n">inputs&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">size&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="o">!=&lt;/span> &lt;span class="n">indexes&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">size&lt;/span>&lt;span class="p">():&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">raise&lt;/span> &lt;span class="ne">ValueError&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;`inputs` and `indexes` should have the same size.&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">_check_cdf_size&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">_check_cdf_length&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">_check_offsets_size&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">strings&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">[]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">for&lt;/span> &lt;span class="n">i&lt;/span> &lt;span class="ow">in&lt;/span> &lt;span class="nb">range&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">symbols&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">size&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">)):&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">rv&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">entropy_coder&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">encode_with_indexes&lt;/span>&lt;span class="p">(&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">symbols&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">reshape&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">int&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">tolist&lt;/span>&lt;span class="p">(),&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">indexes&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="n">i&lt;/span>&lt;span class="p">]&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">reshape&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">int&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">tolist&lt;/span>&lt;span class="p">(),&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">_quantized_cdf&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">tolist&lt;/span>&lt;span class="p">(),&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">_cdf_length&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">reshape&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">int&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">tolist&lt;/span>&lt;span class="p">(),&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">_offset&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">reshape&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">int&lt;/span>&lt;span class="p">()&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">tolist&lt;/span>&lt;span class="p">(),&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">strings&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">append&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">rv&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="n">strings&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>&lt;code>symbols&lt;/code> 就是量化后的待编码值减去网络预测出的高斯分布的均值，这样后面熵编码就可以统一用准备好的不同方差的零均值高斯采样的 cdf 表。再注意一下这里的 &lt;code>indexes&lt;/code> ，下文会讲。&lt;/p>
+&lt;p>上面说的 cdf 表可以通过这个更新函数看一下实现过程。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl"> &lt;span class="k">def&lt;/span> &lt;span class="nf">update&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">):&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">multiplier&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="o">-&lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">_standardized_quantile&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">tail_mass&lt;/span> &lt;span class="o">/&lt;/span> &lt;span class="mi">2&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">pmf_center&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">torch&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">ceil&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">scale_table&lt;/span> &lt;span class="o">*&lt;/span> &lt;span class="n">multiplier&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">int&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">pmf_length&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mi">2&lt;/span> &lt;span class="o">*&lt;/span> &lt;span class="n">pmf_center&lt;/span> &lt;span class="o">+&lt;/span> &lt;span class="mi">1&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">max_length&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">torch&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">max&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">pmf_length&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">item&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">device&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">pmf_center&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">device&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">samples&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">torch&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">abs&lt;/span>&lt;span class="p">(&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">torch&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">arange&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">max_length&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">device&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="n">device&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">int&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="o">-&lt;/span> &lt;span class="n">pmf_center&lt;/span>&lt;span class="p">[:,&lt;/span> &lt;span class="kc">None&lt;/span>&lt;span class="p">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">samples_scale&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">scale_table&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">unsqueeze&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">samples&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">samples&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">float&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">samples_scale&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">samples_scale&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">float&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">upper&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">_standardized_cumulative&lt;/span>&lt;span class="p">((&lt;/span>&lt;span class="mf">0.5&lt;/span> &lt;span class="o">-&lt;/span> &lt;span class="n">samples&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">/&lt;/span> &lt;span class="n">samples_scale&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">lower&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">_standardized_cumulative&lt;/span>&lt;span class="p">((&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="mf">0.5&lt;/span> &lt;span class="o">-&lt;/span> &lt;span class="n">samples&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">/&lt;/span> &lt;span class="n">samples_scale&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">pmf&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">upper&lt;/span> &lt;span class="o">-&lt;/span> &lt;span class="n">lower&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">tail_mass&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mi">2&lt;/span> &lt;span class="o">*&lt;/span> &lt;span class="n">lower&lt;/span>&lt;span class="p">[:,&lt;/span> &lt;span class="p">:&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">quantized_cdf&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">torch&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">Tensor&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nb">len&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">pmf_length&lt;/span>&lt;span class="p">),&lt;/span> &lt;span class="n">max_length&lt;/span> &lt;span class="o">+&lt;/span> &lt;span class="mi">2&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">quantized_cdf&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">_pmf_to_cdf&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">pmf&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">tail_mass&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">pmf_length&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">max_length&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">_quantized_cdf&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">quantized_cdf&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">_offset&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="o">-&lt;/span>&lt;span class="n">pmf_center&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">_cdf_length&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">pmf_length&lt;/span> &lt;span class="o">+&lt;/span> &lt;span class="mi">2&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>可以看到，cdf 表其实是一定数量采样的 scale 值对应的零均值高斯分布（转化后的 $p_{y_i}$）在一定数量采样点上计算好 $p_{\tilde{y_i}}$ 的值。&lt;/p>
+&lt;p>这里其实有两处采样：&lt;/p>
+&lt;ol>
+&lt;li>采样 scale （对应 index ，index 指明取 cdf 表哪个分布）&lt;/li>
+&lt;li>对于分布采样一系列的点计算概率值 （对应 cdf 表中每个分布）&lt;/li>
+&lt;/ol>
+&lt;p>可以通过 &lt;code>build_indexes&lt;/code> 来看一下 indexes 的确定过程。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl"> &lt;span class="k">def&lt;/span> &lt;span class="nf">build_indexes&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">scales&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="n">Tensor&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">-&amp;gt;&lt;/span> &lt;span class="n">Tensor&lt;/span>&lt;span class="p">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">scales&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">lower_bound_scale&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">scales&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">indexes&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">scales&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">new_full&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">scales&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">size&lt;/span>&lt;span class="p">(),&lt;/span> &lt;span class="nb">len&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">scale_table&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">-&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">int&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">for&lt;/span> &lt;span class="n">s&lt;/span> &lt;span class="ow">in&lt;/span> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">scale_table&lt;/span>&lt;span class="p">[:&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">]:&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">indexes&lt;/span> &lt;span class="o">-=&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="n">scales&lt;/span> &lt;span class="o">&amp;lt;=&lt;/span> &lt;span class="n">s&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">int&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="n">indexes&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>&lt;code>indexes&lt;/code> 是通过 &lt;code>scales&lt;/code> 来确定的，具体来说 &lt;code>index&lt;/code> 其实是之前说的一系列采样的 scale 值里小于等于当前 scale 的最接近它的采样 scale 的编号。&lt;/p></description></item><item><title>可变形卷积与光流</title><link>https://bygonexf.github.io/p/%E5%8F%AF%E5%8F%98%E5%BD%A2%E5%8D%B7%E7%A7%AF%E4%B8%8E%E5%85%89%E6%B5%81/</link><pubDate>Sun, 20 Feb 2022 17:04:37 +0800</pubDate><guid>https://bygonexf.github.io/p/%E5%8F%AF%E5%8F%98%E5%BD%A2%E5%8D%B7%E7%A7%AF%E4%B8%8E%E5%85%89%E6%B5%81/</guid><description>&lt;h2 id="可变形卷积代码篇">可变形卷积代码篇
+&lt;/h2>&lt;p>一个调用 &lt;code>from mmcv.ops import ModulatedDeformConv2d&lt;/code> 的例子：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="line">&lt;span class="cl">&lt;span class="k">def&lt;/span> &lt;span class="nf">forward&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="bp">self&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nb">input&lt;/span>&lt;span class="p">):&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">x&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">offset_mask_conv&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nb">input&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">o1&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">o2&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">mask&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">torch&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">chunk&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">x&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">3&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">dim&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">offset&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">torch&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">cat&lt;/span>&lt;span class="p">((&lt;/span>&lt;span class="n">o1&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">o2&lt;/span>&lt;span class="p">),&lt;/span> &lt;span class="n">dim&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">mask&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">torch&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">sigmoid&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">mask&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="n">output&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="bp">self&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">dcnv2&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nb">input&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">offset&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">mask&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="n">output&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>总而言之 &lt;code>offset&lt;/code> 的 size 就是 &lt;code>2*kernel[0]*kernel[1]&lt;/code> ，想一想，原来我们求偏移的时候，会把 &lt;code>B*H*W*C&lt;/code> 的图像送入普通卷积得到 &lt;code>B*H*W*2C&lt;/code> 得到偏移，也就是每个通道每个位置点都有 x 和 y 两个方向的偏移量。&lt;/p>
+&lt;p>对 DCN 来说，每个通道都做一样的处理，也就是只需要对每个位置点存卷积核每个点的 x 和 y 的偏移，所以就是 &lt;code>B*H*W*(2*kernel_size)&lt;/code> 。&lt;/p>
+&lt;p>关于 mask:：置信 mask，并非必需，不作展开了&lt;/p>
+&lt;p>所以 offset 和 mask 一起就是 &lt;code>B*H*W*(3*kernel_size)&lt;/code>&lt;/p>
+&lt;p>关于 deform_groups：本来是所有通道公用，也可以改成划成几组，组数就是 deform_groups，那这样就是 &lt;code>B*H*W*(group_num*3*kernel_size)&lt;/code>&lt;/p>
+&lt;h2 id="可变形卷积与光流">可变形卷积与光流
+&lt;/h2>&lt;p>端到端视频压缩模型里，运动估计运动补偿环节，常用到光流和可变形卷积。本质上都是预测偏移，只不过 DCN 可以利用多个偏移，这样在预测难度较大的位置就有多个 offset 互作补充，所以比只用单一的光流更有优势一些。&lt;/p>
+&lt;p>推荐一下这篇文章：&lt;a class="link" href="https://ckkelvinchan.github.io/projects/DCN/" target="_blank" rel="noopener"
+>Understanding Deformable Alignment in Video Super-Resolution&lt;/a>，讲得比较透彻了。&lt;/p>
+&lt;h3 id="可变形卷积涉及多少个不同的-offset-map">可变形卷积涉及多少个不同的 offset map
+&lt;/h3>&lt;ol>
+&lt;li>
+&lt;p>首先，与 kernel size 有关&lt;/p>
+&lt;p>&lt;img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/2023/02/upgit_20230225_1677309897.png"
+loading="lazy"
+alt="image-20230225152456053"
+>&lt;/p>
+&lt;p>假设特征图大小为 &lt;code>W * H&lt;/code>，每个点的感受野都对应了 &lt;code>kernel_size * kernel_size&lt;/code> 个偏移&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>其次，与 group num 有关&lt;/p>
+&lt;p>&lt;img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/2023/02/upgit_20230225_1677310198.png"
+loading="lazy"
+alt="image-20230225152648179"
+>&lt;/p>
+&lt;p>每 &lt;code>C(通道数) / group_num&lt;/code> 个通道共用一套 offset&lt;/p>
+&lt;p>比如假设特征有 8 个通道，group_num 为 4,则 每 2 个通道共用一套偏移参数&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;p>综合来说，一共会有 &lt;code>(kernel_size * kernel_size) * group_num&lt;/code> 个 &lt;code>W * H&lt;/code> 大小的偏移图。&lt;/p>
+&lt;h3 id="dcn-对齐和光流对齐的本质差异">DCN 对齐和光流对齐的本质差异
+&lt;/h3>&lt;p>&lt;img src="https://raw.githubusercontent.com/bygonexf/Blog-Images/master/2023/02/upgit_20230225_1677310203.png"
+loading="lazy"
+alt="image-20230225152953943"
+>&lt;/p>
+&lt;p>&lt;code>kernel size 为 n * n 的DCN = n^2 个空间warping + 1 * 1 * n^2 的3D卷积&lt;/code>&lt;/p>
+&lt;p>也就是说，如果 n=1，group_num=1，DCN对齐基本就等同于光流对齐，DCN 和光流的本质区别就在于 offset diversity。&lt;/p></description></item></channel></rss>
